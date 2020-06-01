@@ -1,0 +1,32 @@
+export const primaryColors = {
+    primeBG:'#000',
+    primaryBlue: '#3D4A97',
+    secondaryBlue: '#eaefff',
+    terneryBlue: '#9FACBD',
+    brightblue:'#2D99FF',
+    blue:'#1281E3',
+    darkblue:'#000A21',
+    white:'#fff',
+    lightWhite:'rgba(255, 255, 255, 0.7)',
+
+    color2: 'rgba(58, 74, 123,0.1)',
+    badgeColor: '#ff5c5c',
+    dangerColor: '#e64f4f',
+    greenColor: '#58a694',
+    lightGreen: '#ddf9f3',
+    darkGreen:'#122E25',
+    mediumGreen:'#41987B',
+    lightorange: '#FFF3EB',
+    paleorange:'#FFDEC8',
+    mediumorange: 'rgba(255, 143, 68,0.16)',
+    brown: '#331400',
+    brightorange: '#FF8F44',
+    lightbrown: '#d7c7bd',
+    mediumbrown: '#c09071',
+    brownBorder: '#e2d7d0',
+    lightyellow: '#ffedbd',
+    yellow:'#EBD61B',
+    parrotGreen:'#6DD400',
+
+    
+  };
