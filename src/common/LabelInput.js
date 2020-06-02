@@ -24,6 +24,7 @@ const LabelInput = (props) => {
                     <Label style={{ fontFamily: "NordiquePro-Regular", color: primaryColors.lightWhite, letterSpacing: 1, fontSize: 16 }}>{props.label}</Label>
 
                     <Input  
+                        onChange={(text=> props.onChange(text))}
                         keyboardType={"default" || props.keyboardType}
                         autoCapitalize="none"
                         autoCompleteType="off"
