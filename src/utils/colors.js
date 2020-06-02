@@ -8,7 +8,8 @@ export const primaryColors = {
     darkblue:'#000A21',
     white:'#fff',
     lightWhite:'rgba(255, 255, 255, 0.7)',
-
+    darkGray:'#1F1F1F',
+    lightGray:'#707070',
     color2: 'rgba(58, 74, 123,0.1)',
     badgeColor: '#ff5c5c',
     dangerColor: '#e64f4f',

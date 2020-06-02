@@ -6,7 +6,7 @@ import { primaryColors } from '../utils/colors'
 
 
 const LabelInput = (props) => {
-    const [secureTextEntry, setSecureTextEntry] = useState(props.isPassword)
+    const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry)
 
     const onVisibleIconPress =()=>{
      
@@ -24,7 +24,7 @@ const LabelInput = (props) => {
                     <Label style={{ fontFamily: "NordiquePro-Regular", color: primaryColors.lightWhite, letterSpacing: 1, fontSize: 16 }}>{props.label}</Label>
 
                     <Input  
-                        keyboardType={"default" || props.keyboardType}
+                        keyboardType={ props.keyboardType ? props.keyboardType : "default"}
                         autoCapitalize="none"
                         autoCompleteType="off"
                         secureTextEntry={secureTextEntry}
