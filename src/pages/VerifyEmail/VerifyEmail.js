@@ -8,13 +8,14 @@ import BPButton from '../../common/BPButton/BPButton'
 import LabelInput from '../../common/LabelInput/LabelInput'
 import QueryActions from '../../common/QueryActions/QueryActions'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
+import { useNavigation } from '@react-navigation/native'
 
 const VerifyEmail = () => {
 
     const [code, setCode] = useState(''); //setting code initial STATE value
     const [showProgress, setProgress] = useState(false) //setting showProgress initial STATE value
 
-
+    const navigation = useNavigation()
     const handleCodeFilled = (code) => {
         setCode(code)
 
@@ -57,7 +58,7 @@ const VerifyEmail = () => {
                     <BPSubtitle text={`Please enter the 4 digit code sent to\nvrsuresh.choudhary@gmail.com`} />
                 </View>
                 <View style={{flex:1,alignItems:'center', justifyContent: 'center', marginHorizontal:43}}>
-                    
+                
                     
                 <OTPInputView
                         keyboardType="phone-pad"
@@ -72,7 +73,7 @@ const VerifyEmail = () => {
                     />
                   
                     <View style={{paddingTop:20}}>
-                        <BPButton label="Reset Password"/>
+                        <BPButton label="Reset Password" onPress={()=> navigation.navigate("ChangePassword")}/>
                     </View>
 
                     <View style={{paddingVertical:20}}>

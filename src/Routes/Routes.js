@@ -9,6 +9,7 @@ import OTPscreen from '../pages/OTPscreen/OTPscreen';
 import GoogleVerificationCode from '../pages/GoogleVerificationCode/GoogleVerificationCode';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import VerifyEmail from '../pages/VerifyEmail/VerifyEmail';
+import ChangePassword from '../pages/ChangePassword/ChangePassword';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ const Routes = () => {
                 <Stack.Screen name="OTPscreen" component={OTPscreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
                 <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
+                <Stack.Screen name="ChangePassword" component={ChangePassword} />
                 <Stack.Screen name="GoogleVerificationCode" component={GoogleVerificationCode} />
                 <Stack.Screen name="Dashboard" children={BottomTabs} />
             </Stack.Navigator>
