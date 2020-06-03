@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text , TouchableOpacity, StatusBar} from 'react-native'
 import { Container, Content, CardItem, Item, Card , Button, View} from 'native-base'
-import LabelInput from '../../common/LabelInput'
+import LabelInput from '../../common/LabelInput/LabelInput'
 import { primaryColors } from '../../utils/colors'
-import LogoHeader from '../../common/LogoHeader'
-import BPButton from '../../common/BPButton'
-import QueryActions from '../../common/QueryActions'
+import LogoHeader from '../../common/LogoHeader/LogoHeader'
+import BPButton from '../../common/BPButton/BPButton'
+import QueryActions from '../../common/QueryActions/QueryActions'
 
 const Signin = ({navigation}) => {
     return (
@@ -22,7 +22,7 @@ const Signin = ({navigation}) => {
                             <LabelInput keyboardType="email-address" label="Email" placeholder="Email/Mobile Number" /*iconPath={iconLabel1} */ />
                             <LabelInput label="Password" placeholder="Enter your Password" secureTextEntry/*iconPath={iconLabel2} isPassword secureTextEntry *//>
                             
-                            <Button transparent style={{ marginVertical: 10, alignSelf:'flex-end' }} >
+                            <Button transparent style={{ marginVertical: 10, alignSelf:'flex-end' }} onPress={()=> navigation.navigate("ForgotPassword")} >
                                 <Text uppercase={false} style={{ padding: 30, fontSize: 13, color: primaryColors.lightWhite, fontFamily: 'Asap-Regular' }}>Forgot Password?</Text>
                             </Button>
 

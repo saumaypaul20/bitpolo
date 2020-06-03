@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text , TouchableOpacity, StatusBar} from 'react-native'
 import { Container, Content, CardItem, Item, Card , Button, View} from 'native-base'
-import LabelInput from '../../common/LabelInput'
+import LabelInput from '../../common/LabelInput/LabelInput'
 import { primaryColors } from '../../utils/colors'
-import LogoHeader from '../../common/LogoHeader'
-import BPButton from '../../common/BPButton'
-import QueryActions from '../../common/QueryActions'
+import LogoHeader from '../../common/LogoHeader/LogoHeader'
+import BPButton from '../../common/BPButton/BPButton'
+import QueryActions from '../../common/QueryActions/QueryActions'
 
 const Signup = ({navigation}) => {
     const goToScreen = () =>{

@@ -6,6 +6,9 @@ import BottomTabs from './BottomTabs'
 import Signin from '../pages/Signin/Signin';
 import Signup from '../pages/Signup/Signup';
 import OTPscreen from '../pages/OTPscreen/OTPscreen';
+import GoogleVerificationCode from '../pages/GoogleVerificationCode/GoogleVerificationCode';
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
+import VerifyEmail from '../pages/VerifyEmail/VerifyEmail';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +23,9 @@ const Routes = () => {
                 <Stack.Screen name="Signin" component={Signin} />
                 <Stack.Screen name="Signup" component={Signup} />
                 <Stack.Screen name="OTPscreen" component={OTPscreen} />
+                <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
+                <Stack.Screen name="GoogleVerificationCode" component={GoogleVerificationCode} />
                 <Stack.Screen name="Dashboard" children={BottomTabs} />
             </Stack.Navigator>
         </NavigationContainer>

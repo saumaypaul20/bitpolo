@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import { View, Text, Keyboard, StyleSheet, StatusBar, SafeAreaView } from 'react-native'
+import { View, Text, Keyboard, StyleSheet, StatusBar, SafeAreaView, TextInput } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { primaryColors } from '../../utils/colors';
 import { Container, Content, Item, Button } from 'native-base';
 import BPButton from '../../common/BPButton/BPButton';
 import QueryActions from '../../common/QueryActions/QueryActions';
 import UserHeader from '../../common/Toolbar/Toolbar';
-import BPTitle from '../../common/BPTitle/BPTitle';
-import BPSubtitle from '../../common/BPSubTitle/BPSubtitle';
 
-const OTPscreen = (props) => {
+const GoogleVerificationCode = (props) => {
     const {navigation} = props
     const [code, setCode] = useState(''); //setting code initial STATE value
     const [showProgress, setProgress] = useState(false) //setting showProgress initial STATE value
@@ -50,24 +48,22 @@ const OTPscreen = (props) => {
             <UserHeader />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
-                    <BPTitle title="Verfication Code"/>
-                    <BPSubtitle text="Please enter the 4 digit code sent to vrsuresh.choudhary@gmail.com" />
+                    <Text style={{color: primaryColors.white, fontSize:24, fontWeight: '900'}}>Enter the Verification code</Text>
+                    <Text style={{color: primaryColors.white, fontSize:16, textAlign:'center', paddingVertical:20, lineHeight:23}}>{`Get a verification code from the\n`}<Text style={{fontWeight:'700'}}>Google Authenticator app</Text></Text>
                     
-                    <OTPInputView
+                    <TextInput
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:primaryColors.lightGray , overflow: 'hidden' }}
-                        pinCount={4}
-                        code={code}
-                        onCodeChanged={code => handleCodeFilled(code)}
-                        codeInputFieldStyle={styles.underlineStyleBase}
-                        codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                        onCodeFilled={code => setCode(code)}
+                        placeholder="Enter 6-digit code"
+                        placeholderTextColor={primaryColors.lightGray}
+                        style={styles.inputStyle}
+                        value={code}
+                        onChangeText={code => setCode(code)}
+                        maxLength={6}
                     />
 
-                    <QueryActions query={"Didn't recieve code yet?"} actionName="Resend" action={()=> resendCode()}/>
 
-                    <BPButton label="Confirm" onPress={()=> navigation.navigate("GoogleVerificationCode")}/>
+                    <BPButton label="Confirm" onPress={()=> navigation.reset({index:0, routes: [{name:"Dashboard"}]})}/>
                    
 
                 </View>
@@ -79,30 +75,9 @@ const OTPscreen = (props) => {
 
 const styles = StyleSheet.create({
 
-    underlineStyleBase: {
-         width:75,
-         height:64,
-        borderWidth: 0,
-        overflow:'hidden',
-        borderLeftWidth: 0.5,
-        borderRightWidth: 0.5,
-        marginLeft:-1,
-       // borderColor: primaryColors.lightGray,
-        color: primaryColors.white,
-        backgroundColor: primaryColors.darkGray,
-         borderRadius:0
-    },
-
-    underlineStyleHighLighted: {
-        // borderColor: '#fff',
-        // backgroundColor: 'rgba(45, 154, 255,0.1)'
-    },
-    blueText: {
-        // color: primaryColors.blue,
-        fontSize: 12,
-        fontFamily: 'Asap-Regular'
-    }
+    inputStyle:{  width: '100%',  marginTop: 40, marginBottom:68 ,borderRadius:6, borderWidth:1, borderColor:primaryColors.lightGray , padding: 20, color:'#fff'},
+   
 });
 
 
-export default OTPscreen
+export default GoogleVerificationCode

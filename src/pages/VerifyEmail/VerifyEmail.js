@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { View, Text, Keyboard, StyleSheet, StatusBar, SafeAreaView } from 'react-native'
-import OTPInputView from '@twotalltotems/react-native-otp-input';
-import { primaryColors } from '../../utils/colors';
-import { Container, Content, Item, Button } from 'native-base';
-import BPButton from '../../common/BPButton/BPButton';
-import QueryActions from '../../common/QueryActions/QueryActions';
-import UserHeader from '../../common/Toolbar/Toolbar';
-import BPTitle from '../../common/BPTitle/BPTitle';
-import BPSubtitle from '../../common/BPSubTitle/BPSubtitle';
+import { View, Text, StatusBar, Image, StyleSheet, Keyboard } from 'react-native'
+import { Container, Content } from 'native-base'
+import { primaryColors } from '../../utils/colors'
+import BPTitle from '../../common/BPTitle/BPTitle'
+import BPSubtitle from '../../common/BPSubTitle/BPSubtitle'
+import BPButton from '../../common/BPButton/BPButton'
+import LabelInput from '../../common/LabelInput/LabelInput'
+import QueryActions from '../../common/QueryActions/QueryActions'
+import OTPInputView from '@twotalltotems/react-native-otp-input'
 
-const OTPscreen = (props) => {
-    const {navigation} = props
+const VerifyEmail = () => {
+
     const [code, setCode] = useState(''); //setting code initial STATE value
     const [showProgress, setProgress] = useState(false) //setting showProgress initial STATE value
 
@@ -41,22 +41,28 @@ const OTPscreen = (props) => {
         const resendCode = ()=>{
             //to do
         }
-        
 
     return (
-        <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
-            {/* <StatusBar translucent barStyle="light-content" backgroundColor="transparent" /> */}
-            <UserHeader />
+            <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
-                    <BPTitle title="Verfication Code"/>
-                    <BPSubtitle text="Please enter the 4 digit code sent to vrsuresh.choudhary@gmail.com" />
+            
+                <View style={{flex:3,alignItems:'center', justifyContent: 'center',paddingTop:110}}>
+                    <View style={{padding:28}}>
+                        <Image source={require('../../assets/images/items/verify_icon.png')} style={{width: 140, height:140}} resizeMode="contain" />
+                    </View>
                     
-                    <OTPInputView
+                    <BPTitle title="Verify Your Email" />
+                    
+                    <BPSubtitle text={`Please enter the 4 digit code sent to\nvrsuresh.choudhary@gmail.com`} />
+                </View>
+                <View style={{flex:1,alignItems:'center', justifyContent: 'center', marginHorizontal:43}}>
+                    
+                    
+                <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:primaryColors.lightGray , overflow: 'hidden' }}
+                        style={{ height: 64, width: '100%',  marginTop: 60, marginBottom:60, borderRadius:6, borderWidth:1, borderColor:primaryColors.lightGray , overflow: 'hidden' }}
                         pinCount={4}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}
@@ -64,29 +70,34 @@ const OTPscreen = (props) => {
                         codeInputHighlightStyle={styles.underlineStyleHighLighted}
                         onCodeFilled={code => setCode(code)}
                     />
+                  
+                    <View style={{paddingTop:20}}>
+                        <BPButton label="Reset Password"/>
+                    </View>
 
-                    <QueryActions query={"Didn't recieve code yet?"} actionName="Resend" action={()=> resendCode()}/>
+                    <View style={{paddingVertical:20}}>
+                        <QueryActions action={()=> alert('yo')} actionName="Sign In" query="Remeber Password?"/>  
 
-                    <BPButton label="Confirm" onPress={()=> navigation.navigate("GoogleVerificationCode")}/>
-                   
-
+                    </View>
                 </View>
+
+
             </Content>
         </Container>
-        </SafeAreaView>
     )
 }
+
 
 const styles = StyleSheet.create({
 
     underlineStyleBase: {
-         width:75,
+         width:77,
          height:64,
         borderWidth: 0,
         overflow:'hidden',
         borderLeftWidth: 0.5,
         borderRightWidth: 0.5,
-        marginLeft:-1,
+        marginHorizontal:-1,
        // borderColor: primaryColors.lightGray,
         color: primaryColors.white,
         backgroundColor: primaryColors.darkGray,
@@ -102,7 +113,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Asap-Regular'
     }
-});
+});  
 
-
-export default OTPscreen
+export default VerifyEmail
