@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { View, Text, Image, TextInput , TouchableOpacity} from 'react-native'
 
 import { Item, Input, CardItem, Label } from 'native-base'
-import { primaryColors } from '../utils/colors'
+import { primaryColors } from '../../utils/colors'
 
 
 const LabelInput = (props) => {
-    const [secureTextEntry, setSecureTextEntry] = useState(props.isPassword)
+    const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry)
 
     const onVisibleIconPress =()=>{
      
@@ -24,8 +24,7 @@ const LabelInput = (props) => {
                     <Label style={{ fontFamily: "NordiquePro-Regular", color: primaryColors.lightWhite, letterSpacing: 1, fontSize: 16 }}>{props.label}</Label>
 
                     <Input  
-                        onChange={(text=> props.onChange(text))}
-                        keyboardType={"default" || props.keyboardType}
+                        keyboardType={ props.keyboardType ? props.keyboardType : "default"}
                         autoCapitalize="none"
                         autoCompleteType="off"
                         secureTextEntry={secureTextEntry}
