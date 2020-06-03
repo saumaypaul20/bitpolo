@@ -9,37 +9,7 @@ import UserHeader from '../../common/Toolbar/Toolbar';
 
 const GoogleVerificationCode = (props) => {
     const {navigation} = props
-    const [code, setCode] = useState(''); //setting code initial STATE value
-    const [showProgress, setProgress] = useState(false) //setting showProgress initial STATE value
-
-
-    const handleCodeFilled = (code) => {
-        setCode(code)
-
-        if (code.length == 4) {
-            Keyboard.dismiss();
-            //setProgress(true)
-           // renderToast("PIN Number Verified")
-            //  console.log("code " + code)
-            verifyOtp(code)
-
-        }}
-
-
-        const verifyOtp = (input) => {
-            if (input == code) {//need to implement
-    
-                //Actions.push("AccountType")
-            } else {
-                Keyboard.dismiss();
-                alert("PIN code doesn't match")
-            }
-        }
-
-        const resendCode = ()=>{
-            //to do
-        }
-        
+    const [code, setCode] = useState(''); //setting code initial STATE value        
 
     return (
         <SafeAreaView style={{flex:1}}>
