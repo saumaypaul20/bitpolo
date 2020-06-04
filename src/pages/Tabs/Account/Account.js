@@ -1,11 +1,12 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Account = () => {
     return (
-        <View style={{flex:1,justifyContent:'center', alignItems:'center'}}>
+        <SafeAreaView style={{flex:1,justifyContent:'center', alignItems:'center'}}>
             <Text>Account</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 Account.navigationOptions = screenProps => ({

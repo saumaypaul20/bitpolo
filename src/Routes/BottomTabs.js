@@ -17,7 +17,7 @@ const BottomTabs = () => {
     return (
        
             <Tab.Navigator 
-            
+            initialRouteName="Home"
               tabBarOptions={{
                 activeTintColor: '#fff',
                 style:{
@@ -34,7 +34,7 @@ const BottomTabs = () => {
                     inactive = require(`../assets/images/items/home_gray_icon.png`)
                     iconName= focused ? active : inactive
                   } else if (route.name == "Markets") {
-                    active = require(`../assets/images/items/market_chart_icon.png`)
+                    active = require(`../assets/images/items/markets_icon.png`)
                     inactive = require(`../assets/images/items/markets_gray_icon.png`)
                     iconName= focused ? active : inactive
 
@@ -54,7 +54,7 @@ const BottomTabs = () => {
                     iconName= focused ? active : inactive
 
                   }
-                  return <Image source={iconName} style={{width:size-2, height:size-2, marginTop: 15}} resizeMode="contain" />;
+                  return <Image source={iconName} style={{width:size-2, height:size-2, marginTop: 15, marginBottom:10}} resizeMode="contain" />;
                 }
                 })}
                 >
