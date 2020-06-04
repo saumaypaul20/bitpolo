@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Keyboard, StyleSheet, StatusBar, SafeAreaView } from 'react-native'
+import { View, Text, Keyboard, StyleSheet, StatusBar } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { primaryColors } from '../../utils/colors';
 import { Container, Content, Item, Button } from 'native-base';
@@ -8,6 +8,8 @@ import QueryActions from '../../common/QueryActions/QueryActions';
 import UserHeader from '../../common/Toolbar/Toolbar';
 import BPTitle from '../../common/BPTitle/BPTitle';
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle';
+import Toolbar from '../../common/Toolbar/Toolbar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const OTPscreen = (props) => {
     const {navigation} = props
@@ -47,7 +49,7 @@ const OTPscreen = (props) => {
         <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
             {/* <StatusBar translucent barStyle="light-content" backgroundColor="transparent" /> */}
-            <UserHeader />
+            <Toolbar enableBackButton/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
                     <BPTitle title="Verfication Code"/>

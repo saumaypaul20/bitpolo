@@ -1,21 +1,20 @@
 import React, { useState } from 'react'
-import { View, Text, Keyboard, StyleSheet, StatusBar, SafeAreaView, TextInput } from 'react-native'
-import OTPInputView from '@twotalltotems/react-native-otp-input';
+import { View, Text, StyleSheet, TextInput } from 'react-native'
 import { primaryColors } from '../../utils/colors';
-import { Container, Content, Item, Button } from 'native-base';
+import { Container, Content } from 'native-base';
 import BPButton from '../../common/BPButton/BPButton';
-import QueryActions from '../../common/QueryActions/QueryActions';
-import UserHeader from '../../common/Toolbar/Toolbar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Toolbar from '../../common/Toolbar/Toolbar';
 
 const GoogleVerificationCode = (props) => {
     const {navigation} = props
     const [code, setCode] = useState(''); //setting code initial STATE value        
 
     return (
-        <SafeAreaView style={{flex:1}}>
-        <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
+        <SafeAreaView style={{flex:1, backgroundColor: primaryColors.primeBG}}>
+        <Container style={{ flex: 1,  backgroundColor: primaryColors.primeBG}}>
             {/* <StatusBar translucent barStyle="light-content" backgroundColor="transparent" /> */}
-            <UserHeader />
+            <Toolbar enableBackButton/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
                     <Text style={{color: primaryColors.white, fontSize:24, fontWeight: '900'}}>Enter the Verification code</Text>

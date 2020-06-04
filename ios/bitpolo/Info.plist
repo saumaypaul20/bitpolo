@@ -74,6 +74,24 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Inter-Black-slnt=0.ttf</string>
+		<string>Inter-Bold-slnt=0.ttf</string>
+		<string>Inter-ExtraBold-slnt=0.ttf</string>
+		<string>Inter-ExtraLight-slnt=0.ttf</string>
+		<string>Inter-Light-slnt=0.ttf</string>
+		<string>Inter-Medium-slnt=0.ttf</string>
+		<string>Inter-Regular-slnt=0.ttf</string>
+		<string>Inter-SemiBold-slnt=0.ttf</string>
+		<string>Inter-Thin-slnt=0.ttf</string>
+		<string>Inter-Bold.ttf</string>
+		<string>Inter-Black.ttf</string>
+		<string>Inter-ExtraBold.ttf</string>
+		<string>Inter-ExtraLight.ttf</string>
+		<string>Inter-Light.ttf</string>
+		<string>Inter-Medium.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
+		<string>Inter-Thin.ttf</string>
 	</array>
 </dict>
 </plist>
