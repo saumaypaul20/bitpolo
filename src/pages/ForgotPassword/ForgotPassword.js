@@ -1,18 +1,19 @@
 import React from 'react'
 import { View, Text, StatusBar, Image } from 'react-native'
 import { Container, Content } from 'native-base'
-import { primaryColors } from '../../utils/colors'
+import { primaryColors } from '../../styles/colors'
 import BPTitle from '../../common/BPTitle/BPTitle'
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle'
 import BPButton from '../../common/BPButton/BPButton'
-import LabelInput from '../../common/LabelInput/LabelInput'
-import QueryActions from '../../common/QueryActions/QueryActions'
+import LabelInput from '../../components/LabelInput/LabelInput'
+import QueryActions from '../../components/QueryActions/QueryActions'
 import { useNavigation } from '@react-navigation/native'
+import { Colors } from '../../styles'
 
 const ForgotPassword = () => {
     const navigation = useNavigation()
     return (
-        <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
+        <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
             <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
             

@@ -10,12 +10,20 @@ export const primaryColors = {
     green: '#2BAB64',
     red:'#EE5252',
     lightRed:'rgba(238,82,82,0.5)',
+    textInputBorder:'rgba(255, 255, 255, 0.3)',
     
     text:{
       darkGreen:'#2F4B3B',
       darkRed:'#870505',
       white: '#fff',
       lightWhite:'rgba(255, 255, 255, 0.7)',
-    }
+    },
+
+    tabActiveTintColor: '#fff',
+    tabBackgroundColor:'#1C1C1E'
     
   };
+
+  export const secondaryColors ={
+    
+  }

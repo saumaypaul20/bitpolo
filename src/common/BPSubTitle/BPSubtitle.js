@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { primaryColors } from '../../utils/colors'
+import { primaryColors } from '../../styles/colors'
+import BPText from '../BPText/BPText'
 
 const BPSubtitle = ({text}) => {
     return (
-        <Text style={{color: primaryColors.white, fontSize:16, textAlign:'center', paddingVertical:20, lineHeight:23}}>{text}</Text>
+        <BPText style={{fontSize:16, textAlign:'center', paddingVertical:20, lineHeight:23}}>{text}</BPText>
     )
 }
 

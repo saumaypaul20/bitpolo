@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import { primaryColors } from '../../utils/colors'
+import { primaryColors } from '../../styles/colors'
 
 const SettingsListItem = (props) => {
     return (

@@ -2,7 +2,8 @@ import React from 'react'
 import {Header,Button,Title, Text, Item, Left, Body, Right, Icon, View } from 'native-base';
 import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { primaryColors } from '../../utils/colors';
+import { Colors } from '../../styles';
+import BPText from '../../common/BPText/BPText';
 
 
 const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs, searchbar }) => {
@@ -11,7 +12,7 @@ const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs, searchbar 
         <View> 
 
             <Header style={{backgroundColor:backgroundColor || 'transparent', paddingTop:10, paddingBottom:0}} hasTabs={hasTabs }>
-                <StatusBar translucent barStyle="light-content" backgroundColor={backgroundColor || primaryColors.primeBG} />
+                <StatusBar translucent barStyle="light-content" backgroundColor={backgroundColor || Colors.primeBG} />
                 <Left style={{flexDirection:'row', alignItems:'center', flex:0.1}}>
                     {enableBackButton && <Button transparent onPress={()=> navigation.goBack()}>
                         <Icon  name='arrow-back' style={{fontSize:20}} />
@@ -20,11 +21,11 @@ const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs, searchbar 
                 </Left>
                 <Body style={{flex:0.8}}>
                 {
-                        title && <Text style={{color:primaryColors.white, fontSize:20,}}>{title}</Text>
+                        title && <BPText style={{fontSize:20,}}>{title}</BPText>
                     }
                 </Body>
                 <Right style={{flex:0.2}}>
-                   {searchbar && <Text style={{color:'#fff'}}>O</Text>}
+                   {searchbar && <BPText>O</BPText>}
                 </Right>
             </Header>
         

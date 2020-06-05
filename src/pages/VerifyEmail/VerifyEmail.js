@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { View, Text, StatusBar, Image, StyleSheet, Keyboard } from 'react-native'
 import { Container, Content } from 'native-base'
-import { primaryColors } from '../../utils/colors'
 import BPTitle from '../../common/BPTitle/BPTitle'
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle'
 import BPButton from '../../common/BPButton/BPButton'
-import LabelInput from '../../common/LabelInput/LabelInput'
-import QueryActions from '../../common/QueryActions/QueryActions'
+import LabelInput from '../../components/LabelInput/LabelInput'
+import QueryActions from '../../components/QueryActions/QueryActions'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { useNavigation } from '@react-navigation/native'
+import { Colors } from '../../styles'
 
 const VerifyEmail = () => {
 
@@ -44,7 +44,7 @@ const VerifyEmail = () => {
         }
 
     return (
-        <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
+        <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
             <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
             
@@ -63,7 +63,7 @@ const VerifyEmail = () => {
                 <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 60, marginBottom:60, borderRadius:6, borderWidth:1, borderColor:primaryColors.lightGray , overflow: 'hidden' }}
+                        style={{ height: 64, width: '100%',  marginTop: 60, marginBottom:60, borderRadius:6, borderWidth:1, borderColor:Colors.lightGray , overflow: 'hidden' }}
                         pinCount={4}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}
@@ -99,9 +99,9 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0.5,
         borderRightWidth: 0.5,
         marginHorizontal:-1,
-       // borderColor: primaryColors.lightGray,
-        color: primaryColors.white,
-        backgroundColor: primaryColors.darkGray,
+       // borderColor: Colors.lightGray,
+        color: Colors.white,
+        backgroundColor: Colors.darkGray,
          borderRadius:0
     },
 
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'rgba(45, 154, 255,0.1)'
     },
     blueText: {
-        // color: primaryColors.blue,
+        // color: Colors.blue,
         fontSize: 12,
         fontFamily: 'Asap-Regular'
     }

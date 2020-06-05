@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { View, Text, Keyboard, StyleSheet, StatusBar } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import { primaryColors } from '../../utils/colors';
 import { Container, Content, Item, Button } from 'native-base';
 import BPButton from '../../common/BPButton/BPButton';
-import QueryActions from '../../common/QueryActions/QueryActions';
-import UserHeader from '../../common/Toolbar/Toolbar';
+import QueryActions from '../../components/QueryActions/QueryActions';
+import UserHeader from '../../components/Toolbar/Toolbar';
 import BPTitle from '../../common/BPTitle/BPTitle';
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle';
-import Toolbar from '../../common/Toolbar/Toolbar';
+import Toolbar from '../../components/Toolbar/Toolbar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../styles';
 
 const OTPscreen = (props) => {
     const {navigation} = props
@@ -47,18 +47,18 @@ const OTPscreen = (props) => {
 
     return (
         <SafeAreaView style={{flex:1}}>
-        <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
+        <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
             {/* <StatusBar translucent barStyle="light-content" backgroundColor="transparent" /> */}
             <Toolbar enableBackButton/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
-                    <BPTitle title="Verfication Code"/>
+                    <BPTitle title="Verification Code"/>
                     <BPSubtitle text="Please enter the 4 digit code sent to vrsuresh.choudhary@gmail.com" />
                     
                     <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:primaryColors.lightGray , overflow: 'hidden' }}
+                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.lightGray , overflow: 'hidden' }}
                         pinCount={4}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}
@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0.5,
         borderRightWidth: 0.5,
         marginLeft:-1,
-       // borderColor: primaryColors.lightGray,
-        color: primaryColors.white,
-        backgroundColor: primaryColors.darkGray,
+       // borderColor: Colors.lightGray,
+        color: Colors.white,
+        backgroundColor: Colors.darkGray,
          borderRadius:0
     },
 

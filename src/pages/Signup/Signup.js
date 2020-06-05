@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text , TouchableOpacity, StatusBar} from 'react-native'
 import { Container, Content, CardItem, Item, Card , Button, View} from 'native-base'
-import LabelInput from '../../common/LabelInput/LabelInput'
-import { primaryColors } from '../../utils/colors'
+import LabelInput from '../../components/LabelInput/LabelInput'
 import LogoHeader from '../../common/LogoHeader/LogoHeader'
 import BPButton from '../../common/BPButton/BPButton'
-import QueryActions from '../../common/QueryActions/QueryActions'
+import QueryActions from '../../components/QueryActions/QueryActions'
+import { Colors } from '../../styles'
 
 const Signup = ({navigation}) => {
     const goToScreen = () =>{
@@ -15,7 +15,7 @@ const Signup = ({navigation}) => {
         })
     }
     return (
-        <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
+        <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
             <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
             
             

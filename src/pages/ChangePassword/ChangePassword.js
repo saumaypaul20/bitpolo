@@ -1,18 +1,20 @@
 import React from 'react'
 import { View, Text, StatusBar, Image, TouchableOpacity } from 'react-native'
 import { Container, Content, Icon } from 'native-base'
-import { primaryColors } from '../../utils/colors'
+import { primaryColors } from '../../styles/colors'
 import BPTitle from '../../common/BPTitle/BPTitle'
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle'
 import BPButton from '../../common/BPButton/BPButton'
-import LabelInput from '../../common/LabelInput/LabelInput'
-import QueryActions from '../../common/QueryActions/QueryActions'
+import LabelInput from '../../components/LabelInput/LabelInput'
+import QueryActions from '../../components/QueryActions/QueryActions'
 import { useNavigation } from '@react-navigation/native'
+import BPText from '../../common/BPText/BPText'
+import { Colors } from '../../styles'
 
 const ChangePassword = () => {
     const navigation = useNavigation()
     return (
-        <Container style={{ flex: 1, backgroundColor: primaryColors.primeBG }}>
+        <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
             <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
             
@@ -39,7 +41,7 @@ const ChangePassword = () => {
                        onPress={()=> navigation.popToTop()}
                        style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
                            <Icon  type="FontAwesome" name="chevron-left" style={{color:'#fff', paddingHorizontal: 10, fontSize: 10}}/>
-                           <Text style={{color:'#fff'}}>Go Back</Text>
+                           <BPText>Go Back</BPText>
                        </TouchableOpacity>
                     </View>
                 </View>
