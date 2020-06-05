@@ -5,23 +5,27 @@ import { useNavigation } from '@react-navigation/native';
 import { primaryColors } from '../../utils/colors';
 
 
-const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs }) => {
+const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs, searchbar }) => {
     const navigation = useNavigation();
     return (
         <View> 
 
             <Header style={{backgroundColor:backgroundColor || 'transparent', paddingTop:10, paddingBottom:0}} hasTabs={hasTabs }>
                 <StatusBar translucent barStyle="light-content" backgroundColor={backgroundColor || primaryColors.primeBG} />
-                <Left style={{flexDirection:'row', alignItems:'center', flex:1}}>
+                <Left style={{flexDirection:'row', alignItems:'center', flex:0.1}}>
                     {enableBackButton && <Button transparent onPress={()=> navigation.goBack()}>
                         <Icon  name='arrow-back' style={{fontSize:20}} />
                     </Button>}
-                    {
-                        title && <Text style={{color:'#fff', fontSize:20,}}>{title}</Text>
-                    }
+                   
                 </Left>
-                <Body/>
-                <Right />
+                <Body style={{flex:0.8}}>
+                {
+                        title && <Text style={{color:primaryColors.white, fontSize:20,}}>{title}</Text>
+                    }
+                </Body>
+                <Right style={{flex:0.2}}>
+                   {searchbar && <Text style={{color:'#fff'}}>O</Text>}
+                </Right>
             </Header>
         
         </View>

@@ -183,7 +183,8 @@ const Markets = () => {
                    
                    
 
-                   <Tabs locked tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: primaryColors.darkGray2}} >
+                   <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: primaryColors.darkGray2}} >
+
                     <Tab  heading="Favourites" 
                     textStyle={{color:primaryColors.text.lightWhite,}} 
                     tabStyle={{ backgroundColor: primaryColors.darkGray2, }} 

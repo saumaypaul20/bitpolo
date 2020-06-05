@@ -10,6 +10,10 @@ import GoogleVerificationCode from '../pages/GoogleVerificationCode/GoogleVerifi
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import VerifyEmail from '../pages/VerifyEmail/VerifyEmail';
 import ChangePassword from '../pages/ChangePassword/ChangePassword';
+import About from '../pages/Tabs/Account/About/About';
+import Security from '../pages/Tabs/Account/Security/Security';
+import BankAccountDetails from '../pages/Tabs/Account/BankAccountDetails/BankAccountDetails';
+import Settings from '../pages/Tabs/Account/Settings/Settings';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +32,10 @@ const Routes = () => {
                 <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
                 <Stack.Screen name="ChangePassword" component={ChangePassword} />
                 <Stack.Screen name="GoogleVerificationCode" component={GoogleVerificationCode} />
+                <Stack.Screen name="About" component={About} />
+                <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen name="Security" component={Security} />
+                <Stack.Screen name="BankAccountDetails" component={BankAccountDetails} />
                 <Stack.Screen name="Dashboard" children={BottomTabs} />
             </Stack.Navigator>
         </NavigationContainer>
