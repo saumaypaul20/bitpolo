@@ -9,6 +9,7 @@ export const primaryColors = {
     lightGreen: '#2BAB64',
     green: '#2BAB64',
     red:'#EE5252',
+    lightRed:'rgba(238,82,82,0.5)',
     
     text:{
       darkGreen:'#2F4B3B',
