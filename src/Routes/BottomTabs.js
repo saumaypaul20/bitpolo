@@ -10,7 +10,7 @@ import Trades from '../pages/Tabs/Trades/Trades';
 import Wallet from '../pages/Tabs/Wallet/Wallet';
 import Account from '../pages/Tabs/Account/Account';
 import { Icon } from 'native-base';
-import { Colors } from '../styles';
+import { Colors, Images } from '../theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,30 +33,26 @@ const BottomTabs = () => {
                 tabBarIcon: ({ size, focused }) => {
                   let iconName, active, inactive;
                   if (route.name == "Home") {
-                    active = require(`../assets/images/items/home_icon.png`)
-                    inactive = require(`../assets/images/items/home_gray_icon.png`)
-                    iconName= focused ? active : inactive
+                    active = Images.home_icon
+                    inactive = Images.home_gray_icon
                   } else if (route.name == "Markets") {
-                    active = require(`../assets/images/items/markets_icon.png`)
-                    inactive = require(`../assets/images/items/markets_gray_icon.png`)
-                    iconName= focused ? active : inactive
+                    active = Images.markets_icon
+                    inactive = Images.markets_gray_icon
 
                   } else if (route.name == "Trades") {
-                    active = require(`../assets/images/items/trade_icon.png`)
-                    inactive = require(`../assets/images/items/trade_gray_icon.png`)
-                    iconName= focused ? active : inactive
+                    active = Images.trade_icon
+                    inactive = Images.trade_gray_icon
 
                   }else if (route.name == "Wallet") {
-                    active = require(`../assets/images/items/wallet_icon.png`)
-                    inactive = require(`../assets/images/items/wallet_gray_icon.png`)
-                    iconName= focused ? active : inactive
+                    active = Images.wallet_icon
+                    inactive = Images.wallet_gray_icon
 
                   }else if (route.name == "Account") {
-                    active = require(`../assets/images/items/account_icon.png`)
-                    inactive = require(`../assets/images/items/account_gray_icon.png`)
-                    iconName= focused ? active : inactive
+                    active = Images.account_icon
+                    inactive = Images.account_gray_icon
 
                   }
+                  iconName= focused ? active : inactive
                   return <Image source={iconName} style={{width:size-2, height:size-2, marginTop: 15, marginBottom:10}} resizeMode="contain" />;
                 }
                 })}

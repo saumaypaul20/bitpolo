@@ -1,12 +1,10 @@
 import React from 'react'
-import { View, Text, FlatList,  } from 'react-native'
-import { primaryColors } from '../../../styles/colors'
+import { View, FlatList,  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
-import { Container, Content } from 'native-base'
 import HomeHeaderComp from '../../../components/HomeHeaderComp/HomeHeaderComp'
 import BPText from '../../../common/BPText/BPText'
-import { Colors } from '../../../styles'
+import { Colors } from '../../../theme'
 
 const DATA = [
     {
@@ -39,6 +37,7 @@ const DATA = [
     },
   
 ]
+
 const ListItem = () =>{
     return(
         <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8}}>

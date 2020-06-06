@@ -9,7 +9,7 @@ import BPTitle from '../../common/BPTitle/BPTitle';
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle';
 import Toolbar from '../../components/Toolbar/Toolbar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../styles';
+import { Colors } from '../../theme';
 
 const OTPscreen = (props) => {
     const {navigation} = props
@@ -48,7 +48,7 @@ const OTPscreen = (props) => {
     return (
         <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            {/* <StatusBar translucent barStyle="light-content" backgroundColor="transparent" /> */}
+            {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
             <Toolbar enableBackButton/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
@@ -58,7 +58,7 @@ const OTPscreen = (props) => {
                     <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.lightGray , overflow: 'hidden' }}
+                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
                         pinCount={4}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0.5,
         borderRightWidth: 0.5,
         marginLeft:-1,
-       // borderColor: Colors.lightGray,
+       // borderColor: Colors.gray,
         color: Colors.white,
         backgroundColor: Colors.darkGray,
          borderRadius:0

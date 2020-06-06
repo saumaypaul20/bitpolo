@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StatusBar, Image, TouchableOpacity } from 'react-native'
 import { Container, Content, Icon } from 'native-base'
-import { primaryColors } from '../../styles/colors'
+import { primaryColors } from '../../theme/colors'
 import BPTitle from '../../common/BPTitle/BPTitle'
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle'
 import BPButton from '../../common/BPButton/BPButton'
@@ -9,18 +9,18 @@ import LabelInput from '../../components/LabelInput/LabelInput'
 import QueryActions from '../../components/QueryActions/QueryActions'
 import { useNavigation } from '@react-navigation/native'
 import BPText from '../../common/BPText/BPText'
-import { Colors } from '../../styles'
+import { Colors, Images } from '../../theme'
 
 const ChangePassword = () => {
     const navigation = useNavigation()
     return (
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
+            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
             
                 <View style={{flex:3,alignItems:'center', justifyContent: 'center',paddingTop:110}}>
                     <View style={{padding:28}}>
-                        <Image source={require('../../assets/images/items/change_your_password_icon.png')} style={{width: 140, height:140}} resizeMode="contain" />
+                        <Image source={Images.change_your_password_icon} style={{width: 140, height:140}} resizeMode="contain" />
                     </View>
                     
                     <BPTitle title="Change Your Password" />

@@ -8,7 +8,7 @@ import LabelInput from '../../components/LabelInput/LabelInput'
 import QueryActions from '../../components/QueryActions/QueryActions'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { useNavigation } from '@react-navigation/native'
-import { Colors } from '../../styles'
+import { Colors, Images } from '../../theme'
 
 const VerifyEmail = () => {
 
@@ -45,12 +45,12 @@ const VerifyEmail = () => {
 
     return (
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
+            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
             
                 <View style={{flex:3,alignItems:'center', justifyContent: 'center',paddingTop:110}}>
                     <View style={{padding:28}}>
-                        <Image source={require('../../assets/images/items/verify_icon.png')} style={{width: 140, height:140}} resizeMode="contain" />
+                        <Image source={Images.verify_icon} style={{width: 140, height:140}} resizeMode="contain" />
                     </View>
                     
                     <BPTitle title="Verify Your Email" />
@@ -63,7 +63,7 @@ const VerifyEmail = () => {
                 <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 60, marginBottom:60, borderRadius:6, borderWidth:1, borderColor:Colors.lightGray , overflow: 'hidden' }}
+                        style={{ height: 64, width: '100%',  marginTop: 60, marginBottom:60, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
                         pinCount={4}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0.5,
         borderRightWidth: 0.5,
         marginHorizontal:-1,
-       // borderColor: Colors.lightGray,
+       // borderColor: Colors.gray,
         color: Colors.white,
         backgroundColor: Colors.darkGray,
          borderRadius:0

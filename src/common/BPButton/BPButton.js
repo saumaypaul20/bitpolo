@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { Button } from 'native-base'
-import { Colors } from '../../styles'
+import { Colors } from '../../theme/'
 
 const BPButton = ({label, onPress, marginTop, disabled}) => {
     return (

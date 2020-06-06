@@ -1,9 +1,9 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Item, Button } from 'native-base'
-import { primaryColors } from '../../styles/colors'
+import { primaryColors } from '../../theme/colors'
 import BPText from '../../common/BPText/BPText'
-import { Fonts } from '../../styles'
+import { Fonts } from '../../theme'
 
 const QueryActions = (props) => {
     return (

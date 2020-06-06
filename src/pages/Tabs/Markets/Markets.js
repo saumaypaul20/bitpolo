@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, FlatList, TouchableOpacity, Image,  } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { Colors } from '../../../styles'
+import { Colors, Images } from '../../../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Container, Content, Icon, Tab, Tabs } from 'native-base'
@@ -66,26 +66,6 @@ const listItem = (item, index) =>{
 const homeHeaderComp = () => {
     return (
         <View style={{backgroundColor: Colors.primeBG}}>
-            {/* <View style={{ flexDirection:'row', alignItems:'flex-start', paddingVertical:20}}>
-                        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                            <Text style={{color: Colors.lightWhite, fontFamily:'Inter-Bold' , fontSize:10}}>BDX/USDT</Text>
-                            <Text style={{color:'#fff', fontSize:23,}}>17.6043</Text>
-                            <Text style={{color:'#fff', fontSize:11, color:Colors.lightGreen}}>-0.13%</Text>
-                        </View>
-
-                        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                            <Text style={{color: Colors.lightWhite, fontFamily:'Inter-Bold', fontWeight:'bold', fontSize:10}}>BDX/USDT</Text>
-                            <Text style={{color:'#fff', fontSize:23,}}>17.6043</Text>
-                            <Text style={{color:'#fff', fontSize:11, color:Colors.lightGreen}}>-0.13%</Text>
-                        </View>
-                        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                            <Text style={{color: Colors.lightWhite, fontFamily:'Inter-Bold' , fontWeight:'bold', fontSize:10}}>BDX/USDT</Text>
-                            <Text style={{color:'#fff', fontSize:23,}}>17.6043</Text>
-                            <Text style={{color:'#fff', fontSize:11, color:Colors.lightGreen}}>-0.13%</Text>
-                        </View>
-                    </View> */}
-                   
-                    
 
                     <View style={{ flexDirection:'row', alignItems:'flex-start', backgroundColor: Colors.darkGray2, paddingVertical:15}}>
                         <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
@@ -107,7 +87,7 @@ const homeHeaderComp = () => {
 const favsEmpty = () =>{
     return(
         <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
-                <Image source={require('../../../assets/images/items/nothing_is_here.png')} style={{width:167, height:130, margin:25}} resizeMode="center" />
+                <Image source={Images.nothing_is_here} style={{width:167, height:130, margin:25}} resizeMode="center" />
                 <Text style={{color: Colors.white, fontSize:18, fontFamily:'Inter-Medium', opacity:0.8}}>Nothing is here</Text>
                 <Text style={{color: Colors.white, fontSize:14, fontFamily:'Inter-Regular', opacity:0.5,lineHeight:23, paddingHorizontal:56, textAlign:'center',paddingTop:12}}>{`Go to any crypto and then Swipe left to\nadd it in favourites`}</Text>
         </View>
@@ -163,14 +143,14 @@ const Markets = () => {
         if(favs.find(i=> i.id === item.id)){
             return(
                 <Image 
-                    source={require('../../../assets/images/items/star_active.png')} 
+                    source={Images.star_active} 
                     style={{width:19, height:19}} 
                     resizeMode="contain" />
             )
         }else
         return(
             <Image 
-                source={require('../../../assets/images/items/star_icon.png')} 
+                source={Images.star_icon} 
                 style={{width:19, height:19}} 
                 resizeMode="contain" />
         )
@@ -181,9 +161,7 @@ const Markets = () => {
             <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <Toolbar title="Markets" backgroundColor={Colors.darkGray2} hasTabs />
                    
-                   
-
-                   <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
+                <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
 
                     <Tab  heading="Favourites" 
                     textStyle={{color:Colors.text.lightWhite,}} 
@@ -203,7 +181,7 @@ const Markets = () => {
                                                 onDeleteClick(rowData.item) ;
                                             }, 500);} }>
                                                <Image 
-                                               source={require('../../../assets/images/items/delete_icon.png')} 
+                                               source={Images.delete_icon} 
                                                style={{width:14, height:16}} 
                                                resizeMode="contain" />
                                             </TouchableOpacity>
@@ -229,7 +207,6 @@ const Markets = () => {
                         </View>
                     </Tab>
                     
-
                     <Tab heading="BDX" 
                     textStyle={{color:Colors.text.lightWhite,}} 
                     tabStyle={{ backgroundColor: Colors.darkGray2 , }} 
@@ -289,15 +266,8 @@ const Markets = () => {
                         </View>
                     </Tab>
 
+                </Tabs>
 
-                    </Tabs>
-
-
-
-                  
-                        
-                   
-               
             </View>
         </SafeAreaView>
     )

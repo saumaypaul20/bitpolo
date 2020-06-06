@@ -1,17 +1,50 @@
-'use strict';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import { AsyncStorage } from 'react-native'
+let Storage = {
+    get: async function (key){
+        try {
+          const value = await AsyncStorage.getItem(key)
+          if(value !== null) {
+            return JSON.parse(value)
+          }
+          return null
+        } catch(e) {
+           return null
+        }
+      },
 
-export default class Storage {
-    static get(key) {
-        return AsyncStorage.getItem(key);
-    }
+    set: async function(key,value){
+        try {
+          const jsonValue = JSON.stringify(value)
+          await AsyncStorage.setItem(`${key}`, jsonValue)
+        } catch (e) {
+          // saving error
+        }
+        return true
+      },
 
-    static set(key, value) {
-        //console.log('storage',key,value);
-        return AsyncStorage.setItem(key, value);
-    }
-    static clearAll() {
-        return AsyncStorage.clear();
-    }
+     clear: async function(key){
+        try {
+          await AsyncStorage.removeItem(key)
+        } catch(e) {
+          // remove error
+          return false
+        }
+      
+        return true
+      },
+
+    clearAll: async function() {
+        try {
+          await AsyncStorage.clear()
+        } catch(e) {
+          // clear error
+          return null
+        }
+      
+        return true
+      }
 }
+
+
+export default Storage

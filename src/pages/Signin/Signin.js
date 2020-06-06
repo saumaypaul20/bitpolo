@@ -1,30 +1,31 @@
-import React, { useState } from 'react'
-import { Text , TouchableOpacity, StatusBar} from 'react-native'
-import { Container, Content, CardItem, Item, Card , Button, View} from 'native-base'
+import React from 'react'
+import { StatusBar} from 'react-native'
+import { Container, Content, Card , Button, View} from 'native-base'
 import LabelInput from '../../components/LabelInput/LabelInput'
-import { primaryColors } from '../../styles/colors'
 import BPButton from '../../common/BPButton/BPButton'
 import { useSelector, useDispatch } from 'react-redux'
 import { inputAction } from '../../redux/actions/input.actions'
 import LogoHeader from '../../common/LogoHeader/LogoHeader'
 import QueryActions from '../../components/QueryActions/QueryActions'
-import { Colors } from '../../styles'
+import { Colors, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
 import Storage from '../../utils/storage.utils'
+import { screenNames } from '../../Routes/screenNames/screenNames'
 
 const Signin = ({navigation}) => {
     const dispatch = useDispatch()
+    
     let email = useSelector(state => state.inputReducer.email);
     let password = useSelector(state => state.inputReducer.password);
 
-    const onSingInPress =() => {
-        Storage.set("login", true)
-        navigation.navigate("OTPscreen")
+    const onSingInPress = async () => {
+        await Storage.set("login", true)
+        navigation.navigate(screenNames.OTP_SCREEN)
     }
     
     return (
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
+            <StatusBar translucent barStyle={Colors.barStyle} backgroundColor="transparent" />
             
             
             <Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -37,7 +38,7 @@ const Signin = ({navigation}) => {
                             <LabelInput label="Password" placeholder="Enter your Password" onChange={(text)=> dispatch(inputAction("PASSWORD", text))} value={password}/*iconPath={iconLabel2} isPassword secureTextEntry *//>
                             
                             <Button transparent style={{ marginVertical: 10, alignSelf:'flex-end' }} >
-                                <BPText uppercase={false} style={{ padding: 20, fontSize: 13, color: Colors.lightWhite, fontFamily: 'Asap-Regular' }}>Forgot Password?</BPText>
+                                <BPText uppercase={false} style={{ padding: 20, fontSize: 13, color: Colors.lightWhite, fontFamily: Fonts.FONT_REGULAR }}>Forgot Password?</BPText>
                             </Button>
 
                             <BPButton label="Sign in" onPress={()=> onSingInPress()}/>
@@ -50,7 +51,7 @@ const Signin = ({navigation}) => {
                     <QueryActions
                         query={"Don't have an account yet?"} 
                         actionName="Sign Up" 
-                        action={()=> navigation.navigate("Signup")}/>
+                        action={()=> navigation.navigate(screenNames.SIGNUP)}/>
 
                     </Card>
           

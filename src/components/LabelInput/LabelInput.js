@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, Image, TextInput , TouchableOpacity} from 'react-native'
 
 import { Item, Input, CardItem, Label } from 'native-base'
-import { Colors, Fonts } from '../../styles'
+import { Colors, Fonts } from '../../theme'
 
 
 const LabelInput = (props) => {

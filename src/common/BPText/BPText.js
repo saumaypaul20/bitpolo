@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { primaryColors } from '../../styles/colors';
+import { View, Text, StyleSheet, TextStyle } from 'react-native'
+import { primaryColors } from '../../theme/colors';
 
 const BPText = (props) => {
     return (
-       <Text {...props}  style={[styles.defaultStyle, props.style]}>
+       <Text {...props}  style={[TextStyle,styles.defaultStyle, props.style]}>
             {props.children}
        </Text>
              

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Fonts } from '../../styles'
+import { Fonts } from '../../theme'
 import BPText from '../BPText/BPText'
 
 const BPTitle = ({title}) => {

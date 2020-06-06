@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Colors, Fonts } from '../../styles'
+import { Colors, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
 
 const HomeHeaderComp = () => {

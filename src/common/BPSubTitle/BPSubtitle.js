@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { primaryColors } from '../../styles/colors'
+import { primaryColors } from '../../theme/colors'
 import BPText from '../BPText/BPText'
 
 const BPSubtitle = ({text}) => {

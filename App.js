@@ -4,15 +4,22 @@ import Routes from './src/Routes/Routes';
 import Storage from './src/utils/storage.utils';
 
 const App= () => {
-  const [login, setLogin] = useState(false)
+  const [login, setLogin] = useState(null)
+
   useEffect(() => {
-    if(Storage.get("login")){
+    let user =Storage.get("login")
+     
+    if(user){
         setLogin(true)
+    }else{
+      setLogin(false)
     }
   }, [])
+
   return (
-   <Routes login={login}/>
+    login !== null ? <Routes login={login}/> : null
   );
+
 };
 
 export default App;

@@ -5,7 +5,7 @@ import LabelInput from '../../components/LabelInput/LabelInput'
 import LogoHeader from '../../common/LogoHeader/LogoHeader'
 import BPButton from '../../common/BPButton/BPButton'
 import QueryActions from '../../components/QueryActions/QueryActions'
-import { Colors } from '../../styles'
+import { Colors } from '../../theme'
 
 const Signup = ({navigation}) => {
     const goToScreen = () =>{
@@ -16,7 +16,7 @@ const Signup = ({navigation}) => {
     }
     return (
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
+            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" />
             
             
             <Content contentContainerStyle={{ flexGrow: 1 }}>

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
-import { primaryColors } from '../../styles/colors';
+import { primaryColors } from '../../theme/colors';
 import { Container, Content } from 'native-base';
 import BPButton from '../../common/BPButton/BPButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toolbar from '../../components/Toolbar/Toolbar';
 import BPText from '../../common/BPText/BPText';
-import { Fonts, Colors } from '../../styles';
+import { Fonts, Colors } from '../../theme';
+import { screenNames } from '../../Routes/screenNames/screenNames';
 
 const GoogleVerificationCode = (props) => {
     const {navigation} = props
@@ -15,7 +16,7 @@ const GoogleVerificationCode = (props) => {
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
-                {/* <StatusBar translucent barStyle="light-content" backgroundColor="transparent" /> */}
+                {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
                 <Toolbar enableBackButton/>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
@@ -26,7 +27,7 @@ const GoogleVerificationCode = (props) => {
                             keyboardType="phone-pad"
                             // autoFocusOnLoad
                             placeholder="Enter 6-digit code"
-                            placeholderTextColor={Colors.lightGray}
+                            placeholderTextColor={Colors.gray}
                             style={styles.inputStyle}
                             value={code}
                             onChangeText={code => setCode(code)}
@@ -34,7 +35,7 @@ const GoogleVerificationCode = (props) => {
                         />
 
 
-                        <BPButton label="Confirm" onPress={()=> navigation.reset({index:0, routes: [{name:"Dashboard"}]})}/>
+                        <BPButton label="Confirm" onPress={()=> navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})}/>
                     
 
                     </View>
@@ -46,7 +47,7 @@ const GoogleVerificationCode = (props) => {
 
 const styles = StyleSheet.create({
 
-    inputStyle:{  width: '100%',  marginTop: 40, marginBottom:68 ,borderRadius:6, borderWidth:1, borderColor:Colors.lightGray , padding: 20, color:'#fff'},
+    inputStyle:{  width: '100%',  marginTop: 40, marginBottom:68 ,borderRadius:6, borderWidth:1, borderColor:Colors.gray , padding: 20, color:'#fff'},
    
 });
 

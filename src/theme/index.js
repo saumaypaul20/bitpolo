@@ -1,5 +1,6 @@
 import * as Fonts from './typography';
 import * as ColorPallette from './colors'
+import * as Images from './images'
 
 let isLight = false;
 
@@ -8,5 +9,5 @@ if(isLight){
     Colors = ColorPallette.secondaryColors
 }
 
-export {Fonts, Colors }
+export {Fonts, Colors, Images }
  
