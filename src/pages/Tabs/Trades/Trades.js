@@ -6,10 +6,14 @@ import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Colors, Images } from '../../../theme'
 import BPText from '../../../common/BPText/BPText'
 import SellTab from './SellTab/SellTab'
+import PickerComp from '../../../components/PickerComp/PickerComp'
 
 const Trades = () => {
 
     const [pickerVal, setPickerVal] = useState(null)
+
+    const currencies = [{label: 'BTC/USDT', value:'key1'}];
+    const [currencyVal, setCurrency] = useState(null)
 
     return (
         <SafeAreaView style={{flex:1}}>
@@ -22,24 +26,14 @@ const Trades = () => {
                     <View style={{flexBasis:1, alignItems:'center', flexDirection:'row', justifyContent:'space-between', width:'100%', paddingVertical:10, backgroundColor: Colors.darkGray2, paddingHorizontal:16}}>
                          
                         <View style={{flex:0.5, borderRadius:4, alignSelf:'flex-start'}}>
-                            <Picker 
-                                mode="dropdown"
-                                style={{ width: 140 , height:16, color: Colors.lightWhite, backgroundColor: "transparent", fontSize:16, transform: [
-                                    { scaleX: 0.9 }, 
-                                    { scaleY: 0.9 },
-                                 ]}}
-                                selectedValue={pickerVal}
-                                onValueChange={(val)=> setPickerVal(val)}
-                                itemStyle={{
-                                    backgroundColor: Colors.transparent,
-                                  }}
-                                  itemTextStyle={{ color: Colors.white }}
-                                >
-                                <Picker.Item style={{fontSize:16}} label="BTC/USDT" value="key0" />
-                                {/* <Picker.Item label="INR/USDT" value="key1" /> */}
-                                 
-                            </Picker>
-                            <Icon type="FontAwesome" name="chevron-down" style={{position:'absolute', top: 5, right: 10, fontSize:14, color: Colors.lightWhite}} />
+                            <PickerComp
+                                items={currencies}
+                                pickerVal = {currencyVal}
+                                setPickerVal = {setCurrency}
+                                chevronPositionTop= {3}
+                            />
+                             
+                           
                         </View>
 
                         <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>

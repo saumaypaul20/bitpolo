@@ -43,10 +43,6 @@ const RedBarChart = ({color, rightTextColor}) => {
             apples: 2330,
             aam: 22
         },
-        {
-            apples: 2130,
-            aam: 22
-        },
          
     ]
 
