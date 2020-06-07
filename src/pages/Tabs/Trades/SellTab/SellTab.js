@@ -55,7 +55,7 @@ const SellTab = () => {
 
         <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
             {/* Left Column */}
-            <View style={{flex:1, backgroundColor: Colors.primeBG , justifyContent:'center', alignItems:'center'}}>
+            <View style={{flex:1, backgroundColor: Colors.primeBG , justifyContent:'center', alignItems:'center', marginRight:5}}>
                {/* Red Chart 1 */}
                <View style={{height:245, alignSelf:'stretch',}}>
                     <RedBarChart color={Colors.lightRed} rightTextColor={Colors.red}/>
@@ -114,7 +114,7 @@ const SellTab = () => {
 
             {/* Right Column */}
             <View style={{flex:1}}>
-                <View style={{marginRight:16}}>
+                <View style={{marginRight:16, marginLeft:3}}>
                     <InputCounter />
 
                     <Spacer space={8}/>
