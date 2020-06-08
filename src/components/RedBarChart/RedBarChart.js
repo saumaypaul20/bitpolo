@@ -55,7 +55,7 @@ const RedBarChart = ({color, rightTextColor}) => {
                 <>
                 <Text
                     
-                    key={ index }
+                    key={ index.toString() }
                     x={  171 }
                     y={ y(index) + (bandwidth / 2) }
                     fontSize={ 10 }
@@ -67,7 +67,7 @@ const RedBarChart = ({color, rightTextColor}) => {
                 </Text>
                 <Text
                     
-                    key={ (index+1)*20 }
+                    key={ ((index+1)*20).toString() }
                     x={ x(aam) + 22 }
                     y={ y(index) + (bandwidth / 2) }
                     fontSize={ 10 }

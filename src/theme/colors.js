@@ -24,6 +24,8 @@ export const primaryColors = {
     lightGreen: '#2BAB64',
     red:'#EE5252',
     lightRed:'rgba(238,82,82,0.5)',
+    inactiveToggleBG:'#3c3c3c',
+    activeToggleBG:'#707070'
   
   };
 

@@ -17,5 +17,7 @@ export const screenNames = {
     TRADES :"Trades",
     WALLET : "Wallet",
     ACCOUNT : "Account",
+    ORDERS : "Orders",
+    ORDERS_HISTORY : "OrdersHistory",
 
 }

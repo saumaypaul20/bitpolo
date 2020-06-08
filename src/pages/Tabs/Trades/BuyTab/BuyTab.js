@@ -76,7 +76,7 @@ const SellTab = () => {
                     <RedBarChart color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/>
                </View>
 
-                <View style={{ alignSelf:'stretch', flexDirection:'row', paddingHorizontal:16, paddingVertical:9}}>
+                <View style={{ alignSelf:'stretch', flexDirection:'row', paddingHorizontal:16, paddingVertical:8}}>
                         <View style={{flex:1, borderRadius:2, borderTopRightRadius:0, borderBottomRightRadius:0, alignSelf:'stretch',borderWidth:1, borderColor: Colors.gray, opacity:0.8}}>
                                 <PickerComp
                                     items={list1}
@@ -130,7 +130,7 @@ const SellTab = () => {
                             <BPText style={styles.percentages}>100%</BPText>
                     </View>
 
-                    <Spacer space={18}/>
+                    <Spacer space={17}/>
 
                     <View style={{justifyContent:'center', alignItems:'center'}}>
                         <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText>

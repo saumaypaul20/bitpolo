@@ -15,16 +15,32 @@ import Security from '../pages/Tabs/Account/Security/Security';
 import BankAccountDetails from '../pages/Tabs/Account/BankAccountDetails/BankAccountDetails';
 import Settings from '../pages/Tabs/Account/Settings/Settings';
 import {screenNames} from './screenNames/screenNames'
+import Orders from '../pages/Tabs/Trades/Orders/Orders';
+import OrdersHistory from '../pages/Tabs/Trades/OrdersHistory/OrdersHistory';
 const Stack = createStackNavigator();
 
 const Routes = ({login}) => {
+
+    const config = {
+        animation: 'spring',
+        config: {
+          stiffness: 1000,
+          damping: 100,
+          mass: 3,
+          overshootClamping: true,
+          restDisplacementThreshold: 0.01,
+          restSpeedThreshold: 0.01,
+        },
+      };
+
     return (
         <NavigationContainer>
             <Stack.Navigator 
                 initialRouteName = {login ? screenNames.DASHBOARD : screenNames.SIGNIN}
                 screenOptions={{
                 headerShown: false, 
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS 
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS ,
+                
             }}>
                 
                 <Stack.Screen name= {screenNames.SIGNIN} component={Signin} />
@@ -39,6 +55,8 @@ const Routes = ({login}) => {
                 <Stack.Screen name= {screenNames.SETTINGS} component={Settings} />
                 <Stack.Screen name= {screenNames.SECURITY} component={Security} />
                 <Stack.Screen name= {screenNames.BANK_ACCOUNT_DETAILS} component={BankAccountDetails} />
+                <Stack.Screen name= {screenNames.ORDERS} component={Orders} />
+                <Stack.Screen name= {screenNames.ORDERS_HISTORY} component={OrdersHistory} />
                
             </Stack.Navigator>
         </NavigationContainer>

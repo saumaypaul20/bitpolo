@@ -7,11 +7,14 @@ import { Colors } from '../../theme'
 const InputCounter = ({onIncrease, onDecrease, input, onInputChange}) => {
     return (
         <View style={{flex:1, flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
-            <Button style={styles.counterBtns}>
+            <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
                 <BPText>+</BPText>
             </Button>
 
-            <TextInput keyboardType={"decimal-pad"} 
+            <TextInput 
+            value={input}
+            onChange={(text)=> onInputChange(text)}
+            keyboardType={"decimal-pad"} 
             style={{
                 alignSelf:'stretch', 
                 flex:1, 
@@ -20,7 +23,7 @@ const InputCounter = ({onIncrease, onDecrease, input, onInputChange}) => {
                 textAlign:'center'
                 }} />
             
-            <Button style={styles.counterBtns}>
+            <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
                 <BPText>-</BPText>
             </Button>
 
