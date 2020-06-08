@@ -115,12 +115,12 @@ const FilterFAB = () => {
                             
                        
                             <View style={{ flexDirection:'row',justifyContent:'space-between', alignItems:'center', paddingVertical:12}}>
-                                    <BPText style={{fontSize:15}}>Hide Other Pairs </BPText>
+                                    <BPText style={{fontSize:15}}>Hide All Cancelled </BPText>
 
                                     <Switch
                                         trackColor={{ false: Colors.inactiveToggleBG, true: Colors.activeToggleBG }}
                                         thumbColor={isEnabled ? Colors.white : Colors.white}
-                                        ios_backgroundColor="#3e3e3e"
+                                        ios_backgroundColor={Colors.inactiveToggleBG}
                                         onValueChange={toggleSwitch}
                                         value={isEnabled}
                                     />
