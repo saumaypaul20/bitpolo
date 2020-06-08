@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native'
 import { Images, Colors } from '../../theme'
 import Modal from 'react-native-modal'
 import BPText from '../../common/BPText/BPText'
 import Spacer from '../../common/Spacer/Spacer'
 import { Content, Container } from 'native-base'
 const FilterFAB = () => {
+
+    const WIDTH = Dimensions.get("window").width;
 
     const [modalVisible, showModal] = useState(false)
     return (
@@ -23,111 +25,20 @@ const FilterFAB = () => {
              onBackdropPress={()=> showModal(false)}
              
              >
-                   <View style={styles.modalView}>
+                   <Container style={styles.modalView}>
                        <Spacer space={12}/>
-                        <View style={{backgroundColor: Colors.white, borderRadius:20, height:6, width:90, opacity: 0.6}} />
+                        <View style={{backgroundColor: Colors.white, borderRadius:20, height:6, width:90, opacity: 0.6 , alignSelf:'center'}} />
 
-                        <Content style={{flex:1, alignSelf:'stretch', width:'100%'}} contentContainerStyle={{flexGrow:1, marginHorizontal:24, marginTop:25, width:'100%'}}>
-                            <View style={{width:'100%', justifyContent:'center', alignItems:'stretch', flexGrow:1}}>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
-                            <BPText style={{fontSize:18}}>Order Filter</BPText>
+                        <Content  
+                            contentContainerStyle={{flexGrow:1, marginHorizontal:24, marginTop:25, alignItems:'stretch', borderWidth:1, borderColor:'#fff'}}>
+
+                            <View style={{ justifyContent:'flex-start', alignItems:'flex-start', flex:1}}>
+                                <BPText style={{fontSize:18}}>Order Filter</BPText>
                             </View>
+
+                            
                         </Content>
-                   </View>
+                   </Container>
             </Modal>
         </>
     )
@@ -147,8 +58,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.tabBackgroundColor, 
         borderTopLeftRadius:25, 
         borderTopRightRadius:25,
-        alignItems:'center',
-        alignSelf:'stretch',
+        alignItems:'stretch',
+        
         width:'100%'
     }
 })
