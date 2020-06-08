@@ -1,4 +1,4 @@
-export const BASE_URL ='http://192.168.1.5:9000/';
+export const BASE_URL ='https://cruxtest.bitpolo.com/api/v1';
 
 export const LOGIN = 'users/login';
 export const CREATORDER ='createOrder'

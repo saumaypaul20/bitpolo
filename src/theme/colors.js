@@ -13,6 +13,12 @@ export const primaryColors = {
 
     textInputBorder:'rgba(255, 255, 255, 0.3)',
 
+    radioBG:'#78788052',
+    radioActiveBG:'#fff',
+    radioText:'#fff',
+    radioActiveText:'#000',
+    filterResetBG:'#39393D',
+    
     transparent:'transparent',
     primeBG:'#000',
     white:'#fff',

@@ -5,6 +5,7 @@ import { Container, Content } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
 import { Colors, Images } from '../../../../theme'
 import FilterFAB from '../../../../components/FilterFAB/FilterFAB'
+import BPText from '../../../../common/BPText/BPText'
 
 const OrdersHistory = () => {
     return (
@@ -13,8 +14,8 @@ const OrdersHistory = () => {
                 {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
                 <Toolbar enableBackButton title="Order History"/>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:20, marginTop:83}}>
-                         
+                    <View style={{flex:1, justifyContent:'flex-start', alignItems:'stretch',  marginHorizontal:20,}}>
+                         <BPText>uo</BPText>
                     
                        <FilterFAB />
                     </View>
