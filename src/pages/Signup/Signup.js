@@ -32,8 +32,8 @@ const Signup = ({navigation}) => {
                     <View style={{  flexDirection: 'column', backgroundColor: 'transparent', alignItems:'center', marginHorizontal:43,}}>
                         <LabelInput keyboardType="email" label="Email" placeholder="Email/Mobile Number" /*iconPath={iconLabel1} */ />
                         <LabelInput label="Phone No" placeholder="Enter your Password" keyboardType="phone-pad" /*iconPath={iconLabel2} isPassword secureTextEntry *//>
-                        <LabelInput secureTextEntry label="Password" placeholder="Enter your Password" /*iconPath={iconLabel2} isPassword secureTextEntry *//>
-                        <LabelInput secureTextEntry label="Re-Enter Password" placeholder="Enter your Password" /*iconPath={iconLabel2} isPassword secureTextEntry *//>
+                        <LabelInput secureTextEntry label="Password" placeholder="Enter your Password" secureTextEntry /*iconPath={iconLabel2} isPassword secureTextEntry *//>
+                        <LabelInput secureTextEntry label="Re-Enter Password" placeholder="Enter your Password"secureTextEntry /*iconPath={iconLabel2} isPassword secureTextEntry *//>
                         
                         
                         <View style={{marginTop:48, marginBottom:53}}>

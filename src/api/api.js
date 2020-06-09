@@ -32,9 +32,9 @@ export const api = async (url, method, body = null, headers = {}) => {
     }
 }
 
-export const fetchApi = async (url, method, body, statusCode, token = null, loader = false) => {
+export const fetchApi = async (url, method, body, statusCode, passedHeaders ={}, token = null, loader = false) => {
     try {
-        const headers = {}
+        const headers = passedHeaders
         const result = {
             token: null,
             success: false,
