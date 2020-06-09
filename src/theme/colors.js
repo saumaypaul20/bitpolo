@@ -18,7 +18,7 @@ export const primaryColors = {
     radioText:'#fff',
     radioActiveText:'#000',
     filterResetBG:'#39393D',
-    
+
     transparent:'transparent',
     primeBG:'#000',
     white:'#fff',
@@ -31,7 +31,8 @@ export const primaryColors = {
     red:'#EE5252',
     lightRed:'rgba(238,82,82,0.5)',
     inactiveToggleBG:'#3c3c3c',
-    activeToggleBG:'#707070'
+    activeToggleBG:'#707070',
+    smallButtonBorder: '#70707064'
   
   };
 
