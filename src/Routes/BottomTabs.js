@@ -11,6 +11,7 @@ import Wallet from '../pages/Tabs/Wallet/Wallet';
 import Account from '../pages/Tabs/Account/Account';
 import { Icon } from 'native-base';
 import { Colors, Images } from '../theme';
+import WalletTabRoutes from './WalletTabRoutes';
 
 const Tab = createBottomTabNavigator();
 
@@ -61,7 +62,7 @@ const BottomTabs = () => {
                 <Tab.Screen name="Home" component={Home} />
                 <Tab.Screen name="Markets" component={Markets} />
                 <Tab.Screen name="Trades" component={Trades} />
-                <Tab.Screen name="Wallet" component={Wallet} />
+                <Tab.Screen name="Wallet" component={WalletTabRoutes} />
                 <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false}} />
                 
             </Tab.Navigator>

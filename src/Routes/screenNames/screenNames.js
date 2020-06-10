@@ -19,5 +19,7 @@ export const screenNames = {
     ACCOUNT : "Account",
     ORDERS : "Orders",
     ORDERS_HISTORY : "OrdersHistory",
+    DEPOSIT: 'Deposit',
+    WITHDRAW: 'Withdraw'
 
 }

@@ -11,6 +11,7 @@ import { Colors, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
 import Storage from '../../utils/storage.utils'
 import { screenNames } from '../../Routes/screenNames/screenNames'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Signin = ({navigation}) => {
     const dispatch = useDispatch()
@@ -24,8 +25,9 @@ const Signin = ({navigation}) => {
     }
     
     return (
+        <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle={Colors.barStyle} backgroundColor="transparent" />
+            <StatusBar translucent barStyle={Colors.barStyle} backgroundColor={Colors.primeBG} />
             
             
             <Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -34,8 +36,8 @@ const Signin = ({navigation}) => {
                 <Card transparent style={{ flex:4, justifyContent:'center',}}>
                 <LogoHeader />    
                         <View style={{  flexDirection: 'column', backgroundColor: 'transparent', alignItems:'center', marginHorizontal:43}}>
-                            <LabelInput keyboardType="email-address" label="Email" placeholder="Email/Mobile Number"  onChange={(text)=> dispatch(inputAction("EMAIL", text))} value={email}/*iconPath={iconLabel1} */ />
-                            <LabelInput label="Password" placeholder="Enter your Password" onChange={(text)=> dispatch(inputAction("PASSWORD", text))} value={password}/*iconPath={iconLabel2} isPassword secureTextEntry *//>
+                            <LabelInput keyboardType="email-address" label="Email" placeholder="Email/Mobile Number"  onChangeText={(text)=> dispatch(inputAction("EMAIL", text))} value={email}/*iconPath={iconLabel1} */ />
+                            <LabelInput label="Password" placeholder="Enter your Password" onChangeText={(text)=> dispatch(inputAction("PASSWORD", text))} value={password} secureTextEntry/*iconPath={iconLabel2} isPassword secureTextEntry *//>
                             
                             <Button transparent style={{ marginVertical: 10, alignSelf:'flex-end' }} >
                                 <BPText uppercase={false} style={{ padding: 20, fontSize: 13, color: Colors.lightWhite, fontFamily: Fonts.FONT_REGULAR }}>Forgot Password?</BPText>
@@ -59,6 +61,7 @@ const Signin = ({navigation}) => {
 
             </Content>
         </Container>
+        </SafeAreaView>
     )
 }
 

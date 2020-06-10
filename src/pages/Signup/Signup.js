@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text , TouchableOpacity, StatusBar} from 'react-native'
 import { Container, Content, CardItem, Item, Card , Button, View} from 'native-base'
 import LabelInput from '../../components/LabelInput/LabelInput'
@@ -6,19 +6,85 @@ import LogoHeader from '../../common/LogoHeader/LogoHeader'
 import BPButton from '../../common/BPButton/BPButton'
 import QueryActions from '../../components/QueryActions/QueryActions'
 import { Colors } from '../../theme'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser } from '../../api/apiCalls'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { screenNames } from '../../Routes/screenNames/screenNames'
+import { inputAction } from '../../redux/actions/input.actions'
 
 const Signup = ({navigation}) => {
+    const dispatch = useDispatch()
+
+    const deviceId = useSelector(state=> state.deviceReducer.deviceId)
+    let email = useSelector(state => state.inputReducer.email);
+
+    // const [email, setEmail] = useState(null);
+    const [phone, setPhone] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [rePassword, setRePassword] =useState(null);
+    const [error, setError] = useState(false)
+ 
     const goToScreen = () =>{
         navigation.reset({
             index: 0,
-            routes: [{ name: 'Signin' }],
+            routes: [{ name: screenNames.SIGNIN, params:{email: email} }],
         })
     }
+
+    const isError =() =>{
+        if(!email && !password && !phone && !rePassword){
+            alert("All fields must be filled")
+            setError(true)
+            return true
+        }
+        else if(!email || email.length === 0 || !email.match("@") || !email.match(".")){
+            alert("Provide correct email address")
+            setError(true)
+            return true
+        }else if(!phone || phone.length === 0){
+            setError(true)
+            alert("Phone mustn't be empty")
+            return true
+        }else if(!password || password.length === 0){
+            alert("Password mustn't be empty")
+            setError(true)
+            return true
+        }else  if(password != rePassword){
+            alert("Confirmation password doesn't match!")
+            return true
+        }
+        return false
+    }
+
+    const register = async ()=>{
+        if(isError()){
+            return 
+        }
+        let referrer_code = ""
+       
+        let payload = {
+            email: email,
+            password: password,
+            password_confirmation: rePassword,
+            referrer_code: referrer_code
+        }
+
+        let res = await registerUser(payload);
+        console.log(res)
+        if(!res.status){
+            alert(JSON.stringify(Object.values(res.data.data.attributes.message)[0]).replace(/['"]+/g, ''))
+            return
+        }
+
+        alert(res.data.data.attributes.message)
+
+        goToScreen() 
+         
+    }
     return (
+        <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" />
-            
-            
+            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor= {Colors.primeBG} />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
            
                <View style={{flex:1, justifyContent:'center'}}>
@@ -30,14 +96,38 @@ const Signup = ({navigation}) => {
                 <Card transparent  style={{flex:0.5,justifyContent:'flex-start', alignItems:'center', paddingBottom: 55, paddingTop:0, marginTop:0 }}>
 
                     <View style={{  flexDirection: 'column', backgroundColor: 'transparent', alignItems:'center', marginHorizontal:43,}}>
-                        <LabelInput keyboardType="email" label="Email" placeholder="Email/Mobile Number" /*iconPath={iconLabel1} */ />
-                        <LabelInput label="Phone No" placeholder="Enter your Password" keyboardType="phone-pad" /*iconPath={iconLabel2} isPassword secureTextEntry *//>
-                        <LabelInput secureTextEntry label="Password" placeholder="Enter your Password" secureTextEntry /*iconPath={iconLabel2} isPassword secureTextEntry *//>
-                        <LabelInput secureTextEntry label="Re-Enter Password" placeholder="Enter your Password"secureTextEntry /*iconPath={iconLabel2} isPassword secureTextEntry *//>
-                        
+                        <LabelInput 
+                            keyboardType="email-address" 
+                            label="Email" 
+                            
+                            value={email}
+                            onChangeText={(t) =>{dispatch(inputAction("EMAIL", t))}}
+
+                        />
+                        <LabelInput 
+                            label="Phone No" 
+                           
+                            keyboardType="phone-pad" 
+                            value={phone}
+                            onChangeText = {(t)=>setPhone(t)}
+                        />
+                        <LabelInput 
+                            secureTextEntry 
+                            label="Password" 
+                           
+                            value={password}
+                            onChangeText = {(t)=>{setPassword(t); dispatch(inputAction("PASSWORD", t))}} 
+                        />
+                        <LabelInput 
+                             secureTextEntry
+                            label="Re-Enter Password" 
+                          
+                            value={rePassword}
+                            onChangeText = {(t)=>setRePassword(t)} 
+                        />
                         
                         <View style={{marginTop:48, marginBottom:53}}>
-                            <BPButton label="Sign Up" onPress={()=> goToScreen()}/>
+                            <BPButton label="Sign Up" onPress={()=> register()}/>
                         </View>
                     </View>
                     
@@ -50,6 +140,7 @@ const Signup = ({navigation}) => {
 
             </Content>
         </Container>
+        </SafeAreaView>
     )
 }
 

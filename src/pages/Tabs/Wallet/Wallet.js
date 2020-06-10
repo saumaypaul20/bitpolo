@@ -7,9 +7,12 @@ import { Images, Colors, Fonts } from '../../../theme'
 import BPText from '../../../common/BPText/BPText'
 import BPButtonSmall from '../../../common/BPButtonSmall/BPButtonSmall'
 import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
+import { useNavigation } from '@react-navigation/native'
+import { screenNames } from '../../../Routes/screenNames/screenNames'
 
 const Wallet = () => {
 
+    const navigation = useNavigation()
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -41,9 +44,24 @@ const Wallet = () => {
                             <BPText style={{fontFamily: Fonts.FONT_MEDIUM, letterSpacing: 1.89, fontSize:24}}>0.00000000 BTC </BPText>
 
                             <View style={{ flexDirection:'row', alignItems:'center', paddingTop:20,}}>
-                                <BPButtonSmall image={Images.deposit_icon} label="Deposit" image_size={20} />
-                                <BPButtonSmall image={Images.deposit_icon} label="Withdraw" image_size={20}/>
-                                <BPButtonSmall image={Images.history_icon} label="History" image_size={13}/>
+                                <BPButtonSmall 
+                                    image={Images.deposit_icon} 
+                                    label="Deposit" 
+                                    image_size={20} 
+                                    onPress={()=> navigation.navigate(screenNames.DEPOSIT)}
+                                />
+
+                                <BPButtonSmall 
+                                    image={Images.deposit_icon} 
+                                    label="Withdraw" 
+                                    image_size={20}
+                                    onPress={()=> navigation.navigate(screenNames.WITHDRAW)}
+                                />
+                                <BPButtonSmall 
+                                    image={Images.history_icon} 
+                                    label="History" 
+                                    image_size={13}
+                                />
                             </View>
                             
                         </View>
