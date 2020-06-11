@@ -30,7 +30,7 @@ const ForgotPassword = () => {
                     
                    <LabelInput label="Email" />
                   
-                    <View style={{paddingTop:20}}>
+                    <View style={{paddingTop:20, alignSelf:'stretch', marginHorizontal:16}}>
                         <BPButton label="Submit" onPress={()=> navigation.navigate("VerifyEmail")}/>
                     </View>
 

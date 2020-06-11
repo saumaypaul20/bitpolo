@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 // import { reducer as formReducer } from 'redux-form'
-import inputReducer from './input.reducer'
+import authReducer from './auth.reducer'
 import marketReducer from './markets.reducer'
 import deviceReducer from './device.reducer'
 
 const reducers = {
-    inputReducer,
+    authReducer,
     marketReducer,
     deviceReducer
 };

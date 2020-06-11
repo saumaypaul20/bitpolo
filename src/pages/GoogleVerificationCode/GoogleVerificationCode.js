@@ -13,6 +13,9 @@ const GoogleVerificationCode = (props) => {
     const {navigation} = props
     const [code, setCode] = useState(''); //setting code initial STATE value        
 
+    const goToScreen =()=>{
+        navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+    }
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -35,7 +38,7 @@ const GoogleVerificationCode = (props) => {
                         />
 
 
-                        <BPButton label="Confirm" onPress={()=> navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})}/>
+                        <BPButton label="Confirm" style={{alignSelf:'stretch'}} onPress={()=> goToScreen()}/>
                     
 
                     </View>

@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Container, Content, Button, ListItem, Left, Body, Right, Icon } from 'native-base'
+import { Container, Content, Button } from 'native-base'
 import {Colors, Images} from '../../../theme'
 import Toolbar from '../../../components/Toolbar/Toolbar'
-import BPButton from '../../../common/BPButton/BPButton'
 import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
-const Account = (props) => {
+const Account = () => {
+    let email = useSelector(state=> state.authReducer.email)
     const navigation = useNavigation()
     return (
         <SafeAreaView style={{flex:1}}>
@@ -21,7 +22,7 @@ const Account = (props) => {
                     <Image source={Images.user_icon} style={{width:106, height:106, marginBottom:20}} resizeMode="contain"/>
                    
                     <Text style={{color: Colors.white, fontSize:16, fontFamily:'Inter-Medium'}}>
-                        vrsuresh.choudhary@gmail.com
+                       {email}
                         </Text>
                     
                    <Button 
@@ -40,15 +41,8 @@ const Account = (props) => {
                         <SettingsListItem label="Support" image={Images.support_icon}/>
                         <SettingsListItem label="Rate Us" image={Images.rate_us_icon}/>
                         <SettingsListItem label="About Us" image={Images.about_us_icon}/>
- 
-
 
                     </View>
-                   
-
-
-                   
-
                 </View>
             </Content>
         </Container>
@@ -63,7 +57,7 @@ const styles = StyleSheet.create({
    
 });
 
-Account.navigationOptions = screenProps => ({
+Account.navigationOptions = () => ({
     title: 'Acc',
     tabBarVisible: false
 })
