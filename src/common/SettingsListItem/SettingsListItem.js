@@ -5,13 +5,15 @@ import BPText from '../BPText/BPText'
 
 const SettingsListItem = (props) => {
     return (
-        <TouchableOpacity onPress={()=>props.onPress ? props.onPress() : console.log("uo")}
+        <TouchableOpacity 
+         onPress={()=>props.onPress ? props.onPress() : console.log("uo")}
          activeOpacity={0.8} 
          style={{
              ...styles.button,
-            borderTopWidth: props.borderBottom ? 0 : 1, 
-            borderBottomWidth: props.borderBottom ? 1 : 0, 
+            borderTopWidth: props.borderBottom ? 0 : props.noBorder ? 0 :1, 
+            borderBottomWidth: props.noBorder ? 0 : props.borderBottom ? 1 : 0, 
             paddingHorizontal: props.paddingHorizontal ? props.paddingHorizontal : 40,
+            backgroundColor: props.backgroundColor || "transparent"
             }}
             >
            <View style={{flexDirection:'row', flex:1, alignSelf:'flex-start'}}>
