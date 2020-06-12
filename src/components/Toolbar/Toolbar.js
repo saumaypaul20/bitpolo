@@ -12,6 +12,9 @@ const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs, rightEleme
 
     const leftFlex =() => {
         if(enableBackButton){
+            if(title){
+                return 0.25
+            }
             return 0.2
         }
         else{

@@ -9,8 +9,10 @@ import BPText from '../../../../common/BPText/BPText'
 import BPButtonSmall from '../../../../common/BPButtonSmall/BPButtonSmall'
 import SettingsListItem from '../../../../common/SettingsListItem/SettingsListItem'
 import BPButton from '../../../../common/BPButton/BPButton'
-
+import WalletEndNotes from '../../../../components/WalletEndNotes/WalletEndNotes'
+import WalletEndButtons from '../../../../components/WalletEndButtons/WalletEndButtons'
 const Deposit = () => {
+
 
     const [activeView, setView] = useState(1)
     const [depositAmount, setDepositAmount] = useState('')
@@ -27,10 +29,7 @@ const Deposit = () => {
             <BPText style={{color: Colors.lightWhite, fontSize:15}}>History</BPText>
         )
     }
-
-    const listDot = () =>{
-        return <View style={{width:6, height:6, borderRadius:3, backgroundColor: Colors.white}}/>
-    }
+ 
     const renderTab1 = () =>{
         return (
             <Root>
@@ -39,7 +38,7 @@ const Deposit = () => {
                         onPress= {()=> setView(2)}
                         noBorder 
                         label={"BTC (Bitcoin)"}
-                        image = {Images.fees_icon}
+                        image = {Images.btc_white}
                         backgroundColor={Colors.darkGray3} 
                         rightElement={<Icon type="FontAwesome" name="chevron-right" style={{color: Colors.white, fontSize: 14}} />}/>
                         <View style={{marginHorizontal:16}}>
@@ -83,11 +82,7 @@ const Deposit = () => {
                                 <BPText>Copy Address</BPText>
                             </Button>
 
-
-                            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-                                <BPButtonSmall label="Important" image={Images.information_icon} image_size={16} noBorder labelStyle={{fontSize:12}}/>
-                                <BPButtonSmall label="Please Note" image={Images.bell_icon} image_size={12} noBorder labelStyle={{fontSize:12}}/>
-                            </View>
+                           <WalletEndButtons />
                         </View>
             </View>
            </Root>
@@ -100,7 +95,7 @@ const Deposit = () => {
                     onPress= {()=> setView(1)}
                     noBorder 
                     label={"INR (Rupee)"}
-                    image = {Images.fees_icon}
+                    image = {Images.rupee_icon}
                     backgroundColor={Colors.darkGray3} 
                     rightElement={<Icon type="FontAwesome" name="chevron-right" style={{color: Colors.white, fontSize: 14}} />}/>
 
@@ -118,20 +113,11 @@ const Deposit = () => {
                         </View>
 
                         <View style={{marginTop:16}}>
-                            <BPText style={{fontFamily: Fonts.FONT_MEDIUM}}>Note:</BPText>
+                            <WalletEndNotes notes={[
+                                "Minimum deposit 10 INR.",
+                                "Maximum deposit 1 lakh per transaction."
+                            ]}/>
 
-                            <View style={{marginVertical:8}}>
-                                <View style={{flexDirection:'row', alignItems:'center'}}>
-                                    {listDot()}
-                                    <BPText style={{fontSize:12}}> Minimum deposit 10 INR. </BPText>
-                                </View>
-
-                                <View style={{flexDirection:'row', alignItems:'center'}}>
-                                    {listDot()}
-                                    <BPText style={{fontSize:12}}> Maximum deposit 1 lakh per transaction.</BPText>
-                                </View>
-                               
-                            </View>
 
                             <View style={{alignSelf:'center', marginTop:44}}>
                                 <BPButton label="Deposit" style={{paddingHorizontal:60}} />

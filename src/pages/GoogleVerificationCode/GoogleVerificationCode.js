@@ -27,7 +27,7 @@ const GoogleVerificationCode = (props) => {
                         <BPText style={{ fontSize:16, textAlign:'center', paddingVertical:20, lineHeight:23}}>{`Get a verification code from the\n`}<BPText style={{fontFamily:Fonts.FONT_BOLD}}>Google Authenticator app</BPText></BPText>
                         
                         <TextInput
-                            keyboardType="phone-pad"
+                            keyboardType="oneTimeCode"
                             // autoFocusOnLoad
                             placeholder="Enter 6-digit code"
                             placeholderTextColor={Colors.gray}
