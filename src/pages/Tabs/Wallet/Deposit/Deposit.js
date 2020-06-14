@@ -11,6 +11,7 @@ import SettingsListItem from '../../../../common/SettingsListItem/SettingsListIt
 import BPButton from '../../../../common/BPButton/BPButton'
 import WalletEndNotes from '../../../../components/WalletEndNotes/WalletEndNotes'
 import WalletEndButtons from '../../../../components/WalletEndButtons/WalletEndButtons'
+import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
 const Deposit = () => {
 
 
@@ -40,7 +41,7 @@ const Deposit = () => {
                         label={"BTC (Bitcoin)"}
                         image = {Images.btc_white}
                         backgroundColor={Colors.darkGray3} 
-                        rightElement={<Icon type="FontAwesome" name="chevron-right" style={{color: Colors.white, fontSize: 14}} />}/>
+                        rightElement={<ChevronRight />}/>
                         <View style={{marginHorizontal:16}}>
 
                             <View style={{flexDirection:'row', justifyContent:'space-between', marginVertical:20 }}>
@@ -97,7 +98,7 @@ const Deposit = () => {
                     label={"INR (Rupee)"}
                     image = {Images.rupee_icon}
                     backgroundColor={Colors.darkGray3} 
-                    rightElement={<Icon type="FontAwesome" name="chevron-right" style={{color: Colors.white, fontSize: 14}} />}/>
+                    rightElement={<ChevronRight />}/>
 
                     <View style={{marginHorizontal:16, marginTop:27}}>
                         <BPText style={{fontFamily: Fonts.FONT_MEDIUM}}>INR Deposit Details</BPText>

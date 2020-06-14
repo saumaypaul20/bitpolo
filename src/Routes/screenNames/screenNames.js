@@ -20,6 +20,8 @@ export const screenNames = {
     ORDERS : "Orders",
     ORDERS_HISTORY : "OrdersHistory",
     DEPOSIT: 'Deposit',
-    WITHDRAW: 'Withdraw'
+    WITHDRAW: 'Withdraw',
+    UPI: 'UPI',
+    NOTIFICATIONS: 'Notifications'
 
 }

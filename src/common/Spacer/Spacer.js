@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 
 const Spacer = ({space}) => {
     return (
-        <View style={{height: space || 10}}/>
+        <View style={{height: space || 10, width: space || 10}}/>
     )
 }
 

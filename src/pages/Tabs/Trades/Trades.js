@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab } from 'native-base'
@@ -9,12 +9,34 @@ import SellTab from './BuyTab/BuyTab'
 import PickerComp from '../../../components/PickerComp/PickerComp'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../Routes/screenNames/screenNames'
+import { useSelector } from 'react-redux'
+import { getTradeVolume } from '../../../api/apiCalls'
 
 const Trades = () => {
 
-    const currencies = [{label: 'BTC/USDT', value:'key1'}];
+    let user = useSelector(state=> state.authReducer.auth_attributes);
+    console.log("user",user)
     const [currencyVal, setCurrency] = useState(null)
     const navigation =  useNavigation()
+
+    const getTrades =async()=>{
+        console.log("user_atributes-------------------------",user.attributes)
+        let attr = {
+            Authorization: user.attributes.token,
+            info: user.attributes.info,
+        }
+        let res = await getTradeVolume(attr);
+        console.log(res)
+    }
+
+    useEffect(() => {
+        if(user){
+
+            getTrades();
+        }
+    }, [user])
+
+    const currencies = [{label: 'BTC/USDT', value:'key1'}];
     const OpenOrders =()=>{
         navigation.navigate(screenNames.ORDERS)
     }

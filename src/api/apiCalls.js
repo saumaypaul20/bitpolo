@@ -1,4 +1,4 @@
-import { LOGIN, REGISTER, ENCRYPT, VALIDATE_OTP, RESEND_OTP } from "./constants";
+import { LOGIN, REGISTER, ENCRYPT, VALIDATE_OTP, RESEND_OTP, TRADE_VOLUME } from "./constants";
 import { fetchApi } from "./api";
 import { getDeviceId } from "../utils/apiHeaders.utils";
 
@@ -144,6 +144,27 @@ export const resendOtp = async (attributes)=>{
         }
         
         let res = await fetchApi(RESEND_OTP, "POST", payloadToSend, 200, headers);
+        console.log(res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+ 
+export const getTradeVolume = async (attributes)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log(attributes)   
+        if(!attributes) reject({msg: "No attributes"})
+         
+        let headers = {
+            device: DEVICE_ID,
+            info: attributes.info,
+            Authorization: attributes.Authorization
+        }
+ 
+        let res = await fetchApi(TRADE_VOLUME, "GET", null, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})

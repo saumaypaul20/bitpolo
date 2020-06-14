@@ -6,6 +6,7 @@ import BPText from '../../common/BPText/BPText'
 import Spacer from '../../common/Spacer/Spacer'
 import { Content, Container, Switch } from 'native-base'
 import BPButton from '../../common/BPButton/BPButton'
+import BPSwitch from '../../common/BPSwitch/BPSwitch'
 const FilterFAB = () => {
 
     const WIDTH = Dimensions.get("window").width;
@@ -117,13 +118,7 @@ const FilterFAB = () => {
                             <View style={{ flexDirection:'row',justifyContent:'space-between', alignItems:'center', paddingVertical:12}}>
                                     <BPText style={{fontSize:15}}>Hide All Cancelled </BPText>
 
-                                    <Switch
-                                        trackColor={{ false: Colors.inactiveToggleBG, true: Colors.activeToggleBG }}
-                                        thumbColor={isEnabled ? Colors.white : Colors.white}
-                                        ios_backgroundColor={Colors.inactiveToggleBG}
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                    />
+                                    <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>
                                 </View>
 
                                 <View style={{paddingVertical:12,flexDirection:'row', alignSelf:'stretch', alignItems:'center', justifyContent:'space-between', }}>

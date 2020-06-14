@@ -13,6 +13,8 @@ import WalletEndNotes from '../../../../components/WalletEndNotes/WalletEndNotes
 import WalletEndButtons from '../../../../components/WalletEndButtons/WalletEndButtons'
 import Spacer from '../../../../common/Spacer/Spacer'
 import { useNavigation } from '@react-navigation/native'
+import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
+import BPInput from '../../../../common/BPInput/BPInput'
 
 
 const Withdraw = () => {
@@ -42,7 +44,7 @@ const Withdraw = () => {
                         label={"BTC (Bitcoin)"}
                         image = {Images.btc_white}
                         backgroundColor={Colors.darkGray3} 
-                        rightElement={<Icon type="FontAwesome" name="chevron-right" style={{color: Colors.white, fontSize: 14}} />}/>
+                        rightElement={<ChevronRight />}/>
                        
                         <View style={{marginHorizontal:16}}>
                             
@@ -55,7 +57,7 @@ const Withdraw = () => {
                         
                            <View style={{paddingVertical:20}}>
                                 
-                                <WithdrawTextInput label="Withdraw Amount" text={withdrawAmount} setText={(t)=>setWithdrawAmount(t)} rightEl={<BPText>BTC</BPText>}/>
+                                <BPInput label="Withdraw Amount" text={withdrawAmount} setText={(t)=>setWithdrawAmount(t)} rightEl={<BPText>BTC</BPText>}/>
 
                                 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingTop:8}}>
                                     <BPText style={{fontSize:12}}>Fee: 0.000 BTC</BPText>
@@ -64,11 +66,11 @@ const Withdraw = () => {
 
                                 <Spacer space={20}/>
 
-                                <WithdrawTextInput label="Address" text={address} setText={(t)=>setAddress(t)} rightEl={<Image source={Images.small_qr_code_icon} style={{width:16, height:16}} resizeMode="contain" />}/>
+                                <BPInput label="Address" text={address} setText={(t)=>setAddress(t)} rightEl={<Image source={Images.small_qr_code_icon} style={{width:16, height:16}} resizeMode="contain" />}/>
 
                                 <Spacer space={20}/>
 
-                                <WithdrawTextInput label="Payment id" text={payment_id} setText={(t)=>setPaymentId(t)}/>
+                                <BPInput label="Payment id" text={payment_id} setText={(t)=>setPaymentId(t)}/>
                                 
                                 
                            </View>
@@ -95,7 +97,7 @@ const Withdraw = () => {
                     label={"INR (Rupee)"}
                     image = {Images.rupee_icon}
                     backgroundColor={Colors.darkGray3} 
-                    rightElement={<Icon type="FontAwesome" name="chevron-right" style={{color: Colors.white, fontSize: 14}} />}/>
+                    rightElement={<ChevronRight/>}/>
 
                     <View style={{marginHorizontal:16,}}>
                         
@@ -157,23 +159,23 @@ const Withdraw = () => {
 }
 
 
-const WithdrawTextInput =({label,text,setText,rightEl}) =>{
-    return(
-        <>
-            <BPText style={{fontFamily: Fonts.FONT_MEDIUM}}>{label}</BPText>
-            <View style={{borderColor: Colors.lightWhite, borderRadius: 6, borderWidth:1, marginTop:8, paddingHorizontal:16, flexDirection:'row', alignItems:'center'}}>
-                <Input
-                    keyboardType="numeric"
-                    value={text}
-                    onChangeText ={(t)=> setText(t)}
-                />
-               {rightEl && <View style={{alignItems:'center', justifyContent:'center', borderLeftWidth:1, borderColor: Colors.lightWhite, position:'absolute', right:0, top:0, bottom:0, padding:14}}>
-                    {rightEl}
-                </View>}
-            </View>
-        </>
-    )
-}
+// const WithdrawTextInput =({label,text,setText,rightEl}) =>{
+//     return(
+//         <>
+//             <BPText style={{fontFamily: Fonts.FONT_MEDIUM}}>{label}</BPText>
+//             <View style={{borderColor: Colors.lightWhite, borderRadius: 6, borderWidth:1, marginTop:8, paddingHorizontal:16, flexDirection:'row', alignItems:'center'}}>
+//                 <Input
+//                     keyboardType="default"
+//                     value={text}
+//                     onChangeText ={(t)=> setText(t)}
+//                 />
+//                {rightEl && <View style={{alignItems:'center', justifyContent:'center', borderLeftWidth:1, borderColor: Colors.lightWhite, position:'absolute', right:0, top:0, bottom:0, padding:14}}>
+//                     {rightEl}
+//                 </View>}
+//             </View>
+//         </>
+//     )
+// }
 
 const WithdrawHeader =({available, order, total}) =>{
     return (

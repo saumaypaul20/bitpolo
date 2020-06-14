@@ -9,6 +9,7 @@ import BPButtonSmall from '../../../common/BPButtonSmall/BPButtonSmall'
 import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../Routes/screenNames/screenNames'
+import BPSwitch from '../../../common/BPSwitch/BPSwitch'
 
 const Wallet = () => {
 
@@ -76,13 +77,7 @@ const Wallet = () => {
                                 <View style={{ flex:1, flexDirection:'row',justifyContent:'flex-start', alignItems:'flex-start', alignSelf:'stretch', paddingVertical:20}}>
                                     <BPText style={{fontSize:15}}>Hide Other Pairs </BPText>
 
-                                    <Switch
-                                        trackColor={{ false: Colors.inactiveToggleBG, true: Colors.activeToggleBG }}
-                                        thumbColor={isEnabled ? Colors.white : Colors.white}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                    />
+                                    <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>
                                 </View>
 
                                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-end'}}>

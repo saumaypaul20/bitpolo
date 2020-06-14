@@ -6,6 +6,7 @@ import Toolbar from '../../../../components/Toolbar/Toolbar'
 import { Colors } from '../../../../theme'
 import BPText from '../../../../common/BPText/BPText'
 import { screenNames } from '../../../../Routes/screenNames/screenNames'
+import BPSwitch from '../../../../common/BPSwitch/BPSwitch'
 
 const Orders = ({navigation}) => {
 
@@ -31,13 +32,7 @@ const Orders = ({navigation}) => {
                         <View style={{ flex:1, flexDirection:'row',justifyContent:'flex-start', alignItems:'flex-start', alignSelf:'stretch', paddingVertical:20}}>
                             <BPText style={{fontSize:15}}>Hide Other Pairs </BPText>
 
-                            <Switch
-                                trackColor={{ false: Colors.inactiveToggleBG, true: Colors.activeToggleBG }}
-                                thumbColor={isEnabled ? Colors.white : Colors.white}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
+                            <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>
                         </View>
 
                         <View style={{flex:1, alignItems:'flex-end', justifyContent:'center'}}>

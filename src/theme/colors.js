@@ -32,7 +32,10 @@ export const primaryColors = {
     lightRed:'rgba(238,82,82,0.5)',
     inactiveToggleBG:'#3c3c3c',
     activeToggleBG:'#707070',
-    smallButtonBorder: '#70707064'
+    smallButtonBorder: '#70707064',
+
+    bankModalTextColor:'#181818'
+
   
   };
 

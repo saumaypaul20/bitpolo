@@ -58,7 +58,7 @@ const OTPscreen = (props) => {
                 let res_data= res.data.data;
                 res_data.email =email
                 // alert("Success")
-                dispatch(saveAuthAttributesAction(res_data.attributes))
+                dispatch(saveAuthAttributesAction(res_data))
                 if(res.data.data.attributes.google_auth){
                     navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res_data})
                     return

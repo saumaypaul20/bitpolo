@@ -10,14 +10,14 @@ const SettingsListItem = (props) => {
          activeOpacity={0.8} 
          style={{
              ...styles.button,
-            borderTopWidth: props.borderBottom ? 0 : props.noBorder ? 0 :1, 
+            borderTopWidth: props.borderBottom ? props.borderTop ? 1:0 : props.noBorder ? 0 :1, 
             borderBottomWidth: props.noBorder ? 0 : props.borderBottom ? 1 : 0, 
             paddingHorizontal: props.paddingHorizontal ? props.paddingHorizontal : 40,
             backgroundColor: props.backgroundColor || "transparent"
             }}
             >
-           <View style={{flexDirection:'row', flex:1, alignSelf:'flex-start'}}>
-                <Image source={props.image} style={{width:18, marginRight:20, height:18}} resizeMode="contain"/>
+           <View style={{flexDirection:'row', flex:1, alignSelf:'flex-start', alignItems:"center"}}>
+              {props.image &&  <Image source={props.image} style={{width:18, marginRight:20, height:18}} resizeMode="contain"/>}
                 <BPText style={{ fontSize:18}}>{props.label}</BPText>
            </View>
            {
@@ -36,7 +36,7 @@ const styles= StyleSheet.create({
         alignItems:'center', 
         alignSelf:'stretch', 
         borderColor: primaryColors.gray, 
-        
+        opacity:0.8,
         paddingVertical:18
     },
 })

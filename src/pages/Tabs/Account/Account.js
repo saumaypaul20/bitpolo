@@ -7,6 +7,7 @@ import Toolbar from '../../../components/Toolbar/Toolbar'
 import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
+import { screenNames } from '../../../Routes/screenNames/screenNames'
 
 const Account = () => {
     let email = useSelector(state=> state.authReducer.email)
@@ -34,13 +35,17 @@ const Account = () => {
                    </Button>
                     <View style={{alignSelf:'stretch', marginTop:25}}>
                         
-                        <SettingsListItem label="Bank Account Details" image={Images.bank_account_details_icon} onPress={()=> navigation.navigate("BankAccountDetails")}/>
-                        <SettingsListItem label="Fees" image={Images.fees_icon}/>
-                        <SettingsListItem label="Security" image={Images.security_icon}/>
-                        <SettingsListItem label="Settings" image={Images.settings_icon}/>
+                        <SettingsListItem label="Bank Account Details" image={Images.bank_account_details_icon} onPress={()=> navigation.navigate(screenNames.BANK_ACCOUNT_DETAILS)}/>
+                        <SettingsListItem label="Fees" image={Images.fees_icon}
+                       />
+                        <SettingsListItem label="Security" image={Images.security_icon}
+                        onPress={()=> navigation.navigate(screenNames.SECURITY)}/>
+                        <SettingsListItem label="Settings" image={Images.settings_icon}
+                         onPress={()=> navigation.navigate(screenNames.SETTINGS)}/>
                         <SettingsListItem label="Support" image={Images.support_icon}/>
                         <SettingsListItem label="Rate Us" image={Images.rate_us_icon}/>
-                        <SettingsListItem label="About Us" image={Images.about_us_icon}/>
+                        <SettingsListItem label="About Us" image={Images.about_us_icon}
+                           onPress={()=> navigation.navigate(screenNames.ABOUT)}/>
 
                     </View>
                 </View>

@@ -17,6 +17,8 @@ import Settings from '../pages/Tabs/Account/Settings/Settings';
 import {screenNames} from './screenNames/screenNames'
 import Orders from '../pages/Tabs/Trades/Orders/Orders';
 import OrdersHistory from '../pages/Tabs/Trades/OrdersHistory/OrdersHistory';
+import UPI from '../pages/Tabs/Account/BankAccountDetails/UPI/UPI';
+import NotificationSettings from '../pages/Tabs/Account/Settings/NotificationSettings/NotificationSettings';
 const Stack = createStackNavigator();
 
 const Routes = ({login}) => {
@@ -57,6 +59,8 @@ const Routes = ({login}) => {
                 <Stack.Screen name= {screenNames.BANK_ACCOUNT_DETAILS} component={BankAccountDetails} />
                 <Stack.Screen name= {screenNames.ORDERS} component={Orders} />
                 <Stack.Screen name= {screenNames.ORDERS_HISTORY} component={OrdersHistory} />
+                <Stack.Screen name= {screenNames.UPI} component={UPI} />
+                <Stack.Screen name= {screenNames.NOTIFICATIONS} component={NotificationSettings} />
                
             </Stack.Navigator>
         </NavigationContainer>
