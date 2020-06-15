@@ -27,7 +27,8 @@ const BankAccountDetails = () => {
                     <View style={{flex:1, alignSelf:'stretch'}}>
                         <SettingsListItem label="UPI" image={upiDone? Images.tick_active_icon : Images.tick_hide} paddingHorizontal={16} borderBottom rightElement={<ChevronRight/>} onPress={()=> navigation.navigate(screenNames.UPI)}/>
 
-                        <SettingsListItem label="IMPS / NEFT / RTGS" image={inrDone ? Images.tick_active_icon : Images.tick_hide} paddingHorizontal={16} borderBottom rightElement={<ChevronRight/>}/>
+                        <SettingsListItem label="IMPS / NEFT / RTGS" image={inrDone ? Images.tick_active_icon : Images.tick_hide} paddingHorizontal={16} borderBottom rightElement={<ChevronRight/>}
+                        onPress={()=> navigation.navigate(screenNames.IMPS)}/>
                     </View>
                 </Content>
             </Container>

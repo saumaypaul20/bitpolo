@@ -22,6 +22,7 @@ export const screenNames = {
     DEPOSIT: 'Deposit',
     WITHDRAW: 'Withdraw',
     UPI: 'UPI',
-    NOTIFICATIONS: 'Notifications'
+    NOTIFICATIONS: 'Notifications',
+    IMPS:'IMPS / NEFT / RTGS'
 
 }

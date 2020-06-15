@@ -8,13 +8,19 @@ import Toolbar from '../../components/Toolbar/Toolbar';
 import BPText from '../../common/BPText/BPText';
 import { Fonts, Colors } from '../../theme';
 import { screenNames } from '../../Routes/screenNames/screenNames';
+import { useNavigation, StackActions } from '@react-navigation/native';
 
 const GoogleVerificationCode = (props) => {
-    const {navigation} = props
+    const navigation = useNavigation()
     const [code, setCode] = useState(''); //setting code initial STATE value        
 
     const goToScreen =()=>{
-        navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+        if(props.route.params.screen){
+            navigation.dispatch(StackActions.pop(2))
+        }else{
+
+            navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+        }
     }
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>

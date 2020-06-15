@@ -4,10 +4,10 @@ import BPText from '../BPText/BPText'
 import { Colors, Fonts } from '../../theme'
 import { Input } from 'native-base'
 
-const BPInput = ({label, placeholder, text, setText, rightEl}) =>{
+const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle}) =>{
     return(
         <>
-            <BPText style={{fontFamily: Fonts.FONT_MEDIUM}}>{label}</BPText>
+            <BPText style={{fontFamily: Fonts.FONT_MEDIUM}, labelStyle}>{label}</BPText>
             <View style={{borderColor: Colors.lightWhite, borderRadius: 6, borderWidth:1, marginTop:8, paddingHorizontal:16, flexDirection:'row', alignItems:'center'}}>
                 <Input
                     keyboardType="default"

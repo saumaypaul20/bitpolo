@@ -9,7 +9,10 @@ import BPButton from '../../../../../common/BPButton/BPButton'
 import Modal from 'react-native-modal'
 import Spacer from '../../../../../common/Spacer/Spacer'
 import BankConfirmModal from '../../../../../components/BankConfirmModal/BankConfirmModal'
+import { useNavigation } from '@react-navigation/native'
+import { screenNames } from '../../../../../Routes/screenNames/screenNames'
 const UPI = () => {
+    const navigation = useNavigation()
     const [upi, setupi] = useState('')
     const [showModal, setModal] = useState(false)
 
@@ -39,7 +42,7 @@ const UPI = () => {
                             <BankConfirmModal
                                 onBackPress={()=>handleModal()}
                                 onRecheck={()=> handleModal()}
-                                onConfirm={()=> handleModal()}
+                                onConfirm={()=>{handleModal();navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE,{screen: screenNames.IMPS})}}
                             />
                         </Modal>
 
