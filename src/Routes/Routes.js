@@ -20,6 +20,11 @@ import OrdersHistory from '../pages/Tabs/Trades/OrdersHistory/OrdersHistory';
 import UPI from '../pages/Tabs/Account/BankAccountDetails/UPI/UPI';
 import NotificationSettings from '../pages/Tabs/Account/Settings/NotificationSettings/NotificationSettings';
 import IMPS from '../pages/Tabs/Account/BankAccountDetails/IMPS/IMPS';
+import ChangePasswordSettings from '../pages/Tabs/Account/Security/ChangePasswordSettings/ChangePasswordSettings';
+import DeviceManagement from '../pages/Tabs/Account/Security/DeviceManagement/DeviceManagement';
+import AntiSpoof from '../pages/Tabs/Account/Security/AntiSpoof/AntiSpoof';
+import GoogleAuthenticator from '../pages/Tabs/Account/Security/GoogleAuthenticator/GoogleAuthenticator';
+import TwoFactorAuthentication from '../pages/Tabs/Account/Security/2FactorAuthentication/2FactorAuthentication';
 const Stack = createStackNavigator();
 
 const Routes = ({login}) => {
@@ -63,6 +68,11 @@ const Routes = ({login}) => {
                 <Stack.Screen name= {screenNames.UPI} component={UPI} />
                 <Stack.Screen name= {screenNames.NOTIFICATIONS} component={NotificationSettings} />
                 <Stack.Screen name= {screenNames.IMPS} component={IMPS} />
+                <Stack.Screen name= {screenNames.CHANGE_PASSWORD_SETTINGS} component={ChangePasswordSettings} />
+                <Stack.Screen name= {screenNames.DEVICE_MANAGEMENT} component={DeviceManagement} />
+                <Stack.Screen name= {screenNames.SET_ANTI_SPOOF} component={AntiSpoof} />
+                <Stack.Screen name= {screenNames.GOOGLE_AUTHENTICATOR} component={GoogleAuthenticator} />
+                <Stack.Screen name= {screenNames.TWO_FACTOR_AUTHENTICATION} component={TwoFactorAuthentication} />
                
             </Stack.Navigator>
         </NavigationContainer>

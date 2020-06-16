@@ -59,8 +59,8 @@ const Toolbar = ({ enableBackButton,title, backgroundColor , hasTabs, rightEleme
     return (
         <View> 
 
-            <Header style={{backgroundColor:backgroundColor || 'transparent', paddingTop:10, paddingBottom:0}} hasTabs={hasTabs }>
-                <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={backgroundColor || Colors.primeBG} />
+            <Header style={{backgroundColor:backgroundColor || Colors.darkGray2, paddingTop:10, paddingBottom:10}} hasTabs={hasTabs }>
+                <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={backgroundColor || Colors.darkGray2} />
                 <Left style={{flexDirection:'row', alignItems:'center', flex:  leftFlex()}}>
                     {enableBackButton && <Button transparent onPress={()=> navigation.goBack()}>
                         <Icon  name='arrow-back' style={{fontSize:20}} />

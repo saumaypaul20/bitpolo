@@ -22,7 +22,7 @@ const UPI = () => {
     return (
         <SafeAreaView style={{flex:1}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
-                <Toolbar enableBackButton title={"UPI"}/>
+                <Toolbar enableBackButton title={screenNames.UPI}/>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, justifyContent:'space-between', marginHorizontal:20, marginTop:10}}>
                        <View>

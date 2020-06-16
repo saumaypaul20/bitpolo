@@ -22,7 +22,7 @@ const BankAccountDetails = () => {
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}> 
          <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
-            <Toolbar enableBackButton title={"Bank Account Details"}/>
+            <Toolbar enableBackButton title={screenNames.BANK_ACCOUNT_DETAILS}/>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, alignSelf:'stretch'}}>
                         <SettingsListItem label="UPI" image={upiDone? Images.tick_active_icon : Images.tick_hide} paddingHorizontal={16} borderBottom rightElement={<ChevronRight/>} onPress={()=> navigation.navigate(screenNames.UPI)}/>

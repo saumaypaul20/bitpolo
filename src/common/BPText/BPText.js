@@ -15,7 +15,8 @@ const BPText = (props) => {
 const styles = StyleSheet.create({
     defaultStyle: {
         color: primaryColors.white,
-        fontFamily: 'Inter-Regular'
+        fontFamily: 'Inter-Regular',
+       
     },
   });
 

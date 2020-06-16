@@ -31,7 +31,7 @@ const Wallet = () => {
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, justifyContent:'flex-start'}}>
                         
-                        <BPText style={{marginHorizontal:12, fontSize:12, paddingVertical:16}}>
+                        <BPText style={{paddingHorizontal:12, fontSize:12, paddingVertical:16, backgroundColor: Colors.darkGray2}}>
                             Total Value (BTC) <BPText style={{fontFamily:Fonts.FONT_MEDIUM, fontSize:11,}}> 0 BTC</BPText> = $0.00
                         </BPText>
 

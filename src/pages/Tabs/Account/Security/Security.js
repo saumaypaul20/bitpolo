@@ -8,8 +8,10 @@ import SettingsListItem from '../../../../common/SettingsListItem/SettingsListIt
 import BPSwitch from '../../../../common/BPSwitch/BPSwitch'
 import { Colors } from '../../../../theme'
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
+import { useNavigation } from '@react-navigation/native'
 
 const Security = () => {
+    const navigation= useNavigation()
     const [isEnabled, toggleSwitch] = useState(false)
 
     return (
@@ -24,6 +26,7 @@ const Security = () => {
                         paddingHorizontal={20} 
                         borderBottom 
                         rightElement={ <ChevronRight/>} 
+                        onPress={()=> navigation.navigate(screenNames.CHANGE_PASSWORD_SETTINGS)}
                         />
 
                         <SettingsListItem 
@@ -31,6 +34,7 @@ const Security = () => {
                         paddingHorizontal={20} 
                         borderBottom 
                         rightElement={ <ChevronRight/>} 
+                        onPress={()=> navigation.navigate(screenNames.DEVICE_MANAGEMENT)}
                         />
 
                         <SettingsListItem 
@@ -52,6 +56,7 @@ const Security = () => {
                         paddingHorizontal={20} 
                         borderBottom 
                         rightElement={ <ChevronRight/>} 
+                        onPress={()=> navigation.navigate(screenNames.GOOGLE_AUTHENTICATOR)}
                         />
 
                          <SettingsListItem 
@@ -66,6 +71,7 @@ const Security = () => {
                         paddingHorizontal={20} 
                         borderBottom 
                         rightElement={ <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>} 
+                        onPress={()=> navigation.navigate(screenNames.SET_ANTI_SPOOF)}
                         />
 
                         
