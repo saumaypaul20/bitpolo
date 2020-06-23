@@ -9,7 +9,7 @@ import SettingsListItem from '../../../../common/SettingsListItem/SettingsListIt
 import { Images, Colors } from '../../../../theme'
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
 import BPInput from '../../../../common/BPInput/BPInput'
-import { screenNames } from '../../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../../routes/screenNames/screenNames'
 import { useNavigation } from '@react-navigation/native'
 import { Container, Content } from 'native-base'
 

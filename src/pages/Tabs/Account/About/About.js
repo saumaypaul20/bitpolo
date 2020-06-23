@@ -7,7 +7,7 @@ import Toolbar from '../../../../components/Toolbar/Toolbar'
 import SettingsListItem from '../../../../common/SettingsListItem/SettingsListItem'
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
 import LogoHeader from '../../../../common/LogoHeader/LogoHeader'
-import { screenNames } from '../../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../../routes/screenNames/screenNames'
 
 const About = () => {
     return (

@@ -10,7 +10,7 @@ import QueryActions from '../../components/QueryActions/QueryActions'
 import { Colors, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
 import Storage from '../../utils/storage.utils'
-import { screenNames } from '../../Routes/screenNames/screenNames'
+import { screenNames } from '../../routes/screenNames/screenNames'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {loginUser} from '../../api/apiCalls'
 import publicIP from 'react-native-public-ip';
@@ -65,7 +65,7 @@ const Signin = () => {
     }
     
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <StatusBar translucent barStyle={Colors.barStyle} backgroundColor={Colors.primeBG} />
                 <Content contentContainerStyle={{ flexGrow: 1 }}>

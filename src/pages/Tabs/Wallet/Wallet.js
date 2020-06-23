@@ -8,7 +8,7 @@ import BPText from '../../../common/BPText/BPText'
 import BPButtonSmall from '../../../common/BPButtonSmall/BPButtonSmall'
 import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
-import { screenNames } from '../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../routes/screenNames/screenNames'
 import BPSwitch from '../../../common/BPSwitch/BPSwitch'
 
 const Wallet = () => {

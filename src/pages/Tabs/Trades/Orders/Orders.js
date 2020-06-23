@@ -5,7 +5,7 @@ import { Container, Content, Switch, Button } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
 import { Colors } from '../../../../theme'
 import BPText from '../../../../common/BPText/BPText'
-import { screenNames } from '../../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../../routes/screenNames/screenNames'
 import BPSwitch from '../../../../common/BPSwitch/BPSwitch'
 
 const Orders = ({navigation}) => {

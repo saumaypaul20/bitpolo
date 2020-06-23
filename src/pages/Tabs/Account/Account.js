@@ -7,7 +7,7 @@ import Toolbar from '../../../components/Toolbar/Toolbar'
 import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import { screenNames } from '../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../routes/screenNames/screenNames'
 
 const Account = () => {
     let email = useSelector(state=> state.authReducer.email)

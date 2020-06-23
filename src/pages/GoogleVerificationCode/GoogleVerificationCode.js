@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Toolbar from '../../components/Toolbar/Toolbar';
 import BPText from '../../common/BPText/BPText';
 import { Fonts, Colors } from '../../theme';
-import { screenNames } from '../../Routes/screenNames/screenNames';
+import { screenNames } from '../../routes/screenNames/screenNames';
 import { useNavigation, StackActions } from '@react-navigation/native';
 
 const GoogleVerificationCode = (props) => {

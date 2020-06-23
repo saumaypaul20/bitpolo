@@ -1,4 +1,4 @@
-import { LOGIN, REGISTER, ENCRYPT, VALIDATE_OTP, RESEND_OTP, TRADE_VOLUME } from "./constants";
+import * as REST from "./constants";
 import { fetchApi } from "./api";
 import { getDeviceId } from "../utils/apiHeaders.utils";
 
@@ -21,7 +21,7 @@ export const encryptValue = (value) => {
         }
         console.log(payload)
        
-        let res = await fetchApi(ENCRYPT, "POST", payload, 200, headers);
+        let res = await fetchApi(REST.ENCRYPT, "POST", payload, 200, headers);
         console.log("encrepyted res", res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody.data.attributes.data})
@@ -57,7 +57,7 @@ export const registerUser = async (payload)=>{
             }
         }
         
-        let res = await fetchApi(REGISTER, "POST", payloadToSend, 200, headers);
+        let res = await fetchApi(REST.REGISTER, "POST", payloadToSend, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
@@ -92,7 +92,7 @@ export const loginUser = async (payload)=>{
             }
         }
         
-        let res = await fetchApi(LOGIN, "POST", payloadToSend, 200, headers);
+        let res = await fetchApi(REST.LOGIN, "POST", payloadToSend, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
@@ -111,7 +111,7 @@ export const validateOtp = async (payload)=>{
 
         console.log(payload)
 
-        let payloadToSend = {
+        let body = {
             lang: LANG,
             data:{
                 id: payload.id,
@@ -119,7 +119,7 @@ export const validateOtp = async (payload)=>{
             }
         }
         
-        let res = await fetchApi(VALIDATE_OTP, "POST", payloadToSend, 200, headers);
+        let res = await fetchApi(REST.VALIDATE_OTP, "POST", body, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
@@ -143,7 +143,7 @@ export const resendOtp = async (attributes)=>{
             }
         }
         
-        let res = await fetchApi(RESEND_OTP, "POST", payloadToSend, 200, headers);
+        let res = await fetchApi(REST.RESEND_OTP, "POST", payloadToSend, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
@@ -153,9 +153,112 @@ export const resendOtp = async (attributes)=>{
     })
 }
  
-export const getTradeVolume = async (attributes)=>{
+export const forgetPassword = async (attributes)=>{
     return new Promise ( async (resolve, reject)=>{ 
         console.log(attributes)   
+        if(!attributes) reject({msg: "No attributes"})
+         
+        let headers = {
+            device: DEVICE_ID,
+        }
+
+        let body={
+                data : {
+                    attributes : attributes
+                }
+            }
+ 
+        let res = await fetchApi(REST.FORGET_PASSWORD, "POST", body, 200, headers);
+        console.log(res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+
+export const resetPasswordHashValidation = async (hash)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log(hash)   
+        if(!hash) reject({msg: "No hash"})
+         
+        let headers = {
+            device: DEVICE_ID,
+        }
+ 
+        let res = await fetchApi(`${REST.RESET_PASSWORD}/${hash}`, "GET", null, 200, headers);
+        console.log(res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+export const generateOtp = async (payload,passedHeaders)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log(payload)   
+        console.log('pasedHeaders',passedHeaders)   
+        if(!payload) reject({msg: "No payload"})
+        
+        let headers = {
+            device: DEVICE_ID,
+        }
+
+        if(passedHeaders){
+            headers =passedHeaders
+        }
+
+        let res = await fetchApi(REST.GENERATE_OTP, "POST", payload, 200, headers);
+        console.log(res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+export const resetPassword = async (payload)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log(payload)   
+        if(!payload) reject({msg: "No payload"})
+         
+        let headers = {
+            device: DEVICE_ID,
+        }
+
+        let password = await encryptValue(payload.data.attributes.password)
+        let password_confirmation = await encryptValue(payload.data.attributes.password_confirmation)
+
+        payload.data.attributes.password = password.data;
+        payload.data.attributes.password_confirmation = password_confirmation.data
+
+        console.log("resetpayloadfinal",payload)
+
+        let res = await fetchApi(REST.RESET_PASSWORD, "PATCH", payload, 200, headers);
+        console.log(res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+
+
+
+
+
+
+
+export const getMarketList = async (attributes)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log("getmarketlist attr",attributes)   
         if(!attributes) reject({msg: "No attributes"})
          
         let headers = {
@@ -164,7 +267,29 @@ export const getTradeVolume = async (attributes)=>{
             Authorization: attributes.Authorization
         }
  
-        let res = await fetchApi(TRADE_VOLUME, "GET", null, 200, headers);
+        let res = await fetchApi(REST.GET_MARKET_LIST, "GET", null, 200, headers);
+        console.log("getMarketList api rs",res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+ 
+
+export const getTradeVolume = async (headers)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log(headers)   
+        if(!headers) reject({msg: "No headers"})
+         
+        let headers = {
+            device: DEVICE_ID,
+            info: headers.info,
+            Authorization: headers.Authorization
+        }
+ 
+        let res = await fetchApi(REST.TRADE_VOLUME, "GET", null, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})

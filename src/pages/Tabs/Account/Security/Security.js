@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text } from 'react-native'
-import { screenNames } from '../../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../../routes/screenNames/screenNames'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'

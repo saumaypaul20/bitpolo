@@ -9,17 +9,24 @@ import QueryActions from '../../components/QueryActions/QueryActions'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { useNavigation } from '@react-navigation/native'
 import { Colors, Images } from '../../theme'
+import { screenNames } from '../../routes/screenNames/screenNames'
+import { useSelector } from 'react-redux'
+import { resetPassword, validateOtp } from '../../api/apiCalls'
 
-const VerifyEmail = () => {
+const VerifyEmail = (props) => {
+    let user_id = useSelector(state => state.authReducer.auth_attributes.id);
+    console.log(user_id)
 
+    let ip = useSelector(state=> state.authReducer.ip)
+    const email = useSelector(state=> state.authReducer.email) 
     const [code, setCode] = useState(''); //setting code initial STATE value
     const [showProgress, setProgress] = useState(false) //setting showProgress initial STATE value
-
+    const pinCount = 6
     const navigation = useNavigation()
     const handleCodeFilled = (code) => {
         setCode(code)
 
-        if (code.length == 4) {
+        if (code.length == pinCount) {
             Keyboard.dismiss();
             //setProgress(true)
            // renderToast("PIN Number Verified")
@@ -43,6 +50,51 @@ const VerifyEmail = () => {
             //to do
         }
 
+        const onsubmit= async ()=>{
+            let payload= {
+                id: props.route.params.validated_data.id,
+                attributes:{
+                    is_browser: false,
+                    is_mobile: true,
+                    ip: ip,
+                    country: "India",
+                    otp: `BEL-${code}`
+                }
+            }
+            
+            let res = await validateOtp(payload);
+            console.log("valid",res)
+
+            if(res.status){
+                
+                let payload2= {
+                    data:{
+                        id:props.route.params.validated_data.id,
+                        attributes:{
+                            otp:`BEL-${code}`,
+                            password: props.route.params.passwords.password,
+                            password_confirmation: props.route.params.passwords.c_password,
+                        }
+                    }
+                }
+                let ress = await resetPassword(payload2)
+                console.log(ress)
+                if(ress.status){
+
+                }
+                
+                 
+            } 
+            else {
+                alert("PIN code doesn't match")
+                return
+            }
+        }
+
+        const validateTheOtp = async () =>{
+           
+        }
+
     return (
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
             <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" />
@@ -55,16 +107,16 @@ const VerifyEmail = () => {
                     
                     <BPTitle title="Verify Your Email" />
                     
-                    <BPSubtitle text={`Please enter the 4 digit code sent to\nvrsuresh.choudhary@gmail.com`} />
+                    <BPSubtitle text={`Please enter the ${pinCount} digit code sent to\n${email}`} />
                 </View>
-                <View style={{flex:1,alignItems:'center', justifyContent: 'center', marginHorizontal:43}}>
+                <View style={{flex:1,alignItems:'center', justifyContent: 'center', marginHorizontal:43,}}>
                 
                     
                 <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 60, marginBottom:60, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
-                        pinCount={4}
+                        style={{ height: 64, width: 300,  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
+                        pinCount={pinCount}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}
                         codeInputFieldStyle={styles.underlineStyleBase}
@@ -72,12 +124,12 @@ const VerifyEmail = () => {
                         onCodeFilled={code => setCode(code)}
                     />
                   
-                    <View style={{paddingTop:20}}>
-                        <BPButton label="Reset Password" onPress={()=> navigation.navigate("ChangePassword")}/>
+                    <View style={{paddingTop:20, alignSelf:'stretch'}}>
+                        <BPButton label="Reset Password" onPress={()=> onsubmit()}/>
                     </View>
 
                     <View style={{paddingVertical:20}}>
-                        <QueryActions action={()=> alert('yo')} actionName="Sign In" query="Remeber Password?"/>  
+                        <QueryActions action={()=> alert('yo')} actionName="Sign In" query="Remember Password?"/>  
 
                     </View>
                 </View>
@@ -92,28 +144,28 @@ const VerifyEmail = () => {
 const styles = StyleSheet.create({
 
     underlineStyleBase: {
-         width:77,
-         height:64,
-        borderWidth: 0,
-        overflow:'hidden',
-        borderLeftWidth: 0.5,
-        borderRightWidth: 0.5,
-        marginHorizontal:-1,
-       // borderColor: Colors.gray,
-        color: Colors.white,
-        backgroundColor: Colors.darkGray,
-         borderRadius:0
-    },
+        width:51,
+        height:64,
+       borderWidth: 0,
+       overflow:'hidden',
+       borderLeftWidth: 0.5,
+       borderRightWidth: 0.5,
+       marginLeft:-1,
+      // borderColor: Colors.gray,
+       color: Colors.white,
+       backgroundColor: Colors.darkGray,
+        borderRadius:0
+   },
 
-    underlineStyleHighLighted: {
-        // borderColor: '#fff',
-        // backgroundColor: 'rgba(45, 154, 255,0.1)'
-    },
-    blueText: {
-        // color: Colors.blue,
-        fontSize: 12,
-        fontFamily: 'Asap-Regular'
-    }
+   underlineStyleHighLighted: {
+       // borderColor: '#fff',
+       // backgroundColor: 'rgba(45, 154, 255,0.1)'
+   },
+   blueText: {
+       // color: primaryColors.blue,
+       fontSize: 12,
+       fontFamily: 'Asap-Regular'
+   }
 });  
 
 export default VerifyEmail

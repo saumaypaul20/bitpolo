@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StatusBar, Image, TouchableOpacity } from 'react-native'
 import { Container, Content, Icon } from 'native-base'
 import { primaryColors } from '../../theme/colors'
@@ -10,12 +10,46 @@ import QueryActions from '../../components/QueryActions/QueryActions'
 import { useNavigation } from '@react-navigation/native'
 import BPText from '../../common/BPText/BPText'
 import { Colors, Images } from '../../theme'
+import { screenNames } from '../../routes/screenNames/screenNames'
+import { resetPasswordHashValidation, generateOtp } from '../../api/apiCalls'
+import { getDeviceId, getAuthToken, getInfoAuthToken } from '../../utils/apiHeaders.utils'
 
-const ChangePassword = () => {
-    const navigation = useNavigation()
+const ChangePassword = (props) => {
+    console.log(props.route.params.data)
+    const navigation = useNavigation();
+    const [pwd, setPwd] = useState(null);
+    const [cpwd, setCpwd] = useState(null);
+
+    const onSubmit = async ()=>{
+        if(!pwd || pwd.trim().length == 0 ){ alert("Enter the password"); return}
+        if(!cpwd || cpwd.trim().length == 0){ alert("Re-Enter the password"); return}
+        if(cpwd.trim() !== pwd.trim()){ alert("Passwords doesn't match!"); return}
+
+        let res = await resetPasswordHashValidation(props.route.params.data.attributes.hash)
+
+        if(res.status){
+            console.log("restpwd",res)
+            let body={lang:"en",data:{attributes:{type:"reset password"}}}
+            let toPassHeader={
+                Authorization: getAuthToken(),
+                info: getInfoAuthToken(),
+                device: getDeviceId()
+            }
+            let ress = await generateOtp(body, toPassHeader)
+            if(ress.status){
+
+                navigation.navigate(screenNames.VERIFY_EMAIL, {validated_data: res.data.data, passwords: {password:pwd, c_password: cpwd}})
+            }else{
+                alert("Something went wrong! Please try again.")
+                 
+            }
+        }else{
+            alert("Something went wrong! Please try again.")
+        }
+    }
     return (
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
-            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" />
+            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={Colors.primeBG} />
             <Content contentContainerStyle={{ flexGrow: 1 }}>
             
                 <View style={{flex:3,alignItems:'center', justifyContent: 'center',paddingTop:110}}>
@@ -29,11 +63,11 @@ const ChangePassword = () => {
                 </View>
                 <View style={{flex:1,alignItems:'center', justifyContent: 'center', marginHorizontal:43}}>
                     
-                   <LabelInput label="Password" secureTextEntry/>
-                   <LabelInput label="Re-Enter Password" secureTextEntry/>
+                   <LabelInput label="Password" onChangeText={(t)=> setPwd(t)} value={pwd} secureTextEntry/>
+                   <LabelInput label="Re-Enter Password" onChangeText={(t)=> setCpwd(t)} value={cpwd} secureTextEntry/>
                   
-                    <View style={{paddingTop:20}}>
-                        <BPButton label="Change Password" onPress={()=> navigation.navigate("VerifyEmail")}/>
+                    <View style={{paddingTop:20, alignSelf:'stretch'}}>
+                        <BPButton label="Change Password" onPress={()=> onSubmit()}/>
                     </View>
 
                     <View style={{paddingVertical:50}}>

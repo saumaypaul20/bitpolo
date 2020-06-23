@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { validateOtp, resendOtp } from '../../api/apiCalls';
 import { getPublicIP } from '../../utils/apiHeaders.utils';
 import { saveAuthAttributesAction } from '../../redux/actions/auth.actions';
-import { screenNames } from '../../Routes/screenNames/screenNames';
+import { screenNames } from '../../routes/screenNames/screenNames';
 import Storage from '../../utils/storage.utils';
 
 const OTPscreen = (props) => {
@@ -52,7 +52,7 @@ const OTPscreen = (props) => {
                 }
             }
             let res = await validateOtp(payload);
-            //console.log(res)
+            console.log(res)
 
             if(res.status){
                 let res_data= res.data.data;
@@ -75,6 +75,7 @@ const OTPscreen = (props) => {
         }
 
     const resendCode = async()=>{
+        setCode('')
         let attributes ={
             user_id: user_id,
             type: 'login'
@@ -101,7 +102,7 @@ const OTPscreen = (props) => {
                     <OTPInputView
                         keyboardType="phone-pad"
                         // autoFocusOnLoad
-                        style={{ height: 64, width: '100%',  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
+                        style={{ height: 64, width: 300,  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
                         pinCount={pinCount}
                         code={code}
                         onCodeChanged={code => handleCodeFilled(code)}

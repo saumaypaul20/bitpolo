@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Signin from './src/pages/Signin/Signin';
-import Routes from './src/Routes/Routes';
+import Routes from './src/routes/Routes';
 import Storage from './src/utils/storage.utils';
 import DeviceInfo  from 'react-native-device-info';
 import { useDispatch } from 'react-redux';
@@ -19,9 +19,10 @@ const App= () => {
   const getUser = async ()=>{
     let user = await Storage.get("login")
     if(user){
-      setLogin(true)
+      console.log(user)
       dispatch(inputAction(TYPES.EMAIL_INPUT, user.email))
       dispatch(saveAuthAttributesAction(user))
+      setLogin(true)
     } 
       setLogin(false)
   }

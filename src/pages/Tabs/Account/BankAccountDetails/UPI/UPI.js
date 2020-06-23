@@ -10,7 +10,7 @@ import Modal from 'react-native-modal'
 import Spacer from '../../../../../common/Spacer/Spacer'
 import BankConfirmModal from '../../../../../components/BankConfirmModal/BankConfirmModal'
 import { useNavigation } from '@react-navigation/native'
-import { screenNames } from '../../../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../../../routes/screenNames/screenNames'
 const UPI = () => {
     const navigation = useNavigation()
     const [upi, setupi] = useState('')

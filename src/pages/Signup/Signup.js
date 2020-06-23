@@ -9,7 +9,7 @@ import { Colors } from '../../theme'
 import { useDispatch, useSelector } from 'react-redux'
 import { registerUser } from '../../api/apiCalls'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { screenNames } from '../../Routes/screenNames/screenNames'
+import { screenNames } from '../../routes/screenNames/screenNames'
 import { inputAction } from '../../redux/actions/auth.actions'
 import { TYPES } from '../../redux/types'
 
@@ -82,7 +82,7 @@ const Signup = ({navigation}) => {
          
     }
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor= {Colors.primeBG} />
                 <Content contentContainerStyle={{ flexGrow: 1 }}>

@@ -8,11 +8,13 @@ import BPText from '../../../common/BPText/BPText'
 import SellTab from './BuyTab/BuyTab'
 import PickerComp from '../../../components/PickerComp/PickerComp'
 import { useNavigation } from '@react-navigation/native'
-import { screenNames } from '../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../routes/screenNames/screenNames'
 import { useSelector } from 'react-redux'
 import { getTradeVolume } from '../../../api/apiCalls'
-
+import io from 'socket.io-client';
 const Trades = () => {
+  
+   
 
     let user = useSelector(state=> state.authReducer.auth_attributes);
     console.log("user",user)
@@ -21,18 +23,22 @@ const Trades = () => {
 
     const getTrades =async()=>{
         console.log("user_atributes-------------------------",user.attributes)
-        let attr = {
-            Authorization: user.attributes.token,
-            info: user.attributes.info,
+        try{
+            let attr = {
+                Authorization: user.attributes.token,
+                info: user.attributes.info,
+            }
+            let res = await getTradeVolume(attr);
+            console.log("getTrades",res)
+        }catch(e){
+            console.log(e)
         }
-        let res = await getTradeVolume(attr);
-        console.log(res)
     }
 
     useEffect(() => {
         if(user){
-
-            getTrades();
+           
+            // getTrades();
         }
     }, [user])
 

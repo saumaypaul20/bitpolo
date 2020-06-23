@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content } from 'native-base'
 import Toolbar from '../../../../../components/Toolbar/Toolbar'
 import { Colors } from '../../../../../theme'
-import { screenNames } from '../../../../../Routes/screenNames/screenNames'
+import { screenNames } from '../../../../../routes/screenNames/screenNames'
 import BPText from '../../../../../common/BPText/BPText'
 
 const DeviceManagement = () => {
