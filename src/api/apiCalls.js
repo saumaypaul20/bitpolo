@@ -213,7 +213,7 @@ export const generateOtp = async (payload,passedHeaders)=>{
         }
 
         let res = await fetchApi(REST.GENERATE_OTP, "POST", payload, 200, headers);
-        console.log(res)
+        console.log("geneateotp",res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
         }else{
@@ -222,15 +222,12 @@ export const generateOtp = async (payload,passedHeaders)=>{
     })
 }
 
-export const resetPassword = async (payload)=>{
+export const resetPassword = async (payload, toPassHeader)=>{
     return new Promise ( async (resolve, reject)=>{ 
         console.log(payload)   
         if(!payload) reject({msg: "No payload"})
          
-        let headers = {
-            device: DEVICE_ID,
-        }
-
+        let headers = toPassHeader
         let password = await encryptValue(payload.data.attributes.password)
         let password_confirmation = await encryptValue(payload.data.attributes.password_confirmation)
 
@@ -240,7 +237,7 @@ export const resetPassword = async (payload)=>{
         console.log("resetpayloadfinal",payload)
 
         let res = await fetchApi(REST.RESET_PASSWORD, "PATCH", payload, 200, headers);
-        console.log(res)
+        console.log("resretpaswww",res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
         }else{

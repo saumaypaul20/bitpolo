@@ -12,6 +12,7 @@ import { Colors, Images } from '../../theme'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { useSelector } from 'react-redux'
 import { resetPassword, validateOtp } from '../../api/apiCalls'
+import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../utils/apiHeaders.utils'
 
 const VerifyEmail = (props) => {
     let user_id = useSelector(state => state.authReducer.auth_attributes.id);
@@ -51,41 +52,29 @@ const VerifyEmail = (props) => {
         }
 
         const onsubmit= async ()=>{
-            let payload= {
-                id: props.route.params.validated_data.id,
-                attributes:{
-                    is_browser: false,
-                    is_mobile: true,
-                    ip: ip,
-                    country: "India",
-                    otp: `BEL-${code}`
-                }
-            }
-            
-            let res = await validateOtp(payload);
-            console.log("valid",res)
 
-            if(res.status){
-                
-                let payload2= {
-                    data:{
-                        id:props.route.params.validated_data.id,
-                        attributes:{
-                            otp:`BEL-${code}`,
-                            password: props.route.params.passwords.password,
-                            password_confirmation: props.route.params.passwords.c_password,
-                        }
+            let toPassHeader={
+                Authorization: getAuthToken(),
+                info: getInfoAuthToken(),
+                device: getDeviceId()
+            }
+
+            let payload2= {
+                data:{
+                    id:props.route.params.validated_data.id,
+                    attributes:{
+                        otp:`BEL-${code}`,
+                        password: props.route.params.passwords.password,
+                        password_confirmation: props.route.params.passwords.c_password,
                     }
                 }
-                let ress = await resetPassword(payload2)
-                console.log(ress)
-                if(ress.status){
+            }
+            console.log("payload2",payload2)
+            let ress = await resetPassword(payload2, toPassHeader)
+            console.log("resPasswd",ress)
+            if(ress.status){
 
-                }
-                
-                 
-            } 
-            else {
+            } else {
                 alert("PIN code doesn't match")
                 return
             }
