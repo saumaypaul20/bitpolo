@@ -8,10 +8,26 @@ import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { screenNames } from '../../../routes/screenNames/screenNames'
+import { logoutUser } from '../../../api/apiCalls'
+import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
+import Storage from '../../../utils/storage.utils'
 
 const Account = () => {
     let email = useSelector(state=> state.authReducer.email)
     const navigation = useNavigation()
+
+    const logout = async() =>{
+        let toPassHeader={
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+        let ress = await logoutUser(toPassHeader)
+        if(ress.status){
+            Storage.clearAll()
+            navigation.reset({index:0, routes: [{name:screenNames.SIGNIN}]})
+        }
+    }
     return (
         <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -46,6 +62,8 @@ const Account = () => {
                         <SettingsListItem label="Rate Us" image={Images.rate_us_icon}/>
                         <SettingsListItem label="About Us" image={Images.about_us_icon}
                            onPress={()=> navigation.navigate(screenNames.ABOUT)}/>
+                        <SettingsListItem label="Logout" image={Images.about_us_icon}
+                           onPress={()=> logout()}/>
 
                     </View>
                 </View>

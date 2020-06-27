@@ -29,10 +29,16 @@ const App= () => {
 
   // getDeviceId for headers
   const deviceAccess =async()=>{
-    let deviceId = DeviceInfo.getUniqueId();
-    dispatch(addDeviceId(deviceId))
-    console.log(deviceId)
-  
+    // let deviceId = DeviceInfo.getUniqueId();
+    let device_name = await DeviceInfo.getModel();
+    let os = await DeviceInfo.getSystemName()
+    let deviceVer = await DeviceInfo.getSystemVersion()
+    let device = {
+      os: os,
+      os_byte: deviceVer,
+      browser: device_name
+    }
+    dispatch(addDeviceId(device))
   }
 
   const storeIP = async() =>{

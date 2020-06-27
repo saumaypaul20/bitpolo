@@ -29,7 +29,7 @@ const ChangePassword = (props) => {
 
         if(res.status){
             console.log("restpwd",res)
-            let body={lang:"en",data:{attributes:{type:"reset password"}}}
+            let body={lang:"en",data:{id: res.data.data.id ,attributes:{type:"reset-password"}}}
             let toPassHeader={
                 Authorization: getAuthToken(),
                 info: getInfoAuthToken(),

@@ -24,7 +24,7 @@ const LabelInput = (props) => {
            
             <CardItem style={{flex:1, backgroundColor:'transparent',flexDirection:'column', alignItems:'flex-start', padding:0, }}>
                  
-                <Item floatingLabel style={{borderBottomColor: 'transparent', borderBottomWidth:0.2, borderBottomColor: Colors.textInputBorder, paddingBottom:10}}>
+                <Item floatingLabel style={{borderBottomColor: 'transparent', borderBottomWidth:1, borderBottomColor: Colors.textInputBorder, paddingBottom:10}}>
                     <Label style={{ fontFamily: Fonts.FONT_REGULAR, color: Colors.lightWhite, letterSpacing: 1, fontSize: 16 }}>{label}</Label>
 
                     <Input  

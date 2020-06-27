@@ -3,7 +3,7 @@ import { StatusBar} from 'react-native'
 import { Container, Content, Card , Button, View, Toast} from 'native-base'
 import LabelInput from '../../components/LabelInput/LabelInput'
 import BPButton from '../../common/BPButton/BPButton'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { inputAction, saveUserId } from '../../redux/actions/auth.actions'
 import LogoHeader from '../../common/LogoHeader/LogoHeader'
 import QueryActions from '../../components/QueryActions/QueryActions'
@@ -22,8 +22,8 @@ const Signin = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     
-    let email = useSelector(state => state.authReducer.email);
-    let password = useSelector(state => state.authReducer.password);
+    let email = useSelector(state => state.authReducer.email, shallowEqual);
+    let password = useSelector(state => state.authReducer.password, shallowEqual);
 
     const onSignInPress = async () => {
       //  await Storage.set("login", true)
@@ -56,7 +56,7 @@ const Signin = () => {
       let res = await loginUser(payload)
       console.log(res)
       if(!res.status){
-            alert("Something went worng!")
+            alert(res.data.data.attributes.message)
       }else{ 
           alert(res.data.data.attributes.message)
           dispatch(saveUserId(res.data.data.id))

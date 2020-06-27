@@ -1,3 +1,5 @@
+
+import _ from 'lodash'
 export function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
@@ -17,4 +19,11 @@ export const convertDate = (time) => {
     const converted = dt + '/' + month + '/' + year;
     return converted
 
+}
+
+
+export const roundNumber =(num, place=2) =>{
+    console.log(num);
+    
+   return _.round(num, place)
 }

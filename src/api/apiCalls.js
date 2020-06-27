@@ -48,8 +48,9 @@ export const registerUser = async (payload)=>{
         payload.password = encrypt_res.data,
         payload.password_confirmation = encrypt_res.data
 
-        console.log(payload)
-
+        console.log("new paykoad",payload)
+        console.log(headers)
+        
         let payloadToSend = {
             lang: LANG,
             data:{
@@ -71,8 +72,10 @@ export const loginUser = async (payload)=>{
     return new Promise ( async (resolve, reject)=>{ 
         console.log(payload)   
         if(!payload) reject({msg: "No payload"})
-         
-        let headers = {device: DEVICE_ID}
+        let dev = getDeviceId()
+        console.log(dev)
+        if(!dev){return}
+        let headers = {device: dev}
 
         let toEncrypt = payload.password
 
@@ -83,7 +86,9 @@ export const loginUser = async (payload)=>{
 
         payload.password = encrypt_res.data,
 
-        console.log(payload)
+        // console.log(payload)
+        console.log("new paykoad",payload)
+        console.log(headers)
 
         let payloadToSend = {
             lang: LANG,
@@ -221,6 +226,21 @@ export const generateOtp = async (payload,passedHeaders)=>{
         }
     })
 }
+export const logoutUser = async (passedHeaders)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log('pasedHeaders',passedHeaders)   
+
+        let headers = passedHeaders
+
+        let res = await fetchApi(REST.LOGOUT, "POST", null, 200, headers);
+        console.log("logoutuser",res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
 
 export const resetPassword = async (payload, toPassHeader)=>{
     return new Promise ( async (resolve, reject)=>{ 
@@ -265,6 +285,25 @@ export const getMarketList = async (attributes)=>{
         }
  
         let res = await fetchApi(REST.GET_MARKET_LIST, "GET", null, 200, headers);
+        console.log("getMarketList api rs",res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+ 
+
+
+export const getMarketByPair = async (pair, toPassHeader)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log("getmarketlist attr",pair, toPassHeader)   
+        if(!pair) reject({msg: "No pair"})
+         
+        let headers = toPassHeader
+ 
+        let res = await fetchApi(`${REST.GET_MARKET_BY_PAIR}/${pair}`, "GET", null, 200, headers);
         console.log("getMarketList api rs",res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})

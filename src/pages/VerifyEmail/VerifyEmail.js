@@ -73,7 +73,9 @@ const VerifyEmail = (props) => {
             let ress = await resetPassword(payload2, toPassHeader)
             console.log("resPasswd",ress)
             if(ress.status){
-
+                alert("Password has been reset")
+                // navigation.navigate(screenNames.SIGNIN)
+                navigation.reset({index:0, routes: [{name:screenNames.SIGNIN}]})
             } else {
                 alert("PIN code doesn't match")
                 return

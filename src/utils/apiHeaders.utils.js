@@ -3,7 +3,9 @@ import publicIP from 'react-native-public-ip';
 
 export const getDeviceId = () =>{
     const reduxState = store.getState()
-    return reduxState.deviceReducer.deviceId
+    const res = reduxState.deviceReducer.deviceId
+    console.log("device id",res)
+    return res
 }
 
 export const getAuthToken = () =>{
