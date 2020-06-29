@@ -17,7 +17,7 @@ const SettingsListItem = (props) => {
             }}
             >
            <View style={{flexDirection:'row', flex:1, alignSelf:'flex-start', alignItems:"center"}}>
-              {props.image &&  <Image source={props.image} style={{width:18, marginRight:20, height:18}} resizeMode="contain"/>}
+              {props.image &&  <Image source={props.image} style={{width: 18, marginRight:20, height:18}} resizeMode="contain"/>}
                 <BPText style={{ fontSize:18}}>{props.label}</BPText>
            </View>
            {

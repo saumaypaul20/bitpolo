@@ -10,7 +10,7 @@ import PickerComp from '../../../components/PickerComp/PickerComp'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../routes/screenNames/screenNames'
 import { useSelector } from 'react-redux'
-import { getTradeVolume } from '../../../api/apiCalls'
+import { getTradeVolume } from '../../../api/users.api'
 import io from 'socket.io-client';
 const Trades = () => {
   

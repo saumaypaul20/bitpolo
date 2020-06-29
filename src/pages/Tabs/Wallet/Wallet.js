@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Image, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Content, Button, Container, Switch, Icon } from 'native-base'
@@ -10,11 +10,14 @@ import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../routes/screenNames/screenNames'
 import BPSwitch from '../../../common/BPSwitch/BPSwitch'
+import { getAsset } from '../../../api/wallet.api'
+import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
 
 const Wallet = () => {
 
     const navigation = useNavigation()
     const [isEnabled, setIsEnabled] = useState(false);
+    const [assets, setassets] = useState([])
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     const sortByAlpha =()=>{
@@ -24,6 +27,23 @@ const Wallet = () => {
     const rightEl =()=>{
         return <BPText>0</BPText>
     }
+
+    const getWalletAsset = async () =>{
+        let toPassHeader={
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+        let res = await getAsset(toPassHeader)
+        if (res.status){
+            console.log(res)
+            setassets(res.data)
+        }
+    }
+
+    useEffect(() => {
+        getWalletAsset()
+    }, [])
     return (
         <SafeAreaView style={{flex:1}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -88,55 +108,24 @@ const Wallet = () => {
                             </View>
 
                             <View>
-                                <SettingsListItem 
-                                label="BDX (Beldex)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
-                                <SettingsListItem 
-                                label="BDX (Beldex)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
-                                <SettingsListItem 
-                                label="BTC (Bitcoin)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
-                                <SettingsListItem 
-                                label="DASH (Dash)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
-                                <SettingsListItem 
-                                label="ETH (Ethereum)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
-                                <SettingsListItem 
-                                label="LTC (Litcoin)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
-                                <SettingsListItem 
-                                label="XMR (Monero)" 
-                                image={Images.fees_icon} 
-                                paddingHorizontal={20} 
-                                borderBottom
-                                rightElement={rightEl()}
-                                />
+                                {assets.length > 0 && assets.map(item=>{
+                                    return (
+                                        <SettingsListItem 
+                                        key={item._id}
+                                        label={`${item.asset_code} (${item.asset_name})`}
+                                        image={{uri: item.logo_url}} 
+                                        paddingHorizontal={20} 
+                                        borderBottom
+                                        rightElement={rightEl()}
+                                        />
+                                    )
+                                })}
+
+                                {
+                                    assets.length == 0 &&  <ActivityIndicator size="large" color="#fff" />
+                                }
+                            
+                               
                             </View>
                         </View>
                         

@@ -8,7 +8,7 @@ import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { screenNames } from '../../../routes/screenNames/screenNames'
-import { logoutUser } from '../../../api/apiCalls'
+import { logoutUser } from '../../../api/users.api'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
 import Storage from '../../../utils/storage.utils'
 

@@ -12,7 +12,7 @@ import BPText from '../../common/BPText/BPText'
 import Storage from '../../utils/storage.utils'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {loginUser} from '../../api/apiCalls'
+import {loginUser} from '../../api/users.api'
 import publicIP from 'react-native-public-ip';
 import { getPublicIP } from '../../utils/apiHeaders.utils'
 import { useNavigation } from '@react-navigation/native'
@@ -58,9 +58,15 @@ const Signin = () => {
       if(!res.status){
             alert(res.data.data.attributes.message)
       }else{ 
+
+        if(res.data.data.attributes.google_auth){
+            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res.data.data})
+            return
+        }else{
+
           alert(res.data.data.attributes.message)
           dispatch(saveUserId(res.data.data.id))
-          navigation.navigate(screenNames.OTP_SCREEN, {data: res.data.data})
+          navigation.navigate(screenNames.OTP_SCREEN, {data: res.data.data})}
         }
     }
     

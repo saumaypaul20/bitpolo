@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Colors, Images } from '../../theme'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { useSelector } from 'react-redux'
-import { resetPassword, validateOtp } from '../../api/apiCalls'
+import { resetPassword, validateOtp } from '../../api/users.api'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../utils/apiHeaders.utils'
 
 const VerifyEmail = (props) => {

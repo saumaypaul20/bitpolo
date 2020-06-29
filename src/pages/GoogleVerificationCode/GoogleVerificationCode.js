@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import { primaryColors } from '../../theme/colors';
 import { Container, Content } from 'native-base';
@@ -9,19 +9,75 @@ import BPText from '../../common/BPText/BPText';
 import { Fonts, Colors } from '../../theme';
 import { screenNames } from '../../routes/screenNames/screenNames';
 import { useNavigation, StackActions } from '@react-navigation/native';
+import { g2fVerify, getGeolocation } from '../../api/users.api';
+import { getPublicIP } from '../../utils/apiHeaders.utils';
+import DeviceInfo  from 'react-native-device-info';
+import Geolocation from '@react-native-community/geolocation';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveAuthAttributesAction } from '../../redux/actions/auth.actions';
+import Storage from '../../utils/storage.utils';
 
 const GoogleVerificationCode = (props) => {
     const navigation = useNavigation()
-    const [code, setCode] = useState(''); //setting code initial STATE value        
+    let email = useSelector(state => state.authReducer.email);
 
-    const goToScreen =()=>{
+    const [code, setCode] = useState(''); //setting code initial STATE value        
+    const [geo, setgeo] = useState(null); //setting code initial STATE value        
+    const dispatch = useDispatch()
+
+    const goToScreen = async ()=>{
         if(props.route.params.screen){
             navigation.dispatch(StackActions.pop(2))
         }else{
-
-            navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+            let payload = {
+                id: props.route.params.data.id,
+                attributes:{
+                    browser : await DeviceInfo.getModel(),
+                    ip : await getPublicIP(),
+                    is_browser : false,
+                    is_mobile : true,
+                    is_app : true,
+                    os : await DeviceInfo.getSystemName(),
+                    os_byte : await DeviceInfo.getSystemVersion(),
+                    g2f_code : code,
+                    country : geo.country,
+                    // city : geo.city,
+                    // region : geo.region
+                }
+            }
+            try {
+                let res = await g2fVerify(payload)
+                console.log(res)
+                if(res.status){
+                let res_data= res.data.data;
+                res_data.email =email
+                dispatch(saveAuthAttributesAction(res_data))
+                await Storage.set("login", res_data)
+                navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+            }
+            } catch (error) {
+                console.log(error);
+                alert("Something went wrong!")
+                
+            }
         }
     }
+
+    const getGeoInfo = async () =>{
+        try {
+            let res = await getGeolocation()
+        if(res){
+            console.log("geo res",res)
+            setgeo(res.data)
+        }
+        } catch (error) {
+            //
+        }
+
+    }
+    useEffect(() => {
+        getGeoInfo() 
+    }, [])
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>

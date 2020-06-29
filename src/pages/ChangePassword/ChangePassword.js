@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import BPText from '../../common/BPText/BPText'
 import { Colors, Images } from '../../theme'
 import { screenNames } from '../../routes/screenNames/screenNames'
-import { resetPasswordHashValidation, generateOtp } from '../../api/apiCalls'
+import { resetPasswordHashValidation, generateOtp } from '../../api/users.api'
 import { getDeviceId, getAuthToken, getInfoAuthToken } from '../../utils/apiHeaders.utils'
 
 const ChangePassword = (props) => {

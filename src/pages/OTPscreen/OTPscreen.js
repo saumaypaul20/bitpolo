@@ -11,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../theme';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { validateOtp, resendOtp } from '../../api/apiCalls';
+import { validateOtp, resendOtp } from '../../api/users.api';
 import { getPublicIP } from '../../utils/apiHeaders.utils';
 import { saveAuthAttributesAction } from '../../redux/actions/auth.actions';
 import { screenNames } from '../../routes/screenNames/screenNames';
@@ -59,14 +59,14 @@ const OTPscreen = (props) => {
                 res_data.email =email
                 // alert("Success")
                 dispatch(saveAuthAttributesAction(res_data))
-                if(res.data.data.attributes.google_auth){
-                    navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res_data})
-                    return
-                }else{
+                // if(res.data.data.attributes.google_auth){
+                //     navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res_data})
+                //     return
+                // }else{
                     await Storage.set("login", res_data)
                     navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
                     return 
-                }
+                // }
             } 
             else {
                 alert("PIN code doesn't match")

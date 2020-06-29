@@ -1,5 +1,5 @@
     import React, { useEffect, useState, useCallback, useRef } from 'react'
-    import { View, Text, FlatList, TouchableOpacity, Image,  } from 'react-native'
+    import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator,  } from 'react-native'
     import { SwipeListView } from 'react-native-swipe-list-view';
     import { Colors, Images } from '../../../theme'
     import { SafeAreaView } from 'react-native-safe-area-context'
@@ -9,13 +9,14 @@
     import { addMarketData, modifyFavs } from '../../../redux/actions/markets.action';
     import io from 'socket.io-client';
     import * as ENDPOINT from '../../../api/constants'
-    import { getMarketList, getMarketByPair } from '../../../api/apiCalls';
+    import { getMarketList, getMarketByPair } from '../../../api/users.api';
     import store from '../../../redux/store';
     import _ from 'lodash'
 import { createSelector, createSelectorCreator } from 'reselect';
+import BPText from '../../../common/BPText/BPText';
     // var io = require("socket.io-client/dist/socket.io");
     var pako = require('pako');
-    
+    let id = 1;
     let count = 0
     let count2 = 0
     let count3 = 0
@@ -68,32 +69,12 @@ import { createSelector, createSelectorCreator } from 'reselect';
       )
 
     const BTCView = ()=>{
-        const [data, setdata] = useState([])
+     
         console.log("btcview reloads", count)
         count++
         let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
         console.log("market_data",market_data)
-        // useEffect(() => {
-        //     console.log("calle btc in useeffectr 1", count3)
-             
-        //         count3++
-        //         console.log('1 setdata usededff')
-        //         setdata(market_data)
-
-        // }, [])
-
-        // useEffect(() => {
-        //     console.log("calle btc in useeffectr 2", count3)
-        //     if(data.length> 0 && equalityFnMarket(market_data,data)=== false){
-        //         count3++
-        //         console.log('calling eq fn from useefect')
-        //         setdata(market_data)
-        //     } else{
-        //         console.log("else use eff 2")
-        //         setdata(market_data)
-        //     }
-
-        // }, [market_data])
+         
         // const favourites = [useSelector(state=> state.marketReducer.favourites, (l,r)=>{
         //     console.log(l,r);
         //     // let l2=l.map(i=> {delete i.id; return i}); 
@@ -139,7 +120,8 @@ import { createSelector, createSelectorCreator } from 'reselect';
                         // listItem(rowData.item, rowData.index)
                         <ListItem item={rowData.item} index={rowData.index} />
 
-                        )}}
+                        )
+                    }}
                         renderHiddenItem={ (rowData, rowMap) => (
                             <View style={{right:0, position:'absolute', top:0, bottom:0, backgroundColor:Colors.darkGray, flex:1, justifyContent:'center', alignItems:'center',width:64}}>
                                 <TouchableOpacity onPress={ () =>{ onStarClicked(rowData.item, favourites);setTimeout(() => {
@@ -162,7 +144,8 @@ import { createSelector, createSelectorCreator } from 'reselect';
                         ListHeaderComponent={ homeHeaderComp()}
                         stickyHeaderIndices={[0]}
                         keyExtractor={item => item.id}
-                        contentContainerStyle={{flex:1}}
+                        contentContainerStyle={{flexGrow:1}}
+                        ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
                         
                     
                     />  
@@ -235,20 +218,23 @@ import { createSelector, createSelectorCreator } from 'reselect';
         )
     })
     const ListItem = ({item, index}) =>{
-    //  console.log("item",item)
+      console.log("item",item)
         let bool = index%2===0 ? true : false
         return(
             <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8, backgroundColor: bool ? Colors.primeBG: Colors.darkGray2}}>
-                <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
-                    <Text style={{color: Colors.white, fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.params[0].slice(0,3)} <Text style={{color: Colors.lightWhite,  fontFamily:'Inter-Bold'}}>/ {item?.params[0].slice(3)}</Text></Text>
-                    <Text style={{color: Colors.white, fontSize:10,  fontFamily:'Inter-Medium' }}>Vol {parseFloat(item?.params[1]?.v).toFixed(2)}</Text>
+                <View style={{flex:1, justifyContent:'center', alignItems:'flex-start', paddingHorizontal:30}}>
+                    <View style={{alignItems:'flex-start'}}>
+                        <BPText style={{  fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.params[0].slice(0,3)} <BPText style={{color: Colors.lightWhite,  fontFamily:'Inter-Bold'}}>/ {item?.params[0].slice(3)}</BPText></BPText>
+
+                        <BPText style={{fontSize:10,  fontFamily:'Inter-Medium', textAlign:'left' }}>Vol {parseFloat(item?.params[1]?.v).toFixed(2)}</BPText>
+                    </View>
                 </View>
 
-                <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
-                    <Text style={{color: Colors.lightWhite, fontFamily:'Inter-Regular', fontSize:12, }}>{parseFloat(item?.params[1]?.l).toFixed(2)}</Text>
-                    <Text style={{color: Colors.white, fontFamily:'Inter-Medium', fontSize:10, }}>$ {parseFloat(item?.params[1]?.l).toFixed(2)}</Text>
+                <View style={{flex:1, justifyContent:'center', alignItems:'center',paddingHorizontal:30}}>
+                    <BPText style={{fontSize:12, }}>{parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
+                    <BPText style={{fontFamily:'Inter-Medium', fontSize:10, }}>$ {parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
                     </View>
-                <View style={{flex:1, justifyContent:'center', alignItems:'center', alignSelf:'center'}}>
+                <View style={{flex:1, justifyContent:'center', alignItems:'flex-end', alignSelf:'center',paddingHorizontal:30}}>
                     <Text 
                     style={{
                         color: !item?.params[1]?.cp.match('-') ? Colors.text.darkGreen : Colors.text.darkRed, 
@@ -263,32 +249,7 @@ import { createSelector, createSelectorCreator } from 'reselect';
         )
     }
 
-    // const startSocket=() => {
-    //     const reduxState = store.getState()
-    //     socket.on("connect", function() {
-    //         socket.emit("message", { "method" : "state.subscribe", "params" : ["BTCINR"] });
-    //         socket.on("message", function(data) {
-    //             const result = JSON.parse(pako.inflate(data, { to: "string" }));
-    //             console.log("count-socket",count2);
-    //             console.log("soclet00000",result);
-            
-    //             count2++
-    //             result.id = Math.random().toString()
-    //             // setData([result])
-    //             if( reduxState.marketReducer.data.length > 0 && Object.entries(reduxState.marketReducer.data[0]).toString() !== Object.entries(result.params[1]).toString()){
-                    
-    //                 store.dispatch(addMarketData([result]))
-    //             }else if(reduxState.marketReducer.data.length == 0){
-    //                 store.dispatch(addMarketData([result]))
-
-    //             }
-    //         });
-    //     })
-
-    //     socket.on("disconnect", function(){
-    //         console.log("socket disconnected");
-    //     });
-    // }
+     
     const homeHeaderComp = () => {
         return (
             <View style={{backgroundColor: Colors.primeBG}}>
@@ -351,21 +312,26 @@ import { createSelector, createSelectorCreator } from 'reselect';
         // const [favs, setFavs] = useState([])
         // const favourites = useSelector(state=> state.marketReducer.favourites, shallowEqual)
 
-        const startSocket=() => {
+        const startSocket=(marketPairs) => {
           
             // const reduxState = store.getState()
             socket.on("connect", function() {
                 console.log("connected")
-                socket.emit("message", { "method" : "state.subscribe", "params" : ["BTCUSDT", ["BTCINR"]] });
+               
+                socket.emit("message", {"id": id, "method" : "state.subscribe", "params" : marketPairs });
                 socket.on("message", function(data) {
                     const result = JSON.parse(pako.inflate(data, { to: "string" }));
                     console.log("count-socket",count2);
                     console.log("soclet00000",result);
-                
+                    console.log("id",id);
+                    id++
                     count2++
                     result.id = Math.random().toString()
                     // setData([result])
-                    dispatch(addMarketData([result]))
+                    if(result.params){
+
+                        dispatch(addMarketData(result))
+                    }
                 });
             })
         
@@ -389,7 +355,7 @@ import { createSelector, createSelectorCreator } from 'reselect';
 
         useEffect(() => {
             if(socket){
-               startSocket()
+               startSocket(marketPairs)
             }
             return () => {
                 if(socket) socket.disconnect()
@@ -410,7 +376,7 @@ import { createSelector, createSelectorCreator } from 'reselect';
                 console.log("getmarkets",res)
 
                 if(res.status){
-                    setmarketPairs(res.data.data)
+                    setmarketPairs(res.data.data.attributes.market_list.map(i =>{ if(i.is_active){return i.market_name}}))
                     setSocket(io(ENDPOINT.WEBSOCKET, {
                         transports: ['websocket'],
                       }))

@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { inputAction } from '../../redux/actions/auth.actions'
 import { TYPES } from '../../redux/types'
 import { screenNames } from '../../routes/screenNames/screenNames'
-import { forgetPassword } from '../../api/apiCalls'
+import { forgetPassword } from '../../api/users.api'
 import { getPublicIP } from '../../utils/apiHeaders.utils'
 
 const ForgotPassword = () => {
