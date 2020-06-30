@@ -30,6 +30,7 @@
     "react-native-network-info": "5.2.1",
     "react-native-permissions": "2.1.5",
     "react-native-public-ip": "1.0.2",
+    "react-native-qrcode-svg": "6.0.6",
     "react-native-reanimated": "1.9.0",
     "react-native-safe-area-context": "3.0.2",
     "react-native-screens": "2.8.0",

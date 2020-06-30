@@ -14,6 +14,7 @@
     import _ from 'lodash'
 import { createSelector, createSelectorCreator } from 'reselect';
 import BPText from '../../../common/BPText/BPText';
+import { useNavigation } from '@react-navigation/native';
     // var io = require("socket.io-client/dist/socket.io");
     var pako = require('pako');
     let id = 1;
@@ -52,10 +53,37 @@ import BPText from '../../../common/BPText/BPText';
         console.log("inside eqFn",l,r);
         eq++
         console.log("eq called", eq)
-        console.log("market_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length); 
-        console.log("market_data _lodash cond", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0); 
-        console.log("market_data _lodash  res", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method']))))); 
-        return _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0 ? true : false
+        let change = false
+        if(r.length > 0){
+            console.log("r>0")
+            l.forEach((lItem, index)=>{
+                let found = r.findIndex(rItem=> rItem.params[0]=== lItem.params[0])
+                console.log("litem index eqFn",index)
+                console.log("found index eqFn",found)
+                console.log("found index rfound",r[found].params[1])
+                console.log("found index lfound",lItem.params[1])
+                if(found>-1){
+                    console.log("found params", _.isEqual(lItem.params[1], r[found].params[1]))
+                    change =  (_.isEqual(lItem.params[1], r[found].params[1]))
+                    // return change
+                    if(!change){
+                        change = false
+                        return change
+                    }else{
+                        change = true
+                        return change
+                    }
+                    
+                }
+             })
+        }
+
+        // return change
+        // console.log("market_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length); 
+        // console.log("market_data _lodash cond", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0); 
+        // console.log("market_data _lodash  res", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method']))))); 
+        // return _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0 ? true : false
+      
        
     }
  
@@ -304,6 +332,8 @@ import BPText from '../../../common/BPText/BPText';
         console.log('reload')
         const [socket, setSocket] = useState(null)
         const dispatch = useDispatch();
+        const navigation = useNavigation()
+        let focus = navigation.isFocused()
         const user = useSelector(state=> state.authReducer.auth_attributes);
         const [marketPairs, setmarketPairs] = useState([])
      console.log("usert",user)
@@ -354,13 +384,19 @@ import BPText from '../../../common/BPText/BPText';
         }, [])
 
         useEffect(() => {
+            console.log("foucs", focus)
             if(socket){
-               startSocket(marketPairs)
+                if(focus){
+
+                    startSocket(marketPairs)
+                }else{
+                    socket.disconnect()
+                }
             }
             return () => {
                 if(socket) socket.disconnect()
             }
-        }, [socket])
+        }, [socket,navigation,focus])
         // useEffect(() => {
         //     console.log("called setFavs")
         //     setFavs(favourites)

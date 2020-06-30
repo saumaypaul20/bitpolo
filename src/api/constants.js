@@ -24,5 +24,13 @@ export const WEBSOCKET = 'wss://msocket.bitpolo.com'
 /* ------------------------------- WALLET API ------------------------------- */
 
 export const WALLET = {
-    GET_ASSET : '/wallet/assets'
+    GET_ASSET : '/wallet/assets',
+    GET_BALANCE : '/wallet/balance',
+    CREATE_ASSET_ADDRESS : '/wallet/asset-address',
+}
+
+/* ------------------------------- SECURITY API ------------------------------- */
+
+export const SECURITY = {
+    DEVICE_HISTORY : '/user/device-history'
 }

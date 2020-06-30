@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Signin from './src/pages/Signin/Signin';
+import { StatusBar } from 'react-native'
 import Routes from './src/routes/Routes';
 import Storage from './src/utils/storage.utils';
 import DeviceInfo  from 'react-native-device-info';
 import { useDispatch } from 'react-redux';
 import { addDeviceId } from './src/redux/actions/device.actions';
-import publicIP from 'react-native-public-ip';
-import Geolocation from '@react-native-community/geolocation';
-import { PermissionsAndroid } from 'react-native';
 import { saveIpAction, inputAction, saveAuthAttributesAction } from './src/redux/actions/auth.actions';
 import { getPublicIP } from './src/utils/apiHeaders.utils';
 import { TYPES } from './src/redux/types';
+import { Colors } from './src/theme';
 const App= () => {
   const dispatch = useDispatch()
   const [login, setLogin] = useState(null)
@@ -56,7 +54,7 @@ const App= () => {
   }, [])
 
   return (
-    login !== null ? <Routes login={login}/> : null
+    login !== null ? <><StatusBar translucent barStyle={Colors.barStyle} backgroundColor={ Colors.primeBG} /><Routes login={login}/></>: null
   );
 
 };

@@ -3,11 +3,13 @@ import { combineReducers } from 'redux';
 import authReducer from './auth.reducer'
 import marketReducer from './markets.reducer'
 import deviceReducer from './device.reducer'
+import walletReducer from './wallet.reducer'
 
 const reducers = {
     authReducer,
     marketReducer,
-    deviceReducer
+    deviceReducer,
+    walletReducer
 };
 
 const appReducer = combineReducers(reducers);

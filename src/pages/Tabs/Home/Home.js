@@ -57,7 +57,7 @@ const ListItem = () =>{
 
 const Home = () => {
     return (
-        <SafeAreaView style={{flex:1,}}>
+        <SafeAreaView style={{flex:1,backgroundColor: Colors.primeBG}}>
             <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <Toolbar title="Exchange" backgroundColor={Colors.darkGray2}/>
 

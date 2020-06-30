@@ -19,8 +19,8 @@ const BottomTabs = () => {
     return (
        
             <Tab.Navigator 
-              initialRouteName="Markets"
-
+              initialRouteName="Wallet"
+              unmountOnBlur
               tabBarOptions={{
                 activeTintColor: Colors.tabActiveTintColor,
                 style:{
@@ -59,7 +59,7 @@ const BottomTabs = () => {
                 })}
                 >
               
-                <Tab.Screen name="Home" component={Home} />
+                <Tab.Screen name="Home" component={Home} unmountOnBlur/>
                 <Tab.Screen name="Markets" component={Markets} />
                 <Tab.Screen name="Trades" component={Trades} />
                 <Tab.Screen name="Wallet" component={WalletTabRoutes} />

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, Image, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, Text, Image, ActivityIndicator, StatusBar } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Content, Button, Container, Switch, Icon } from 'native-base'
@@ -10,44 +10,58 @@ import SettingsListItem from '../../../common/SettingsListItem/SettingsListItem'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../routes/screenNames/screenNames'
 import BPSwitch from '../../../common/BPSwitch/BPSwitch'
-import { getAsset } from '../../../api/wallet.api'
+import { getAsset, getWalletBalance } from '../../../api/wallet.api'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
+import { useDispatch } from 'react-redux'
+import { fetchedWalletBalance, fetchedWalletAssets } from '../../../redux/actions/wallet.actions'
+
+
+const rightEl =(val)=>{
+    return <BPText>{val}</BPText>
+}
 
 const Wallet = () => {
-
+    const dispatch = useDispatch()
     const navigation = useNavigation()
     const [isEnabled, setIsEnabled] = useState(false);
     const [assets, setassets] = useState([])
+    const [balance, setbalance] = useState(null)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     const sortByAlpha =()=>{
-         alert('soon')
+         console.log('soon')
     }
-
-    const rightEl =()=>{
-        return <BPText>0</BPText>
-    }
-
-    const getWalletAsset = async () =>{
+ 
+    const getWalletAsset = useCallback(async () =>{
         let toPassHeader={
             Authorization: getAuthToken(),
             info: getInfoAuthToken(),
             device: getDeviceId()
         }
-        let res = await getAsset(toPassHeader)
-        if (res.status){
-            console.log(res)
-            setassets(res.data)
+        let assetsResult = await getAsset(toPassHeader)
+        if (assetsResult.status){
+            let balanceResult = await getWalletBalance(toPassHeader)
+
+            if(balanceResult.status){
+                setbalance(balanceResult.data.data)
+                setassets(assetsResult.data)
+
+                dispatch(fetchedWalletBalance(balanceResult.data))
+                dispatch(fetchedWalletAssets(assetsResult.data))
+
+            }
         }
-    }
+    },[])
 
     useEffect(() => {
         getWalletAsset()
     }, [])
+
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
+             <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={ Colors.primeBG} />
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
-                {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
+               
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, justifyContent:'flex-start'}}>
                         
@@ -108,7 +122,7 @@ const Wallet = () => {
                             </View>
 
                             <View>
-                                {assets.length > 0 && assets.map(item=>{
+                                {assets.length > 0 && balance && assets.map(item=>{
                                     return (
                                         <SettingsListItem 
                                         key={item._id}
@@ -116,7 +130,7 @@ const Wallet = () => {
                                         image={{uri: item.logo_url}} 
                                         paddingHorizontal={20} 
                                         borderBottom
-                                        rightElement={rightEl()}
+                                        rightElement={rightEl(balance[item.asset_code].available.balance)}
                                         />
                                     )
                                 })}

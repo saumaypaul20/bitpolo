@@ -25,6 +25,7 @@ import DeviceManagement from '../pages/Tabs/Account/Security/DeviceManagement/De
 import AntiSpoof from '../pages/Tabs/Account/Security/AntiSpoof/AntiSpoof';
 import GoogleAuthenticator from '../pages/Tabs/Account/Security/GoogleAuthenticator/GoogleAuthenticator';
 import TwoFactorAuthentication from '../pages/Tabs/Account/Security/2FactorAuthentication/2FactorAuthentication';
+import Banks from '../pages/Tabs/Account/BankAccountDetails/Banks';
 const Stack = createStackNavigator();
 
 const Routes = ({login}) => {
@@ -62,7 +63,7 @@ const Routes = ({login}) => {
                 <Stack.Screen name= {screenNames.ABOUT} component={About} />
                 <Stack.Screen name= {screenNames.SETTINGS} component={Settings} />
                 <Stack.Screen name= {screenNames.SECURITY} component={Security} />
-                <Stack.Screen name= {screenNames.BANK_ACCOUNT_DETAILS} component={BankAccountDetails} />
+                <Stack.Screen name= {screenNames.BANK_ACCOUNT_DETAILS} component={Banks} />
                 <Stack.Screen name= {screenNames.ORDERS} component={Orders} />
                 <Stack.Screen name= {screenNames.ORDERS_HISTORY} component={OrdersHistory} />
                 <Stack.Screen name= {screenNames.UPI} component={UPI} />
