@@ -27,6 +27,17 @@ const Security = () => {
             setg2fenabled(!g2fenabled)
         }
     }
+
+    const onChangePasswordPress =()=>{
+        switch(g2fenabled){
+            case true:
+                navigation.navigate(screenNames.CHANGE_PASSWORD_SETTINGS, {google_auth: g2fenabled})
+                break
+            default:
+                navigation.navigate(screenNames.FORGOT_PASSWORD, {type:'change password', screen: screenNames.SECURITY})
+        }
+    }
+    
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}> 
          <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -39,7 +50,7 @@ const Security = () => {
                         paddingHorizontal={20} 
                         borderBottom 
                         rightElement={ <ChevronRight/>} 
-                        onPress={()=> navigation.navigate(screenNames.CHANGE_PASSWORD_SETTINGS)}
+                        onPress={()=> onChangePasswordPress()}
                         />
 
                         <SettingsListItem 

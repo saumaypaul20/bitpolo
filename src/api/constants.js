@@ -34,5 +34,6 @@ export const WALLET = {
 export const SECURITY = {
     DEVICE_HISTORY : '/user/device-history',
     G2F_CREATE: '/user/g2f-create',
-    G2F_SETTINGS: '/user/g2f-settings'
+    G2F_SETTINGS: '/user/g2f-settings',
+    CHANGE_PASSWORD:'/user/change-password'
 }

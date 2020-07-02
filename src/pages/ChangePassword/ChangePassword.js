@@ -29,7 +29,7 @@ const ChangePassword = (props) => {
 
         if(res.status){
             console.log("restpwd",res)
-            let body={lang:"en",data:{id: res.data.data.id ,attributes:{type:"reset-password"}}}
+            let body={lang:"en",data:{id: res.data.data.id ,attributes:{type:props.route.params.type}}}
             let toPassHeader={
                 Authorization: getAuthToken(),
                 info: getInfoAuthToken(),
@@ -38,7 +38,7 @@ const ChangePassword = (props) => {
             let ress = await generateOtp(body, toPassHeader)
             if(ress.status){
 
-                navigation.navigate(screenNames.VERIFY_EMAIL, {validated_data: res.data.data, passwords: {password:pwd, c_password: cpwd}})
+                navigation.navigate(screenNames.VERIFY_EMAIL, {validated_data: res.data.data, passwords: {password:pwd, c_password: cpwd, type: props.route.params.type}})
             }else{
                 alert("Something went wrong! Please try again.")
                  

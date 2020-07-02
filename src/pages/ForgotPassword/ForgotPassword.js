@@ -16,19 +16,35 @@ import { screenNames } from '../../routes/screenNames/screenNames'
 import { forgetPassword } from '../../api/users.api'
 import { getPublicIP } from '../../utils/apiHeaders.utils'
 
-const ForgotPassword = () => {
+const ForgotPassword = (props) => {
+    console.log(props);
     const navigation = useNavigation()
     // const [email, setEmail] = useState('')
     const dispatch = useDispatch()
     const email = useSelector(state=> state.authReducer.email)
     const ip = useSelector(state=> state.authReducer.ip)
 
+    const renderTitle = () =>{
+        switch(props.route.params.type){
+            case 'reset-password':
+                return 'Forgot'
+            case 'change password':
+                return 'Change'
+            default:
+                return 'Forgot'
+        }
+    }
     const onSubmit = async () =>{
         try{
             let res = await forgetPassword({email:email, ip: ip})
+          
             if(res.status){
                 console.log(res)
-                navigation.navigate(screenNames.CHANGE_PASSWORD, {data:res.data.data})
+                if(props.route.params.type === 'reset-password'){
+                    navigation.navigate(screenNames.CHANGE_PASSWORD, {data:res.data.data, type: props.route.params.type,  })
+                }else if(props.route.params.type === 'change password'){
+                    navigation.navigate(screenNames.CHANGE_PASSWORD_SETTINGS, {data:res.data.data, type: props.route.params.type,  })
+                }
             }else{
                 alert("Something went wrong! Please try again.")
             }
@@ -46,21 +62,20 @@ const ForgotPassword = () => {
                         <Image source={Images.forgot_icon} style={{width: 140, height:140}} resizeMode="contain" />
                     </View>
                     
-                    <BPTitle title="Forgot Password" />
+                    <BPTitle title={`${renderTitle()} Password`} />
                     
                     <BPSubtitle text={`Enter the email id associated with\nyour account`} />
                 </View>
                 <View style={{flex:1,alignItems:'center', justifyContent: 'center', marginHorizontal:43}}>
                     
-                   <LabelInput label="Email" onChangeText={(t)=> dispatch(inputAction(TYPES.EMAIL_INPUT, t))} value={email} />
+                   <LabelInput label="Email" onChangeText={(text)=> dispatch(inputAction(TYPES.EMAIL_INPUT, text))} value={email} />
                   
                     <View style={{paddingTop:20, alignSelf:'stretch', marginHorizontal:16}}>
                         <BPButton label="Submit" onPress={()=> onSubmit()}/>
                     </View>
 
-                    <View style={{paddingVertical:20}}>
+                    <View style={{paddingVertical:20, opacity: props.route.params.type === 'reset-password' ? 1 : 0 }}>
                         <QueryActions action={()=> navigation.pop()} actionName="Sign In" query="Remember Password?"/>  
-
                     </View>
                 </View>
 

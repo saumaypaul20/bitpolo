@@ -2,8 +2,9 @@ import { TYPES } from "../types"
 import { equalityFnMarket } from "../../utils/reduxChecker.utils"
 let eq = 0
 const init_state = {
-    favourites:[],
-    data:[],
+    favourites: [],
+    data: [],
+    socketConnected: false
 }
 
 const  marketReducer = (state = init_state, action) => {
@@ -51,7 +52,14 @@ const  marketReducer = (state = init_state, action) => {
             state = {
                 ...state,
                 data: action.payload,
-                favourites: action.payload.filter(item=> item.isFavourite)
+                // favourites: action.payload.filter(item=> item.isFavourite)
+            }
+            break
+      
+        case TYPES.TRIGGER_SOCKET_FOR_MARKET:
+            state = {
+                ...state,
+               socketConnected: true
             }
             break
       

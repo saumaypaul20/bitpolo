@@ -10,12 +10,13 @@ import { Fonts, Colors } from '../../theme';
 import { screenNames } from '../../routes/screenNames/screenNames';
 import { useNavigation, StackActions } from '@react-navigation/native';
 import { g2fVerify, getGeolocation } from '../../api/users.api';
-import { getPublicIP } from '../../utils/apiHeaders.utils';
+import { getPublicIP, getAuthToken, getInfoAuthToken, getDeviceId } from '../../utils/apiHeaders.utils';
 import DeviceInfo  from 'react-native-device-info';
 import Geolocation from '@react-native-community/geolocation';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveAuthAttributesAction } from '../../redux/actions/auth.actions';
 import Storage from '../../utils/storage.utils';
+import { changeUserPassword } from '../../api/security.api';
 
 const GoogleVerificationCode = (props) => {
     const navigation = useNavigation()
@@ -24,6 +25,14 @@ const GoogleVerificationCode = (props) => {
     const [code, setCode] = useState(''); //setting code initial STATE value        
     const [geo, setgeo] = useState(null); //setting code initial STATE value        
     const dispatch = useDispatch()
+
+    const onSubmit = () =>{
+        if(props.route.params.type === 'login'){
+            goToScreen()
+        }else{
+            changeUserPasswordFlow()
+        }
+    }
 
     const goToScreen = async ()=>{
         if(props.route.params.screen){
@@ -63,6 +72,37 @@ const GoogleVerificationCode = (props) => {
         }
     }
 
+    const changeUserPasswordFlow = async () =>{
+          let toPassHeader={
+                Authorization: getAuthToken(),
+                info: getInfoAuthToken(),
+                device: getDeviceId()
+            }
+
+            let payload1= {
+                data:{
+                    id:props.route.params.id,
+                    attributes:{
+                        g2f_code:code,
+                        old_password: props.route.params.passwords.old_password,
+                        password: props.route.params.passwords.password,
+                        password_confirmation: props.route.params.passwords.c_password,
+                    }
+                }
+            }
+        let ress = await changeUserPassword(payload1, toPassHeader)
+                console.log("cahnge pwd",ress)
+                if(ress.status){
+                    alert("Password has been changed")
+                    // navigation.navigate(screenNames.SIGNIN)
+                    navigation.dispatch(StackActions.pop(2))
+                } else {
+                    alert("Something went wrong!")
+                    return
+                }
+
+    }
+
     const getGeoInfo = async () =>{
         try {
             let res = await getGeolocation()
@@ -100,7 +140,7 @@ const GoogleVerificationCode = (props) => {
                         />
 
 
-                        <BPButton label="Confirm" style={{alignSelf:'stretch'}} onPress={()=> goToScreen()}/>
+                        <BPButton label="Confirm" style={{alignSelf:'stretch'}} onPress={()=> onSubmit()}/>
                     
 
                     </View>

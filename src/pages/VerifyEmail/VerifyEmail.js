@@ -7,12 +7,13 @@ import BPButton from '../../common/BPButton/BPButton'
 import LabelInput from '../../components/LabelInput/LabelInput'
 import QueryActions from '../../components/QueryActions/QueryActions'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, StackActions } from '@react-navigation/native'
 import { Colors, Images } from '../../theme'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { useSelector } from 'react-redux'
 import { resetPassword, validateOtp } from '../../api/users.api'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../utils/apiHeaders.utils'
+import { changeUserPassword } from '../../api/security.api'
 
 const VerifyEmail = (props) => {
     let user_id = useSelector(state => state.authReducer.auth_attributes.id);
@@ -59,27 +60,57 @@ const VerifyEmail = (props) => {
                 device: getDeviceId()
             }
 
-            let payload2= {
-                data:{
-                    id:props.route.params.validated_data.id,
-                    attributes:{
-                        otp:`BEL-${code}`,
-                        password: props.route.params.passwords.password,
-                        password_confirmation: props.route.params.passwords.c_password,
+            
+            if(props.route.params.type === 'reset-password'){
+                let payload2= {
+                    data:{
+                        id:props.route.params.validated_data.id,
+                        attributes:{
+                            otp:`BEL-${code}`,
+                            password: props.route.params.passwords.password,
+                            password_confirmation: props.route.params.passwords.c_password,
+                        }
                     }
                 }
+                console.log("payload2",payload2)
+
+                let ress = await resetPassword(payload2, toPassHeader)
+                console.log("resPasswd",ress)
+                if(ress.status){
+                    alert("Password has been reset")
+                    // navigation.navigate(screenNames.SIGNIN)
+                    navigation.reset({index:0, routes: [{name:screenNames.SIGNIN}]})
+                } else {
+                    alert("PIN code doesn't match")
+                    return
+                }
+            }else{
+
+                let payload1= {
+                    data:{
+                        id:props.route.params.validated_data.id,
+                        attributes:{
+                            otp:`BEL-${code}`,
+                            old_password: props.route.params.passwords.old_password,
+                            password: props.route.params.passwords.password,
+                            password_confirmation: props.route.params.passwords.c_password,
+                        }
+                    }
+                }
+
+                let ress = await changeUserPassword(payload1, toPassHeader)
+                console.log("cahnge pwd",ress)
+                if(ress.status){
+                    alert("Password has been changed")
+                    // navigation.navigate(screenNames.SIGNIN)
+                    navigation.dispatch(StackActions.pop(3))
+                } else {
+                    alert("PIN code doesn't match")
+                    return
+                }
             }
-            console.log("payload2",payload2)
-            let ress = await resetPassword(payload2, toPassHeader)
-            console.log("resPasswd",ress)
-            if(ress.status){
-                alert("Password has been reset")
-                // navigation.navigate(screenNames.SIGNIN)
-                navigation.reset({index:0, routes: [{name:screenNames.SIGNIN}]})
-            } else {
-                alert("PIN code doesn't match")
-                return
-            }
+
+            
         }
 
         const validateTheOtp = async () =>{

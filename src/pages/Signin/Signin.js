@@ -60,7 +60,7 @@ const Signin = () => {
       }else{ 
 
         if(res.data.data.attributes.google_auth){
-            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res.data.data})
+            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res.data.data, type:'login'})
             return
         }else{
 
@@ -83,7 +83,7 @@ const Signin = () => {
                                 <LabelInput keyboardType="email-address" label="Email" placeholder="Email/Mobile Number"  onChangeText={(text)=> dispatch(inputAction(TYPES.EMAIL_INPUT, text))} value={email}/*iconPath={iconLabel1} */ />
                                 <LabelInput label="Password" placeholder="Enter your Password" onChangeText={(text)=> dispatch(inputAction(TYPES.PASSWORD_INPUT, text))} value={password} secureTextEntry/*iconPath={iconLabel2} isPassword secureTextEntry *//>
                                 
-                                <Button onPress={()=>navigation.navigate(screenNames.FORGOT_PASSWORD)} transparent style={{ marginVertical: 10, alignSelf:'flex-end' }} >
+                                <Button onPress={()=>navigation.navigate(screenNames.FORGOT_PASSWORD, {type:'reset-password', screen: screenNames.SIGNIN})} transparent style={{ marginVertical: 10, alignSelf:'flex-end' }} >
                                     <BPText uppercase={false} style={{ padding: 20, fontSize: 13, color: Colors.lightWhite, fontFamily: Fonts.FONT_REGULAR }}>Forgot Password?</BPText>
                                 </Button>
 

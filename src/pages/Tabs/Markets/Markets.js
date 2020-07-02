@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Container, Content, Icon, Tab, Tabs } from 'native-base'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { addMarketData, modifyFavs } from '../../../redux/actions/markets.action';
+import { addMarketData, modifyFavs, triggerSocket } from '../../../redux/actions/markets.action';
 import io from 'socket.io-client';
 import * as ENDPOINT from '../../../api/constants'
 import { getMarketList, getMarketByPair } from '../../../api/users.api';
@@ -14,6 +14,8 @@ import store from '../../../redux/store';
 import _ from 'lodash'
 import BPText from '../../../common/BPText/BPText';
 import { useNavigation } from '@react-navigation/native';
+import ListEmpty from '../../../components/ListEmpty/ListEmpty';
+// import { equalityFnMarket } from '../../../utils/reduxChecker.utils';
 // var io = require("socket.io-client/dist/socket.io");
 var pako = require('pako');
 let id = 1;
@@ -81,7 +83,7 @@ const DATA = [
 
     const INRView = ()=>{
         const navigation = useNavigation()
-        let focus = navigation.isFocused()
+        // let focus = navigation.isFocused()
         console.log("INRView reloads", count)
         count++
         let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
@@ -290,7 +292,7 @@ const DATA = [
                             stickyHeaderIndices={[0]}
                             keyExtractor={item => item.id.toString()}
                             contentContainerStyle={{flex:1,}}
-                            ListEmptyComponent={favsEmpty()}
+                            ListEmptyComponent={<ListEmpty />}
                         
                         />  
                         
@@ -323,7 +325,7 @@ const DATA = [
                         backgroundColor:!item?.params[1]?.cp.match('-')  ?Colors.lightGreen : Colors.red,
                         padding:5, borderRadius:3
                     }}
-                        > {parseFloat(item?.params[1]?.cp).toFixed(2)}%</Text>
+                        > {parseFloat(item?.params[1]?.cp === "Infinity" ? 0 : item?.params[1]?.cp ).toFixed(2)}%</Text>
                     </View>
             </View>
         )
@@ -351,7 +353,7 @@ const DATA = [
         )
     }
 
-    const favsEmpty = () =>{
+    const FavsEmpty = () =>{
         return(
             <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
                     <Image source={Images.nothing_is_here} style={{width:167, height:130, margin:25}} resizeMode="center" />
@@ -387,6 +389,8 @@ const DATA = [
         const navigation = useNavigation()
         let focus = navigation.isFocused()
         const user = useSelector(state=> state.authReducer.auth_attributes);
+        const socketConnected = useSelector(state=> state.marketReducer.socketConnected, shallowEqual)
+
         const [marketPairs, setmarketPairs] = useState([])
      console.log("usert",user)
         // const market_data = useSelector(state=> state.marketReducer.data, shallowEqual)
@@ -394,11 +398,15 @@ const DATA = [
         // const [favs, setFavs] = useState([])
         // const favourites = useSelector(state=> state.marketReducer.favourites, shallowEqual)
 
-        const startSocket=(marketPairs) => {
+        const startSocket=(marketPairs,socket) => {
             console.log("soceklt mareket_paors",marketPairs)
             // const reduxState = store.getState()
+            dispatch(triggerSocket())
             socket.on("connect", function() {
-                // console.log("connected")
+                
+               
+
+                 console.log("connected")
                
                 socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
                 socket.on("message", function(data) {
@@ -429,13 +437,12 @@ const DATA = [
         }, [])
 
         useEffect(() => {
-            console.log("foucs", focus)
+        console.log("socketConnected", socketConnected)
+        console.log("foucs", focus)
             if(socket){
-                if(focus){
-                    startSocket(marketPairs)
-                }else{
-                    socket.disconnect()
-                }
+                if(focus && !socketConnected){
+                    startSocket(marketPairs,socket)
+                } 
             }
             return () => {
                 if(socket) socket.disconnect()

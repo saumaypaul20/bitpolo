@@ -38,18 +38,7 @@ const HomeHeaderComp = () => {
                             </View>
                     </View>
 
-                    <View style={{ flexDirection:'row', alignItems:'flex-start',   borderTopWidth:1, borderBottomWidth:1,borderColor: Colors.lightWhite }}>
-                        <View style={{flex:1, justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
-                            <BPText style={{color: Colors.white, fontFamily:Fonts.FONT_MEDIUM , fontSize:12}}>Gainers</BPText>
-                           </View>
-
-                        <View style={{flex:1, justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
-                            <BPText style={{color: Colors.white, fontFamily:'Inter-Regular', fontSize:12, }}>Losers</BPText>
-                             </View>
-                        <View style={{flex:1, justifyContent:'center', alignItems:'center', alignSelf:'center'}}>
-                            <BPText style={{color: Colors.lightGreen, fontFamily:Fonts.FONT_MEDIUM , fontSize:12}}>24h Volume</BPText>
-                            </View>
-                    </View>
+                   
         </View>
     )
 }

@@ -13,6 +13,12 @@ export const modifyFavs = (data) =>{
         payload: data
     }
 }
+export const triggerSocket = () =>{
+    return{
+        type:TYPES.TRIGGER_SOCKET_FOR_MARKET,
+        payload: true
+    }
+}
 
 // export const addMarketData =(result) =>{
 //     let state = store.getState();
