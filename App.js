@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native'
+import {Root} from 'native-base'
 import Routes from './src/routes/Routes';
 import Storage from './src/utils/storage.utils';
 import DeviceInfo  from 'react-native-device-info';
@@ -54,7 +55,7 @@ const App= () => {
   }, [])
 
   return (
-    login !== null ? <><StatusBar translucent barStyle={Colors.barStyle} backgroundColor={ Colors.primeBG} /><Routes login={login}/></>: null
+    login !== null ? <Root><StatusBar translucent barStyle={Colors.barStyle} backgroundColor={ Colors.primeBG} /><Routes login={login}/></Root>: null
   );
 
 };

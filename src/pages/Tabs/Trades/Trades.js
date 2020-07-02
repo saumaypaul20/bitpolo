@@ -90,7 +90,7 @@ const Trades = () => {
 
                         </Tab>
 
-                        <Tab heading="Sell" disabled 
+                        <Tab heading="Sell"  
                         textStyle={styles.tabTextStyle} 
                         tabStyle={styles.tabStyle} 
                         activeTabStyle={styles.activeTabStyle} >

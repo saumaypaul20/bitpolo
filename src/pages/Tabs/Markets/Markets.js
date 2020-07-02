@@ -1,84 +1,76 @@
-    import React, { useEffect, useState, useCallback, useRef } from 'react'
-    import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator,  } from 'react-native'
-    import { SwipeListView } from 'react-native-swipe-list-view';
-    import { Colors, Images } from '../../../theme'
-    import { SafeAreaView } from 'react-native-safe-area-context'
-    import Toolbar from '../../../components/Toolbar/Toolbar'
-    import { Container, Content, Icon, Tab, Tabs } from 'native-base'
-    import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-    import { addMarketData, modifyFavs } from '../../../redux/actions/markets.action';
-    import io from 'socket.io-client';
-    import * as ENDPOINT from '../../../api/constants'
-    import { getMarketList, getMarketByPair } from '../../../api/users.api';
-    import store from '../../../redux/store';
-    import _ from 'lodash'
-import { createSelector, createSelectorCreator } from 'reselect';
+import React, { useEffect, useState, useCallback, useRef } from 'react'
+import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator,  } from 'react-native'
+import { SwipeListView } from 'react-native-swipe-list-view';
+import { Colors, Images } from '../../../theme'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Toolbar from '../../../components/Toolbar/Toolbar'
+import { Container, Content, Icon, Tab, Tabs } from 'native-base'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { addMarketData, modifyFavs } from '../../../redux/actions/markets.action';
+import io from 'socket.io-client';
+import * as ENDPOINT from '../../../api/constants'
+import { getMarketList, getMarketByPair } from '../../../api/users.api';
+import store from '../../../redux/store';
+import _ from 'lodash'
 import BPText from '../../../common/BPText/BPText';
 import { useNavigation } from '@react-navigation/native';
-    // var io = require("socket.io-client/dist/socket.io");
-    var pako = require('pako');
-    let id = 1;
-    let count = 0
-    let count2 = 0
-    let count3 = 0
-    let eq = 0
-    const DATA = [
-        {
-            id: (Math.random()*1000).toString(),
-            pair: {up: 'BDN', down: 'BDX' },
-            last_price:{inr: 0.00003333, usd:0.13434},
-            volume: '5,333',
-            rate: {val:'21.63', sign:'-'}
-        },
-        
-        {
-            id: (Math.random()*1000).toString(),
-            pair: {up: 'BDN', down: 'BDX' },
-            last_price:{inr: 0.00003333, usd:0.13434},
-            volume: '5,333',
-            rate: {val:'21.63', sign:'+'}
-        },
-        
-        {
-            id: (Math.random()*1000).toString(),
-            pair: {up: 'BDN', down: 'BDX' },
-            last_price:{inr: 0.00003333, usd:0.13434},
-            volume: '5,133',
-            rate: {val:'21.63', sign:'-'}
-        },
-        
-    ]
+// var io = require("socket.io-client/dist/socket.io");
+var pako = require('pako');
+let id = 1;
+let count = 0
+let count2 = 0
+let count3 = 0
+let eq = 0
+const DATA = [
+    {
+        id: (Math.random()*1000).toString(),
+        pair: {up: 'BDN', down: 'BDX' },
+        last_price:{inr: 0.00003333, usd:0.13434},
+        volume: '5,333',
+        rate: {val:'21.63', sign:'-'}
+    },
+    
+    {
+        id: (Math.random()*1000).toString(),
+        pair: {up: 'BDN', down: 'BDX' },
+        last_price:{inr: 0.00003333, usd:0.13434},
+        volume: '5,333',
+        rate: {val:'21.63', sign:'+'}
+    },
+    
+    {
+        id: (Math.random()*1000).toString(),
+        pair: {up: 'BDN', down: 'BDX' },
+        last_price:{inr: 0.00003333, usd:0.13434},
+        volume: '5,133',
+        rate: {val:'21.63', sign:'-'}
+    },
+    
+]
 
     const  equalityFnMarket = (l,r) =>{
-        console.log("inside eqFn",l,r);
+       // console.log("inside eqFn",l,r);
         eq++
-        console.log("eq called", eq)
+        //console.log("eq called", eq)
         let change = false
         if(r.length > 0){
-            console.log("r>0")
-            l.forEach((lItem, index)=>{
-                let found = r.findIndex(rItem=> rItem.params[0]=== lItem.params[0])
-                console.log("litem index eqFn",index)
-                console.log("found index eqFn",found)
-                console.log("found index rfound",r[found].params[1])
-                console.log("found index lfound",lItem.params[1])
-                if(found>-1){
-                    console.log("found params", _.isEqual(lItem.params[1], r[found].params[1]))
-                    change =  (_.isEqual(lItem.params[1], r[found].params[1]))
-                    // return change
+            
+
+             for(let i=0; i <l.length ;i++){
+                let found = r.findIndex(rItem=> rItem.params[0]=== l[i].params[0])
+                if(found > -1){
+                    change =  (_.isEqual(l[i].params[1], r[found].params[1]))
                     if(!change){
-                        change = false
-                        return change
-                    }else{
-                        change = true
-                        return change
+                        break;
                     }
-                    
                 }
-             })
+             }
         }
 
-        // return change
+
+        console.log("CHANG--------",change);
+        
+        return change
         // console.log("market_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length); 
         // console.log("market_data _lodash cond", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0); 
         // console.log("market_data _lodash  res", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method']))))); 
@@ -86,37 +78,97 @@ import { useNavigation } from '@react-navigation/native';
       
        
     }
- 
 
-    const createDeepEqualSelector = createSelectorCreator(
-        _.memoize
-      )
-    const getMarketSelector = createDeepEqualSelector(
-        state => state.marketReducer.data,
-        data => data.map(i=>{console.log("data itwem",i); return i})
-      )
-
-    const BTCView = ()=>{
-     
-        console.log("btcview reloads", count)
+    const INRView = ()=>{
+        const navigation = useNavigation()
+        let focus = navigation.isFocused()
+        console.log("INRView reloads", count)
         count++
         let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
-        console.log("market_data",market_data)
-         
-        // const favourites = [useSelector(state=> state.marketReducer.favourites, (l,r)=>{
-        //     console.log(l,r);
-        //     // let l2=l.map(i=> {delete i.id; return i}); 
-        //     // let r2=r.map(i=> {delete i.id; return i});
-        //     console.log("favs_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id'], _omit(b,['id'])))).length); 
-        //     return _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id'], _omit(b,['id'])))).length > 0
-        // })]
+        market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
 
-        // const favourites = useSelector(state=> state.marketReducer.favourites, equalityFnMarket)
+        // console.log("market_data",market_data)
+        
+        const favourites = []
+
+        useEffect(() => {
+            // console.log("INRView mounts", count)
+            count++
+          }, [])
+        const onStarClicked = useCallback((item,favourites) =>{
+            if(favourites.find(i => i.id == item.id)){
+                    onDeleteClick(item, favourites)
+                }else{
+                    let newData =market_data.map(i=>{
+                        if(i.id == item.id){
+                            i.isFavourite = true;
+                            return i
+                        }else{
+                            return i
+                        }
+                    })
+                    store.dispatch(modifyFavs(newData))
+                }
+            },[favourites])
+
+
+        return(
+            <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
+                <SwipeListView
+                        useFlatList={true}
+                        data={market_data}
+                        renderItem={ (rowData, rowMap) => {
+                        //  console.log("bdx",rowData)
+                            
+                            return(
+                        // listItem(rowData.item, rowData.index)
+                        <ListItem item={rowData.item} index={rowData.index} />
+
+                        )
+                    }}
+                        renderHiddenItem={ (rowData, rowMap) => (
+                            <View style={{right:0, position:'absolute', top:0, bottom:0, backgroundColor:Colors.darkGray, flex:1, justifyContent:'center', alignItems:'center',width:64}}>
+                                <TouchableOpacity onPress={ () =>{ onStarClicked(rowData.item, favourites);setTimeout(() => {
+                                    
+                                    rowMap[rowData.item.id]?.closeRow();
+                                }, 1000); } }>
+                                {isFavourite(rowData.item, favourites)}
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    
+                        onRowOpen={(rowKey, rowMap) => {
+                            setTimeout(() => {
+                                rowMap[rowKey]?.closeRow()
+                            }, 1000)
+                        }}
+                        rightOpenValue={-64}
+                        disableRightSwipe
+                        stopRightSwipe={-64}
+                        ListHeaderComponent={ homeHeaderComp()}
+                        stickyHeaderIndices={[0]}
+                        keyExtractor={item => item.id}
+                        contentContainerStyle={{flexGrow:1}}
+                        ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
+                        
+                    
+                    />  
+            </View>
+        )
+    }
+    const USDTView = ()=>{
+     
+        console.log("USDTView reloads", count)
+        count++
+        let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
+        market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
+        // console.log(" USDTViewmarket_data",market_data)
+         
         const favourites = []
 
 
         useEffect(() => {
-            console.log("btcview mounts", count)
+            // console.log("USDTView mounts", count)
             count++
           }, [])
         const onStarClicked = useCallback((item,favourites) =>{
@@ -246,7 +298,7 @@ import { useNavigation } from '@react-navigation/native';
         )
     })
     const ListItem = ({item, index}) =>{
-      console.log("item",item)
+    //   console.log("item",item)
         let bool = index%2===0 ? true : false
         return(
             <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8, backgroundColor: bool ? Colors.primeBG: Colors.darkGray2}}>
@@ -343,17 +395,17 @@ import { useNavigation } from '@react-navigation/native';
         // const favourites = useSelector(state=> state.marketReducer.favourites, shallowEqual)
 
         const startSocket=(marketPairs) => {
-          
+            console.log("soceklt mareket_paors",marketPairs)
             // const reduxState = store.getState()
             socket.on("connect", function() {
-                console.log("connected")
+                // console.log("connected")
                
-                socket.emit("message", {"id": id, "method" : "state.subscribe", "params" : marketPairs });
+                socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
                 socket.on("message", function(data) {
                     const result = JSON.parse(pako.inflate(data, { to: "string" }));
                     console.log("count-socket",count2);
-                    console.log("soclet00000",result);
-                    console.log("id",id);
+                    // console.log("soclet00000",result);
+                    // console.log("id",id);
                     id++
                     count2++
                     result.id = Math.random().toString()
@@ -370,24 +422,16 @@ import { useNavigation } from '@react-navigation/native';
             });
         }
 
-      
-
         useEffect(() => {
-            // socketAuth()
-        // setData(market_data)
-            // setSocket(io(ENDPOINT.WEBSOCKET))
-           
-            getMarketPairs()
-            // dispatch(addMarketData(data))
-            // setData(DATA)
-           
+            // getMarketPairs()
+            callgetMarketList()
+            
         }, [])
 
         useEffect(() => {
             console.log("foucs", focus)
             if(socket){
                 if(focus){
-
                     startSocket(marketPairs)
                 }else{
                     socket.disconnect()
@@ -397,22 +441,43 @@ import { useNavigation } from '@react-navigation/native';
                 if(socket) socket.disconnect()
             }
         }, [socket,navigation,focus])
-        // useEffect(() => {
-        //     console.log("called setFavs")
-        //     setFavs(favourites)
-        // }, [favourites])
+      
+        // const getMarketPairs = async () =>{
+        //     try{ 
+        //         let attr = {
+        //             Authorization: user?.attributes?.token,
+        //             info: user?.attributes?.info,
+        //         }
+        //         let res = await getMarketByPair("BTC",attr)
+        //         console.log("getmarkets",res)
 
-        const getMarketPairs = async () =>{
+        //         if(res.status){
+        //             setmarketPairs(res.data.data.attributes.market_list.map(i =>{ if(i.is_active){return i.market_name}}))
+        //             setSocket(io(ENDPOINT.WEBSOCKET, {
+        //                 transports: ['websocket'],
+        //               }))
+        //         }
+        //     }catch(e){
+        //     //  console.log(e)
+        //     }
+        // }
+        const callgetMarketList = useCallback(async () =>{
             try{ 
                 let attr = {
                     Authorization: user?.attributes?.token,
                     info: user?.attributes?.info,
                 }
-                let res = await getMarketByPair("BTC",attr)
-                console.log("getmarkets",res)
+                let res = await getMarketList(attr)
+                // console.log("getmarkets",res)
 
                 if(res.status){
-                    setmarketPairs(res.data.data.attributes.market_list.map(i =>{ if(i.is_active){return i.market_name}}))
+                    let arr = res.data.data.attributes.filter((i,index) =>{ 
+                        if( i.market_pair === "INR" || i.market_pair === "USDT"){
+                            return i
+                        }
+                    })
+                    let final = arr.map(i=>i.market_name)
+                    setmarketPairs(final)
                     setSocket(io(ENDPOINT.WEBSOCKET, {
                         transports: ['websocket'],
                       }))
@@ -420,7 +485,7 @@ import { useNavigation } from '@react-navigation/native';
             }catch(e){
             //  console.log(e)
             }
-        }
+        },[])
 
         
 
@@ -438,11 +503,18 @@ import { useNavigation } from '@react-navigation/native';
                            <FavouritesTab   />
                         </Tab>
                         
-                        <Tab heading="BTC" 
+                        <Tab heading="INR" 
                         textStyle={{color:Colors.text.lightWhite,}} 
                         tabStyle={{ backgroundColor: Colors.darkGray2 , }} 
                         activeTabStyle={{backgroundColor: Colors.darkGray2, borderBottomWidth:1, borderBottomColor:'#fff', }} >
-                            <BTCView   />
+                            <INRView   />
+                        </Tab>
+
+                        <Tab heading="USDT" 
+                        textStyle={{color:Colors.text.lightWhite,}} 
+                        tabStyle={{ backgroundColor: Colors.darkGray2 , }} 
+                        activeTabStyle={{backgroundColor: Colors.darkGray2, borderBottomWidth:1, borderBottomColor:'#fff', }} >
+                            <USDTView   />
                         </Tab>
 
                         {/* <Tab heading="BDX"  

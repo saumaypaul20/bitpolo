@@ -59,7 +59,7 @@ const Wallet = () => {
 
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
-             <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={ Colors.primeBG} />
+            <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={ Colors.primeBG} />
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
                
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -84,6 +84,7 @@ const Wallet = () => {
                                     label="Deposit" 
                                     image_size={20} 
                                     onPress={()=> navigation.navigate(screenNames.DEPOSIT)}
+                                    disabled={assets.length === 0}
                                 />
 
                                 <BPButtonSmall 
@@ -91,11 +92,13 @@ const Wallet = () => {
                                     label="Withdraw" 
                                     image_size={20}
                                     onPress={()=> navigation.navigate(screenNames.WITHDRAW)}
+                                    disabled={assets.length === 0}
                                 />
                                 <BPButtonSmall 
                                     image={Images.history_icon} 
                                     label="History" 
                                     image_size={13}
+                                    disabled={assets.length === 0}
                                 />
                             </View>
                             

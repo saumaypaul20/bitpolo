@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content } from 'native-base'
@@ -15,16 +15,25 @@ import { useNavigation } from '@react-navigation/native'
 
 const IMPS = () => {
     const navigation = useNavigation()
+    const acctypes = [{label: 'Savings', value:'savings'}, {label: 'Current', value:'current'}];
     const [accNo, setaccNo] = useState('');
+    const [acclabel, setacclabel] = useState('');
+    const [accname, setaccname] = useState('');
+    const [ifsc, setifsc] = useState('');
     const [accType, setAccType] = useState(null)
-    const acctypes = [{label: 'IMPS', value:'key1'}, {label: 'RTGS', value:'key2'}, {label: 'NEFT', value:'key3'}];
-    
     const [showModal, setModal] = useState(false)
 
-    const handleModal =() =>{
+    const handleModal =useCallback(() =>{
         setModal(!showModal)
-    }
+    },[showModal])
     
+    const isDisabled = useCallback(() =>{
+        if(accNo.length === 0 || acclabel.length === 0 || accname.length === 0 || ifsc.length === 0){
+            return true
+        }
+        return false
+    })
+
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}> 
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -46,15 +55,21 @@ const IMPS = () => {
                         </View>
 
                         <View style={{marginTop:24}}>
+                            <BPInput label="Account Label" labelStyle={{fontSize:18}} placeholder="Enter a label for your bank account" text={acclabel} setText={(t)=> setacclabel(t)}/>
+                        </View>
+                        <View style={{marginTop:24}}>
+                            <BPInput label="Account Name" labelStyle={{fontSize:18}} placeholder="Enter your name as per in bank account" text={accname} setText={(t)=> setaccname(t)}/>
+                        </View>
+                        <View style={{marginTop:24}}>
                             <BPInput label="Account No" labelStyle={{fontSize:18}} placeholder="Enter your bank account number" text={accNo} setText={(t)=> setaccNo(t)}/>
                         </View>
                         <View style={{marginTop:24}}>
-                            <BPInput label="IFSC Code" labelStyle={{fontSize:18}} placeholder="Enter your IFSC Code" text={accNo} setText={(t)=> setaccNo(t)}/>
+                            <BPInput label="IFSC Code" labelStyle={{fontSize:18}} placeholder="Enter your IFSC Code" text={ifsc} setText={(t)=> setifsc(t)}/>
                         </View>
                     </View>
 
                     <View style={{marginBottom:40}}>
-                        <BPButton label="Submit" onPress={()=>{ handleModal(); }} />
+                        <BPButton label="Submit" onPress={()=>{ handleModal(); }} disabled={isDisabled()} />
                       </View>
 
 

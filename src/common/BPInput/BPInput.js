@@ -4,7 +4,7 @@ import BPText from '../BPText/BPText'
 import { Colors, Fonts } from '../../theme'
 import { Input } from 'native-base'
 
-const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle}) =>{
+const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle, secureTextEntry=false, maxLength}) =>{
     return(
         <>
             <BPText style={{fontFamily: Fonts.FONT_MEDIUM}, labelStyle}>{label}</BPText>
@@ -14,6 +14,9 @@ const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle}) =>{
                     value={text}
                     onChangeText ={(t)=> setText(t)}
                     placeholder={placeholder}
+                    style={{color: Colors.white}}
+                    secureTextEntry={secureTextEntry}
+                    maxLength={maxLength}
                 />
                {rightEl && <View style={{alignItems:'center', justifyContent:'center', borderLeftWidth:1, borderColor: Colors.lightWhite, position:'absolute', right:0, top:0, bottom:0, padding:14}}>
                     {rightEl}

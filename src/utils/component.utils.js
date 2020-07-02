@@ -1,4 +1,4 @@
-import { Platform, ToastAndroid, Linking } from "react-native";
+import { Platform, ToastAndroid, Linking, Clipboard } from "react-native";
 import { Toast } from "native-base";
 
 
@@ -17,3 +17,13 @@ export const renderToast = (message) => {
     return toast;
   }
   
+
+  export const copyText =(text, label='Text') =>{
+    Clipboard.setString(text)
+    Toast.show({
+        text: `Copied ${label}`,
+        buttonText: 'Okay',
+        type:"success",
+        position:"bottom"
+      })
+}

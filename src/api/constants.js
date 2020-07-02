@@ -32,5 +32,7 @@ export const WALLET = {
 /* ------------------------------- SECURITY API ------------------------------- */
 
 export const SECURITY = {
-    DEVICE_HISTORY : '/user/device-history'
+    DEVICE_HISTORY : '/user/device-history',
+    G2F_CREATE: '/user/g2f-create',
+    G2F_SETTINGS: '/user/g2f-settings'
 }

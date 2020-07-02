@@ -64,7 +64,7 @@ export const registerUser = async (payload)=>{
             resolve({status: false, data: encrypt_res})
         }
 
-        payload.password = encrypt_res.data,
+        payload.password = encrypt_res.data
         payload.password_confirmation = encrypt_res.data
 
         console.log("new paykoad",payload)
@@ -143,7 +143,7 @@ export const g2fVerify = async (payload)=>{
             }
         }
         
-        let res = await fetchApi(REST.G2F_VERIFY, "POST", body, 200, headers);
+        let res = await fetchApi(REST.USERS.G2F_VERIFY, "POST", body, 200, headers);
         console.log(res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})

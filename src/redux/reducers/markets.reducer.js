@@ -1,6 +1,6 @@
 import { TYPES } from "../types"
 import { equalityFnMarket } from "../../utils/reduxChecker.utils"
-
+let eq = 0
 const init_state = {
     favourites:[],
     data:[],
@@ -22,14 +22,18 @@ const  marketReducer = (state = init_state, action) => {
                 if(index > -1){
               
                     //arr[index] = action.payload
+                    console.log("eq2 bool val" ,equalityFnMarket([action.payload],[arr[index]]))
                     if(!equalityFnMarket([action.payload],[arr[index]])){
-
+                     
+                        console.log("eq2 passed" ,eq)
+                        eq++
                         state = {
                             ...state,
                             data: [...state.data.slice(0, index), action.payload, ...state.data.slice(index+1)],
                         }
                     }
                 }else{
+                  console.log("no indx found..now in else");
                   
                     state = {
                         ...state,

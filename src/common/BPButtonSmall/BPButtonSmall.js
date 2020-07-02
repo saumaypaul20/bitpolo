@@ -4,9 +4,10 @@ import { Button } from 'native-base'
 import BPText from '../BPText/BPText'
 import { Images, Colors } from '../../theme'
 
-const BPButtonSmall = ({image, label, onPress, image_size = 15, backgroundColor = Colors.darkGray2, borderColor=  Colors.smallButtonBorder, labelStyle, noBorder, marginRight= 5}) => {
+const BPButtonSmall = ({image, label, onPress, image_size = 15, backgroundColor = Colors.darkGray2, borderColor=  Colors.smallButtonBorder, labelStyle, noBorder, marginRight= 5, disabled=false}) => {
     return (
         <Button 
+            disabled={disabled}
             onPress={()=> onPress ? onPress() : alert('soon')}
             style={{
                 height:30, 
@@ -17,7 +18,8 @@ const BPButtonSmall = ({image, label, onPress, image_size = 15, backgroundColor 
                 paddingHorizontal: 10, 
                 flexDirection: 'row', 
                 alignItems: 'center', 
-                backgroundColor: backgroundColor  
+                backgroundColor: backgroundColor,
+                opacity: disabled ? 0.5 : 1
                 }}
             >
             <Image source={image} style={{width:image_size , height:image_size ,marginRight: marginRight}} resizeMode="contain"/>

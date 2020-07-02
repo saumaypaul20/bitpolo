@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../../utils/apiHeaders.utils'
 import { convertDate } from '../../../../utils/converters'
 import QRCode from 'react-native-qrcode-svg';
+import { copyText } from '../../../../utils/component.utils'
 
 let currentTime = new Date()
 
@@ -30,17 +31,17 @@ const rightEl = () => {
     )
 }
 
-const copyAddress =(address) =>{
-    Clipboard.setString(address)
-    Toast.show({
-        text: 'Copied Address!',
-        buttonText: 'Okay'
-      })
-}
+// const copyAddress =(address) =>{
+//     Clipboard.setString(address)
+//     Toast.show({
+//         text: 'Copied Address!',
+//         buttonText: 'Okay'
+//       })
+// }
 
 const Tab1 = ({address, setView, activecoin}) =>{
     return (
-        <Root>
+      
             <View>
                 <SettingsListItem  
                     onPress= {()=> setView(2)}
@@ -68,16 +69,23 @@ const Tab1 = ({address, setView, activecoin}) =>{
                         </BPText>
 
                         
-                        <View style={{alignSelf:'center', padding:15, marginTop:42, borderWidth:1, borderColor: Colors.darkGray}}>
+                        <View style={{alignSelf:'center', padding:15, marginTop:42, borderWidth:1, borderColor: Colors.darkGray, }}>
                             {/* <Image source={Images.qr} style={{width:140, height:140}}  resizeMode="contain"/> */}
-                                <QRCode
+
+                            <View style={{alignSelf:'center', padding:5, backgroundColor:'white'}}>
+                            <QRCode
                                     value={address}
-                                    size={140}
+                                    size={135}
+                                    backgroundColor='white'
+                                    color='black'
+                                    onError={(e)=> console.log(e)}
                                     />
+                            </View>
+                              
                         </View>
 
                         <Button 
-                        onPress={()=> copyAddress(address)}
+                        onPress={()=> copyText(address, "Address")}
                         transparent
                         bordered 
                         style={{
@@ -97,12 +105,13 @@ const Tab1 = ({address, setView, activecoin}) =>{
                        <WalletEndButtons />
                     </View>
         </View>
-       </Root>
+       
     )
 }
 
  
-const Tab2 = ({depositAmount, setView}) =>{
+const Tab2 = ({setView}) =>{
+    const [depositamount, setdepositamount] = useState(null)
     return (
         <View>
             <SettingsListItem  
@@ -120,8 +129,10 @@ const Tab2 = ({depositAmount, setView}) =>{
                         <Input
                             placeholder="Enter the amount"
                             placeholderTextColor={Colors.lightWhite}
-                            value={depositAmount}
-                            onChangeText ={(t)=> setDepositAmount(t)}
+                            value={depositamount}
+                            onChangeText ={(t)=> setdepositamount(t)}
+                            style={{color: Colors.white}}
+                            keyboardType="number-pad"
                             
                         />
                     </View>
@@ -202,10 +213,11 @@ let Deposit = () => {
         callcreateassetaddress(item)
     }
 
-    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2 depositAmount={depositAmount} setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
+    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2  setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
 
     return (
         <SafeAreaView style={{flex:1}}>
+              <Root>
         <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
             <Toolbar enableBackButton title={screenNames.DEPOSIT} rightElement={rightEl()}/>
@@ -266,6 +278,7 @@ let Deposit = () => {
                 </View>
             </Content>
         </Container>
+        </Root>
         </SafeAreaView>
     )
 }
