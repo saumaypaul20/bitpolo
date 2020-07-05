@@ -1,58 +1,50 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab } from 'native-base'
+import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab, Left } from 'native-base'
 import Toolbar from '../../../components/Toolbar/Toolbar'
-import { Colors, Images } from '../../../theme'
-import BPText from '../../../common/BPText/BPText'
-import SellTab from './BuyTab/BuyTab'
+import { Colors, Images, Fonts } from '../../../theme'
 import PickerComp from '../../../components/PickerComp/PickerComp'
-import { useNavigation } from '@react-navigation/native'
-import { screenNames } from '../../../routes/screenNames/screenNames'
-import { useSelector } from 'react-redux'
-import { getTradeVolume } from '../../../api/users.api'
-import io from 'socket.io-client';
+import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
+import { emitDepthSubscribeEvent } from '../../../api/config.ws'
+import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
+import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
+
 const Trades = () => {
-  
    
-
-    let user = useSelector(state=> state.authReducer.auth_attributes);
-    console.log("user",user)
+    // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
+    // console.log("user",user)
     const [currencyVal, setCurrency] = useState(null)
-    const navigation =  useNavigation()
 
-    const getTrades =async()=>{
-        console.log("user_atributes-------------------------",user.attributes)
-        try{
-            let attr = {
-                Authorization: user.attributes.token,
-                info: user.attributes.info,
-            }
-            let res = await getTradeVolume(attr);
-            console.log("getTrades",res)
-        }catch(e){
-            console.log(e)
-        }
-    }
+    // const getTrades =async()=>{
+    //     // console.log("user_atributes-------------------------",user.attributes)
+    //     try{
+    //         let attr = {
+    //             Authorization:getAuthToken(),
+    //             info: getInfoAuthToken(),
+    //             device: getDeviceId()
+    //         }
+    //         let res = await getTradeVolume(attr);
+    //         console.log("getTrades",res)
+    //     }catch(e){
+    //         console.log(e)
+    //     }
+    // }
 
     useEffect(() => {
-        if(user){
-           
-            // getTrades();
-        }
-    }, [user])
+       // emitDepthSubscribeEvent()
+    }, [])
 
+ 
     const currencies = [{label: 'BTC/USDT', value:'key1'}];
-    const OpenOrders =()=>{
-        navigation.navigate(screenNames.ORDERS)
-    }
+   
     return (
-        <SafeAreaView style={{flex:1}}>
-            <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
+        <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
+            <Container style={{ flex: 1, backgroundColor:Colors.primeBG}}>
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
             <Toolbar backgroundColor={Colors.darkGray2} title={"Exchange"}/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center'}}>
+                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
                 
                     <View style={styles.headerContainer}>
                          
@@ -76,37 +68,16 @@ const Trades = () => {
                         </View>
                     </View>
                     
-
-                    <Tabs locked initialPage={0} 
-                    tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} 
-                    tabContainerStyle={{paddingLeft:'53%', backgroundColor: Colors.darkGray3}} >
-
-                        <Tab heading="Buy" 
-                        textStyle={styles.tabTextStyle} 
-                        tabStyle={styles.tabStyle} 
-                        activeTabStyle={styles.activeTabStyle} >
-                            
-                           <SellTab />
-
-                        </Tab>
-
-                        <Tab heading="Sell"  
-                        textStyle={styles.tabTextStyle} 
-                        tabStyle={styles.tabStyle} 
-                        activeTabStyle={styles.activeTabStyle} >
-                            {/* TO DO */}
-                            <View style={{flex:1, backgroundColor: Colors.primeBG}}><BPText>3</BPText></View>    
-
-                        </Tab>
-
-                    </Tabs>
                     
-                    <View style={{position:'absolute', top:42, left:0, right:'47%',height:50,  justifyContent:'center', alignItems:'stretch', flex:1}}>
-                        <TouchableOpacity style={{flex: 1, justifyContent:'center', alignItems:'center', flexDirection:'row'}} onPress={()=> OpenOrders()}>
-                            <Image source={Images.open_orders_icon} style={{width:20, height:20}}/>
-                            <BPText style={{marginHorizontal:10}}>Open Orders</BPText>
-                        </TouchableOpacity>
+                    {/* ---------------------------------- */}
+
+                    <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
+                        <TradesLeftCol />
+                        <TradesRightCol />
                     </View>
+
+                    {/* {-----------------------------} */}
+ 
 
                 </View>
             </Content>

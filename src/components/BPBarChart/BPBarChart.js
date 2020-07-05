@@ -4,11 +4,11 @@ import { StackedBarChart , Grid} from 'react-native-svg-charts'
 import { Colors } from '../../theme'
 import * as scale from 'd3-scale'
 import {Text} from 'react-native-svg'
-const RedBarChart = ({color, rightTextColor}) => {
-    const data = [
+const BPBarChart = ({data,color, rightTextColor}) => {
+    const idata = [
         
         {
-            apples: 330,
+            a: 330,
             aam: 22
         },
         {
@@ -46,12 +46,12 @@ const RedBarChart = ({color, rightTextColor}) => {
          
     ]
 
-    const colors = [color, Colors.transparent]
-    const keys = ['apples', 'aam']
+    const colors = [Colors.transparent, color]
+    const keys = ['a', 'p']
 
 
         const Labels = ({  x, y, bandwidth, data }) => (
-            data.map(({apples,aam}, index) => (
+            data.map(({p,a}, index) => (
                 <>
                 <Text
                     
@@ -63,18 +63,18 @@ const RedBarChart = ({color, rightTextColor}) => {
                     fill={ rightTextColor }
                     alignmentBaseline={"middle"}
                 >
-                    {apples}
+                    {p}
                 </Text>
                 <Text
                     
                     key={ ((index+1)*20).toString() }
-                    x={ x(aam) + 22 }
+                    x={ x(a) + 22 }
                     y={ y(index) + (bandwidth / 2) }
                     fontSize={ 10 }
                     fill={ Colors.white }
                     alignmentBaseline={ 'middle' }
                 >
-                    {aam}
+                    {a}
                 </Text>
                 </>
             ))
@@ -103,4 +103,4 @@ const RedBarChart = ({color, rightTextColor}) => {
     )
 }
 
-export default RedBarChart
+export default BPBarChart

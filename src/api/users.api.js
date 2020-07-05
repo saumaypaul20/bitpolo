@@ -360,16 +360,12 @@ export const getMarketByPair = async (pair, toPassHeader)=>{
 }
  
 
-export const getTradeVolume = async (headers)=>{
+export const getTradeVolume = async (passedHeaders)=>{
     return new Promise ( async (resolve, reject)=>{ 
-        console.log(headers)   
-        if(!headers) reject({msg: "No headers"})
+        console.log(passedHeaders)   
+        if(!passedHeaders) reject({msg: "No headers"})
          
-        let headers = {
-            device: getDeviceId(),
-            info: headers.info,
-            Authorization: headers.Authorization
-        }
+        let headers = passedHeaders
  
         let res = await fetchApi(REST.USERS.TRADE_VOLUME, "GET", null, 200, headers);
         console.log(res)

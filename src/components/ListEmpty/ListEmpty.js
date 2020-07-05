@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text } from 'react-native'
-import { Images, Colors, Fonts } from '../../theme'
+import { View, Image } from 'react-native'
+import { Images, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
 
 const ListEmpty = () =>{

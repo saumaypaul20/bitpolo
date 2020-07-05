@@ -3,12 +3,13 @@ import { View, Text, TextInput, StyleSheet } from 'react-native'
 import { Fonts, Colors } from '../../../../theme'
 import BPText from '../../../../common/BPText/BPText'
 import { Picker, Icon, Col, Button } from 'native-base'
-import RedBarChart from '../../../../components/RedBarChart/RedBarChart'
+import BPBarChart from '../../../../components/BPBarChart/BPBarChart'
 import PickerComp from '../../../../components/PickerComp/PickerComp'
 import InputCounter from '../../../../components/InputCounter/InputCounter'
 import Spacer from '../../../../common/Spacer/Spacer'
 import BPButton from '../../../../common/BPButton/BPButton'
 import AreaChart from '../../../../components/AreaChart/AreaChart'
+// import BPBarChart from '../../../../components/BPBarChart/BPBarChart'
 
 const SellTab = () => {
     const [pickerOrderVal, setPickerOrderVal] = useState(null)
@@ -58,7 +59,7 @@ const SellTab = () => {
             <View style={{flex:1, backgroundColor: Colors.primeBG , justifyContent:'center', alignItems:'center', marginRight:5}}>
                {/* Red Chart 1 */}
                <View style={{height:245, alignSelf:'stretch',}}>
-                    <RedBarChart color={Colors.lightRed} rightTextColor={Colors.red}/>
+                    <BPBarChart color={Colors.lightRed} rightTextColor={Colors.red}/>
                </View>
 
                 {/* Divider with Value */}
@@ -73,7 +74,7 @@ const SellTab = () => {
                
                {/* Red Chart 2 */}
                <View style={{height:245,  alignSelf:'stretch', paddingBottom:2}}>
-                    <RedBarChart color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/>
+                    <BPBarChart color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/>
                </View>
 
                 <View style={{ alignSelf:'stretch', flexDirection:'row', paddingHorizontal:16, paddingVertical:8}}>

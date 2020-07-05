@@ -10,50 +10,19 @@ import { equalityFnMarket } from '../../../utils/reduxChecker.utils'
 import { useNavigation } from '@react-navigation/native'
 import { getMarketList } from '../../../api/users.api'
 import io from 'socket.io-client';
-import { addMarketData, triggerSocket } from '../../../redux/actions/markets.action'
+import { addMarketData, triggerMarketSocket } from '../../../redux/actions/markets.action'
 var pako = require('pako');
 import * as ENDPOINT from '../../../api/constants'
+import { splitIt } from '../../../utils/converters'
+import { emitMarketListEvent } from '../../../api/config.ws'
 
-const DATA = [
-    {
-        id: (Math.random(80)*1000).toString(),
-        gainers: 'LINK',
-        gainers_sub: 'BDX',
-        losers: 0.000333555,
-        volume: 5.333
-    },
-    {
-        id: (Math.random(80)*1000).toString(),
-        gainers: 'LINK',
-        gainers_sub: 'BDX',
-        losers: 0.000333555,
-        volume: 5.333
-    },
-    {
-        id: (Math.random(80)*1000).toString(),
-        gainers: 'LINK',
-        gainers_sub: 'BDX',
-        losers: 0.000333555,
-        volume: 5.333
-    },
-    {
-        id: (Math.random(80)*1000).toString(),
-        gainers: 'LINK',
-        gainers_sub: 'BDX',
-        losers: 0.000333555,
-        volume: 5.333
-    },
-  
-]
-
+ 
 const ListItem = ({item}) =>{
-
-   
 
     return(
         <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8}}>
             <View style={{flex:1, justifyContent:'center', alignItems:'flex-start', paddingHorizontal:30}}>
-                <BPText style={{color: Colors.white, fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.params[0].slice(0,3)} <BPText style={{color: Colors.lightWhite, fontSize:10, fontFamily:'Inter-Bold'}}>/ {item?.params[0].slice(3)}</BPText></BPText>
+                <BPText style={{color: Colors.white, fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.divider.a} <BPText style={{color: Colors.lightWhite, fontSize:10, fontFamily:'Inter-Bold'}}>/ {item?.divider.b}</BPText></BPText>
             </View>
 
             <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
@@ -70,21 +39,22 @@ const ListItem = ({item}) =>{
 const Tab = ({type}) =>{
     let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
     console.log("tab makerketdata", market_data)
-    // const [data, setdata] = useState([])
-    //     useEffect(() => {
-    //         if(type === 1 ){
-    //             setdata(market_data.filter(i=> !i.params[1].cp.match('-')))
-    //         }else{
-    //             setdata(market_data.filter(i=> i.params[1].cp.match('-')))
-    //         }
-    //     }, [market_data])
+    console.log("tab type", type)
+    const [data, setdata] = useState([])
+        useEffect(() => {
+            if(type === 1 ){
+                setdata(market_data.filter(i=> !i.params[1].cp.match('-')))
+            }else{
+                setdata(market_data.filter(i=> i.params[1].cp.match('-')))
+            }
+        }, [market_data,type])
     return (
         <FlatList
-                data={type === 1 ? market_data.filter(i=> !i.params[1].cp.match('-')) : market_data.filter(i=> i.params[1].cp.match('-'))}
+                data={data}
                 renderItem={({ item }) => <ListItem item={item} />}
                 keyExtractor={item => item.id}
                 // ListHeaderComponent={ <HomeHeaderComp />}
-                stickyHeaderIndices={[0]}
+                // stickyHeaderIndices={[0]}
                 ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
             />)
 }
@@ -118,60 +88,64 @@ const Home = () => {
                 })
                 let final = arr.map(i=>i.market_name)
                 setmarketPairs(final)
-                setSocket(io(ENDPOINT.WEBSOCKET, {
-                    transports: ['websocket'],
-                  }))
+                setSocket(true)
             }
         }catch(e){
         //  console.log(e)
         }
     },[])
 
-    const startSocket= (marketPairs,socket) => {
-        console.log("soceklt mareket_paors",marketPairs)
-        // const reduxState = store.getState()
-        dispatch(triggerSocket())
-        socket.on("connect", function() {
-             console.log("connected home")
+    // const startSocket= (marketPairs,socket) => {
+    //     console.log("soceklt mareket_paors",marketPairs)
+    //     // const reduxState = store.getState()
+    //     dispatch(triggerMarketSocket())
+    //     socket.on("connect", function() {
+    //          console.log("connected home")
             
-            socket.emit("message", {"id": 2, "method" : "state.subscribe", "params" : marketPairs });
-            socket.on("message", function(data) {
-                const result = JSON.parse(pako.inflate(data, { to: "string" }));
-                // console.log("count-socket",count2);
-                // console.log("soclet00000",result);
-                // console.log("id",id);
+    //         socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
+    //         socket.on("message", function(data) {
+    //             const result = JSON.parse(pako.inflate(data, { to: "string" }));
+    //             // console.log("count-socket",count2);
+    //             // console.log("soclet00000",result);
+    //             // console.log("id",id);
                 
-                result.id = Math.random().toString()
-                // setData([result])
-                if(result.params){
-
-                    dispatch(addMarketData(result))
-                }
-            });
-        })
+    //             result.id = Math.random().toString()
+    //             // setData([result])
+    //             if(result.params){
+    //                 let pair = result.params[0]
+    //                 if(pair.match("INR")){
+    //                     result.divider= splitIt(result.params[0], "INR")
+    //                 }else if(pair.match("USDT")){
+    //                     result.divider= splitIt(result.params[0], "USDT")
+    //                 }
+    //                 dispatch(addMarketData(result))
+    //             }
+    //         });
+    //     })
     
-        socket.on("disconnect", function(){
-            console.log("socket disconnected");
-        });
-    }
+    //     socket.on("disconnect", function(){
+    //         console.log("socket disconnected");
+    //     });
+    // }
 
     useEffect(() => {
         // getMarketPairs()
-        callgetMarketList()
-        
+        if(!socketConnected){
+            callgetMarketList()
+          }
     }, [])
 
     useEffect(() => {
-        console.log("foucs", focus)
-        console.log("socketConnected", socketConnected)
+    console.log("socketConnected", socketConnected)
+    console.log("foucs", focus)
         if(socket){
             if(focus && !socketConnected){
-                startSocket(marketPairs, socket)
+                emitMarketListEvent(marketPairs)
             } 
         }
-        return () => {
-            if(socket) socket.disconnect()
-        }
+        // return () => {
+        //     if(socket) socket.disconnect()
+        // }
     }, [socket,navigation,focus])
 
 
@@ -198,8 +172,7 @@ const Home = () => {
                             </View>
                     </View>
 
-                    {activetab ===1 && <Tab type={1} />}
-                    {activetab ===2 && <Tab type={2}  />}
+                        {activetab ===1 ? <Tab type={1} /> : <Tab type={2} />}
                             
                     </View>
                         

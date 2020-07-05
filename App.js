@@ -10,6 +10,7 @@ import { saveIpAction, inputAction, saveAuthAttributesAction } from './src/redux
 import { getPublicIP } from './src/utils/apiHeaders.utils';
 import { TYPES } from './src/redux/types';
 import { Colors } from './src/theme';
+import { startSocket } from './src/api/config.ws';
 const App= () => {
   const dispatch = useDispatch()
   const [login, setLogin] = useState(null)
@@ -52,6 +53,7 @@ const App= () => {
      getUser()
      storeIP()
      deviceAccess()
+     startSocket()
   }, [])
 
   return (

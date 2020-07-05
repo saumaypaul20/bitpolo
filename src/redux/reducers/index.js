@@ -4,12 +4,14 @@ import authReducer from './auth.reducer'
 import marketReducer from './markets.reducer'
 import deviceReducer from './device.reducer'
 import walletReducer from './wallet.reducer'
+import depthSubsReducer from './depthSubs.reducer'
 
 const reducers = {
     authReducer,
     marketReducer,
     deviceReducer,
-    walletReducer
+    walletReducer,
+    depthSubsReducer
 };
 
 const appReducer = combineReducers(reducers);

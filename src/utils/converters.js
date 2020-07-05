@@ -28,3 +28,27 @@ export const roundNumber =(num, place=2) =>{
     
    return _.round(num, place)
 }
+
+export function splitIt (str, occ){
+    let endsWith = str.endsWith(occ)
+    
+     let l1 = str.length;
+     let l2 = occ.length;
+      
+     let index = l1-l2;
+    
+    if(endsWith){ 
+      
+        let s1 = str.slice(0,index);
+        let s2 = str.slice(index)
+    
+        return   {a:s1, b:s2}
+
+    }else{
+        
+        let s3 = str.slice(0,index-1);
+        let s4 = str.slice(index-1)
+    
+        return {a:s3, b:s4}
+    }
+  }

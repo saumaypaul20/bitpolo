@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Container, Content, Icon, Tab, Tabs } from 'native-base'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { addMarketData, modifyFavs, triggerSocket } from '../../../redux/actions/markets.action';
+import { addMarketData, modifyFavs, triggerMarketSocket } from '../../../redux/actions/markets.action';
 import io from 'socket.io-client';
 import * as ENDPOINT from '../../../api/constants'
 import { getMarketList, getMarketByPair } from '../../../api/users.api';
@@ -15,7 +15,10 @@ import _ from 'lodash'
 import BPText from '../../../common/BPText/BPText';
 import { useNavigation } from '@react-navigation/native';
 import ListEmpty from '../../../components/ListEmpty/ListEmpty';
-// import { equalityFnMarket } from '../../../utils/reduxChecker.utils';
+import { splitIt } from '../../../utils/converters';
+import { equalityFnMarket } from '../../../utils/reduxChecker.utils';
+import { emitMarketListEvent } from '../../../api/config.ws';
+import { getAuthToken, getInfoAuthToken } from '../../../utils/apiHeaders.utils';
 // var io = require("socket.io-client/dist/socket.io");
 var pako = require('pako');
 let id = 1;
@@ -23,63 +26,37 @@ let count = 0
 let count2 = 0
 let count3 = 0
 let eq = 0
-const DATA = [
-    {
-        id: (Math.random()*1000).toString(),
-        pair: {up: 'BDN', down: 'BDX' },
-        last_price:{inr: 0.00003333, usd:0.13434},
-        volume: '5,333',
-        rate: {val:'21.63', sign:'-'}
-    },
-    
-    {
-        id: (Math.random()*1000).toString(),
-        pair: {up: 'BDN', down: 'BDX' },
-        last_price:{inr: 0.00003333, usd:0.13434},
-        volume: '5,333',
-        rate: {val:'21.63', sign:'+'}
-    },
-    
-    {
-        id: (Math.random()*1000).toString(),
-        pair: {up: 'BDN', down: 'BDX' },
-        last_price:{inr: 0.00003333, usd:0.13434},
-        volume: '5,133',
-        rate: {val:'21.63', sign:'-'}
-    },
-    
-]
 
-    const  equalityFnMarket = (l,r) =>{
-       // console.log("inside eqFn",l,r);
-        eq++
-        //console.log("eq called", eq)
-        let change = false
-        if(r.length > 0){
+
+    // const  equalityFnMarket = (l,r) =>{
+    //    // console.log("inside eqFn",l,r);
+    //     eq++
+    //     //console.log("eq called", eq)
+    //     let change = false
+    //     if(r.length > 0){
             
 
-             for(let i=0; i <l.length ;i++){
-                let found = r.findIndex(rItem=> rItem.params[0]=== l[i].params[0])
-                if(found > -1){
-                    change =  (_.isEqual(l[i].params[1], r[found].params[1]))
-                    if(!change){
-                        break;
-                    }
-                }
-             }
-        }
+    //          for(let i=0; i <l.length ;i++){
+    //             let found = r.findIndex(rItem=> rItem.params[0]=== l[i].params[0])
+    //             if(found > -1){
+    //                 change =  (_.isEqual(l[i].params[1], r[found].params[1]))
+    //                 if(!change){
+    //                     break;
+    //                 }
+    //             }
+    //          }
+    //     }
 
-
-        console.log("CHANG--------",change);
+    //     console.log("CHANG--------",change);
         
-        return change
-        // console.log("market_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length); 
-        // console.log("market_data _lodash cond", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0); 
-        // console.log("market_data _lodash  res", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method']))))); 
-        // return _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0 ? true : false
+    //     return change
+    //     // console.log("market_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length); 
+    //     // console.log("market_data _lodash cond", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0); 
+    //     // console.log("market_data _lodash  res", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method']))))); 
+    //     // return _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0 ? true : false
       
        
-    }
+    // }
 
     const INRView = ()=>{
         const navigation = useNavigation()
@@ -306,7 +283,7 @@ const DATA = [
             <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8, backgroundColor: bool ? Colors.primeBG: Colors.darkGray2}}>
                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-start', paddingHorizontal:30}}>
                     <View style={{alignItems:'flex-start'}}>
-                        <BPText style={{  fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.params[0].slice(0,3)} <BPText style={{color: Colors.lightWhite,  fontFamily:'Inter-Bold'}}>/ {item?.params[0].slice(3)}</BPText></BPText>
+                        <BPText style={{  fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.divider.a} <BPText style={{color: Colors.lightWhite,  fontFamily:'Inter-Bold'}}>/ {item?.divider.b}</BPText></BPText>
 
                         <BPText style={{fontSize:10,  fontFamily:'Inter-Medium', textAlign:'left' }}>Vol {parseFloat(item?.params[1]?.v).toFixed(2)}</BPText>
                     </View>
@@ -353,17 +330,7 @@ const DATA = [
         )
     }
 
-    const FavsEmpty = () =>{
-        return(
-            <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
-                    <Image source={Images.nothing_is_here} style={{width:167, height:130, margin:25}} resizeMode="center" />
-                    <Text style={{color: Colors.white, fontSize:18, fontFamily:'Inter-Medium', opacity:0.8}}>Nothing is here</Text>
-                    <Text style={{color: Colors.white, fontSize:14, fontFamily:'Inter-Regular', opacity:0.5,lineHeight:23, paddingHorizontal:56, textAlign:'center',paddingTop:12}}>{`Go to any crypto and then Swipe left to\nadd it in favourites`}</Text>
-            </View>
-        )
-    }
-
-
+   
     const isFavourite = (item,favs) =>{
         if(favs.find(i=> i.id === item.id)){
             return(
@@ -383,100 +350,28 @@ const DATA = [
     
     let Markets = () => {
 
-        console.log('reload')
+        // console.log('reload')
         const [socket, setSocket] = useState(null)
         const dispatch = useDispatch();
         const navigation = useNavigation()
         let focus = navigation.isFocused()
-        const user = useSelector(state=> state.authReducer.auth_attributes);
+        // const user = useSelector(state=> state.authReducer.auth_attributes);
         const socketConnected = useSelector(state=> state.marketReducer.socketConnected, shallowEqual)
 
         const [marketPairs, setmarketPairs] = useState([])
-     console.log("usert",user)
-        // const market_data = useSelector(state=> state.marketReducer.data, shallowEqual)
-        // const [data, setData] = useState([])
-        // const [favs, setFavs] = useState([])
-        // const favourites = useSelector(state=> state.marketReducer.favourites, shallowEqual)
+        // console.log("usert",user)
+       
 
-        const startSocket=(marketPairs,socket) => {
-            console.log("soceklt mareket_paors",marketPairs)
-            // const reduxState = store.getState()
-            dispatch(triggerSocket())
-            socket.on("connect", function() {
-                
-               
 
-                 console.log("connected")
-               
-                socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
-                socket.on("message", function(data) {
-                    const result = JSON.parse(pako.inflate(data, { to: "string" }));
-                    console.log("count-socket",count2);
-                    // console.log("soclet00000",result);
-                    // console.log("id",id);
-                    id++
-                    count2++
-                    result.id = Math.random().toString()
-                    // setData([result])
-                    if(result.params){
-
-                        dispatch(addMarketData(result))
-                    }
-                });
-            })
-        
-            socket.on("disconnect", function(){
-                console.log("socket disconnected");
-            });
-        }
-
-        useEffect(() => {
-            // getMarketPairs()
-            callgetMarketList()
-            
-        }, [])
-
-        useEffect(() => {
-        console.log("socketConnected", socketConnected)
-        console.log("foucs", focus)
-            if(socket){
-                if(focus && !socketConnected){
-                    startSocket(marketPairs,socket)
-                } 
-            }
-            return () => {
-                if(socket) socket.disconnect()
-            }
-        }, [socket,navigation,focus])
-      
-        // const getMarketPairs = async () =>{
-        //     try{ 
-        //         let attr = {
-        //             Authorization: user?.attributes?.token,
-        //             info: user?.attributes?.info,
-        //         }
-        //         let res = await getMarketByPair("BTC",attr)
-        //         console.log("getmarkets",res)
-
-        //         if(res.status){
-        //             setmarketPairs(res.data.data.attributes.market_list.map(i =>{ if(i.is_active){return i.market_name}}))
-        //             setSocket(io(ENDPOINT.WEBSOCKET, {
-        //                 transports: ['websocket'],
-        //               }))
-        //         }
-        //     }catch(e){
-        //     //  console.log(e)
-        //     }
-        // }
         const callgetMarketList = useCallback(async () =>{
             try{ 
                 let attr = {
-                    Authorization: user?.attributes?.token,
-                    info: user?.attributes?.info,
+                    Authorization: getAuthToken(),
+                    info: getInfoAuthToken(),
                 }
                 let res = await getMarketList(attr)
-                // console.log("getmarkets",res)
-
+                console.log("getmarkets",res)
+    
                 if(res.status){
                     let arr = res.data.data.attributes.filter((i,index) =>{ 
                         if( i.market_pair === "INR" || i.market_pair === "USDT"){
@@ -485,16 +380,73 @@ const DATA = [
                     })
                     let final = arr.map(i=>i.market_name)
                     setmarketPairs(final)
-                    setSocket(io(ENDPOINT.WEBSOCKET, {
-                        transports: ['websocket'],
-                      }))
+                    setSocket(true)
                 }
             }catch(e){
             //  console.log(e)
             }
         },[])
+        // let compstartSocket= (m)=> emitMarketListEvent(m)
+        // const emitMarketListEvent=(marketPairs,socket) => {
+        //     console.log("soceklt mareket_paors",marketPairs)
+        //     // const reduxState = store.getState()
+        //     dispatch(triggerMarketSocket())
+        //     socket.on("connect", function() {
+                
+               
 
+        //          console.log("connected markets")
+               
+        //         socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
+        //         socket.on("message", function(data) {
+        //             const result = JSON.parse(pako.inflate(data, { to: "string" }));
+        //             console.log("count-socket",count2);
+        //          console.log("soclet00000",result);
+        //             // console.log("id",id);
+        //             id++
+        //             count2++
+        //             result.id = Math.random().toString()
+                   
+                    
+        //             // setData([result])
+        //             if(result.params){
+        //                 let pair = result.params[0]
+        //                 if(pair.match("INR")){
+        //                     result.divider= splitIt(result.params[0], "INR")
+        //                 }else if(pair.match("USDT")){
+        //                     result.divider= splitIt(result.params[0], "USDT")
+        //                 }
+
+        //                 dispatch(addMarketData(result))
+        //             }
+        //         });
+        //     })
         
+        //     socket.on("disconnect", function(){
+        //         console.log("socket disconnected");
+        //     });
+        // }
+
+        useEffect(() => {
+            // getMarketPairs()
+            if(!socketConnected){
+                callgetMarketList()
+              }
+        }, [])
+
+        useEffect(() => {
+        console.log("socketConnected", socketConnected)
+        console.log("foucs", focus)
+            if(socket){
+                if(focus && !socketConnected){
+                    emitMarketListEvent(marketPairs)
+                } 
+            }
+            // return () => {
+            //     if(socket) socket.disconnect()
+            // }
+        }, [socket,navigation,focus])
+      
 
         return (
             <SafeAreaView style={{flex:1,}}>
@@ -524,22 +476,6 @@ const DATA = [
                             <USDTView   />
                         </Tab>
 
-                        {/* <Tab heading="BDX"  
-                        disabled
-                        textStyle={{color:Colors.text.lightWhite,}} 
-                        tabStyle={{ backgroundColor: Colors.darkGray2 }}
-                        activeTabStyle={{backgroundColor: Colors.darkGray2, borderBottomWidth:1, borderBottomColor:'#fff'}} >
-                            <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
-                            <FlatList
-                                    data={DATA}
-                                    renderItem={({  item, index }) => <ListItem item={item} index={index} />}
-                                    keyExtractor={item => item.id}
-                                    ListHeaderComponent={homeHeaderComp()}
-                                    stickyHeaderIndices={[0]}
-                                />
-                                    
-                            </View>
-                        </Tab> */}
 
                     </Tabs>
 
