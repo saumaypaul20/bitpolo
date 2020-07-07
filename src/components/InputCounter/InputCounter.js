@@ -4,28 +4,33 @@ import { Button } from 'native-base'
 import BPText from '../../common/BPText/BPText'
 import { Colors } from '../../theme'
 
-const InputCounter = ({onIncrease, onDecrease, input, onInputChange}) => {
+const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled}) => {
     return (
         <View style={{flex:1, flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
-            <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
+        {!disabled && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
                 <BPText>+</BPText>
-            </Button>
+            </Button>}
 
-            <TextInput 
-            value={input}
+            <TextInput
+            placeholder={label} 
+            editable={!disabled}
+            
+            placeholderTextColor={Colors.white}
+            value={String(input)}
             onChange={(text)=> onInputChange(text)}
-            keyboardType={"decimal-pad"} 
+            keyboardType="phone-pad"
             style={{
                 alignSelf:'stretch', 
                 flex:1, 
                 backgroundColor:Colors.darkGray3, 
                 color: Colors.white,
-                textAlign:'center'
+                textAlign:'center',
+                fontSize:12
                 }} />
             
-            <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
+          {!disabled && <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
                 <BPText>-</BPText>
-            </Button>
+            </Button>}
 
         </View>
     )

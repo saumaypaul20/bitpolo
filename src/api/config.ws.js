@@ -4,6 +4,7 @@ import * as  ENDPOINT from '../api/constants'
 import { addMarketData, triggerMarketSocket } from '../redux/actions/markets.action';
 import { splitIt } from '../utils/converters';
 import { addDepthSubs } from '../redux/actions/depthSubs.action';
+import _ from 'lodash'
 // import { emitPingEvent } from './events.ws';
 // var io = require("socket.io-client/dist/socket.io");
 const pako = require('pako');
@@ -54,7 +55,12 @@ export const startSocket=() => {
 
                 case "depth.update":
                     console.log(result)
-                    store.dispatch(addDepthSubs(result))
+                    let res = result;
+                    let askLen = res.params[1].asks.length
+                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse().slice( askLen - 10,  askLen)
+                    console.log("-----TEH RES ---- depth",res)
+                    res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse().slice( 0,  9)
+                    store.dispatch(addDepthSubs(res))
                     // addDepthSubs
                     break
 
@@ -91,8 +97,11 @@ export const emitMarketListEvent = (marketPairs) =>{
 }
 
 //Depth Subscription
-export const emitDepthSubscribeEvent = () =>{
-    socket.emit("message", {"id": 2, "method" : "depth.subscribe", "params" : ["BTCINR", 9,"9"] });
+export const emitDepthSubscribeEvent = (lastpair, newpair) =>{
+    if(lastpair){
+        socket.emit("message", {"id": 2, "method" : "depth.unsubscribe", "params" : [lastpair, 9,"9"] });
+    }
+    socket.emit("message", {"id": 2, "method" : "depth.subscribe", "params" : [newpair, 9,"9"] });
 }
 
 

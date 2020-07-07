@@ -4,7 +4,10 @@ let eq = 0
 const init_state = {
     favourites: [],
     data: [],
-    socketConnected: false
+    socketConnected: false,
+    index_price: null,
+    currencies:[],
+    activeTradePair: null
 }
 
 const  marketReducer = (state = init_state, action) => {
@@ -60,6 +63,24 @@ const  marketReducer = (state = init_state, action) => {
             state = {
                 ...state,
                socketConnected: true
+            }
+            break
+        case TYPES.STORE_INDEX_PRICE:
+            state = {
+                ...state,
+               index_price: action.payload
+            }
+            break
+        case TYPES.STORE_CURRENCIES:
+            state = {
+                ...state,
+               currencies: action.payload
+            }
+            break
+        case TYPES.SET_ACTIVE_TRADE_PAIR:
+            state = {
+                ...state,
+               activeTradePair: action.payload
             }
             break
       

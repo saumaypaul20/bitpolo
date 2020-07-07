@@ -46,8 +46,8 @@ const BPBarChart = ({data,color, rightTextColor}) => {
          
     ]
 
-    const colors = [Colors.transparent, color]
-    const keys = ['a', 'p']
+    const colors = [ color, Colors.transparent,]
+    const keys = ['p', 'a']
 
 
         const Labels = ({  x, y, bandwidth, data }) => (
@@ -68,7 +68,7 @@ const BPBarChart = ({data,color, rightTextColor}) => {
                 <Text
                     
                     key={ ((index+1)*20).toString() }
-                    x={ x(a) + 22 }
+                    x={ 22 }
                     y={ y(index) + (bandwidth / 2) }
                     fontSize={ 10 }
                     fill={ Colors.white }

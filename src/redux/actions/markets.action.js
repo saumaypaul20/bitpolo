@@ -19,6 +19,24 @@ export const triggerMarketSocket = () =>{
         payload: true
     }
 }
+export const storeIndexPrice = (payload) =>{
+    return{
+        type:TYPES.STORE_INDEX_PRICE,
+        payload: payload
+    }
+}
+export const storeCurrencies = (payload) =>{
+    return{
+        type:TYPES.STORE_CURRENCIES,
+        payload: payload
+    }
+}
+export const setActiveTradePair = (payload) =>{
+    return{
+        type:TYPES.SET_ACTIVE_TRADE_PAIR,
+        payload: payload
+    }
+}
 
 // export const addMarketData =(result) =>{
 //     let state = store.getState();

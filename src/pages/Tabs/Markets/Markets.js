@@ -64,6 +64,7 @@ let eq = 0
         console.log("INRView reloads", count)
         count++
         let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
+        
         market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
 
         // console.log("market_data",market_data)
@@ -278,7 +279,25 @@ let eq = 0
     })
     const ListItem = ({item, index}) =>{
     //   console.log("item",item)
-        let bool = index%2===0 ? true : false
+        let bool = index%2===0 ? true : false;
+
+        let index_price = useSelector(state=> state.marketReducer.index_price, (l,r)=>{
+            let change = false
+            if(r.length > 0){
+                 for(let i=0; i <l.length ;i++){
+                    let found = r.findIndex(rItem=> rItem.amout === l[i].amount)
+                    if(found > -1){
+                        change =  (_.isEqual(l[i], r[found]))
+                        if(!change){
+                            break;
+                        }
+                    }
+                 }
+            }
+            return change
+        })
+
+        if(!index_price){return <></>}
         return(
             <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8, backgroundColor: bool ? Colors.primeBG: Colors.darkGray2}}>
                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-start', paddingHorizontal:30}}>
@@ -291,7 +310,7 @@ let eq = 0
 
                 <View style={{flex:1, justifyContent:'center', alignItems:'center',paddingHorizontal:30}}>
                     <BPText style={{fontSize:12, }}>{parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
-                    <BPText style={{fontFamily:'Inter-Medium', fontSize:10, }}>$ {parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
+                    <BPText style={{fontFamily:'Inter-Medium', fontSize:10, }}>$ {item?.divider.b === "USDT" ? (parseFloat(item?.params[1]?.l)* index_price.find(i=> i.asset === "USDT").amount).toFixed(2): (parseFloat(item?.params[1]?.l)/ index_price.find(i=> i.asset === "USDT").amount).toFixed(2)}</BPText>
                     </View>
                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-end', alignSelf:'center',paddingHorizontal:30}}>
                     <Text 

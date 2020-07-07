@@ -8,12 +8,16 @@ import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { emitDepthSubscribeEvent } from '../../api/config.ws'
 import { useSelector } from 'react-redux'
+import _ from 'lodash'
 
 const TradesLeftCol = () => {
 
     const navigation = useNavigation();
     const depths = useSelector(state=> state.depthSubsReducer.data)
-        console.log("depths form rdix", depths)
+    const currencies = useSelector(state=> state.marketReducer.currencies)
+    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair)
+    console.log("activeTradePair", activeTradePair)
+    
     const [list1val, setList1Val] = useState(null)
     const [list2val, setList2Val] = useState(null)
     const list1 = [{label:"Default", value:"val1"}]
@@ -22,12 +26,13 @@ const TradesLeftCol = () => {
     const OpenOrders =()=>{
         navigation.navigate(screenNames.ORDERS)
     }
-    useEffect(() => {
-        console.log("statt e,mit")
-      setTimeout(() => {
-        emitDepthSubscribeEvent()
-      }, 2000);
-     }, [])
+    // useEffect(() => {
+    //     console.log("statt e,mit")
+    //   setTimeout(() => {
+    //       if(!activeTradePair){return }
+    //      emitDepthSubscribeEvent(activeTradePair)
+    //   }, 2000);
+    //  }, [activeTradePair])
     
     return (
         <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
@@ -41,8 +46,8 @@ const TradesLeftCol = () => {
 
                 <View style={{  flexDirection:'row', alignSelf:'stretch', justifyContent:'space-around', paddingVertical:15, alignItems:'center'}}>
             
-                    <BPText style={{fontSize:10}}>Amount(BTC)</BPText>  
-                    <BPText style={{fontSize:10}}>Price(USDT)</BPText>
+                    <BPText style={{fontSize:10}}>{`Amount(${currencies?.find(i=> i.value === activeTradePair)?.a})`}</BPText>  
+                    <BPText style={{fontSize:10}}>{`Price(${currencies?.find(i=> i.value === activeTradePair)?.b})`}</BPText>
                 
                 </View>
 
@@ -64,7 +69,7 @@ const TradesLeftCol = () => {
                
                {/* Red Chart 2 */}
                <View style={{height:245,  alignSelf:'stretch', paddingBottom:2,width:'97%'}}>
-                {depths?.params[1]?.bids?.length > 0 ?    <BPBarChart data={depths?.params[1].bids.splice(0,9)} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />}
+                {depths?.params[1]?.bids?.length > 0 ?    <BPBarChart data={_.sortBy(depths?.params[1].bids, 'price').splice(0,9)} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />}
                </View>
 
                 <View style={{ alignSelf:'stretch', flexDirection:'row', paddingHorizontal:16, paddingVertical:8}}>

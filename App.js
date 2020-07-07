@@ -11,6 +11,8 @@ import { getPublicIP } from './src/utils/apiHeaders.utils';
 import { TYPES } from './src/redux/types';
 import { Colors } from './src/theme';
 import { startSocket } from './src/api/config.ws';
+import { getIndexPrice } from './src/api/markets.api';
+import { storeIndexPrice } from './src/redux/actions/markets.action';
 const App= () => {
   const dispatch = useDispatch()
   const [login, setLogin] = useState(null)
@@ -23,6 +25,10 @@ const App= () => {
       dispatch(inputAction(TYPES.EMAIL_INPUT, user.email))
       dispatch(saveAuthAttributesAction(user))
       setLogin(true)
+      let resIndexPrice = await getIndexPrice()
+      if(resIndexPrice.status){
+        dispatch(storeIndexPrice(resIndexPrice.data))
+      }
     } 
       setLogin(false)
   }

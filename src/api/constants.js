@@ -29,6 +29,13 @@ export const WALLET = {
     CREATE_ASSET_ADDRESS : '/wallet/asset-address',
 }
 
+/* ------------------------------- MARKETS API ------------------------------- */
+
+export const MARKETS = {
+    INDEX_PRICE : '/market/index-price',
+    MARKET_LIST:'/matching/market/list'
+    
+}
 /* ------------------------------- SECURITY API ------------------------------- */
 
 export const SECURITY = {
