@@ -6,6 +6,12 @@ export const addMarketData =(data) =>{
         payload: data,
       };
 }
+export const addMarketList =(data) =>{
+    return {
+        type: TYPES.ADD_MARKET_LIST,
+        payload: data,
+      };
+}
 
 export const modifyFavs = (data) =>{
     return{

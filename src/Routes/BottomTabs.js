@@ -19,7 +19,7 @@ const BottomTabs = () => {
     return (
        
             <Tab.Navigator 
-              initialRouteName="Trades"
+              initialRouteName="Wallet"
               unmountOnBlur
               tabBarOptions={{
                 activeTintColor: Colors.tabActiveTintColor,

@@ -1,6 +1,8 @@
 import React from 'react'
 import DepthChartRenderer from './DepthChartRender'
 import { useSelector } from 'react-redux'
+import { ActivityIndicator } from 'react-native'
+import { Colors } from '../../theme'
 
 export default function DepthChart(props) {
     const depths = useSelector(state=> state.depthSubsReducer.data)
@@ -237,7 +239,7 @@ const bids = processData(bidsD, 'bid')
             side: 'bid',
         }
     }).reverse()
-    
+    if(bidsD.length === 0 || asksD.length === 0) return <ActivityIndicator size="large" color={Colors.white}/>
     return (
         <DepthChartRenderer
             asks={asksProcessed}

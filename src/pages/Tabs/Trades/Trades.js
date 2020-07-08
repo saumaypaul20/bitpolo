@@ -14,12 +14,14 @@ import { splitIt } from '../../../utils/converters'
 import { useDispatch, useSelector } from 'react-redux'
 import { storeCurrencies, setActiveTradePair } from '../../../redux/actions/markets.action'
 import { addDepthSubs } from '../../../redux/actions/depthSubs.action'
+import { useNavigation } from '@react-navigation/native'
+import { screenNames } from '../../../routes/screenNames/screenNames'
 
 const Trades = () => {
     const dispatch = useDispatch()
     const currencies = useSelector(state=> state.marketReducer.currencies)
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair)
-   
+    const navigation= useNavigation()
     // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
     // console.log("user",user)
     const [currencyVal, setCurrency] = useState(activeTradePair)
@@ -106,7 +108,7 @@ const Trades = () => {
                         </View>
 
                         <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
-                            <TouchableOpacity style={{marginHorizontal:22}}>
+                            <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
                                 <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
                             </TouchableOpacity>
                             <TouchableOpacity >

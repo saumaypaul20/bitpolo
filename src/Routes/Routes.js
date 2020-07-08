@@ -26,6 +26,7 @@ import AntiSpoof from '../pages/Tabs/Account/Security/AntiSpoof/AntiSpoof';
 import GoogleAuthenticator from '../pages/Tabs/Account/Security/GoogleAuthenticator/GoogleAuthenticator';
 import TwoFactorAuthentication from '../pages/Tabs/Account/Security/2FactorAuthentication/2FactorAuthentication';
 import Banks from '../pages/Tabs/Account/BankAccountDetails/Banks';
+import MarketTrades from '../pages/Tabs/Trades/MarketTrades/MarketTrades';
 const Stack = createStackNavigator();
 
 const Routes = ({login}) => {
@@ -74,6 +75,7 @@ const Routes = ({login}) => {
                 <Stack.Screen name= {screenNames.SET_ANTI_SPOOF} component={AntiSpoof} />
                 <Stack.Screen name= {screenNames.GOOGLE_AUTHENTICATOR} component={GoogleAuthenticator} />
                 <Stack.Screen name= {screenNames.TWO_FACTOR_AUTHENTICATION} component={TwoFactorAuthentication} />
+                <Stack.Screen name= {screenNames.MARKET_TRADES} component={MarketTrades} />
                
             </Stack.Navigator>
         </NavigationContainer>

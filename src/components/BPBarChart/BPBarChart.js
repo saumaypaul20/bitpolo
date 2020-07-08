@@ -5,57 +5,15 @@ import { Colors } from '../../theme'
 import * as scale from 'd3-scale'
 import {Text} from 'react-native-svg'
 const BPBarChart = ({data,color, rightTextColor}) => {
-    const idata = [
-        
-        {
-            a: 330,
-            aam: 22
-        },
-        {
-            apples: 1330,
-            aam: 22
-        },
-        {
-            apples: 2330,
-            aam: 22
-        },
-        {
-            apples: 3330,
-            aam: 22
-        },
-        {
-            apples: 3150,
-            aam: 22
-        },
-        {
-            apples: 300,
-            aam: 22
-        },
-        {
-            apples: 350,
-            aam: 22
-        },
-        {
-            apples: 1330,
-            aam: 22
-        },
-        {
-            apples: 2330,
-            aam: 22
-        },
-         
-    ]
-
+    
     const colors = [ color, Colors.transparent,]
     const keys = ['p', 'a']
 
 
         const Labels = ({  x, y, bandwidth, data }) => (
             data.map(({p,a}, index) => (
-                <>
+                <React.Fragment  key={ Math.floor(100000000 + Math.random() * 900000000)}>
                 <Text
-                    
-                    key={ index.toString() }
                     x={  171 }
                     y={ y(index) + (bandwidth / 2) }
                     fontSize={ 10 }
@@ -66,8 +24,6 @@ const BPBarChart = ({data,color, rightTextColor}) => {
                     {p}
                 </Text>
                 <Text
-                    
-                    key={ ((index+1)*20).toString() }
                     x={ 22 }
                     y={ y(index) + (bandwidth / 2) }
                     fontSize={ 10 }
@@ -76,7 +32,7 @@ const BPBarChart = ({data,color, rightTextColor}) => {
                 >
                     {a}
                 </Text>
-                </>
+                </React.Fragment>
             ))
         )
 

@@ -7,7 +7,8 @@ const init_state = {
     socketConnected: false,
     index_price: null,
     currencies:[],
-    activeTradePair: null
+    activeTradePair: null,
+    market_list: []
 }
 
 const  marketReducer = (state = init_state, action) => {
@@ -54,7 +55,7 @@ const  marketReducer = (state = init_state, action) => {
         case TYPES.ADD_DELETE_FAVOURITE:
             state = {
                 ...state,
-                data: action.payload,
+                favourites: action.payload,
                 // favourites: action.payload.filter(item=> item.isFavourite)
             }
             break
@@ -81,6 +82,13 @@ const  marketReducer = (state = init_state, action) => {
             state = {
                 ...state,
                activeTradePair: action.payload
+            }
+            break
+      
+        case TYPES.ADD_MARKET_LIST:
+            state = {
+                ...state,
+                market_list: action.payload
             }
             break
       

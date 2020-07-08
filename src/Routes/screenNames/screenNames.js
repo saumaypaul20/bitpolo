@@ -28,6 +28,7 @@ export const screenNames = {
     DEVICE_MANAGEMENT:'Device Management',
     SET_ANTI_SPOOF:'Set Anti-Spoofing Code',
     GOOGLE_AUTHENTICATOR: 'Google Authenticator',
-    TWO_FACTOR_AUTHENTICATION: ' 2 Factor Authentication'
+    TWO_FACTOR_AUTHENTICATION: ' 2 Factor Authentication',
+    MARKET_TRADES: 'MARKET_TRADES'
 
 }

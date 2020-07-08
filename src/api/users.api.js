@@ -1,6 +1,6 @@
 import * as REST from "./constants";
 import { fetchApi } from "./config.api";
-import { getDeviceId } from "../utils/apiHeaders.utils";
+import { getDeviceId, getAuthToken, getInfoAuthToken } from "../utils/apiHeaders.utils";
 
 const LANG = "en"
 
@@ -377,3 +377,44 @@ export const getTradeVolume = async (passedHeaders)=>{
     })
 }
  
+export const addFavCoin = async (payload,toPassHeader)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        // console.log(payload)   
+        if(!payload) reject({msg: "No payload"})
+         
+        let headers = toPassHeader
+        console.log("added fav headers",headers);
+        console.log("added fav paylds",payload);
+        
+
+        let res = await fetchApi(REST.USERS.MODIFY_FAV_COIN, "POST", payload, 200, headers);
+        console.log("added fav res",res)
+
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody.data})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+export const updateFavCoin = async (payload)=>{
+    return new Promise ( async (resolve, reject)=>{ 
+        console.log(payload)   
+        if(!payload) reject({msg: "No payload"})
+         
+        let headers = {
+            Authorizaton: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(REST.USERS.MODIFY_FAV_COIN, "PATCH", payload, 200, headers);
+        console.log("updated fav res",res)
+
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody.data})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}

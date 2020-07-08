@@ -83,7 +83,7 @@ function DepthChartRenderer({ asks, bids }) {
                 <AreaChart
                     style={{ flex: 1 }}
                     data={ data }
-                    contentInset={{ top: 30, }}
+                    contentInset={{ top: 30, botom:30}}
                     svg={{
                         fill: 'url(#bid-gradient)',
                         clipPath: 'url(#clip-path-bid)',
@@ -100,7 +100,7 @@ function DepthChartRenderer({ asks, bids }) {
                 <AreaChart
                     style={ StyleSheet.absoluteFill }
                     data={ data }
-                    contentInset={{ top: 30, }}
+                    contentInset={{ top: 30, botom:30}}
                     svg={{
                         fill: 'url(#ask-gradient)',
                         clipPath: 'url(#clip-path-ask)',

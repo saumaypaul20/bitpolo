@@ -1,103 +1,108 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator,  } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react'
+import { View, Text, TouchableOpacity, Image, ActivityIndicator,  } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Colors, Images } from '../../../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
-import { Container, Content, Icon, Tab, Tabs } from 'native-base'
+import { Icon, Tab, Tabs } from 'native-base'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { addMarketData, modifyFavs, triggerMarketSocket } from '../../../redux/actions/markets.action';
-import io from 'socket.io-client';
-import * as ENDPOINT from '../../../api/constants'
-import { getMarketList, getMarketByPair } from '../../../api/users.api';
+import { modifyFavs, addMarketList } from '../../../redux/actions/markets.action';
 import store from '../../../redux/store';
 import _ from 'lodash'
 import BPText from '../../../common/BPText/BPText';
 import { useNavigation } from '@react-navigation/native';
 import ListEmpty from '../../../components/ListEmpty/ListEmpty';
-import { splitIt } from '../../../utils/converters';
 import { equalityFnMarket } from '../../../utils/reduxChecker.utils';
 import { emitMarketListEvent } from '../../../api/config.ws';
-import { getAuthToken, getInfoAuthToken } from '../../../utils/apiHeaders.utils';
-// var io = require("socket.io-client/dist/socket.io");
-var pako = require('pako');
-let id = 1;
+import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils';
+import { getMatchingMarketList } from '../../../api/markets.api';
+import { addFavCoin, updateFavCoin } from '../../../api/users.api';
+ 
 let count = 0
-let count2 = 0
-let count3 = 0
-let eq = 0
+     
+    const callAddFavCoin = async(item)=>{
+        let payload = {lang:"en",data:{attributes:{market: item}}}
+        let headers = {
+            Authorizaton: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+        let res = await addFavCoin(payload, headers)
+        if(res.status){
+            console.log(res.data)
+        }
+    }
+    const callDeleteFavCoin = async(item)=>{
+        let payload = {lang:"en",data:{attributes:{market: item}}}
+        let res = await updateFavCoin(payload)
+        if(res.status){
+            console.log(res.data)
+        }
+    }
 
+    const onStarClicked = (item, favourites) =>{
+        let state = store.getState()
+         
+        let market_list = state.marketReducer.market_list
+        if(favourites.find(i => i.name == item.params[0])){
+                onDeleteClick(item)
+            }else{
+                let itemRes = market_list.find(i=>i.name === item.params[0])
+            let newData =favourites.concat([itemRes])
+            console.log("onstart click data",newData)
+                store.dispatch(modifyFavs(newData))
+                callAddFavCoin(itemRes.name)
+            }
+        }
 
-    // const  equalityFnMarket = (l,r) =>{
-    //    // console.log("inside eqFn",l,r);
-    //     eq++
-    //     //console.log("eq called", eq)
-    //     let change = false
-    //     if(r.length > 0){
-            
+        const onDeleteClick =(item)=>{
+            let state = store.getState()
+            let favourites = state.marketReducer.favourites
+             
+            let newData = favourites.filter(i=> i.name !== item.params[0])
+            store.dispatch(modifyFavs(newData))
+            callDeleteFavCoin(item.params[0])
+        }
 
-    //          for(let i=0; i <l.length ;i++){
-    //             let found = r.findIndex(rItem=> rItem.params[0]=== l[i].params[0])
-    //             if(found > -1){
-    //                 change =  (_.isEqual(l[i].params[1], r[found].params[1]))
-    //                 if(!change){
-    //                     break;
-    //                 }
-    //             }
-    //          }
-    //     }
-
-    //     console.log("CHANG--------",change);
         
-    //     return change
-    //     // console.log("market_data _lodash", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length); 
-    //     // console.log("market_data _lodash cond", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0); 
-    //     // console.log("market_data _lodash  res", _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method']))))); 
-    //     // return _.differenceWith(l, r, (a, b) => _.isEqual(_.omit(a, ['id','method'], _.omit(b,['id','method'])))).length === 0 ? true : false
-      
-       
-    // }
 
     const INRView = ()=>{
-        const navigation = useNavigation()
         // let focus = navigation.isFocused()
         console.log("INRView reloads", count)
         count++
         let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
+        let favourites = useSelector(state=> state.marketReducer.favourites, (l,r)=>{
+            console.log("Fav eq l r ----", l,r);
+            let change = false
+
+            if( l. length + r.length === 0){
+                change = true
+            }else if(r.length > 0){
+                
+
+                for(let i=0; i <l.length ;i++){
+                    let found = r.findIndex(rItem=> rItem.name === l[i].name)
+                    if(found > -1){
+                        change = true
+                        if(!change){
+                            break;
+                        }
+                    }
+                }
+            } 
+            console.log("Fav eq change----", change);
+            
+            return change
+        })
         
         market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
-
-        // console.log("market_data",market_data)
-        
-        const favourites = []
-
-        useEffect(() => {
-            // console.log("INRView mounts", count)
-            count++
-          }, [])
-        const onStarClicked = useCallback((item,favourites) =>{
-            if(favourites.find(i => i.id == item.id)){
-                    onDeleteClick(item, favourites)
-                }else{
-                    let newData =market_data.map(i=>{
-                        if(i.id == item.id){
-                            i.isFavourite = true;
-                            return i
-                        }else{
-                            return i
-                        }
-                    })
-                    store.dispatch(modifyFavs(newData))
-                }
-            },[favourites])
-
 
         return(
             <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
                 <SwipeListView
                         useFlatList={true}
                         data={market_data}
-                        renderItem={ (rowData, rowMap) => {
+                        renderItem={ (rowData) => {
                         //  console.log("bdx",rowData)
                             
                             return(
@@ -141,39 +146,16 @@ let eq = 0
         console.log("USDTView reloads", count)
         count++
         let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
+        let favourites = useSelector(state=> state.marketReducer.favourites)
         market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
         // console.log(" USDTViewmarket_data",market_data)
-         
-        const favourites = []
-
-
-        useEffect(() => {
-            // console.log("USDTView mounts", count)
-            count++
-          }, [])
-        const onStarClicked = useCallback((item,favourites) =>{
-            if(favourites.find(i => i.id == item.id)){
-                    onDeleteClick(item, favourites)
-                }else{
-                    let newData =market_data.map(i=>{
-                        if(i.id == item.id){
-                            i.isFavourite = true;
-                            return i
-                        }else{
-                            return i
-                        }
-                    })
-                    store.dispatch(modifyFavs(newData))
-                }
-            },[favourites])
-
 
         return(
             <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
                 <SwipeListView
                         useFlatList={true}
                         data={market_data}
-                        renderItem={ (rowData, rowMap) => {
+                        renderItem={ (rowData) => {
                         //  console.log("bdx",rowData)
                             
                             return(
@@ -213,34 +195,26 @@ let eq = 0
         )
     }
 
-    const FavouritesTab = React.memo(()=>{
+    const FavouritesTab = ()=>{
         console.log("called favstab")
-        const dispatch = useDispatch();
         const market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
-        const favourites = useSelector(state=> state.marketReducer.favourites, equalityFnMarket)
-
-
-
-        const onDeleteClick =(item, market_data)=>{
-            let newData =market_data.map(i=>{
-                if(i.id == item.id){
-                    i.isFavourite = false;
-                    return i
-                }else{
-                    return i
+        const favourites = useSelector(state=> state.marketReducer.favourites)
+        console.log("fav tabs favsssss",favourites)
+        let favs = favourites.map(i=>{
+            // let into =false
+            for(let j=0; j< market_data.length; j++){
+                if(market_data[j].params[0] === i.name){
+                    return market_data[j]
                 }
-            })
-            dispatch(modifyFavs(newData))
-        }
-
-
+            }
+        })
 
         return(
             <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
                 <SwipeListView
                             useFlatList={true}
-                            data={favourites}
-                            renderItem={ (rowData, rowMap) => {
+                            data={favs}
+                            renderItem={ (rowData) => {
                                 return(
                             // listItem(rowData.item, rowData.index)
                             <ListItem item={rowData.item} index={rowData.index} />
@@ -248,7 +222,7 @@ let eq = 0
                             renderHiddenItem={ (rowData, rowMap) => (
                                 <View style={{right:0, position:'absolute', top:0, bottom:0, backgroundColor:Colors.lightRed, flex:1, justifyContent:'center', alignItems:'center',width:64}}>
                                     <TouchableOpacity onPress={ () =>{rowMap[rowData.item.id]?.closeRow(); setTimeout(() => {
-                                        onDeleteClick(rowData.item, market_data) ;
+                                        onDeleteClick(rowData.item) ;
                                     }, 500);} }>
                                     <Image 
                                     source={Images.delete_icon} 
@@ -268,7 +242,7 @@ let eq = 0
                             stopRightSwipe={-64}
                             ListHeaderComponent={ favourites.length>0 ? homeHeaderComp() : <></>}
                             stickyHeaderIndices={[0]}
-                            keyExtractor={item => item.id.toString()}
+                            keyExtractor={item => item?.params[1]?.l}
                             contentContainerStyle={{flex:1,}}
                             ListEmptyComponent={<ListEmpty />}
                         
@@ -276,7 +250,7 @@ let eq = 0
                         
                 </View>
         )
-    })
+    }
     const ListItem = ({item, index}) =>{
     //   console.log("item",item)
         let bool = index%2===0 ? true : false;
@@ -351,7 +325,7 @@ let eq = 0
 
    
     const isFavourite = (item,favs) =>{
-        if(favs.find(i=> i.id === item.id)){
+        if( favs.length > 0 && favs.find(i=> i.name === item.params[0])){
             return(
                 <Image 
                     source={Images.star_active} 
@@ -378,6 +352,7 @@ let eq = 0
         const socketConnected = useSelector(state=> state.marketReducer.socketConnected, shallowEqual)
 
         const [marketPairs, setmarketPairs] = useState([])
+        const [, setfavs] = useState([])
         // console.log("usert",user)
        
 
@@ -388,16 +363,21 @@ let eq = 0
                     Authorization: getAuthToken(),
                     info: getInfoAuthToken(),
                 }
-                let res = await getMarketList(attr)
+                // let res = await getMarketList(attr)
+                let res = await getMatchingMarketList(attr)
+                
                 console.log("getmarkets",res)
     
                 if(res.status){
-                    let arr = res.data.data.attributes.filter((i,index) =>{ 
-                        if( i.market_pair === "INR" || i.market_pair === "USDT"){
-                            return i
-                        }
-                    })
-                    let final = arr.map(i=>i.market_name)
+                    let arr = res.data[0][0]["USDT"].concat(res.data[0][1]["INR"])
+                    let final = arr
+                    let favs = arr.filter(i=>i.is_favourite)
+                    console.log("arr",arr)
+                    console.log("favs",favs)
+                    console.log("final",final)
+                    // setfavs(favs)
+                    dispatch(modifyFavs(favs))
+                    dispatch(addMarketList(final))
                     setmarketPairs(final)
                     setSocket(true)
                 }
@@ -405,47 +385,7 @@ let eq = 0
             //  console.log(e)
             }
         },[])
-        // let compstartSocket= (m)=> emitMarketListEvent(m)
-        // const emitMarketListEvent=(marketPairs,socket) => {
-        //     console.log("soceklt mareket_paors",marketPairs)
-        //     // const reduxState = store.getState()
-        //     dispatch(triggerMarketSocket())
-        //     socket.on("connect", function() {
-                
-               
-
-        //          console.log("connected markets")
-               
-        //         socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
-        //         socket.on("message", function(data) {
-        //             const result = JSON.parse(pako.inflate(data, { to: "string" }));
-        //             console.log("count-socket",count2);
-        //          console.log("soclet00000",result);
-        //             // console.log("id",id);
-        //             id++
-        //             count2++
-        //             result.id = Math.random().toString()
-                   
-                    
-        //             // setData([result])
-        //             if(result.params){
-        //                 let pair = result.params[0]
-        //                 if(pair.match("INR")){
-        //                     result.divider= splitIt(result.params[0], "INR")
-        //                 }else if(pair.match("USDT")){
-        //                     result.divider= splitIt(result.params[0], "USDT")
-        //                 }
-
-        //                 dispatch(addMarketData(result))
-        //             }
-        //         });
-        //     })
-        
-        //     socket.on("disconnect", function(){
-        //         console.log("socket disconnected");
-        //     });
-        // }
-
+         
         useEffect(() => {
             // getMarketPairs()
             if(!socketConnected){
@@ -458,7 +398,7 @@ let eq = 0
         console.log("foucs", focus)
             if(socket){
                 if(focus && !socketConnected){
-                    emitMarketListEvent(marketPairs)
+                    emitMarketListEvent(marketPairs.map(i=>i.name))
                 } 
             }
             // return () => {
