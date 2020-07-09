@@ -24,7 +24,7 @@ const Account = () => {
         }
         let ress = await logoutUser(toPassHeader)
         if(ress.status){
-            Storage.clearAll()
+            Storage.clear("login")
             navigation.reset({index:0, routes: [{name:screenNames.SIGNIN}]})
         }
     }

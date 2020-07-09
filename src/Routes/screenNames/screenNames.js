@@ -29,6 +29,7 @@ export const screenNames = {
     SET_ANTI_SPOOF:'Set Anti-Spoofing Code',
     GOOGLE_AUTHENTICATOR: 'Google Authenticator',
     TWO_FACTOR_AUTHENTICATION: ' 2 Factor Authentication',
-    MARKET_TRADES: 'MARKET_TRADES'
+    MARKET_TRADES: 'MARKET_TRADES',
+    PINSCREEN:"PINSCREEN"
 
 }

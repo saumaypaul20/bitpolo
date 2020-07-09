@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Keyboard } from 'react-native'
 import { primaryColors } from '../../theme/colors';
 import { Container, Content } from 'native-base';
 import BPButton from '../../common/BPButton/BPButton';
@@ -24,9 +24,11 @@ const GoogleVerificationCode = (props) => {
 
     const [code, setCode] = useState(''); //setting code initial STATE value        
     const [geo, setgeo] = useState(null); //setting code initial STATE value        
+    const [disabled, setdisabled] = useState(true); //setting code initial STATE value        
     const dispatch = useDispatch()
 
     const onSubmit = () =>{
+        setdisabled(true)
         if(props.route.params.type === 'login'){
             goToScreen()
         }else{
@@ -58,12 +60,16 @@ const GoogleVerificationCode = (props) => {
                 let res = await g2fVerify(payload)
                 console.log(res)
                 if(res.status){
-                let res_data= res.data.data;
-                res_data.email =email
-                dispatch(saveAuthAttributesAction(res_data))
-                await Storage.set("login", res_data)
-                navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
-            }
+                    let res_data= res.data.data;
+                    res_data.email =email
+                    dispatch(saveAuthAttributesAction(res_data))
+                    await Storage.set("login", res_data)
+                    navigation.navigate(screenNames.PINSCREEN, {type: true, screen: screenNames.DASHBOARD})
+                // navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+                }else{
+                    alert("Something went wrong. Please Re-enter the code")
+                    setCode('')
+                }
             } catch (error) {
                 console.log(error);
                 alert("Something went wrong!")
@@ -118,6 +124,15 @@ const GoogleVerificationCode = (props) => {
     useEffect(() => {
         getGeoInfo() 
     }, [])
+
+    const onkeypress = (code) =>{
+        setCode(code)
+        if(code.length == 6){
+            setdisabled(false)
+            Keyboard.dismiss()
+             //onSubmit()
+        }
+    }
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -129,18 +144,18 @@ const GoogleVerificationCode = (props) => {
                         <BPText style={{ fontSize:16, textAlign:'center', paddingVertical:20, lineHeight:23}}>{`Get a verification code from the\n`}<BPText style={{fontFamily:Fonts.FONT_BOLD}}>Google Authenticator app</BPText></BPText>
                         
                         <TextInput
-                            keyboardType="oneTimeCode"
+                            keyboardType="number-pad"
                             // autoFocusOnLoad
                             placeholder="Enter 6-digit code"
                             placeholderTextColor={Colors.gray}
                             style={styles.inputStyle}
                             value={code}
-                            onChangeText={code => setCode(code)}
+                            onChangeText={code => onkeypress(code)}
                             maxLength={6}
                         />
 
 
-                        <BPButton label="Confirm" style={{alignSelf:'stretch'}} onPress={()=> onSubmit()}/>
+                        <BPButton disabled={disabled} label="Confirm" style={{alignSelf:'stretch'}} onPress={()=> onSubmit()}/>
                     
 
                     </View>

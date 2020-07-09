@@ -57,7 +57,7 @@ export const startSocket=() => {
                     console.log(result)
                     let res = result;
                     let askLen = res.params[1].asks.length
-                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse().slice( askLen - 10,  askLen)
+                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse().slice( askLen - 9)
                     console.log("-----TEH RES ---- depth",res)
                     res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse().slice( 0,  9)
                     store.dispatch(addDepthSubs(res))
@@ -99,9 +99,11 @@ export const emitMarketListEvent = (marketPairs) =>{
 //Depth Subscription
 export const emitDepthSubscribeEvent = (lastpair, newpair) =>{
     if(lastpair){
-        socket.emit("message", {"id": 2, "method" : "depth.unsubscribe", "params" : [lastpair, 9,"9"] });
+        socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"9"] });
+        // socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.unsubscribe", "params" : [newpair] });
     }
-    socket.emit("message", {"id": 2, "method" : "depth.subscribe", "params" : [newpair, 9,"9"] });
+    socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "depth.subscribe", "params" : [newpair, 9,"9"] });
+    socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.subscribe", "params" : [newpair] });
 }
 
 

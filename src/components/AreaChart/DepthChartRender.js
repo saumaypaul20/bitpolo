@@ -32,26 +32,29 @@ function DepthChartRenderer({ asks, bids }) {
         </Defs>
     )
 
+    // const Clips = (props) => {
+    //     console.log("clips props", props)
+    //     const { x, width } = props;
+    //     return(
+    //     <Defs key={ 'clips' }>
+    //         <ClipPath id={ 'clip-path-bid' } key={ '0' }>
+    //             <Rect x={ 0 } y={ '0' } width={ width/2 } height={ '100%' }/>
+    //         </ClipPath>
+    //         <ClipPath id="clip-path-ask" key={ '1' }>
+    //             <Rect x={ width/2 } y={ '0' } width={ width/2 } height={ '100%' }/>
+    //         </ClipPath>
+    //     </Defs>
+    // )}
     const Clips = ({ x, width }) => (
         <Defs key={ 'clips' }>
             <ClipPath id={ 'clip-path-bid' } key={ '0' }>
-                <Rect x={ 0 } y={ '0' } width={ width/2 } height={ '100%' }/>
+                <Rect x={ 0 } y={ '0' } width={ x(indexToBidClipFrom) } height={ '100%' }/>
             </ClipPath>
             <ClipPath id="clip-path-ask" key={ '1' }>
-                <Rect x={ width/2 } y={ '0' } width={ width/2 } height={ '100%' }/>
+                <Rect x={ x(idnexToAskClipFrom) } y={ '0' } width={ width - x(idnexToAskClipFrom) } height={ '100%' }/>
             </ClipPath>
         </Defs>
     )
-    // const Clips = ({ x, width }) => (
-    //     <Defs key={ 'clips' }>
-    //         <ClipPath id={ 'clip-path-bid' } key={ '0' }>
-    //             <Rect x={ 0 } y={ '0' } width={ x(indexToBidClipFrom) } height={ '100%' }/>
-    //         </ClipPath>
-    //         <ClipPath id="clip-path-ask" key={ '1' }>
-    //             <Rect x={ x(idnexToAskClipFrom) } y={ '0' } width={ width - x(idnexToAskClipFrom) } height={ '100%' }/>
-    //         </ClipPath>
-    //     </Defs>
-    // )
 
     const BidLine = ({ line }) => (
         <Path

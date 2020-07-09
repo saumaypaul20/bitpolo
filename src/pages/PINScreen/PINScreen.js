@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Keyboard, StyleSheet } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Container, Content } from 'native-base';
@@ -17,21 +17,22 @@ import { saveAuthAttributesAction } from '../../redux/actions/auth.actions';
 import { screenNames } from '../../routes/screenNames/screenNames';
 import Storage from '../../utils/storage.utils';
 
-const OTPscreen = (props) => {
+const PINScreen = (props) => {
     const dispatch =useDispatch()
     const navigation = useNavigation()
     let email = useSelector(state => state.authReducer.email);
     let user_id = useSelector(state => state.authReducer.user_id);
     let ip = useSelector(state=> state.authReducer.ip)
 
+    const [nextScreen, setNextScreen] = useState(props.route.params.screen)
     const [code, setCode] = useState(''); //setting code initial STATE value
+    const [localPin, setLocalPin] = useState(''); //setting code initial STATE value
     const [disabled, setdisabled] = useState(true); //setting code initial STATE value
-   
+    const [isNew, setNew] = useState(props?.route?.params?.type)
     const pinCount = 6
 
     const handleCodeFilled = (code) => {
         setCode(code)
-
         if (code.length == pinCount) {
             setdisabled(false)
             Keyboard.dismiss();
@@ -44,55 +45,53 @@ const OTPscreen = (props) => {
         if(code.length !== pinCount){
             alert("Fill up the the 6 digit code")
             return
-            }
-            let payload= {
-                id: user_id || props.data.data.id,
-                attributes:{
-                    is_browser: false,
-                    is_mobile: true,
-                    ip: ip,
-                    country: "India",
-                    otp: `BEL-${code}`
+        }
+        
+        switch(isNew){
+            case true:
+                await Storage.set("mpin", code)
+                navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+                break
+            default:
+                if(localPin === code){
+
+                    switch(nextScreen){
+                        case screenNames.DASHBOARD:
+                            navigation.reset({index:0, routes: [{name:nextScreen}]})
+                            break
+                        case screenNames.FORGOT_PASSWORD:
+                            navigation.pop(1); 
+                            navigation.navigate(nextScreen, {type:'reset-password', screen: screenNames.SIGNIN})
+                            break
+                        default:
+                            navigation.pop(1); navigation.navigate(nextScreen)
+                            
+                    }
+                }else{
+                    alert("PIN does't match. Re-enter PIN.")
+                    setCode('')
                 }
             }
-            let res = await validateOtp(payload);
-            console.log(res)
 
-            if(res.status){
-                let res_data= res.data.data;
-                res_data.email =email
-                // alert("Success")
-                dispatch(saveAuthAttributesAction(res_data))
-                // if(res.data.data.attributes.google_auth){
-                //     navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res_data})
-                //     return
-                // }else{
-                    await Storage.set("login", res_data)
-                    navigation.navigate(screenNames.PINSCREEN, {type: true, screen: screenNames.DASHBOARD})
-                    return 
-                // }
-            } 
-            else {
-                alert("PIN code doesn't match")
-                return
+        }
+
+        const getSavedPin = async() =>{
+            let mpin = await Storage.get("mpin")
+            if(mpin){
+                setNew(false)
+                setLocalPin(mpin)
+            }else{
+                setNew(true)
             }
         }
 
-    const resendCode = async()=>{
-        setCode('')
-        let attributes ={
-            user_id: user_id,
-            type: 'login'
-        }
-        let res = await resendOtp(attributes)
-        if(res.status){
-            alert(res.data.data.attributes.message)
-        }else{
-            alert("Something went worng, Try again!")
-        }
-    }
+        useEffect(() => {
+           getSavedPin();
+            
+           
+            
+        }, [])
         
-
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
         <Container style={{ flex: 1, backgroundColor: Colors.primeBG }}>
@@ -100,8 +99,8 @@ const OTPscreen = (props) => {
             <Toolbar enableBackButton/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
-                    <BPTitle title="Verification Code"/>
-                    <BPSubtitle text={`Please enter the ${pinCount} digit code sent to ${email}` }/>
+                    <BPTitle title={isNew? "Set MPIN" : "Enter MPIN"}/>
+                    <BPSubtitle text={`Please enter the ${pinCount} digit code` }/>
                     
                     <OTPInputView
                         keyboardType="phone-pad"
@@ -115,9 +114,8 @@ const OTPscreen = (props) => {
                         onCodeFilled={code => setCode(code)}
                     />
 
-                    <QueryActions query={"Didn't recieve code yet?"} actionName="Resend" action={()=> resendCode()}/>
 
-                    <BPButton disabled={disabled} label="Confirm" onPress={()=> verifyOtp()} style={{alignSelf:'stretch'}}/>
+                    {/* <BPButton disabled={disabled} label="Confirm" onPress={()=> verifyOtp()} style={{alignSelf:'stretch'}}/> */}
                    
 
                 </View>
@@ -155,4 +153,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default OTPscreen
+export default PINScreen

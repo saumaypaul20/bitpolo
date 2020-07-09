@@ -9,15 +9,17 @@ import { screenNames } from '../../routes/screenNames/screenNames'
 import { emitDepthSubscribeEvent } from '../../api/config.ws'
 import { useSelector } from 'react-redux'
 import _ from 'lodash'
+import { equalityFnMarket } from '../../utils/reduxChecker.utils'
 
 const TradesLeftCol = () => {
 
     const navigation = useNavigation();
+    const market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
     const depths = useSelector(state=> state.depthSubsReducer.data)
     const currencies = useSelector(state=> state.marketReducer.currencies)
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair)
-    console.log("activeTradePair", activeTradePair)
-    
+    // console.log("depths Trdes left **********", depths)
+    // console.log("market ata ^^^^^^^^^^^^^^^^^^",market_data)
     const [list1val, setList1Val] = useState(null)
     const [list2val, setList2Val] = useState(null)
     const list1 = [{label:"Default", value:"val1"}]
@@ -33,6 +35,13 @@ const TradesLeftCol = () => {
     //      emitDepthSubscribeEvent(activeTradePair)
     //   }, 2000);
     //  }, [activeTradePair])
+
+    const currentMarketPrice = ()=>{
+        let found = market_data.find(i=> i.params[0] === activeTradePair)
+        if(found){
+           return <BPText style={{color: parseFloat(found.params[1].cp)>-1 ? Colors.lightGreen: Colors.red, padding:5}}>{`${parseFloat(found.params[1].l).toFixed(2)} ${parseFloat(found.params[1].cp).toFixed(2)}`}</BPText>
+        }
+    }
     
     return (
         <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
@@ -54,7 +63,7 @@ const TradesLeftCol = () => {
                            
                {/* Red Chart 1 */}
                <View style={{height:245, alignSelf:'stretch',width:'97%'}}>
-                  {depths?.params[1]?.asks?.length > 0 ?  <BPBarChart data={depths?.params[1].asks.splice(depths?.params[1].asks.length - 10,depths?.params[1].asks.length-1)} color={Colors.lightRed} rightTextColor={Colors.red}/> : <ActivityIndicator size="large" color={Colors.white} />}
+                  {depths?.params[1]?.asks?.length > 0 ?  <BPBarChart data={_.sortBy(depths?.params[1].asks, 'price').reverse()} color={Colors.lightRed} rightTextColor={Colors.red}/> : <ActivityIndicator size="large" color={Colors.white} />}
                </View>
 
                 {/* Divider with Value */}
@@ -62,14 +71,14 @@ const TradesLeftCol = () => {
 
                     <View  style={{borderWidth:1, borderColor:Colors.gray, borderStyle:"dashed", alignSelf:'stretch', borderRadius:1}}/>
 
-                    <BPText style={{color: Colors.lightGreen,padding:5}}>0.000003584585 $0.29</BPText>
+                    {currentMarketPrice()}
                     
                     <View  style={{borderWidth:1, borderColor:Colors.gray, borderStyle:"dashed", alignSelf:'stretch', borderRadius:1}}/>
                 </View>
                
                {/* Red Chart 2 */}
                <View style={{height:245,  alignSelf:'stretch', paddingBottom:2,width:'97%'}}>
-                {depths?.params[1]?.bids?.length > 0 ?    <BPBarChart data={_.sortBy(depths?.params[1].bids, 'price').splice(0,9)} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />}
+                {depths?.params[1]?.bids?.length > 0 ?    <BPBarChart data={_.sortBy(depths?.params[1].bids, 'price')} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />}
                </View>
 
                 <View style={{ alignSelf:'stretch', flexDirection:'row', paddingHorizontal:16, paddingVertical:8}}>

@@ -3,11 +3,15 @@ import DepthChartRenderer from './DepthChartRender'
 import { useSelector } from 'react-redux'
 import { ActivityIndicator } from 'react-native'
 import { Colors } from '../../theme'
+import  _ from 'lodash'
 
 export default function DepthChart(props) {
     const depths = useSelector(state=> state.depthSubsReducer.data)
-    const bidsD = depths?.params[1].bids || []
-    const asksD = depths?.params[1].asks || []
+    const bidsD = _.sortBy(depths?.params[1].bids, 'price').reverse() || []
+    const asksD =  _.sortBy(depths?.params[1].asks, 'price').reverse() || []
+    // console.log("depths-----------",depths)
+
+   
     // const { asks, bids } = props
     // let asks =[
     //     {
@@ -209,6 +213,7 @@ function processData(data, side) {
         return {
             p: item.p,
             a: item.a,
+            t: item.t
         }
     }).reduce((arr, item, idx) => {
     
@@ -216,7 +221,7 @@ function processData(data, side) {
             price: item.p,
             amount: item.a,
             side,
-            total: arr.length === 0 ? item.a : (arr[idx - 1].total + item.a),
+            total:item.a,
         }
     
         return [...arr, bid]
@@ -238,7 +243,7 @@ const bids = processData(bidsD, 'bid')
             price: Number(item.price),
             side: 'bid',
         }
-    }).reverse()
+    })
     if(bidsD.length === 0 || asksD.length === 0) return <ActivityIndicator size="large" color={Colors.white}/>
     return (
         <DepthChartRenderer

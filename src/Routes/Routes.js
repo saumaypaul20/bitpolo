@@ -27,26 +27,27 @@ import GoogleAuthenticator from '../pages/Tabs/Account/Security/GoogleAuthentica
 import TwoFactorAuthentication from '../pages/Tabs/Account/Security/2FactorAuthentication/2FactorAuthentication';
 import Banks from '../pages/Tabs/Account/BankAccountDetails/Banks';
 import MarketTrades from '../pages/Tabs/Trades/MarketTrades/MarketTrades';
+import PINScreen from '../pages/PINScreen/PINScreen';
 const Stack = createStackNavigator();
 
 const Routes = ({login}) => {
 
-    const config = {
-        animation: 'spring',
-        config: {
-          stiffness: 1000,
-          damping: 100,
-          mass: 3,
-          overshootClamping: true,
-          restDisplacementThreshold: 0.01,
-          restSpeedThreshold: 0.01,
-        },
-      };
+    // const config = {
+    //     animation: 'spring',
+    //     config: {
+    //       stiffness: 1000,
+    //       damping: 100,
+    //       mass: 3,
+    //       overshootClamping: true,
+    //       restDisplacementThreshold: 0.01,
+    //       restSpeedThreshold: 0.01,
+    //     },
+    //   };
 
     return (
         <NavigationContainer>
             <Stack.Navigator 
-                initialRouteName = {login ? screenNames.DASHBOARD : screenNames.SIGNIN}
+                initialRouteName = {login ? screenNames.PINSCREEN : screenNames.SIGNIN}
                 screenOptions={{
                 headerShown: false, 
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS ,
@@ -76,6 +77,7 @@ const Routes = ({login}) => {
                 <Stack.Screen name= {screenNames.GOOGLE_AUTHENTICATOR} component={GoogleAuthenticator} />
                 <Stack.Screen name= {screenNames.TWO_FACTOR_AUTHENTICATION} component={TwoFactorAuthentication} />
                 <Stack.Screen name= {screenNames.MARKET_TRADES} component={MarketTrades} />
+                <Stack.Screen name= {screenNames.PINSCREEN} component={PINScreen} />
                
             </Stack.Navigator>
         </NavigationContainer>
