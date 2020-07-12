@@ -56,7 +56,7 @@ const App= () => {
 
   useEffect(() => {
     // requestLocationPermission()
-    console.log = function() {}
+    // console.log = function() {}
      getUser()
      storeIP()
      deviceAccess()

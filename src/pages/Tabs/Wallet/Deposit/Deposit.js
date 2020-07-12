@@ -13,13 +13,16 @@ import WalletEndNotes from '../../../../components/WalletEndNotes/WalletEndNotes
 import WalletEndButtons from '../../../../components/WalletEndButtons/WalletEndButtons'
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
 import { createAssetAddress } from '../../../../api/wallet.api'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../../utils/apiHeaders.utils'
 import { convertDate } from '../../../../utils/converters'
 import QRCode from 'react-native-qrcode-svg';
 import { copyText } from '../../../../utils/component.utils'
 import PickerComp from '../../../../components/PickerComp/PickerComp'
 import Modal from 'react-native-modal'
+import { addBanks } from '../../../../redux/actions/payments.action'
+import { getBankAccounts } from '../../../../api/payments.api'
+import { equalityFnBankslist } from '../../../../utils/reduxChecker.utils'
 
 let currentTime = new Date()
 
@@ -41,7 +44,7 @@ const rightEl = () => {
 //       })
 // }
 
-const Tab1 = ({address, setView, activecoin}) =>{
+const Tab1 = ({address, setView, activecoin, image}) =>{
     return (
       
             <View>
@@ -49,7 +52,7 @@ const Tab1 = ({address, setView, activecoin}) =>{
                     onPress= {()=> setView(2)}
                     noBorder 
                     label={`${activecoin}`}
-                    image = {Images.btc_white}
+                    image = {image}
                     backgroundColor={Colors.darkGray3} 
                     rightElement={<ChevronRight />}/>
                     <View style={{marginHorizontal:16}}>
@@ -113,6 +116,7 @@ const Tab1 = ({address, setView, activecoin}) =>{
 
  
 const Tab2 = ({setView}) =>{
+    const dispatch = useDispatch()
     const [depositamount, setdepositamount] = useState(null)
     const [impsid, setimpsid] = useState(null)
     const [confirm_impsid, setconfirm_impsid] = useState(null)
@@ -120,6 +124,23 @@ const Tab2 = ({setView}) =>{
     const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Traditional Payment', value: 0})
     const [showModal, setModal] = useState(false)
     const [activeTPM, setTPM] = useState(0)
+    const [loading,setloading] = useState(true)
+    const banks = useSelector(state=> state.payments.banks, equalityFnBankslist)
+    const balance = useSelector(state=> state.walletReducer.balance.data["INR"], shallowEqual)
+    // alert(JSON.stringify(balance))
+    const getBanksList = useCallback(async()=>{
+        setloading(true)
+        let res  = await getBankAccounts();
+        if(res.status){
+            setloading(false)
+            dispatch(addBanks(res.data))
+        }
+    },[])
+
+    useEffect(() => {
+        getBanksList()
+        
+    }, [])
 
     const handleModal = ()=>{
         setModal(!showModal)
@@ -157,7 +178,7 @@ const Tab2 = ({setView}) =>{
                     <>
                         <BPText style={{fontSize:10, marginTop:16}}> For deposit use the following details only</BPText>
                         <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', alignSelf:'stretch', marginVertical:16, backgroundColor: Colors.darkGray3, paddingVertical:10}}>
-                                <BPText style={{fontSize:10}}>For IMPS, NEFT or RTGS use the bank account.</BPText>
+                                <BPText style={{fontSize:10}}>For IMPS, NEFT or RTGS use this bank account.</BPText>
                                 <Icon type="FontAwesome" name="chevron-down" style={{color: Colors.white, fontSize: 11, opacity:0.6}} />
                         </View>
 
@@ -170,18 +191,29 @@ const Tab2 = ({setView}) =>{
                                 <BPText style={{fontSize:10, color:Colors.lightWhite}}>Account Type</BPText>
                             </View>
                             <View>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>APPLL PPOIOUI IOIS ISS</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>ICICI Name</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>67894567890</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>ICICI73497DC</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>Current</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].account_name}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].label}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_number}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.ifsc}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_type}</BPText>
                             </View>
                             <View>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].account_name, "Name")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].label, "Label")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_number, "Account Number")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.ifsc, "IFSC")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_type, "Account Type")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                            
                             </View>
 
                         </View>
@@ -317,18 +349,29 @@ const Tab2 = ({setView}) =>{
                                 <BPText style={{fontSize:10, color:Colors.lightWhite}}>Account Type</BPText>
                             </View>
                             <View>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>APPLL PPOIOUI IOIS ISS</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>ICICI Name</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>67894567890</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>ICICI73497DC</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>Current</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].account_name}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].label}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_number}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.ifsc}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_type}</BPText>
                             </View>
                             <View>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
-                            <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].account_name, "Name")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].label, "Label")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_number, "Account Number")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.ifsc, "IFSC")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_type, "Account Type")}>
+                                    <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
+                                </TouchableOpacity>
+                            
                             </View>
 
                         </View>
@@ -354,15 +397,15 @@ const Tab2 = ({setView}) =>{
                     <View style={{flexDirection:'row', alignSelf:'stretch', justifyContent:'space-between', marginVertical:27}}>
                         <View>
                             <BPText style={{fontSize:10, color:Colors.lightWhite}}>Available Balance</BPText>
-                            <BPText style={{fontSize:12, color: Colors.white}}>0.00 INR</BPText>
+                            <BPText style={{fontSize:12, color: Colors.white}}>{balance.available.balance.toFixed(2)} INR</BPText>
                         </View>
                         <View style={{alignItems:'center'}}> 
                             <BPText style={{fontSize:10, color:Colors.lightWhite}}>In Order</BPText>
-                            <BPText style={{fontSize:12, color: Colors.white}}>0.00 INR</BPText>
+                            <BPText style={{fontSize:12, color: Colors.white}}>{balance.available.balance.toFixed(2)} INR</BPText>
                         </View>
                         <View style={{alignItems:'flex-end'}}>
                             <BPText style={{fontSize:10, color:Colors.lightWhite}}>Total Balance</BPText>
-                            <BPText style={{fontSize:12, color: Colors.white}}>0.00 INR</BPText>
+                            <BPText style={{fontSize:12, color: Colors.white}}>{balance.available.balance.toFixed(2)}  INR</BPText>
                         </View>
                     </View>
 
@@ -381,7 +424,7 @@ const Tab2 = ({setView}) =>{
                             /> 
                         </View>
 
-                   {viewRenderer()}
+                   {banks.length>0 && viewRenderer()}
 
                     <View style={{marginTop:16, alignSelf:'center'}}>
                         {/* <WalletEndNotes notes={[
@@ -400,11 +443,10 @@ const Tab2 = ({setView}) =>{
 
 let Deposit = () => {
 
-    const [activeView, setView] = useState(2)
+    const [activeView, setView] = useState(1)
     const [activecoin, setactivecoin] = useState("BTC")
-    const [depositAmount, setDepositAmount] = useState('')
     const [address, setaddress] = useState(null)
-
+    const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
     const assetList = useSelector(state=>state.walletReducer.assets)
     console.log("assetlist",assetList);
     
@@ -451,18 +493,15 @@ let Deposit = () => {
     }, [])
     
 
-    const generateAddress =(item)=>{
-        setactivecoin(item);
-        setPickerOrderVal(item)
-        callcreateassetaddress(item)
-    }
-    const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
+   
+        const generateAddress =(item)=>{
+            setactivecoin(item);
+            setPickerOrderVal(item)
+            callcreateassetaddress(item)
+        }
 
-    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2  setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
+    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 image={{uri:assetList.find(i=> i.asset_code == activecoin).logo_url}} address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2  setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
 
-    const onSelectCoin = (coin)=>{
-
-    }
     return (
         <SafeAreaView style={{flex:1}}>
               <Root>
@@ -486,34 +525,8 @@ let Deposit = () => {
                              marginRight={3}
                              />
                          }
-                     }
-
-                         
-                        )  
-}
-                        {/* <BPButtonSmall 
-                            label={"BTC"}  
-                            labelStyle={{color: Colors.primeBG}} 
-                            backgroundColor={Colors.white}
-                            image={Images.change_your_password_icon}
-                            image_size={15}
-                        />
-
-                        <BPButtonSmall 
-                            label={"ETH"}  
-                            labelStyle={{color: Colors.primeBG}} 
-                            backgroundColor={Colors.white}
-                            image={Images.change_your_password_icon}
-                            image_size={15}
-                        />
-
-                        <BPButtonSmall 
-                            label={"BDX"}  
-                            labelStyle={{color: Colors.primeBG}} 
-                            backgroundColor={Colors.white}
-                            image={Images.change_your_password_icon}
-                            image_size={15}
-                        /> */}
+                     })  
+                    }
                         
                     </View>
                     <View style={{  alignSelf:'stretch', marginHorizontal:130, borderWidth:1, borderColor: Colors.white, marginTop:10, borderRadius:5}}>

@@ -379,10 +379,14 @@ export const getTradeVolume = async (passedHeaders)=>{
  
 export const addFavCoin = async (payload,toPassHeader)=>{
     return new Promise ( async (resolve, reject)=>{ 
-        // console.log(payload)   
+        console.log(payload)   
         if(!payload) reject({msg: "No payload"})
          
-        let headers = toPassHeader
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
         console.log("added fav headers",headers);
         console.log("added fav paylds",payload);
         
@@ -403,7 +407,7 @@ export const updateFavCoin = async (payload)=>{
         if(!payload) reject({msg: "No payload"})
          
         let headers = {
-            Authorizaton: getAuthToken(),
+            Authorization: getAuthToken(),
             info: getInfoAuthToken(),
             device: getDeviceId()
         }

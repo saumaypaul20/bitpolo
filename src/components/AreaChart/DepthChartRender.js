@@ -91,7 +91,7 @@ function DepthChartRenderer({ asks, bids }) {
                         fill: 'url(#bid-gradient)',
                         clipPath: 'url(#clip-path-bid)',
                     }}
-                    curve={ shape.curveBasis }
+                    curve={ shape.curveStep }
                     yAccessor={ ({ item }) => item.total }
                     xAccessor={ ({ item }) => item.price }
                     xScale={ scale.scaleLinear }
@@ -108,7 +108,7 @@ function DepthChartRenderer({ asks, bids }) {
                         fill: 'url(#ask-gradient)',
                         clipPath: 'url(#clip-path-ask)',
                     }}
-                    curve={ shape.curveBasis }
+                    curve={ shape.curveStep }
                     yAccessor={ ({ item }) => item.total }
                     xAccessor={ ({ item }) => item.price }
                     xScale={ scale.scaleLinear }

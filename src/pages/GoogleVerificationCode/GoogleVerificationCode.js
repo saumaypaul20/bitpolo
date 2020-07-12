@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveAuthAttributesAction } from '../../redux/actions/auth.actions';
 import Storage from '../../utils/storage.utils';
 import { changeUserPassword } from '../../api/security.api';
+import { addBankAccount } from '../../api/payments.api';
+import { addBanks } from '../../redux/actions/payments.action';
 
 const GoogleVerificationCode = (props) => {
     const navigation = useNavigation()
@@ -27,11 +29,51 @@ const GoogleVerificationCode = (props) => {
     const [disabled, setdisabled] = useState(true); //setting code initial STATE value        
     const dispatch = useDispatch()
 
-    const onSubmit = () =>{
+    const onSubmit = async() =>{
         setdisabled(true)
         if(props.route.params.type === 'login'){
             goToScreen()
-        }else{
+        }else if(props.route.params.type === 'add-bank'){
+            // let res = await addBankAccount(props.route.params.body)
+            // if(res.status){
+            //     console.log(res)
+            //     navigation.dispatch(StackActions.pop(2))
+            // }
+            let payload = {
+                id: props.route.params.body.data.id,
+                attributes:{
+                    browser : await DeviceInfo.getModel(),
+                    ip : await getPublicIP(),
+                    is_browser : false,
+                    is_mobile : true,
+                    is_app : true,
+                    os : await DeviceInfo.getSystemName(),
+                    os_byte : await DeviceInfo.getSystemVersion(),
+                    g2f_code : code,
+                    country : geo.country,
+                    city : geo.city,
+                    region : geo.region
+                }
+            }
+            let res =  await g2fVerify(payload)
+            if(res.status){
+                let res = await addBankAccount(props.route.params.body)
+                if(res.status){
+                    console.log("added banks to server***********************",res)
+                    dispatch(addBanks(props.route.params.body.data.attributes));
+                    navigation.dispatch(StackActions.pop(2))
+                }else{
+                    alert("Something went wwrong!")
+                    navigation.dispatch(StackActions.pop(2))
+
+                }
+              
+            }else{
+                alert("Something went wrong. Please Re-enter the code")
+                setCode('')
+            }
+        }
+        else{
             changeUserPasswordFlow()
         }
     }
@@ -52,8 +94,8 @@ const GoogleVerificationCode = (props) => {
                     os_byte : await DeviceInfo.getSystemVersion(),
                     g2f_code : code,
                     country : geo.country,
-                    // city : geo.city,
-                    // region : geo.region
+                    city : geo.city,
+                    region : geo.region
                 }
             }
             try {

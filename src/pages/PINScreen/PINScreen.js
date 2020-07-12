@@ -24,9 +24,9 @@ const PINScreen = (props) => {
     let user_id = useSelector(state => state.authReducer.user_id);
     let ip = useSelector(state=> state.authReducer.ip)
 
-    const [nextScreen, setNextScreen] = useState(props.route.params.screen)
+    const [nextScreen, setNextScreen] = useState(props?.route?.params?.screen || screenNames.DASHBOARD)
     const [code, setCode] = useState(''); //setting code initial STATE value
-    const [localPin, setLocalPin] = useState(''); //setting code initial STATE value
+    const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
     const [disabled, setdisabled] = useState(true); //setting code initial STATE value
     const [isNew, setNew] = useState(props?.route?.params?.type)
     const pinCount = 6
@@ -36,14 +36,14 @@ const PINScreen = (props) => {
         if (code.length == pinCount) {
             setdisabled(false)
             Keyboard.dismiss();
-            verifyOtp()
+            verifyOtp(code)
         }
     }
 
-    const verifyOtp = async () => {
+    const verifyOtp = async (code) => {
         setdisabled(true)
         if(code.length !== pinCount){
-            alert("Fill up the the 6 digit code")
+            alert("Fill in the the 6 digit code")
             return
         }
         
@@ -80,6 +80,7 @@ const PINScreen = (props) => {
             if(mpin){
                 setNew(false)
                 setLocalPin(mpin)
+                handleCodeFilled("111111")
             }else{
                 setNew(true)
             }
@@ -87,7 +88,7 @@ const PINScreen = (props) => {
 
         useEffect(() => {
            getSavedPin();
-            
+         
            
             
         }, [])

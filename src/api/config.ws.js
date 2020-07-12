@@ -12,6 +12,8 @@ const socket = io(ENDPOINT.WEBSOCKET, {
     transports: ['websocket'],
   })
 
+  let depth_update = 0
+  let state_update = 0
 export const startSocket=() => {
    
     // ON CONNECT
@@ -20,7 +22,7 @@ export const startSocket=() => {
     socket.on("connect", function() {
      
         console.log("connected scoket---------------")
-        emitPingEvent()
+        //emitPingEvent()
         // setInterval(() => {
         //     console.log("emiting ping")
         //     socket.emit("ping");
@@ -42,6 +44,8 @@ export const startSocket=() => {
             switch(result.method){
               
                 case "state.update":
+                    console.log("state_update res====~$~$~$~$~$",state_update)
+                    state_update++
                     if(result.params){
                         let pair = result.params[0]
                         if(pair.match("INR")){
@@ -55,11 +59,15 @@ export const startSocket=() => {
 
                 case "depth.update":
                     console.log(result)
+                    console.log("depth_update res====^=^=^=^=^=",depth_update)
+                    
+                    depth_update++
+
                     let res = result;
-                    let askLen = res.params[1].asks.length
-                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse().slice( askLen - 9)
+                  
+                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse()
                     console.log("-----TEH RES ---- depth",res)
-                    res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse().slice( 0,  9)
+                    res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse()
                     store.dispatch(addDepthSubs(res))
                     // addDepthSubs
                     break
@@ -99,10 +107,10 @@ export const emitMarketListEvent = (marketPairs) =>{
 //Depth Subscription
 export const emitDepthSubscribeEvent = (lastpair, newpair) =>{
     if(lastpair){
-        socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"9"] });
+        socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"0"] });
         // socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.unsubscribe", "params" : [newpair] });
     }
-    socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "depth.subscribe", "params" : [newpair, 9,"9"] });
+    socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "depth.subscribe", "params" : [newpair, 9,"0"] });
     socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.subscribe", "params" : [newpair] });
 }
 

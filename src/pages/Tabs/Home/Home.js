@@ -65,7 +65,8 @@ const Home = () => {
     const [activetab, settab] = useState(1)
     const dispatch = useDispatch();
     const navigation = useNavigation()
-    let focus = navigation.isFocused()
+    const [loading, setloading] = useState(true)
+    // let focus = navigation.isFocused()
     const user = useSelector(state=> state.authReducer.auth_attributes);
     const socketConnected = useSelector(state=> state.marketReducer.socketConnected, shallowEqual)
     const [marketPairs, setmarketPairs] = useState([])
@@ -137,17 +138,32 @@ const Home = () => {
 
     useEffect(() => {
     console.log("socketConnected", socketConnected)
-    console.log("foucs", focus)
+    // console.log("foucs", focus)
         if(socket){
-            if(focus && !socketConnected){
+            if(!socketConnected){
                 emitMarketListEvent(marketPairs)
             } 
         }
         // return () => {
         //     if(socket) socket.disconnect()
         // }
-    }, [socket,navigation,focus])
+    }, [socket,navigation])
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setloading(false)
+          });
+      
+          return unsubscribe;
+    }, [navigation])
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            setloading(true)
+          });
+      
+          return unsubscribe;
+    }, [navigation])
 
 
     return (
@@ -156,7 +172,7 @@ const Home = () => {
                 <Toolbar title="Exchange" backgroundColor={Colors.darkGray2}/>
 
                    <View style={{flex:1}}> 
-                    <View style={{paddingVertical:8}}>
+                    {!loading && <View style={{paddingVertical:8}}>
                     <HomeHeaderComp />
 
                     <View style={{ flexDirection:'row', alignItems:'flex-start',   borderTopWidth:1, borderBottomWidth:1,borderColor: Colors.lightWhite }}>
@@ -174,7 +190,7 @@ const Home = () => {
 
                         {activetab ===1 ? <Tab type={1} /> : <Tab type={2} />}
                             
-                    </View>
+                    </View>}
                         
                    </View>
                

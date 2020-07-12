@@ -12,15 +12,18 @@ import BankConfirmModal from '../../../../../components/BankConfirmModal/BankCon
 import Modal from 'react-native-modal'
 import BPButton from '../../../../../common/BPButton/BPButton'
 import { useNavigation } from '@react-navigation/native'
+import { addBankAccount } from '../../../../../api/payments.api'
+import { useSelector, shallowEqual } from 'react-redux'
 
 const IMPS = () => {
     const navigation = useNavigation()
     const acctypes = [{label: 'Savings', value:'savings'}, {label: 'Current', value:'current'}];
+    const user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual)
     const [accNo, setaccNo] = useState('');
     const [acclabel, setacclabel] = useState('');
     const [accname, setaccname] = useState('');
     const [ifsc, setifsc] = useState('');
-    const [accType, setAccType] = useState(null)
+    const [accType, setAccType] = useState('savings')
     const [showModal, setModal] = useState(false)
 
     const handleModal =useCallback(() =>{
@@ -33,6 +36,30 @@ const IMPS = () => {
         }
         return false
     })
+
+    const onConfirm = async ()=>{
+        let body={
+            data : {
+                id: user.id,
+                attributes : {
+                    type: "bank_account",
+                    account_name: accname,
+                    label: acclabel,
+                    type_of_account:{
+                        bank_account:{
+                            account_number: accNo,
+                            ifsc: ifsc,
+                            account_type: accType,
+                        }
+                    }
+                }
+            }
+        }
+            
+        handleModal();
+        navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE,{screen: screenNames.IMPS, type:'add-bank', body:body})
+
+    }
 
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}> 
@@ -64,7 +91,7 @@ const IMPS = () => {
                             <BPInput label="Account No" labelStyle={{fontSize:18}} placeholder="Enter your bank account number" text={accNo} setText={(t)=> setaccNo(t)}/>
                         </View>
                         <View style={{marginTop:24}}>
-                            <BPInput label="IFSC Code" labelStyle={{fontSize:18}} placeholder="Enter your IFSC Code" text={ifsc} setText={(t)=> setifsc(t)}/>
+                            <BPInput autoCapitalize={'characters'} label="IFSC Code" labelStyle={{fontSize:18}} placeholder="Enter your IFSC Code" text={ifsc} setText={(t)=> setifsc(t)}/>
                         </View>
                     </View>
 
@@ -82,7 +109,7 @@ const IMPS = () => {
                             <BankConfirmModal
                                 onBackPress={()=>handleModal()}
                                 onRecheck={()=> handleModal()}
-                                onConfirm={()=>{handleModal();navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE,{screen: screenNames.IMPS})}}
+                                onConfirm={()=> onConfirm()}
                             />
                         </Modal>
                 </View>

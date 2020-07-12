@@ -60,10 +60,10 @@ const BottomTabs = () => {
                 >
               
                 <Tab.Screen name="Home" component={Home} unmountOnBlur/>
-                <Tab.Screen name="Markets" component={Markets} />
-                <Tab.Screen name="Trades" component={Trades} />
-                <Tab.Screen name="Wallet" component={WalletTabRoutes} />
-                <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false}} />
+                <Tab.Screen name="Markets" component={Markets} unmountOnBlur/>
+                <Tab.Screen name="Trades" component={Trades} unmountOnBlur/>
+                <Tab.Screen name="Wallet" component={WalletTabRoutes} unmountOnBlur/>
+                <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false}} unmountOnBlur/>
                 
             </Tab.Navigator>
         

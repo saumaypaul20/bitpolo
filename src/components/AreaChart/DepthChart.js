@@ -4,11 +4,16 @@ import { useSelector } from 'react-redux'
 import { ActivityIndicator } from 'react-native'
 import { Colors } from '../../theme'
 import  _ from 'lodash'
-
+import { equalityFnDepths } from '../../utils/reduxChecker.utils'
+ 
 export default function DepthChart(props) {
-    const depths = useSelector(state=> state.depthSubsReducer.data)
-    const bidsD = _.sortBy(depths?.params[1].bids, 'price').reverse() || []
-    const asksD =  _.sortBy(depths?.params[1].asks, 'price').reverse() || []
+    
+
+    const rawasks = useSelector(state=> state.depthSubsReducer.data?.params[1]?.asks, equalityFnDepths)
+    const rawbids = useSelector(state=> state.depthSubsReducer.data?.params[1]?.bids, equalityFnDepths)
+    // let askLen = rawasks.length
+    const bidsD = _.sortBy(rawbids, 'amount').reverse() || []
+    const asksD =  _.sortBy(rawasks, 'amount').reverse() || []
     // console.log("depths-----------",depths)
 
    
@@ -228,8 +233,11 @@ function processData(data, side) {
     }, [])
 }
 
-const asks = processData(asksD, 'ask')
-const bids = processData(bidsD, 'bid')
+let asks = processData(asksD, 'ask')
+asks =asks.slice(asks.length - 9)
+let bids = processData(bidsD, 'bid')
+bids= bids.slice(0,9)
+
     const asksProcessed = asks.map(item => {
         return {
             total: Number(item.total),

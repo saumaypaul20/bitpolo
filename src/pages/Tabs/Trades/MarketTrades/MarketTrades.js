@@ -35,7 +35,7 @@ const MarketTrades = () => {
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
                 {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-                <Toolbar enableBackButton title="MArket TRADEs"/>
+                <Toolbar enableBackButton title="Market Trades"/>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{  justifyContent:'flex-start', alignItems:'stretch', backgroundColor: Colors.darkGray3, paddingHorizontal:20}}>
                       
@@ -74,7 +74,7 @@ const MarketTrades = () => {
                      
 
 
-                       <FilterFAB />
+                       {/* <FilterFAB /> */}
                 </Content>
             </Container>
         </SafeAreaView>

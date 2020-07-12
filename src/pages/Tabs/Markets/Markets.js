@@ -12,7 +12,7 @@ import _ from 'lodash'
 import BPText from '../../../common/BPText/BPText';
 import { useNavigation } from '@react-navigation/native';
 import ListEmpty from '../../../components/ListEmpty/ListEmpty';
-import { equalityFnMarket } from '../../../utils/reduxChecker.utils';
+import { equalityFnMarket, equalityFnIndexPrice } from '../../../utils/reduxChecker.utils';
 import { emitMarketListEvent } from '../../../api/config.ws';
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils';
 import { getMatchingMarketList } from '../../../api/markets.api';
@@ -255,21 +255,7 @@ let count = 0
     //   console.log("item",item)
         let bool = index%2===0 ? true : false;
 
-        let index_price = useSelector(state=> state.marketReducer.index_price, (l,r)=>{
-            let change = false
-            if(r.length > 0){
-                 for(let i=0; i <l.length ;i++){
-                    let found = r.findIndex(rItem=> rItem.amout === l[i].amount)
-                    if(found > -1){
-                        change =  (_.isEqual(l[i], r[found]))
-                        if(!change){
-                            break;
-                        }
-                    }
-                 }
-            }
-            return change
-        })
+        let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
 
         if(!index_price){return <></>}
         return(
@@ -347,10 +333,10 @@ let count = 0
         const [socket, setSocket] = useState(null)
         const dispatch = useDispatch();
         const navigation = useNavigation()
-        let focus = navigation.isFocused()
+        // let focus = navigation.isFocused()
         // const user = useSelector(state=> state.authReducer.auth_attributes);
         const socketConnected = useSelector(state=> state.marketReducer.socketConnected, shallowEqual)
-
+        const [loading, setloading] = useState(true)
         const [marketPairs, setmarketPairs] = useState([])
         const [, setfavs] = useState([])
         // console.log("usert",user)
@@ -395,24 +381,39 @@ let count = 0
 
         useEffect(() => {
         console.log("socketConnected", socketConnected)
-        console.log("foucs", focus)
+        // console.log("foucs", focus)
             if(socket){
-                if(focus && !socketConnected){
+                if( !socketConnected){
                     emitMarketListEvent(marketPairs.map(i=>i.name))
                 } 
             }
             // return () => {
             //     if(socket) socket.disconnect()
             // }
-        }, [socket,navigation,focus])
+        }, [socket,navigation])
       
+        useEffect(() => {
+            const unsubscribe = navigation.addListener('focus', () => {
+                setloading(false)
+              });
+          
+              return unsubscribe;
+        }, [navigation])
+
+        useEffect(() => {
+            const unsubscribe = navigation.addListener('blur', () => {
+                setloading(true)
+              });
+          
+              return unsubscribe;
+        }, [navigation])
 
         return (
             <SafeAreaView style={{flex:1,}}>
                 <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                     <Toolbar title="Markets" backgroundColor={Colors.darkGray2} hasTabs />
                     
-                    <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
+                    {!loading && <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
 
                         <Tab  heading="Favourites" 
                         textStyle={{color:Colors.text.lightWhite,}} 
@@ -436,7 +437,7 @@ let count = 0
                         </Tab>
 
 
-                    </Tabs>
+                    </Tabs>}
 
                 </View>
             </SafeAreaView>

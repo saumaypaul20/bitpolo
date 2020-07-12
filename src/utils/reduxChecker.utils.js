@@ -1,5 +1,7 @@
 import _ from 'lodash';
 let eq = 0
+let depths = 0
+let d_reloads= 0
 export const  equalityFnMarket = (l,r) =>{
     // console.log("inside eqFn",l,r);
      eq++
@@ -23,6 +25,69 @@ export const  equalityFnMarket = (l,r) =>{
      
      return change
     }
+
+    
+export const  equalityFnDepths = (l,r) =>{
+    console.log("inside depths eqFn",l,r);
+     depths++
+
+     console.log("depths eq called", depths)
+     let change = false
+     if(r.length > 0){
+         
+        if(JSON.stringify(l) === JSON.stringify(r)){
+            //arrays are equal
+            change= true
+        }
+        //   for(let i=0; i <l.length ;i++){
+        //      for(let j=i; j< r.length; j++){
+        //         change = _.isEqual(l[i],r[j])
+        //          if(!change){
+        //             break;
+        //          }
+        //      }
+              
+        //   }
+     }
+     console.log("depths cahange eq fn----", change);
+     if(!change){
+         console.log("depth reloads count))))))))))))))))))))))))))))))))))))))))))))))))))",d_reloads);
+        d_reloads++
+    }
+     return change
+    }
+
+
+export const  equalityFnIndexPrice = (l,r)=>{
+    let change = false
+    if(r.length > 0){
+         for(let i=0; i <l.length ;i++){
+            let found = r.findIndex(rItem=> rItem.amout === l[i].amount)
+            if(found > -1){
+                change =  (_.isEqual(l[i], r[found]))
+                if(!change){
+                    break;
+                }
+            }
+         }
+    }
+    return change
+}
+export const  equalityFnBankslist = (l,r)=>{
+    let change = false
+    if(r.length > 0){
+         for(let i=0; i <l.length ;i++){
+            let found = r.findIndex(rItem=> rItem._id === l[i]._id)
+            if(found > -1){
+                change =  (_.isEqual(l[i], r[found]))
+                if(!change){
+                    break;
+                }
+            }
+         }
+    }
+    return change
+}
 
 
 

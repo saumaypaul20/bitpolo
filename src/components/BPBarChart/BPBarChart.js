@@ -4,8 +4,10 @@ import { StackedBarChart , Grid} from 'react-native-svg-charts'
 import { Colors } from '../../theme'
 import * as scale from 'd3-scale'
 import {Text} from 'react-native-svg'
+let id= 0
 const BPBarChart = ({data,color, rightTextColor}) => {
-    
+    // console.log(`bpcahrt ${color} left reload ^^^^^^^^^^`, id);
+    //     id++
     const colors = [ color, Colors.transparent,]
     const keys = ['p', 'a']
 

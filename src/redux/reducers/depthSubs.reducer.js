@@ -4,7 +4,8 @@ let eq = 0
 const init_state = {
     favourites: [],
     data: null,
-    socketConnected: false
+    socketConnected: false,
+    market_data:[]
 }
 
 const  depthSubsReducer = (state = init_state, action) => {

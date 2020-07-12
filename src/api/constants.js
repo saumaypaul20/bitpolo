@@ -47,3 +47,11 @@ export const SECURITY = {
     G2F_SETTINGS: '/user/g2f-settings',
     CHANGE_PASSWORD:'/user/change-password'
 }
+
+
+/* ------------------------------- PAYMENT API ------------------------------- */
+
+export const PAYMENT = {
+    ADD_BANK_ACCOUNT : '/payment/traditional-bank-account',
+    
+}
