@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import * as  ENDPOINT from '../api/constants'
 import { addMarketData, triggerMarketSocket } from '../redux/actions/markets.action';
 import { splitIt } from '../utils/converters';
-import { addDepthSubs } from '../redux/actions/depthSubs.action';
+import { addDepthSubs, addDepthAsks, addDepthBids } from '../redux/actions/depthSubs.action';
 import _ from 'lodash'
 // import { emitPingEvent } from './events.ws';
 // var io = require("socket.io-client/dist/socket.io");
@@ -60,15 +60,21 @@ export const startSocket=() => {
                 case "depth.update":
                     console.log(result)
                     console.log("depth_update res====^=^=^=^=^=",depth_update)
-                    
-                    depth_update++
+                    const state = store.getState();
+                    // const depths_data = state.depthSubsReducer.data
+                    // depth_update++
 
                     let res = result;
                   
                     res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse()
                     console.log("-----TEH RES ---- depth",res)
                     res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse()
-                    store.dispatch(addDepthSubs(res))
+
+                    
+                        store.dispatch(addDepthSubs(res))
+                        store.dispatch(addDepthAsks(res.params[1].asks))
+                        store.dispatch(addDepthBids(res.params[1].bids))
+            
                     // addDepthSubs
                     break
 
@@ -114,4 +120,8 @@ export const emitDepthSubscribeEvent = (lastpair, newpair) =>{
     socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.subscribe", "params" : [newpair] });
 }
 
+
+export const stopSocket = ()=>{
+    socket.disconnect()
+}
 

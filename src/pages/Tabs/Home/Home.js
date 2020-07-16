@@ -172,7 +172,7 @@ const Home = () => {
                 <Toolbar title="Exchange" backgroundColor={Colors.darkGray2}/>
 
                    <View style={{flex:1}}> 
-                    {!loading && <View style={{paddingVertical:8}}>
+                    {<View style={{paddingVertical:8}}>
                     <HomeHeaderComp />
 
                     <View style={{ flexDirection:'row', alignItems:'flex-start',   borderTopWidth:1, borderBottomWidth:1,borderColor: Colors.lightWhite }}>

@@ -1,9 +1,13 @@
 import { TYPES } from "../types"
-import { equalityFnMarket } from "../../utils/reduxChecker.utils"
+import { equalityFnMarket, equalityFnDepths } from "../../utils/reduxChecker.utils"
+import _ from 'lodash';
+
 let eq = 0
 const init_state = {
     favourites: [],
     data: null,
+    asks:[],
+    bids:[],
     socketConnected: false,
     market_data:[]
 }
@@ -19,35 +23,69 @@ const  depthSubsReducer = (state = init_state, action) => {
                     data: action.payload,
                 }
             }else if(state?.data){
-                // let index = state?.data?.findIndex(i=> i.params[0] === action.payload.params[0])
-                // console.log("inex found",index)
-                
-              
-                    //arr[index] = action.payload
-                    // console.log("eq2 bool val" ,equalityFnMarket(action.payload.params[1].asks,state?.data?.params[1].asks))
-                    // if(!equalityFnMarket(action.payload.params[1].asks,state?.data?.params[1]?.asks)){
-                     
-                        // console.log("eq2 passed" ,eq)
-                        // eq++
+                // let found = state?.data?.params[2]
+                if(state?.data?.params[2] === action?.payload?.params[2]){
+                    let diffasks= equalityFnDepths(action.payload.params[1].asks, state.data.params[1].asks)
+                    let diffbids= equalityFnDepths(action.payload.params[1].bids, state.data.params[1].bids)
+
+                    if(!diffasks || !diffbids){
                         state = {
                             ...state,
                             data: action.payload
                         }
-                    // }
-                // else{
-                //   console.log("no indx found..now in else");
-                  
-                //     state = {
-                //         ...state,
-                //         data: [...state.data, action.payload],
-                //     }
-                // }
+                    }
+                }else{
+                    state = {
+                        ...state,
+                        data: action.payload
+                    }
+                }
+                      
+                 
             }
             // state = {
             //     ...state,
             //     data: action.payload,
             //     favourites: action.payload.filter(item=> item.isFavourite)
             // }
+            break
+        case TYPES.ADD_DEPTH_ASKS:
+            //let arr = [...state.data]
+            if(state?.asks.length == 0){
+                
+                state = {
+                    ...state,
+                    asks: action.payload,
+                }
+            }else if(state?.asks.length> 0){
+                let found = _.differenceWith(state.asks, action.payload, _.isEqual);
+                if(found.length>0){
+                        state = {
+                            ...state,
+                            asks: action.payload
+                        }  
+                }         
+            }
+            break
+     
+      
+        case TYPES.ADD_DEPTH_BIDS:
+            //let arr = [...state.data]
+            if(state?.bids.length == 0){
+                
+                state = {
+                    ...state,
+                    bids: action.payload,
+                }
+            }else if(state?.bids.length > 0){
+                let found = _.differenceWith(state.bids, action.payload, _.isEqual);
+                if(found.length>0){
+                        state = {
+                            ...state,
+                            bids: action.payload
+                        }  
+                }         
+            }
             break
      
       

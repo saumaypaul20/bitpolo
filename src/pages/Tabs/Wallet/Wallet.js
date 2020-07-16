@@ -14,6 +14,8 @@ import { getAsset, getWalletBalance } from '../../../api/wallet.api'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
 import { useDispatch } from 'react-redux'
 import { fetchedWalletBalance, fetchedWalletAssets } from '../../../redux/actions/wallet.actions'
+import { getBankAccounts } from '../../../api/payments.api'
+import { addBanks } from '../../../redux/actions/payments.action'
 
 
 const rightEl =(val)=>{
@@ -48,13 +50,25 @@ const Wallet = () => {
 
                 dispatch(fetchedWalletBalance(balanceResult.data))
                 dispatch(fetchedWalletAssets(assetsResult.data))
-
+                getBanksList()
             }
+        }
+    },[])
+
+    const getBanksList = useCallback(async()=>{
+        // setloading(true)
+        let res  = await getBankAccounts();
+        if(res.status){
+            // setloading(false)
+            dispatch(addBanks(res.data))
         }
     },[])
 
     useEffect(() => {
         getWalletAsset()
+       
+
+
     }, [])
 
     return (

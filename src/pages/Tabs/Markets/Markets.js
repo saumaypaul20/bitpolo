@@ -373,6 +373,7 @@ let count = 0
         },[])
          
         useEffect(() => {
+            
             // getMarketPairs()
             if(!socketConnected){
                 callgetMarketList()
@@ -392,28 +393,28 @@ let count = 0
             // }
         }, [socket,navigation])
       
-        useEffect(() => {
-            const unsubscribe = navigation.addListener('focus', () => {
-                setloading(false)
-              });
+        // useEffect(() => {
+        //     const unsubscribe = navigation.addListener('focus', () => {
+        //         setloading(false)
+        //       });
           
-              return unsubscribe;
-        }, [navigation])
+        //       return unsubscribe;
+        // }, [navigation])
 
-        useEffect(() => {
-            const unsubscribe = navigation.addListener('blur', () => {
-                setloading(true)
-              });
+        // useEffect(() => {
+        //     const unsubscribe = navigation.addListener('blur', () => {
+        //         setloading(true)
+        //       });
           
-              return unsubscribe;
-        }, [navigation])
+        //       return unsubscribe;
+        // }, [navigation])
 
         return (
             <SafeAreaView style={{flex:1,}}>
                 <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                     <Toolbar title="Markets" backgroundColor={Colors.darkGray2} hasTabs />
                     
-                    {!loading && <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
+                    { <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
 
                         <Tab  heading="Favourites" 
                         textStyle={{color:Colors.text.lightWhite,}} 

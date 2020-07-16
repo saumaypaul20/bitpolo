@@ -115,40 +115,59 @@ const Tab1 = ({address, setView, activecoin, image}) =>{
 }
 
  
-const Tab2 = ({setView}) =>{
+const Tab2 = ({setView, activecoin, assetList}) =>{
     const dispatch = useDispatch()
     const [depositamount, setdepositamount] = useState(null)
     const [impsid, setimpsid] = useState(null)
     const [confirm_impsid, setconfirm_impsid] = useState(null)
     const [remarks, setremarks] = useState(null)
-    const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Traditional Payment', value: 0})
+    const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Traditional Payment', value: 'Traditional Payment'})
     const [showModal, setModal] = useState(false)
     const [activeTPM, setTPM] = useState(0)
     const [loading,setloading] = useState(true)
     const banks = useSelector(state=> state.payments.banks, equalityFnBankslist)
     const balance = useSelector(state=> state.walletReducer.balance.data["INR"], shallowEqual)
     // alert(JSON.stringify(balance))
-    const getBanksList = useCallback(async()=>{
-        setloading(true)
-        let res  = await getBankAccounts();
-        if(res.status){
-            setloading(false)
-            dispatch(addBanks(res.data))
-        }
-    },[])
+    // const getBanksList = useCallback(async()=>{
+    //     setloading(true)
+    //     let res  = await getBankAccounts();
+    //     if(res.status){
+    //         setloading(false)
+    //         dispatch(addBanks(res.data))
+    //     }
+    // },[])
 
     useEffect(() => {
-        getBanksList()
+        if(banks.length == 0){
+
+            getBanksList()
+        }
         
     }, [])
 
     const handleModal = ()=>{
         setModal(!showModal)
     }
+
+    const onmodasubmit = async () =>{
+        handleModal()
+
+        let payload = {
+            data:{
+                attributes:{
+                    asset:assetList.find(i=>i.asset_code === activecoin)._id,
+                    amount: depositamount,
+                    type_of_payment_process: pickerOrderVal
+                }
+            }
+        }
+
+        let res = null
+    }
     const options= [
-        {label: 'Traditional Payment', value: 0},
-        {label: 'Payment Gateway', value: 1},
-        {label: 'Instant Bank Transfer', value: 2},
+        {label: 'Traditional Payment', value: 'Traditional Payment'},
+        {label: 'Payment Gateway', value: 'Payment Gateway'},
+        {label: 'Instant Bank Transfer', value: 'Instant Bank Transfer'},
     ]
 
     const onTPMchange = (val)=>{
@@ -173,7 +192,7 @@ const Tab2 = ({setView}) =>{
     const viewRenderer = () =>{
         switch(pickerOrderVal){
             //Tradional Payment
-            case 0:
+            case 'Traditional Payment':
                 return (
                     <>
                         <BPText style={{fontSize:10, marginTop:16}}> For deposit use the following details only</BPText>
@@ -293,7 +312,7 @@ const Tab2 = ({setView}) =>{
 
 
                                             <View style={{alignSelf:'stretch', marginTop:40, marginBottom:10}}>
-                                                <BPButton label="Submit" style={{paddingHorizontal:60}} backgroundColor={Colors.darkGray} textColor={Colors.white} style={{borderRadius:0}}/>
+                                                <BPButton onPress={()=> onmodasubmit()} label="Submit" style={{paddingHorizontal:60}} backgroundColor={Colors.darkGray} textColor={Colors.white} style={{borderRadius:0}}/>
                                             </View>
 
 
@@ -307,7 +326,7 @@ const Tab2 = ({setView}) =>{
                     
                 )
             // Payment Gatweway
-            case 1:
+            case 'Payment Gateway':
                 return (
                     <>
                      <View style={{borderColor: Colors.lightWhite, borderRadius: 6, borderWidth:1, marginTop:8, paddingHorizontal:16}}>
@@ -330,7 +349,7 @@ const Tab2 = ({setView}) =>{
                     </>
 
                 )
-            case 2:
+            case 'Instant Bank Transfer':
                 return (
                     <>
                     
@@ -500,7 +519,7 @@ let Deposit = () => {
             callcreateassetaddress(item)
         }
 
-    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 image={{uri:assetList.find(i=> i.asset_code == activecoin).logo_url}} address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2  setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
+    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 image={{uri:assetList.find(i=> i.asset_code == activecoin).logo_url}} address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2 assetList={assetList} activecoin={activecoin} setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
 
     return (
         <SafeAreaView style={{flex:1}}>

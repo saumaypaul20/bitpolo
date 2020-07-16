@@ -6,6 +6,18 @@ export const addDepthSubs =(data) =>{
         payload: data,
       };
 }
+export const addDepthAsks =(data) =>{
+    return {
+        type: TYPES.ADD_DEPTH_ASKS,
+        payload: data,
+      };
+}
+export const addDepthBids =(data) =>{
+    return {
+        type: TYPES.ADD_DEPTH_BIDS,
+        payload: data,
+      };
+}
 
 // export const modifyFavs = (data) =>{
 //     return{

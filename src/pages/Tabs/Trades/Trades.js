@@ -63,25 +63,32 @@ const Trades = () => {
         }
     }
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            setloading(true)
-          });
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         setloading(true)
+    //       });
       
-          return unsubscribe;
-    }, [navigation])
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('blur', () => {
-            setloading(false)
-            setActiveTradePair(null)
-          });
+    //       return unsubscribe;
+    // }, [navigation])
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('blur', () => {
+    //         setloading(false)
+    //         setActiveTradePair(null)
+    //       });
       
-          return unsubscribe;
-    }, [navigation])
+    //       return unsubscribe;
+    // }, [navigation])
 
     useEffect(() => {
        // emitDepthSubscribeEvent()
        callListMarket()
+
+       return ()=>{
+        //    alert("trades unmounted")
+        
+           setActiveTradePair(null)
+           setloading(false)
+       }
     }, [])
 
     useEffect(() => {
@@ -135,7 +142,7 @@ const Trades = () => {
                     
                     {/* ---------------------------------- */}
 
-                  {(Lcurrencies.length == 0 || !found ) || !loading?  
+                  {(Lcurrencies.length == 0 || !found || !loading) ?  
                     <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
                   :
                     <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>

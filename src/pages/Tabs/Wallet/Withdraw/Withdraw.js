@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text, Image, Clipboard } from 'react-native'
+import { View, Text, Image, Clipboard, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Button, Icon, Toast, Root, Input } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
@@ -15,9 +15,10 @@ import Spacer from '../../../../common/Spacer/Spacer'
 import { useNavigation } from '@react-navigation/native'
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
 import BPInput from '../../../../common/BPInput/BPInput'
-import { useSelector } from 'react-redux'
+import { useSelector, shallowEqual } from 'react-redux'
 import PickerComp from '../../../../components/PickerComp/PickerComp'
 import { act } from 'react-test-renderer'
+import { equalityFnBankslist } from '../../../../utils/reduxChecker.utils'
 
 
 
@@ -26,7 +27,7 @@ console.log(activecoin)
        
     return (
         <Root>
-            <View>
+            <View style={{flex:1}}>
 
            
 
@@ -50,7 +51,7 @@ console.log(activecoin)
                     
                        <View style={{paddingVertical:20}}>
                             
-                            <BPInput label="Withdraw Amount" text={withdrawAmount} setText={(t)=>setWithdrawAmount(t)} rightEl={<BPText>{activecoin.asset_code}</BPText>}/>
+                            <BPInput label="Withdraw Amount" keyboardType={"number-pad"} text={withdrawAmount} setText={(t)=>setWithdrawAmount(t)} rightEl={<BPText>{activecoin.asset_code}</BPText>}/>
 
                             <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingTop:8}}>
                                 <BPText style={{fontSize:12}}>Fee: {activecoin.withdrawal_fee} {activecoin.asset_code}</BPText>
@@ -59,11 +60,11 @@ console.log(activecoin)
 
                             <Spacer space={20}/>
 
-                            <BPInput label="Address" text={address} setText={(t)=>setAddress(t)} rightEl={<Image source={Images.small_qr_code_icon} style={{width:16, height:16}} resizeMode="contain" />}/>
+                            <BPInput label="Address"   text={address} setText={(t)=>setAddress(t)} rightEl={<Image source={Images.small_qr_code_icon} style={{width:16, height:16}} resizeMode="contain" />}/>
 
                             <Spacer space={20}/>
 
-                            <BPInput label="Payment id" text={payment_id} setText={(t)=>setPaymentId(t)}/>
+                            <BPInput label="Payment id" keyboardType={"number-pad"} text={payment_id} setText={(t)=>setPaymentId(t)}/>
                             
                             
                        </View>
@@ -81,7 +82,36 @@ console.log(activecoin)
        </Root>
     )
 }
-const Tab2 = ({setView}) =>{
+const Tab2 = ({setView, activecoin}) =>{
+    const banks = useSelector(state=> state.payments.banks, equalityFnBankslist);
+    const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Traditional Payment', value: 0});
+    const [withdrawAmount, setWithdrawAmount] = useState(null)
+    const [remarks, setRemarks] = useState(null)
+    const balance = useSelector(state=> state.walletReducer.balance.data["INR"], shallowEqual);
+    const asset = activecoin._id
+    // console.log("BANKS00000000000000000000000", banks)
+
+    // const options= [
+    //     {label: 'Traditional Payment', value: 0},
+    //     {label: 'Payment Gateway', value: 1},
+    //     {label: 'Instant Bank Transfer', value: 2},
+    // ]
+    
+    const [options, setoptions] = useState([])
+    useEffect(()=>{
+        if(banks.length>0){
+            let arr = []
+            banks.forEach(item=>{
+                let option={
+                    label: `${item.account_name}-${item.type_of_account.bank_account.account_number}`,
+                    value: item._id
+                }
+                arr.push(option)
+            })
+            setoptions(arr)
+        }
+    },[])
+
     return (
         <View>
             <SettingsListItem  
@@ -95,12 +125,39 @@ const Tab2 = ({setView}) =>{
                 <View style={{marginHorizontal:16,}}>
                     
                     <WithdrawHeader 
-                            available={"0.00000000000 BTC"}
-                            order={"0.00000000000 BTC"}
-                            total={"0.00000000000 BTC"}
+                            available={`${balance.available.balance.toFixed(2)} INR`}
+                            order={`${balance.available.balance.toFixed(2)} INR`}
+                            total={`${balance.available.balance.toFixed(2)} INR`}
                          />
 
                     <Spacer space={30} />
+                 { banks?.length>0 ? 
+                    <View>
+
+                        <BPText style={{fontFamily: Fonts.FONT_MEDIUM}}>Withdraw to this bank account</BPText>
+
+                        <View style={{  alignSelf:'stretch',   borderWidth:1, borderColor: Colors.lightWhite, marginVertical:10, borderRadius:5}}>
+                                <PickerComp
+                                    items={options}
+                                    pickerVal = {pickerOrderVal}
+                                    setPickerVal = {setPickerOrderVal}
+                                    chevronPositionTop= {16}
+                                    height= {50}
+                                    width ={Dimensions.get("window").width - 32}
+                                    scale={0.9}
+                                    color={Colors.white}
+                                /> 
+                            </View>
+
+                            <BPInput label="Withdraw Amount" keyboardType={"number-pad"} text={withdrawAmount} setText={(t)=>setWithdrawAmount(t)} />
+                            <Spacer />
+                            <BPInput label="Remarks" text={remarks} setText={(t)=>setRemarks(t)} />
+                            <View style={{alignSelf:'center', marginTop:44}}>
+                                <BPButton label="Submit" style={{paddingHorizontal:60}} />
+                            </View>
+
+                    </View> 
+                    :  
                     <View style={{alignSelf:'stretch', borderColor: Colors.lightWhite, borderWidth:1, borderRadius:4, alignItems:'center', padding:20}}>
                             <BPText>Please add your bank detals for INR Withdrawals</BPText>
                             <BPButton 
@@ -108,7 +165,7 @@ const Tab2 = ({setView}) =>{
                             label="My Account" 
                             style={{paddingHorizontal:30, alignSelf:'center', marginTop:20}} />
                     </View>
-
+                }
                     <View style={{marginTop:24}}>
                        <WalletEndNotes notes={[
                            "Withdrawals up to 2 Lakhs made between 9AM to 10PM will be processed within one hour.",
@@ -132,9 +189,9 @@ const Withdraw = () => {
     const navigation = useNavigation()
     const [activeView, setView] = useState(1)
     const [activecoin, setactivecoin] = useState({asset_code:"BTC"})
-    const [withdrawAmount, setWithdrawAmount] = useState('')
-    const [address, setAddress] = useState('')
-    const [payment_id, setPaymentId] = useState('')
+    const [withdrawAmount, setWithdrawAmount] = useState(null)
+    const [address, setAddress] = useState(null)
+    const [payment_id, setPaymentId] = useState(null)
     const assetList = useSelector(state=>state.walletReducer.assets)
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
     // const address = '14gC4zbkDdfdn6DscjuYqBufndzzfddLQzGViAg5cdfHJ'
@@ -154,7 +211,7 @@ const Withdraw = () => {
    
 
    
-    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 withdrawAmount={withdrawAmount} address={address} payment_id={payment_id} setView={(v)=>setView(v)} activecoin={activecoin} setWithdrawAmount={(t)=>setWithdrawAmount(t)}  setAddress={(t)=>setAddress(t)}  setPaymentId={(r)=>setPaymentId(r)}  /> : <Tab2 setView={(v)=>setView(v)}/>,[activeView,activecoin])
+    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 withdrawAmount={withdrawAmount} address={address} payment_id={payment_id} setView={(v)=>setView(v)} activecoin={activecoin} setWithdrawAmount={(t)=>setWithdrawAmount(t)}  setAddress={(t)=>setAddress(t)}  setPaymentId={(r)=>setPaymentId(r)}  /> : <Tab2 activecoin={activecoin} setView={(v)=>setView(v)}/>,[activeView,activecoin])
     
     return (
         <SafeAreaView style={{flex:1}}>

@@ -23,6 +23,7 @@ import { addBanks } from '../../redux/actions/payments.action';
 const GoogleVerificationCode = (props) => {
     const navigation = useNavigation()
     let email = useSelector(state => state.authReducer.email);
+    let banks = useSelector(state=> state.payments.banks)
 
     const [code, setCode] = useState(''); //setting code initial STATE value        
     const [geo, setgeo] = useState(null); //setting code initial STATE value        
@@ -32,53 +33,22 @@ const GoogleVerificationCode = (props) => {
     const onSubmit = async() =>{
         setdisabled(true)
         if(props.route.params.type === 'login'){
-            goToScreen()
+            loginVerfivationFlow()
         }else if(props.route.params.type === 'add-bank'){
             // let res = await addBankAccount(props.route.params.body)
             // if(res.status){
             //     console.log(res)
             //     navigation.dispatch(StackActions.pop(2))
             // }
-            let payload = {
-                id: props.route.params.body.data.id,
-                attributes:{
-                    browser : await DeviceInfo.getModel(),
-                    ip : await getPublicIP(),
-                    is_browser : false,
-                    is_mobile : true,
-                    is_app : true,
-                    os : await DeviceInfo.getSystemName(),
-                    os_byte : await DeviceInfo.getSystemVersion(),
-                    g2f_code : code,
-                    country : geo.country,
-                    city : geo.city,
-                    region : geo.region
-                }
-            }
-            let res =  await g2fVerify(payload)
-            if(res.status){
-                let res = await addBankAccount(props.route.params.body)
-                if(res.status){
-                    console.log("added banks to server***********************",res)
-                    dispatch(addBanks(props.route.params.body.data.attributes));
-                    navigation.dispatch(StackActions.pop(2))
-                }else{
-                    alert("Something went wwrong!")
-                    navigation.dispatch(StackActions.pop(2))
-
-                }
-              
-            }else{
-                alert("Something went wrong. Please Re-enter the code")
-                setCode('')
-            }
+            addBankFlow()
         }
         else{
             changeUserPasswordFlow()
         }
     }
 
-    const goToScreen = async ()=>{
+
+    const loginVerfivationFlow = async ()=>{
         if(props.route.params.screen){
             navigation.dispatch(StackActions.pop(2))
         }else{
@@ -117,6 +87,43 @@ const GoogleVerificationCode = (props) => {
                 alert("Something went wrong!")
                 
             }
+        }
+    }
+
+    const addBankFlow = async ()=>{
+        let payload = {
+            id: props.route.params.body.data.id,
+            attributes:{
+                browser : await DeviceInfo.getModel(),
+                ip : await getPublicIP(),
+                is_browser : false,
+                is_mobile : true,
+                is_app : true,
+                os : await DeviceInfo.getSystemName(),
+                os_byte : await DeviceInfo.getSystemVersion(),
+                g2f_code : code,
+                country : geo.country,
+                city : geo.city,
+                region : geo.region
+            }
+        }
+        let res =  await g2fVerify(payload)
+        if(res.status){
+            props.route.params.body.data.attributes.g2f_code = code;
+            let res = await addBankAccount(props.route.params.body)
+            if(res.status){
+                console.log("added banks to server***********************",res)
+                dispatch(addBanks([...banks,props.route.params.body.data.attributes]));
+                navigation.dispatch(StackActions.pop(2))
+            }else{
+                alert("Something went wwrong!")
+                navigation.dispatch(StackActions.pop(2))
+
+            }
+          
+        }else{
+            alert("Something went wrong. Please Re-enter the code")
+            setCode('')
         }
     }
 

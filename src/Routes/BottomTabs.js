@@ -18,9 +18,10 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
     return (
        
-            <Tab.Navigator 
+            <Tab.Navigator
+              keyboardHidesTabBar 
               initialRouteName="Wallet"
-              unmountOnBlur
+              
               tabBarOptions={{
                 activeTintColor: Colors.tabActiveTintColor,
                 style:{
@@ -31,6 +32,7 @@ const BottomTabs = () => {
                 }}
 
               screenOptions={({ route }) => ({
+                 
                 tabBarIcon: ({ size, focused }) => {
                   let iconName, active, inactive;
                   if (route.name == "Home") {
@@ -59,11 +61,11 @@ const BottomTabs = () => {
                 })}
                 >
               
-                <Tab.Screen name="Home" component={Home} unmountOnBlur/>
-                <Tab.Screen name="Markets" component={Markets} unmountOnBlur/>
-                <Tab.Screen name="Trades" component={Trades} unmountOnBlur/>
-                <Tab.Screen name="Wallet" component={WalletTabRoutes} unmountOnBlur/>
-                <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false}} unmountOnBlur/>
+                <Tab.Screen name="Home" component={Home} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Markets" component={Markets} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Trades" component={Trades} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Wallet" component={WalletTabRoutes} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false, unmountOnBlur:true}}/>
                 
             </Tab.Navigator>
         
