@@ -82,6 +82,8 @@ const TradesLeftCol = () => {
            return <BPText style={{color: parseFloat(found.params[1].cp)>-1 ? Colors.lightGreen: Colors.red, padding:5}}>{`${parseFloat(found.params[1].l).toFixed(2)} ${found?.divider.b === "USDT" ? (parseFloat(found?.params[1]?.l)* index_price.find(i=> i.asset === "USDT").amount).toFixed(2): (parseFloat(found?.params[1]?.l)/ index_price.find(i=> i.asset === "USDT").amount).toFixed(2)}`}</BPText>
         }
     }
+    const renderItem1 =({ item }) => ( <ListItem item={item} type={1}/> )
+    const renderItem2 =({ item }) => ( <ListItem item={item}/> )
     
     return (
         <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
@@ -107,7 +109,7 @@ const TradesLeftCol = () => {
                   {asks?.length > 0 ? 
                      <FlatList
                      data={_.sortBy(asks, 'price').slice(asks.length - lineNumbers).reverse()}
-                     renderItem={({ item }) =>  <ListItem item={item} type={1}/> }
+                     renderItem={renderItem1}
                      //Setting the number of column
                     
                      keyExtractor={(item, index) => index.toString()}
@@ -131,7 +133,7 @@ const TradesLeftCol = () => {
                {(activeBPchart === "buys" || activeBPchart === "0") && <View style={{height:height,  alignSelf:'stretch', paddingBottom:2,width:'97%'}}>
                 {bids?.length > 0 ? <FlatList
                      data={_.sortBy(bids, 'price').slice(0,lineNumbers)}
-                     renderItem={({ item }) =>  <ListItem item={item}/> }
+                     renderItem={renderItem2}
                      //Setting the number of column
                      style={{alignSelf:'stretch'}}
                    

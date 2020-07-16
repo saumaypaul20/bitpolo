@@ -13,7 +13,7 @@ import BPText from '../../../common/BPText/BPText';
 import { useNavigation } from '@react-navigation/native';
 import ListEmpty from '../../../components/ListEmpty/ListEmpty';
 import { equalityFnMarket, equalityFnIndexPrice } from '../../../utils/reduxChecker.utils';
-import { emitMarketListEvent } from '../../../api/config.ws';
+import { emitMarketListEvent, emitUnsubMarketListEvent } from '../../../api/config.ws';
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils';
 import { getMatchingMarketList } from '../../../api/markets.api';
 import { addFavCoin, updateFavCoin } from '../../../api/users.api';
@@ -373,7 +373,7 @@ let count = 0
         },[])
          
         useEffect(() => {
-            
+            // alert("re_mounted markerts")
             // getMarketPairs()
             if(!socketConnected){
                 callgetMarketList()
@@ -401,13 +401,14 @@ let count = 0
         //       return unsubscribe;
         // }, [navigation])
 
-        // useEffect(() => {
-        //     const unsubscribe = navigation.addListener('blur', () => {
-        //         setloading(true)
-        //       });
+        useEffect(() => {
+            const unsubscribe = navigation.addListener('blur', () => {
+                setloading(true)
+                emitUnsubMarketListEvent(marketPairs)
+              });
           
-        //       return unsubscribe;
-        // }, [navigation])
+              return unsubscribe;
+        }, [navigation])
 
         return (
             <SafeAreaView style={{flex:1,}}>

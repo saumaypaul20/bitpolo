@@ -6,7 +6,7 @@ import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Colors, Images, Fonts } from '../../../theme'
 import PickerComp from '../../../components/PickerComp/PickerComp'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
-import { emitDepthSubscribeEvent } from '../../../api/config.ws'
+import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent } from '../../../api/config.ws'
 import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
 import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
 import { getMatchingMarketList } from '../../../api/markets.api'
@@ -63,21 +63,23 @@ const Trades = () => {
         }
     }
 
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         setloading(true)
-    //       });
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setloading(true)
+            emitDepthSubscribeEvent(currencyVal, activeTradePair)
+          });
       
-    //       return unsubscribe;
-    // }, [navigation])
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('blur', () => {
-    //         setloading(false)
-    //         setActiveTradePair(null)
-    //       });
+          return unsubscribe;
+    }, [navigation])
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            setloading(false)
+            setActiveTradePair(null)
+            emitDepthUnsubscribeEvent(currencyVal)
+          });
       
-    //       return unsubscribe;
-    // }, [navigation])
+          return unsubscribe;
+    }, [navigation])
 
     useEffect(() => {
        // emitDepthSubscribeEvent()

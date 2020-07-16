@@ -14,7 +14,7 @@ import { addMarketData, triggerMarketSocket } from '../../../redux/actions/marke
 var pako = require('pako');
 import * as ENDPOINT from '../../../api/constants'
 import { splitIt } from '../../../utils/converters'
-import { emitMarketListEvent } from '../../../api/config.ws'
+import { emitMarketListEvent, emitUnsubMarketListEvent } from '../../../api/config.ws'
 
  
 const ListItem = ({item}) =>{
@@ -160,6 +160,7 @@ const Home = () => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setloading(true)
+            emitUnsubMarketListEvent(marketPairs)
           });
       
           return unsubscribe;
@@ -171,7 +172,7 @@ const Home = () => {
             <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <Toolbar title="Exchange" backgroundColor={Colors.darkGray2}/>
 
-                   <View style={{flex:1}}> 
+                   <View style={{flex:1}}> z
                     {<View style={{paddingVertical:8}}>
                     <HomeHeaderComp />
 
