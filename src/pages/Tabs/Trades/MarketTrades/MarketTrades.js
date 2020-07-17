@@ -9,14 +9,15 @@ import BPText from '../../../../common/BPText/BPText'
 import { useSelector, shallowEqual } from 'react-redux'
 import { emitMarketDealsEvent } from '../../../../api/config.ws'
 import { equalityFnMarket, equalityFnDepths } from '../../../../utils/reduxChecker.utils'
- 
+import _ from 'lodash'
+import { convertDate, convertTime } from '../../../../utils/converters'
 
 const ListItem =({item,type}) =>{
     console.log("liostitem deals",item)
     return(
-        <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16, borderBottomColor: Colors.gray, borderBottomWidth:1, paddingVertical:16}}>
+        <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:32, borderBottomColor: Colors.gray, borderBottomWidth:1, paddingVertical:16}}>
             <View style={{ flex:1, alignItems:'flex-start'}}>
-                <BPText>{item.divider?.a} / {item.divider?.b}</BPText>
+                <BPText>{convertTime(item.t)}</BPText>
                 
             </View>
             
@@ -31,7 +32,7 @@ const ListItem =({item,type}) =>{
     )
 }
 
-const renderItem = ({item})=>( <ListItem item={item} type={item.s === "buy" ? 2 : 1} />)
+const renderItem = ({item})=>( <ListItem item={item.params[1][0]} type={item.params[1][0].s === "buy" ? 2 : 1} />)
 
 const MarketTrades = () => {
     let today = new Date()
@@ -39,7 +40,7 @@ const MarketTrades = () => {
     let [date2, setDate2] = useState(today);
 
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
-    const deals = useSelector(state=> state.dealsReducer.deals?.params[1], equalityFnDepths)
+    const deals = useSelector(state=> state.dealsReducer.deals, equalityFnDepths)
 
     useEffect(()=>{
         if(activeTradePair){
@@ -80,11 +81,11 @@ const MarketTrades = () => {
                     <View style={{flex:1,marginTop:16}}>
                                 {deals && 
                                 <FlatList
-                                data={deals}
+                                data={_.orderBy(deals, function(e){return e.params[1][0].t}, ['desc'])}
                                 renderItem={renderItem}
                                 //Setting the number of column
                                 
-                                keyExtractor={(item, index) => item.id}
+                                keyExtractor={(item, index) => index.toString()}
                                 />}
                                     {/* <ListItem type={1}/>
                                     <ListItem type={2}/>

@@ -30,7 +30,8 @@ export const WALLET = {
     GET_ASSET : '/wallet/assets',
     GET_BALANCE : '/wallet/balance',
     CREATE_ASSET_ADDRESS : '/wallet/asset-address',
-    WITHDRAW:'/wallet/withdraw'
+    WITHDRAW: '/wallet/withdraw',
+    DEPOSIT: '/payment/deposit',
 }
 
 /* ------------------------------- MARKETS API ------------------------------- */

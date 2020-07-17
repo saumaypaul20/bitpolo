@@ -172,7 +172,7 @@ const Home = () => {
             <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <Toolbar title="Exchange" backgroundColor={Colors.darkGray2}/>
 
-                   <View style={{flex:1}}> z
+                   <View style={{flex:1}}>
                     {<View style={{paddingVertical:8}}>
                     <HomeHeaderComp />
 

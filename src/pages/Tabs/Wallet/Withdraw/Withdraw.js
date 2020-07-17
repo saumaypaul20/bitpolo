@@ -19,6 +19,8 @@ import { useSelector, shallowEqual } from 'react-redux'
 import PickerComp from '../../../../components/PickerComp/PickerComp'
 import { act } from 'react-test-renderer'
 import { equalityFnBankslist } from '../../../../utils/reduxChecker.utils'
+import { withdraw } from '../../../../api/wallet.api'
+import { getPublicIP } from '../../../../utils/apiHeaders.utils'
 
 
 
@@ -112,6 +114,23 @@ const Tab2 = ({setView, activecoin}) =>{
         }
     },[])
 
+    const onsubmit = async() => {
+        let payload = {
+            data:{
+                attributes:{
+                    asset: asset,
+                    amount: withdrawAmount,
+                    ip: getPublicIP(),
+                    g2f_code: "122232",
+                    type_of_transfer_statement: "instant",
+                    remarks: remarks
+                }
+            }
+        }
+
+        // let res =  await withdraw(payload);
+    }
+
     return (
         <View>
             <SettingsListItem  
@@ -122,7 +141,7 @@ const Tab2 = ({setView, activecoin}) =>{
                 backgroundColor={Colors.darkGray3} 
                 rightElement={<ChevronRight/>}/>
 
-                <View style={{marginHorizontal:16,}}>
+                <View style={{marginHorizontal: 16,}}>
                     
                     <WithdrawHeader 
                             available={`${balance.available.balance.toFixed(2)} INR`}
@@ -153,7 +172,7 @@ const Tab2 = ({setView, activecoin}) =>{
                             <Spacer />
                             <BPInput label="Remarks" text={remarks} setText={(t)=>setRemarks(t)} />
                             <View style={{alignSelf:'center', marginTop:44}}>
-                                <BPButton label="Submit" style={{paddingHorizontal:60}} />
+                                <BPButton label="Submit" style={{paddingHorizontal:60}} onPress={()=> onsubmit()} />
                             </View>
 
                     </View> 

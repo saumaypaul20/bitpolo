@@ -23,6 +23,13 @@ export const convertDate = (time, divider ='/', reverse=false) => {
     return converted
 }
 
+export const convertTime =(time)=>{
+    const date = new Date(time);
+    console.log("************************DATE****************",date)
+    let converted = date.toTimeString().split(' ')[0]
+    return converted
+}
+
 export const roundNumber =(num, place=2) =>{
     console.log(num);
     

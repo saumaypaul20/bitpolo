@@ -126,6 +126,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
     const [activeTPM, setTPM] = useState(0)
     const [loading,setloading] = useState(true)
     const banks = useSelector(state=> state.payments.banks, equalityFnBankslist)
+    const bank = banks.find(i=> i.is_active)
     const balance = useSelector(state=> state.walletReducer.balance.data["INR"], shallowEqual)
     // alert(JSON.stringify(balance))
     // const getBanksList = useCallback(async()=>{
@@ -210,26 +211,26 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                 <BPText style={{fontSize:10, color:Colors.lightWhite}}>Account Type</BPText>
                             </View>
                             <View>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].account_name}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].label}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_number}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.ifsc}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_type}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.account_name}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.label}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.type_of_account.bank_account.account_number}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.type_of_account.bank_account.ifsc}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.type_of_account.bank_account.account_type}</BPText>
                             </View>
                             <View>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].account_name, "Name")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.account_name, "Name")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].label, "Label")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.label, "Label")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_number, "Account Number")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.type_of_account.bank_account.account_number, "Account Number")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.ifsc, "IFSC")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.type_of_account.bank_account.ifsc, "IFSC")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_type, "Account Type")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.type_of_account.bank_account.account_type, "Account Type")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
                             
@@ -239,7 +240,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
 
                        
                             <View style={{alignSelf:'center', marginTop:40}}>
-                                <BPButton label="ADD TRANSFER DETAILS" style={{paddingHorizontal:50}} onPress={handleModal} />
+                                <BPButton label="ADD TRANSFER DETAILS" style={{paddingHorizontal:50}} onPress={handleModal} disabled={ balance.available.balance <= 0}/>
                                 <Modal isVisible={showModal} onBackButtonPress={handleModal}>
                                     <View style= {{flex:1,}}>
 
@@ -272,7 +273,6 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                                     onChangeText ={(t)=> setdepositamount(t)}
                                                     style={{color: Colors.gray}}
                                                     keyboardType="number-pad"
-                                                    
                                                 />
                                             </View>
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
@@ -282,9 +282,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                                     value={impsid}
                                                     onChangeText ={(t)=> setimpsid(t)}
                                                     style={{color: Colors.gray}}
-                                                    keyboardType="number-pad"
                                                     secureTextEntry
-                                                    
                                                 />
                                             </View>
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
@@ -294,8 +292,6 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                                     value={confirm_impsid}
                                                     onChangeText ={(t)=> setconfirm_impsid(t)}
                                                     style={{color: Colors.gray}}
-                                                    keyboardType="number-pad"
-                                                    
                                                 />
                                             </View>
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
@@ -305,8 +301,6 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                                     value={remarks}
                                                     onChangeText ={(t)=> setremarks(t)}
                                                     style={{color: Colors.gray}}
-                                                 
-                                                    
                                                 />
                                             </View>
 
@@ -368,26 +362,26 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                 <BPText style={{fontSize:10, color:Colors.lightWhite}}>Account Type</BPText>
                             </View>
                             <View>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].account_name}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].label}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_number}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.ifsc}</BPText>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{banks[0].type_of_account.bank_account.account_type}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.account_name}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.label}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.type_of_account.bank_account.account_number}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.type_of_account.bank_account.ifsc}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{bank.type_of_account.bank_account.account_type}</BPText>
                             </View>
                             <View>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].account_name, "Name")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.account_name, "Name")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].label, "Label")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.label, "Label")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_number, "Account Number")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.type_of_account.bank_account.account_number, "Account Number")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.ifsc, "IFSC")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.type_of_account.bank_account.ifsc, "IFSC")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>copyText(banks[0].type_of_account.bank_account.account_type, "Account Type")}>
+                                <TouchableOpacity onPress={()=>copyText(bank.type_of_account.bank_account.account_type, "Account Type")}>
                                     <Image source={Images.copy_icon} style={{width:8,marginVertical:2, height:8,marginVertical:2, marginRight:12}} resizeMode="contain"/>
                                 </TouchableOpacity>
                             

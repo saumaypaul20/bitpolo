@@ -45,12 +45,27 @@ export const createAssetAddress = (body, toPassHeaders) => {
         }
     })
 }
+
 export const withdraw = (body, toPassHeaders) => {
     return new Promise ( async (resolve, reject)=>{    
         let headers = toPassHeaders
 
         let res = await fetchApi(REST.WALLET.WITHDRAW, "POST", body, 200, headers);
-        console.log("createAssetAddress res", res)
+        console.log("withdraw res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+export const deposit = (body, toPassHeaders) => {
+    return new Promise ( async (resolve, reject)=>{    
+        let headers = toPassHeaders
+
+        let res = await fetchApi(REST.WALLET.DEPOSIT, "POST", body, 200, headers);
+        console.log("deposit res", res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
         }else{

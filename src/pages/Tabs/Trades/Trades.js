@@ -74,7 +74,7 @@ const Trades = () => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setloading(false)
-            setActiveTradePair(null)
+            //+setActiveTradePair(null)
             emitDepthUnsubscribeEvent(currencyVal)
           });
       

@@ -4,36 +4,38 @@ import _ from 'lodash';
 
 let eq = 0
 const init_state = {
-    deals:null
+    deals:[]
 }
 
 const  dealsReducer = (state = init_state, action) => {
     switch (action.type) {
         case TYPES.ADD_DEALS_DATA:
-            if(!state?.deals){
-                
-                state = {
-                    ...state,
-                    deals: action.payload,
-                }
-            }else if(state?.deals){
-               
-                if(state?.deals?.params[0] === action?.payload?.params[0]){
-                    let diffdeals= equalityFnDepths(action.payload.params[1], state.deals.params[1])
-
-                    if(!diffdeals){
+            let found = state.deals.find(i=> i.params[0] === action.payload.params[0])
+            if(found){
+                let sameTime = state.deals.findIndex(i=>i.params[1][0].t === action.payload.params[1][0].t)
+                if(sameTime === -1){
+                    if(state.deals.length < 10){
                         state = {
                             ...state,
-                            deals: action.payload
+                            deals:[...state.deals,action.payload],
                         }
-                    }
-                }else{
-                    state = {
-                        ...state,
-                        deals: action.payload
+                    
+                    }else{
+                        state = {
+                            ...state,
+                            deals: [...state.deals.slice(1,10), action.payload]
+                        }
+                    
                     }
                 }
+            }else{
+                state = {
+                    ...state,
+                    deals:[action.payload],
+                }
             }
+                
+                
             break
 
         default:
