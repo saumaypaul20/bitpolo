@@ -39,7 +39,7 @@ export const getGeolocation = () => {
           
             let info = {
                 ip: res.IPv4,
-                region: res.statusText,
+                region: res.state,
                 country: res.country_name,
                 city: res.city
             }
@@ -117,7 +117,7 @@ export const loginUser = async (payload)=>{
         }
         
         let res = await fetchApi(REST.USERS.LOGIN, "POST", payloadToSend, 200, headers);
-        console.log(res)
+        console.log("login res",res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
         }else{
@@ -144,7 +144,7 @@ export const g2fVerify = async (payload)=>{
         }
         
         let res = await fetchApi(REST.USERS.G2F_VERIFY, "POST", body, 200, headers);
-        console.log(res)
+        console.log("g2f vrify res main",res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody})
         }else{

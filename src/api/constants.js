@@ -32,6 +32,7 @@ export const WALLET = {
     CREATE_ASSET_ADDRESS : '/wallet/asset-address',
     WITHDRAW: '/wallet/withdraw',
     DEPOSIT: '/payment/deposit',
+    GET_TRANSACTIONS: '/wallet/transactions/deposit'
 }
 
 /* ------------------------------- MARKETS API ------------------------------- */

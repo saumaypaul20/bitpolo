@@ -18,8 +18,9 @@ const Tab =({label , onPress, active, type}) =>{
 
 const TradesOrderTabs = () => {
     const [tab, settab] = useState(1)
-    const [inramount, setinramount] = useState(null)
-    const [cryptoamount, setcryptoamount] = useState(null)
+    const [inramount, setinramount] = useState('')
+    const [cryptoamount, setcryptoamount] = useState('')
+    const [total, settotal] = useState('')
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"Limit Order", value:"limit"})
     const orderItems = [{label:"Limit Order", value:"limit"}, {label:"Market Order", value:"market"}]
 
@@ -33,21 +34,22 @@ const TradesOrderTabs = () => {
 
     const onIncreaseINR = () => {
         let amt = inramount ? inramount : 0
-        setinramount(parseInt(amt) + 1)
+        setinramount((parseInt(amt) + 1).toString())
     }
     const onDecreaseINR = () => {
         if(inramount  < 1) {return}
         let amt = inramount ? inramount : 0
-        setinramount(amt - 1)
+        setinramount((parseInt(amt) - 1).toString())
     }
     const onIncreaseCRYPTO = () => {
         let amt = cryptoamount ? cryptoamount : 0
          
-        setcryptoamount(amt + 1)
+        setcryptoamount((parseInt(amt) + 1).toString())
     }
     const onDecreaseCRYPTO = () => {
         if(cryptoamount  < 1) {return}
-        setcryptoamount(cryptoamount - 1)
+        let amt = cryptoamount ? cryptoamount : 0
+        setcryptoamount((parseInt(amt) - 1).toString())
     }
 
     return (
@@ -75,11 +77,11 @@ const TradesOrderTabs = () => {
             </View>
 
             <View style={{marginRight:16, marginLeft:3}}>
-                <InputCounter label=  {pickerOrderVal == "limit" ?"Amount in INR" : "Market"} disabled={pickerOrderVal == "market"} onInputChange={(t)=> setinramount()} input={inramount} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR}/> 
+                <InputCounter label=  {pickerOrderVal == "limit" ?"Amount in INR" : "Market"} disabled={pickerOrderVal == "market"} onInputChange={(t)=> setinramount(t)} input={inramount} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR}/> 
 
                 <Spacer space={8}/>
 
-                <InputCounter label={`Amount in BTC`} onInputChange={(t)=> setcryptoamount()} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO}/>
+                <InputCounter label={`Amount in BTC`} onInputChange={(t)=> setcryptoamount(t)} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO}/>
 
                 <Spacer space={4}/>
 
@@ -94,7 +96,8 @@ const TradesOrderTabs = () => {
 
                {pickerOrderVal == "limit" &&  <>
                 <View style={{justifyContent:'center', alignItems:'center'}}>
-                    <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText>
+                    {/* <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText> */}
+                    <InputCounter label={`Total ()`} onInputChange={(t)=> settotal(t)} input={total} /> 
                 </View>
 
                 <View style={{flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>

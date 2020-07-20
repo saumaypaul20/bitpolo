@@ -7,7 +7,7 @@ import { Colors } from '../../theme'
 const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled}) => {
     return (
         <View style={{flex:1, flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
-        {!disabled && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
+        { onIncrease && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
                 <BPText>+</BPText>
             </Button>}
 
@@ -16,8 +16,8 @@ const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disa
             editable={!disabled}
             
             placeholderTextColor={Colors.white}
-            value={String(input)}
-            onChange={(text)=> onInputChange(text)}
+            value={ input}
+            onChangeText={(text)=> onInputChange((text))}
             keyboardType="phone-pad"
             style={{
                 alignSelf:'stretch', 
@@ -28,7 +28,7 @@ const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disa
                 fontSize:12
                 }} />
             
-          {!disabled && <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
+          { onDecrease && <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
                 <BPText>-</BPText>
             </Button>}
 

@@ -9,12 +9,10 @@ import LogoHeader from '../../common/LogoHeader/LogoHeader'
 import QueryActions from '../../components/QueryActions/QueryActions'
 import { Colors, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
-import Storage from '../../utils/storage.utils'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {loginUser} from '../../api/users.api'
-import publicIP from 'react-native-public-ip';
-import { getPublicIP } from '../../utils/apiHeaders.utils'
+import {loginUser, getGeolocation} from '../../api/users.api'
+import { getPublicIP, getDeviceId } from '../../utils/apiHeaders.utils'
 import { useNavigation } from '@react-navigation/native'
 import { TYPES } from '../../redux/types'
 
@@ -43,17 +41,24 @@ const Signin = () => {
           return
       }
 
+      let location = await getGeolocation()
+      if(!location){
+          alert("Unable to get your location");
+          return
+      }
+    //   alert(JSON.stringify(location))
       let payload = {
             is_browser: false,
             is_mobile: true,
             ip: ip,
-            country: "India",
             email: email,
             password: password,
+            browser: getDeviceId().browser,
+            os: getDeviceId().os
             
         }
 
-      let res = await loginUser(payload)
+      let res = await loginUser({...payload, ...location.data})
       console.log(res)
       if(!res.status){
             alert(res.data.data.attributes.message)

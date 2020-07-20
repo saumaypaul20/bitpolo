@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text, Image, Clipboard, Dimensions } from 'react-native'
+import { View, Text, Image, Clipboard, Dimensions, DeviceEventEmitter } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Button, Icon, Toast, Root, Input } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
@@ -26,14 +26,10 @@ import { getPublicIP } from '../../../../utils/apiHeaders.utils'
 
 const Tab1 = ({setView, activecoin, setWithdrawAmount, setAddress, setPaymentId,address,payment_id, withdrawAmount}) =>{
 console.log(activecoin)
-       
+const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.asset_code], shallowEqual);
     return (
         <Root>
             <View style={{flex:1}}>
-
-           
-
-
                 <SettingsListItem  
                     onPress= {()=> setView(2)}
                     noBorder 
@@ -45,9 +41,9 @@ console.log(activecoin)
                     <View style={{marginHorizontal:16}}>
                         
                         <WithdrawHeader 
-                            available={`0.00000000000 ${activecoin.asset_code}`}
-                            order={`0.00000000000 ${activecoin.asset_code}`}
-                            total={`0.00000000000 ${activecoin.asset_code}`}
+                            available={`${(balance.available.balance).toFixed(2)} ${activecoin.asset_code}`}
+                            order={`${(balance.freeze.balance).toFixed(2)} ${activecoin.asset_code}`}
+                            total={`${(balance.available.balance + balance.freeze.balance).toFixed(2)} ${activecoin.asset_code}`}
                          />
                        
                     
@@ -66,25 +62,25 @@ console.log(activecoin)
 
                             <Spacer space={20}/>
 
-                            <BPInput label="Payment id" keyboardType={"number-pad"} text={payment_id} setText={(t)=>setPaymentId(t)}/>
-                            
+                            {/* <BPInput label="Payment id" keyboardType={"number-pad"} text={payment_id} setText={(t)=>setPaymentId(t)}/> */}
                             
                        </View>
-
-                       
-                        
 
                        <WalletEndButtons />
 
                        <View style={{alignSelf:'center', marginTop:44}}>
-                            <BPButton label="Submit" style={{paddingHorizontal:60}} />
+                            <BPButton label="Submit" style={{paddingHorizontal:60}} disabled />
                         </View>
+
                     </View>
             </View>
        </Root>
     )
 }
 const Tab2 = ({setView, activecoin}) =>{
+    const navigation = useNavigation()
+    const google_auth = useSelector(state=> state.authReducer.auth_attributes.attributes.google_auth, shallowEqual)
+    const user_id = useSelector(state=> state.authReducer.auth_attributes.id, shallowEqual)
     const banks = useSelector(state=> state.payments.banks, equalityFnBankslist);
     const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Traditional Payment', value: 0});
     const [withdrawAmount, setWithdrawAmount] = useState(null)
@@ -114,21 +110,38 @@ const Tab2 = ({setView, activecoin}) =>{
         }
     },[])
 
+    const isDisabled = ()=>{
+        if(!remarks){
+            return true
+        }else if(!withdrawAmount){
+            return true
+        }
+        return false
+    }
+
     const onsubmit = async() => {
         let payload = {
             data:{
                 attributes:{
                     asset: asset,
                     amount: withdrawAmount,
-                    ip: getPublicIP(),
-                    g2f_code: "122232",
+                    ip: await getPublicIP(),
+                    
                     type_of_transfer_statement: "instant",
                     remarks: remarks
                 }
             }
         }
 
+        if(google_auth){
+            // alert(user_id)
+            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {payload: payload, id: user_id,type: 'withdraw confirmation'})
+        }else{
+            navigation.navigate(screenNames.OTP_SCREEN, {payload:payload, type: 'withdraw confirmation'})
+        }
         // let res =  await withdraw(payload);
+        setRemarks(null)
+        setWithdrawAmount(null)
     }
 
     return (
@@ -145,8 +158,8 @@ const Tab2 = ({setView, activecoin}) =>{
                     
                     <WithdrawHeader 
                             available={`${balance.available.balance.toFixed(2)} INR`}
-                            order={`${balance.available.balance.toFixed(2)} INR`}
-                            total={`${balance.available.balance.toFixed(2)} INR`}
+                            order={`${balance.freeze.balance.toFixed(2)} INR`}
+                            total={`${(balance.available.balance + balance.freeze.balance).toFixed(2)} INR`}
                          />
 
                     <Spacer space={30} />
@@ -172,7 +185,7 @@ const Tab2 = ({setView, activecoin}) =>{
                             <Spacer />
                             <BPInput label="Remarks" text={remarks} setText={(t)=>setRemarks(t)} />
                             <View style={{alignSelf:'center', marginTop:44}}>
-                                <BPButton label="Submit" style={{paddingHorizontal:60}} onPress={()=> onsubmit()} />
+                                <BPButton label="Submit" style={{paddingHorizontal:60}} onPress={()=> onsubmit()} disabled={isDisabled()} />
                             </View>
 
                     </View> 
@@ -210,7 +223,6 @@ const Withdraw = () => {
     const [activecoin, setactivecoin] = useState({asset_code:"BTC"})
     const [withdrawAmount, setWithdrawAmount] = useState(null)
     const [address, setAddress] = useState(null)
-    const [payment_id, setPaymentId] = useState(null)
     const assetList = useSelector(state=>state.walletReducer.assets)
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
     // const address = '14gC4zbkDdfdn6DscjuYqBufndzzfddLQzGViAg5cdfHJ'
@@ -230,7 +242,7 @@ const Withdraw = () => {
    
 
    
-    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 withdrawAmount={withdrawAmount} address={address} payment_id={payment_id} setView={(v)=>setView(v)} activecoin={activecoin} setWithdrawAmount={(t)=>setWithdrawAmount(t)}  setAddress={(t)=>setAddress(t)}  setPaymentId={(r)=>setPaymentId(r)}  /> : <Tab2 activecoin={activecoin} setView={(v)=>setView(v)}/>,[activeView,activecoin])
+    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 withdrawAmount={withdrawAmount} address={address}  setView={(v)=>setView(v)} activecoin={activecoin} setWithdrawAmount={(t)=>setWithdrawAmount(t)}  setAddress={(t)=>setAddress(t)}  setPaymentId={(r)=>setPaymentId(r)}  /> : <Tab2 activecoin={activecoin} setView={(v)=>setView(v)}/>,[activeView,activecoin])
     
     return (
         <SafeAreaView style={{flex:1}}>

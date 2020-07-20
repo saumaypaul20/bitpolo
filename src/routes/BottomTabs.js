@@ -14,7 +14,7 @@ const BottomTabs = () => {
     return (
        
             <Tab.Navigator
-              keyboardHidesTabBar 
+             
               initialRouteName="Wallet"
               
               tabBarOptions={{
@@ -23,7 +23,8 @@ const BottomTabs = () => {
                     backgroundColor:Colors.tabBackgroundColor,
                     borderTopWidth: 0,
                     
-                }
+                },
+                keyboardHidesTabBar:true
                 }}
 
               screenOptions={({ route }) => ({

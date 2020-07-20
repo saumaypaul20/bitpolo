@@ -12,7 +12,7 @@ import BPButton from '../../../../common/BPButton/BPButton'
 import WalletEndNotes from '../../../../components/WalletEndNotes/WalletEndNotes'
 import WalletEndButtons from '../../../../components/WalletEndButtons/WalletEndButtons'
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight'
-import { createAssetAddress } from '../../../../api/wallet.api'
+import { createAssetAddress, deposit } from '../../../../api/wallet.api'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../../utils/apiHeaders.utils'
 import { convertDate } from '../../../../utils/converters'
@@ -156,14 +156,22 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
         let payload = {
             data:{
                 attributes:{
-                    asset:assetList.find(i=>i.asset_code === activecoin)._id,
+                    asset:assetList.find(i=>i.asset_code === "INR")._id,
                     amount: depositamount,
                     type_of_payment_process: pickerOrderVal
                 }
             }
         }
 
-        let res = null
+        let res = await deposit(payload)
+        if(res.status){
+            //todo
+            console.log(res)
+            alert(`Amount ${payload.data.attributes.amount} INR is deposited!`)
+        }else{
+            alert(res.data.data.attributes.message)
+
+        }
     }
     const options= [
         {label: 'Traditional Payment', value: 'Traditional Payment'},
