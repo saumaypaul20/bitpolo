@@ -59,3 +59,7 @@ export function splitIt (str, occ){
         return {a:s3, b:s4}
     }
   }
+
+  export const toDecimal = (num, count=1000)=>{
+      return Math.round(num * count) / count
+  }

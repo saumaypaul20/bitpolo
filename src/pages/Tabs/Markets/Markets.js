@@ -99,6 +99,9 @@ let count = 0
 
         return(
             <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
+                {market_data.length === 0 ? 
+                <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/> 
+                :
                 <SwipeListView
                         useFlatList={true}
                         data={market_data}
@@ -134,10 +137,10 @@ let count = 0
                         stickyHeaderIndices={[0]}
                         keyExtractor={item => item.id}
                         contentContainerStyle={{flexGrow:1}}
-                        ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
+                      //  ListEmptyComponent={<ActivityIndicator color={Colors.white} size="large" />}
                         
                     
-                    />  
+                    /> } 
             </View>
         )
     }
@@ -415,7 +418,7 @@ let count = 0
                 <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                     <Toolbar title="Markets" backgroundColor={Colors.darkGray2} hasTabs />
                     
-                    { <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'40%', backgroundColor: Colors.darkGray2}} >
+                    { <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'30%', backgroundColor: Colors.darkGray2}} >
 
                         <Tab  heading="Favourites" 
                         textStyle={{color:Colors.text.lightWhite,}} 

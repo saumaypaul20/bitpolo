@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StatusBar} from 'react-native'
 import { Container, Content, Card , Button, View, Toast} from 'native-base'
 import LabelInput from '../../components/LabelInput/LabelInput'
@@ -19,12 +19,26 @@ import { TYPES } from '../../redux/types'
 const Signin = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    
+    const [loading, setloading] = useState(false)
     let email = useSelector(state => state.authReducer.email, shallowEqual);
     let password = useSelector(state => state.authReducer.password, shallowEqual);
 
+    const isDisabled =()=>{
+        if(email.length==0){
+           return true
+        }else if(password.length==0){
+           return true
+        }else if(loading){
+            return true
+        }
+
+       return false
+    }
+
     const onSignInPress = async () => {
       //  await Storage.set("login", true)
+      setloading(true)
+    
       let ip = await getPublicIP()
       if(!ip){
           Toast.show({
@@ -60,19 +74,23 @@ const Signin = () => {
 
       let res = await loginUser({...payload, ...location.data})
       console.log(res)
+     
       if(!res.status){
             alert(res.data.data.attributes.message)
+            setloading(false)
       }else{ 
 
         if(res.data.data.attributes.google_auth){
             navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res.data.data, type:'login'})
+            setloading(false)
             return
         }else{
-
+            setloading(false)
           alert(res.data.data.attributes.message)
           dispatch(saveUserId(res.data.data.id))
           navigation.navigate(screenNames.OTP_SCREEN, {data: res.data.data})}
         }
+       
     }
     
     return (
@@ -92,7 +110,7 @@ const Signin = () => {
                                     <BPText uppercase={false} style={{ padding: 20, fontSize: 13, color: Colors.lightWhite, fontFamily: Fonts.FONT_REGULAR }}>Forgot Password?</BPText>
                                 </Button>
 
-                                <BPButton label="Sign in" onPress={()=> onSignInPress()} style={{alignSelf:'stretch'}}/>
+                                <BPButton loading={loading} label="Sign in" onPress={()=> onSignInPress()} style={{alignSelf:'stretch'}} disabled={isDisabled()}/>
                             </View>
                         </Card>
                         

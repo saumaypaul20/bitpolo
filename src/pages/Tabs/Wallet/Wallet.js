@@ -12,10 +12,12 @@ import { screenNames } from '../../../routes/screenNames/screenNames'
 import BPSwitch from '../../../common/BPSwitch/BPSwitch'
 import { getAsset, getWalletBalance } from '../../../api/wallet.api'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchedWalletBalance, fetchedWalletAssets } from '../../../redux/actions/wallet.actions'
 import { getBankAccounts } from '../../../api/payments.api'
 import { addBanks } from '../../../redux/actions/payments.action'
+import { equalityFnIndexPrice } from '../../../utils/reduxChecker.utils'
+import { toDecimal } from '../../../utils/converters'
 
 
 const rightEl =(val)=>{
@@ -29,7 +31,7 @@ const Wallet = () => {
     const [assets, setassets] = useState([])
     const [balance, setbalance] = useState(null)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+    let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
     const sortByAlpha =()=>{
          console.log('soon')
     }
@@ -71,6 +73,17 @@ const Wallet = () => {
 
     }, [])
 
+    const totalBTC = ()=>{
+        if(!balance){return}
+        let arr = Object.values(balance)
+        let res = arr.reduce((acc=0, cur)=>{
+            console.log(acc)
+              return  parseFloat(acc + cur.available?.btc)
+               
+              
+        },0)
+       return res
+    }
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor={ Colors.primeBG} />
@@ -79,9 +92,12 @@ const Wallet = () => {
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, justifyContent:'flex-start'}}>
                         
-                        <BPText style={{paddingHorizontal:12, fontSize:12, paddingVertical:16, backgroundColor: Colors.darkGray2}}>
-                            Total Value (BTC) <BPText style={{fontFamily:Fonts.FONT_MEDIUM, fontSize:11,}}> 0 BTC</BPText> = $0.00
+                        {balance ? <BPText style={{paddingHorizontal:12, fontSize:12, paddingVertical:16, backgroundColor: Colors.darkGray2}}>
+                            Total Value (BTC) <BPText style={{fontFamily:Fonts.FONT_MEDIUM, fontSize:11,}}> {toDecimal(totalBTC(),100000)} BTC</BPText> = $ {toDecimal(totalBTC()*index_price.find(i=> i.asset === "USDT").amount,100000)}
                         </BPText>
+                        :
+                        <ActivityIndicator color={Colors.white} size="small"/>
+                        }
 
                         <View style={{
                             backgroundColor:  Colors.darkGray3,
@@ -90,7 +106,10 @@ const Wallet = () => {
 
                             <BPText>Estimated value</BPText>
  
-                            <BPText style={{fontFamily: Fonts.FONT_MEDIUM, letterSpacing: 1.89, fontSize:24}}>0.00000000 BTC </BPText>
+                          {balance ?  <BPText style={{fontFamily: Fonts.FONT_MEDIUM, letterSpacing: 1.89, fontSize:24}}>{toDecimal(totalBTC(),100000000)} BTC </BPText>
+                          :
+                          <ActivityIndicator color={Colors.white} size="large" />
+                          }
 
                             <View style={{ flexDirection:'row', alignItems:'center', paddingTop:20,}}>
                                 <BPButtonSmall 
