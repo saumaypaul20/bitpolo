@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'react-native'
+import { StatusBar,Text,TextInput } from 'react-native'
 import {Root} from 'native-base'
 import Routes from './src/routes/Routes';
 import Storage from './src/utils/storage.utils';
@@ -14,6 +14,12 @@ import { startSocket } from './src/api/config.ws';
 import { getIndexPrice } from './src/api/markets.api';
 import { storeIndexPrice } from './src/redux/actions/markets.action';
 const App= () => {
+
+  Text.defaultProps = {};
+  Text.defaultProps.maxFontSizeMultiplier = 1;
+
+  TextInput.defaultProps = {};
+  TextInput.defaultProps.maxFontSizeMultiplier = 1;
   const dispatch = useDispatch()
   const [login, setLogin] = useState(null)
 

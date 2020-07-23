@@ -6,8 +6,18 @@ import PickerComp from '../PickerComp/PickerComp'
 import InputCounter from '../InputCounter/InputCounter'
 import Spacer from '../../common/Spacer/Spacer'
 import BPButton from '../../common/BPButton/BPButton'
+import { useSelector, shallowEqual } from 'react-redux'
+import { splitIt } from '../../utils/converters'
 
-
+const divideIt = (i) =>{
+    let divider={}
+                if(i.match("INR")){
+                    divider= splitIt(i, "INR")
+                }else if(i.match("USDT")){
+                    divider= splitIt(i, "USDT")
+                }
+                return divider
+}
 const Tab =({label , onPress, active, type}) =>{
     return (
         <TouchableOpacity style={{ flex:1, justifyContent:'center', alignItems:'center', flexDirection:'row', borderBottomColor:Colors.white, borderBottomWidth: active === type ? 1 : 0 , paddingVertical:10}} onPress={()=>onPress()}>
@@ -18,10 +28,20 @@ const Tab =({label , onPress, active, type}) =>{
 
 const TradesOrderTabs = () => {
     const [tab, settab] = useState(1)
-    const [inramount, setinramount] = useState(null)
-    const [cryptoamount, setcryptoamount] = useState(null)
+    const [inramount, setinramount] = useState('')
+    const [cryptoamount, setcryptoamount] = useState('')
+    const [total, settotal] = useState(parseInt(inramount) * parseInt(cryptoamount))
+    const [range, setrange]= useState(null)
+    const [parts, ] = useState([25,50,75,100])    
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"Limit Order", value:"limit"})
     const orderItems = [{label:"Limit Order", value:"limit"}, {label:"Market Order", value:"market"}]
+    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
+    const balance = useSelector(state=> state.walletReducer.balance.data[divideIt(activeTradePair).b], shallowEqual);
+
+    const setTotal =(t)=>{
+        settotal(parseInt(t).toString())
+
+    }
 
     const onsubmit = ()=>{
         if(tab === 1 ){
@@ -33,21 +53,32 @@ const TradesOrderTabs = () => {
 
     const onIncreaseINR = () => {
         let amt = inramount ? inramount : 0
-        setinramount(parseInt(amt) + 1)
+        setinramount((parseInt(amt) + 1).toString())
     }
     const onDecreaseINR = () => {
         if(inramount  < 1) {return}
         let amt = inramount ? inramount : 0
-        setinramount(amt - 1)
+        setinramount((parseInt(amt) - 1).toString())
     }
     const onIncreaseCRYPTO = () => {
         let amt = cryptoamount ? cryptoamount : 0
          
-        setcryptoamount(amt + 1)
+        setcryptoamount((parseInt(amt) + 1).toString())
     }
     const onDecreaseCRYPTO = () => {
         if(cryptoamount  < 1) {return}
-        setcryptoamount(cryptoamount - 1)
+        let amt = cryptoamount ? cryptoamount : 0
+        setcryptoamount((parseInt(amt) - 1).toString())
+    }
+    const onIncreaseTOTAL = () => {
+        let amt = total ? total : 0
+         
+        settotal((parseInt(amt) + 1).toString())
+    }
+    const onDecreaseTOTAL = () => {
+        if(total  < 1) {return}
+        let amt = total ? total : 0
+        settotal((parseInt(amt) - 1).toString())
     }
 
     return (
@@ -75,33 +106,43 @@ const TradesOrderTabs = () => {
             </View>
 
             <View style={{marginRight:16, marginLeft:3}}>
-                <InputCounter label=  {pickerOrderVal == "limit" ?"Amount in INR" : "Market"} disabled={pickerOrderVal == "market"} onInputChange={(t)=> setinramount()} input={inramount} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR}/> 
+                <InputCounter label=  {pickerOrderVal == "limit" ?"Amount in INR" : "Market"} disabled={pickerOrderVal == "market"} onInputChange={(t)=> setinramount(t)} input={inramount} onIncrease={pickerOrderVal == "limit"  ?onIncreaseINR: null} onDecrease={pickerOrderVal == "limit"  ?onDecreaseINR: null}/> 
 
                 <Spacer space={8}/>
 
-                <InputCounter label={`Amount in BTC`} onInputChange={(t)=> setcryptoamount()} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO}/>
-
+              
+                {pickerOrderVal == "market" ?  <>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                    {/* <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText> */}
+                    <InputCounter label={`Total (${divideIt(activeTradePair).b})`} onInputChange={(t)=> setTotal(t)} input={total} onIncrease={onIncreaseTOTAL} onDecrease={onDecreaseTOTAL}/> 
+                </View></>
+                :
+                <InputCounter label={`Amount in ${divideIt(activeTradePair).a}`} onInputChange={(t)=> setcryptoamount(t)} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO}/>
+                }
                 <Spacer space={4}/>
 
                 <View style={{flexDirection:'row', alignItems:'center',justifyContent:'space-around', padding:4, opacity:0.5}}>
-                        <BPText style={styles.percentages}>25%</BPText>
-                        <BPText style={styles.percentages}>50%</BPText>
-                        <BPText style={styles.percentages}>75%</BPText>
-                        <BPText style={styles.percentages}>100%</BPText>
+                    {
+                        parts.map((i,index)=>{
+                            return  <TouchableOpacity key={index.toString()} onPress={()=>setrange(i)}><BPText style={[styles.percentages, {opacity: range === i ?1:0.7}]}>{i}%</BPText></TouchableOpacity>
+                        })
+                    }
                 </View>
 
                 <Spacer space={17}/>
 
                {pickerOrderVal == "limit" &&  <>
                 <View style={{justifyContent:'center', alignItems:'center'}}>
-                    <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText>
-                </View>
+                    {/* <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText> */}
+                    <InputCounter label={`Total (${divideIt(activeTradePair).b})`} onInputChange={(t)=> setTotal(t)} input={total} /> 
+                </View></>
+                }
 
                 <View style={{flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
                     <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Avbl</BPText>
-                    <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>{`0`} BTC</BPText>
+                    <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>{`${balance.available.balance}`} {divideIt(activeTradePair).b}</BPText>
                 </View>
-                </>}
+                
 
                 <Spacer space={8}/>
 
@@ -116,7 +157,7 @@ const TradesOrderTabs = () => {
 
 
 const styles= StyleSheet.create({
-    percentages:{borderWidth:1, borderStyle:'dashed', borderColor: Colors.lightWhite, borderRadius:1, padding:6, textAlign:'center'}
+    percentages:{borderWidth:1, borderStyle:'dashed', borderColor:Colors.white, color:Colors.white, borderRadius:1, padding:6, textAlign:'center'}
 })
 
 

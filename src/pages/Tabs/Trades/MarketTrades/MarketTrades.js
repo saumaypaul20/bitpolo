@@ -1,17 +1,23 @@
-import React, { useState } from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, FlatList, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Icon } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
 import { Colors, Images } from '../../../../theme'
 import FilterFAB from '../../../../components/FilterFAB/FilterFAB'
 import BPText from '../../../../common/BPText/BPText'
+import { useSelector, shallowEqual } from 'react-redux'
+import { emitMarketDealsEvent } from '../../../../api/config.ws'
+import { equalityFnMarket, equalityFnDepths } from '../../../../utils/reduxChecker.utils'
+import _ from 'lodash'
+import { convertDate, convertTime } from '../../../../utils/converters'
 
-const ListItem =({type}) =>{
+const ListItem =({item,type}) =>{
+    console.log("liostitem deals",item)
     return(
-        <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16, borderBottomColor: Colors.gray, borderBottomWidth:1, paddingVertical:16}}>
+        <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:32, borderBottomColor: Colors.gray, borderBottomWidth:1, paddingVertical:16}}>
             <View style={{ flex:1, alignItems:'flex-start'}}>
-                <BPText>BTC / USDT</BPText>
+                <BPText>{convertTime(item.t)}</BPText>
                 
             </View>
             
@@ -26,10 +32,22 @@ const ListItem =({type}) =>{
     )
 }
 
+const renderItem = ({item})=>( <ListItem item={item.params[1][0]} type={item.params[1][0].s === "buy" ? 2 : 1} />)
+
 const MarketTrades = () => {
     let today = new Date()
     let [date1, setDate1] = useState(today);
     let [date2, setDate2] = useState(today);
+
+    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
+    const deals = useSelector(state=> state.dealsReducer.deals, equalityFnDepths)
+
+    useEffect(()=>{
+        if(activeTradePair){
+           
+            emitMarketDealsEvent(activeTradePair)
+        }
+    },[])
 
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
@@ -61,20 +79,22 @@ const MarketTrades = () => {
 
 
                     <View style={{flex:1,marginTop:16}}>
-                               
-                                    <ListItem type={1}/>
+                                {deals && 
+                                <FlatList
+                                data={_.orderBy(deals, function(e){return e.params[1][0].t}, ['desc'])}
+                                renderItem={renderItem}
+                                //Setting the number of column
+                                
+                                keyExtractor={(item, index) => index.toString()}
+                                />}
+                                    {/* <ListItem type={1}/>
                                     <ListItem type={2}/>
                                     <ListItem type={2}/>
                                     <ListItem type={1}/>
-                                    <ListItem type={2}/>
+                                    <ListItem type={2}/> */}
 
                                 </View>
-
-
-                     
-
-
-                       {/* <FilterFAB /> */}
+ 
                 </Content>
             </Container>
         </SafeAreaView>

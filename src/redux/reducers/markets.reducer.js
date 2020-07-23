@@ -25,12 +25,9 @@ const  marketReducer = (state = init_state, action) => {
                 let index = state?.data?.findIndex(i=> i.params[0] === action.payload.params[0])
                 console.log("inex found",index)
                 if(index > -1){
-              
-                    //arr[index] = action.payload
-                    console.log("eq2 bool val" ,equalityFnMarket([action.payload],[arr[index]]))
+                    // console.log("eq2 bool val" ,equalityFnMarket([action.payload],[arr[index]]))
                     if(!equalityFnMarket([action.payload],[arr[index]])){
-                     
-                        console.log("eq2 passed" ,eq)
+                        // console.log("eq2 passed" ,eq)
                         eq++
                         state = {
                             ...state,

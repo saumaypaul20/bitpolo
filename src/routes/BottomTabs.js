@@ -1,15 +1,10 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native';
+import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Signin from '../pages/Signin/Signin';
-import Signup from '../pages/Signup/Signup';
 import Home from '../pages/Tabs/Home/Home';
 import Markets from '../pages/Tabs/Markets/Markets';
 import Trades from '../pages/Tabs/Trades/Trades';
-import Wallet from '../pages/Tabs/Wallet/Wallet';
 import Account from '../pages/Tabs/Account/Account';
-import { Icon } from 'native-base';
 import { Colors, Images } from '../theme';
 import WalletTabRoutes from './WalletTabRoutes';
 
@@ -18,19 +13,22 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
     return (
        
-            <Tab.Navigator 
+            <Tab.Navigator
+             
               initialRouteName="Wallet"
-              unmountOnBlur
+              
               tabBarOptions={{
                 activeTintColor: Colors.tabActiveTintColor,
                 style:{
                     backgroundColor:Colors.tabBackgroundColor,
                     borderTopWidth: 0,
                     
-                }
+                },
+                keyboardHidesTabBar:true
                 }}
 
               screenOptions={({ route }) => ({
+                 
                 tabBarIcon: ({ size, focused }) => {
                   let iconName, active, inactive;
                   if (route.name == "Home") {
@@ -59,11 +57,11 @@ const BottomTabs = () => {
                 })}
                 >
               
-                <Tab.Screen name="Home" component={Home} unmountOnBlur/>
-                <Tab.Screen name="Markets" component={Markets} unmountOnBlur/>
-                <Tab.Screen name="Trades" component={Trades} unmountOnBlur/>
-                <Tab.Screen name="Wallet" component={WalletTabRoutes} unmountOnBlur/>
-                <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false}} unmountOnBlur/>
+                <Tab.Screen name="Home" component={Home} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Markets" component={Markets} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Trades" component={Trades} options={{unmountOnBlur:false}}/>
+                <Tab.Screen name="Wallet" component={WalletTabRoutes} options={{unmountOnBlur:true}}/>
+                <Tab.Screen name="Account" component={Account} options={{tabBarVisible:false,unmountOnBlur:true }}/>
                 
             </Tab.Navigator>
         

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Image, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native'
 import BPText from '../../common/BPText/BPText'
 import { Images, Colors } from '../../theme'
 import BPBarChart from '../BPBarChart/BPBarChart'
@@ -11,6 +11,17 @@ import { useSelector, shallowEqual } from 'react-redux'
 import _ from 'lodash'
 import { equalityFnMarket, equalityFnDepths, equalityFnIndexPrice } from '../../utils/reduxChecker.utils'
 let id= 0
+
+
+const ListItem = ({item, type})=>{
+    return(
+        <View style={{flexDirection:'row', alignSelf:'stretch', justifyContent:'space-between',marginVertical:3, paddingVertical:2, marginHorizontal:16,}}>
+            <BPText style={{fontSize:12, color: type == 1 ? Colors.red : Colors.lightGreen}}>{item.a.toFixed(2)}</BPText>
+            <BPText style={{fontSize:12, color: type == 1 ? Colors.red : Colors.lightGreen}}>{item.p.toFixed(2)}</BPText>
+            
+        </View>
+    )
+}
 const TradesLeftCol = () => {
         // console.log("trades left reload +++++++++++++++++", id);
         // id++
@@ -19,8 +30,8 @@ const TradesLeftCol = () => {
    
     let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
     // const depths = useSelector(state=> state.depthSubsReducer.data)
-    const asks = useSelector(state=> state.depthSubsReducer.data?.params[1]?.asks, equalityFnDepths)
-    const bids = useSelector(state=> state.depthSubsReducer.data?.params[1]?.bids, equalityFnDepths)
+    const asks = useSelector(state=> state.depthSubsReducer.asks, equalityFnDepths)
+    const bids = useSelector(state=> state.depthSubsReducer.bids, equalityFnDepths)
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
     //  console.log("depths asks left **********", asks)
     //  console.log("depths bids left **********", bids)
@@ -71,6 +82,8 @@ const TradesLeftCol = () => {
            return <BPText style={{color: parseFloat(found.params[1].cp)>-1 ? Colors.lightGreen: Colors.red, padding:5}}>{`${parseFloat(found.params[1].l).toFixed(2)} ${found?.divider.b === "USDT" ? (parseFloat(found?.params[1]?.l)* index_price.find(i=> i.asset === "USDT").amount).toFixed(2): (parseFloat(found?.params[1]?.l)/ index_price.find(i=> i.asset === "USDT").amount).toFixed(2)}`}</BPText>
         }
     }
+    const renderItem1 =({ item }) => ( <ListItem item={item} type={1}/> )
+    const renderItem2 =({ item }) => ( <ListItem item={item}/> )
     
     return (
         <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
@@ -92,7 +105,16 @@ const TradesLeftCol = () => {
                            
                {/* Red Chart 1 */}
               {(activeBPchart === "sells" || activeBPchart === "0") && <View style={{height:height, alignSelf:'stretch',width:'97%'}}>
-                  {asks?.length > 0 ? <BPBarChart data={_.sortBy(asks, 'price').slice(asks.length - lineNumbers).reverse()} color={Colors.lightRed} rightTextColor={Colors.red}/> : <ActivityIndicator size="large" color={Colors.white} />}
+                  {/* {asks?.length > 0 ? <BPBarChart data={_.sortBy(asks, 'price').slice(asks.length - lineNumbers).reverse()} color={Colors.lightRed} rightTextColor={Colors.red}/> : <ActivityIndicator size="large" color={Colors.white} />} */}
+                  {asks?.length > 0 ? 
+                     <FlatList
+                     data={_.sortBy(asks, 'price').slice(asks.length - lineNumbers).reverse()}
+                     renderItem={renderItem1}
+                     //Setting the number of column
+                    
+                     keyExtractor={(item, index) => index.toString()}
+                     />
+                  : <ActivityIndicator size="large" color={Colors.white} />}
                </View>
 }
                 {/* Divider with Value */}
@@ -106,8 +128,17 @@ const TradesLeftCol = () => {
                 </View>
                
                {/* Red Chart 2 */}
+               {/* {(activeBPchart === "buys" || activeBPchart === "0") && <View style={{height:height,  alignSelf:'stretch', paddingBottom:2,width:'97%'}}>
+                {bids?.length > 0 ? <BPBarChart data={_.sortBy(bids, 'price').slice(0,lineNumbers)} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />} */}
                {(activeBPchart === "buys" || activeBPchart === "0") && <View style={{height:height,  alignSelf:'stretch', paddingBottom:2,width:'97%'}}>
-                {bids?.length > 0 ? <BPBarChart data={_.sortBy(bids, 'price').slice(0,lineNumbers)} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />}
+                {bids?.length > 0 ? <FlatList
+                     data={_.sortBy(bids, 'price').slice(0,lineNumbers)}
+                     renderItem={renderItem2}
+                     //Setting the number of column
+                     style={{alignSelf:'stretch'}}
+                   
+                     keyExtractor={(item, index) => index.toString()}
+                     /> :  <ActivityIndicator size="large" color={Colors.white} />}
                </View>
 }
                 <View style={{ alignSelf:'stretch', flexDirection:'row', paddingHorizontal:16, paddingVertical:8}}>

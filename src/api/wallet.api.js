@@ -1,6 +1,6 @@
 import * as REST from "./constants";
 import { fetchApi } from "./config.api";
-import { getDeviceId } from "../utils/apiHeaders.utils";
+import { getDeviceId, getAuthToken, getInfoAuthToken } from "../utils/apiHeaders.utils";
 
 
 export const getAsset = (toPassHeaders) => {
@@ -40,6 +40,42 @@ export const createAssetAddress = (body, toPassHeaders) => {
         console.log("createAssetAddress res", res)
         if(!res?.responseBody?.errors){
             resolve({status: true , data:res.responseBody.data.attributes.address})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+export const withdraw = (body) => {
+    return new Promise ( async (resolve, reject)=>{    
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(REST.WALLET.WITHDRAW, "POST", body, 200, headers);
+        console.log("withdraw res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+export const deposit = (body) => {
+    return new Promise ( async (resolve, reject)=>{    
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(REST.WALLET.DEPOSIT, "POST", body, 200, headers);
+        console.log("deposit res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
         }else{
             resolve({status: false, data:res.responseBody})
         }

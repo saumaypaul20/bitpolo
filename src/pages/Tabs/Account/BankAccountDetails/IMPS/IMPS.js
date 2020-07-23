@@ -19,6 +19,7 @@ const IMPS = () => {
     const navigation = useNavigation()
     const acctypes = [{label: 'Savings', value:'savings'}, {label: 'Current', value:'current'}];
     const user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual)
+    console.log("user",user)
     const [accNo, setaccNo] = useState('');
     const [acclabel, setacclabel] = useState('');
     const [accname, setaccname] = useState('');
@@ -57,7 +58,12 @@ const IMPS = () => {
         }
             
         handleModal();
-        navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE,{screen: screenNames.IMPS, type:'add-bank', body:body})
+        if(!user.attributes.google_auth){
+            navigation.navigate(screenNames.OTP_SCREEN,{screen: screenNames.IMPS, type:'add-bank', body:body})
+        }else{
+
+            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE,{screen: screenNames.IMPS, type:'add-bank', body:body})
+        }
 
     }
 

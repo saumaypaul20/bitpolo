@@ -79,7 +79,7 @@ const Banks = () => {
                     <View style={{flex:1, alignSelf:'stretch'}}>
 
                         {!loading ? 
-                            banks.map(i=>{
+                            banks?.map(i=>{
                                return(  
                                <React.Fragment key={i?._id}>
                                 <SettingsListItem 

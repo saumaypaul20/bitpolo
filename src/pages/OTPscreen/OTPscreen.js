@@ -45,6 +45,7 @@ const OTPscreen = (props) => {
             alert("Fill up the the 6 digit code")
             return
             }
+
             let payload= {
                 id: user_id || props.data.data.id,
                 attributes:{
@@ -59,24 +60,23 @@ const OTPscreen = (props) => {
             console.log(res)
 
             if(res.status){
-                let res_data= res.data.data;
-                res_data.email =email
-                // alert("Success")
-                dispatch(saveAuthAttributesAction(res_data))
-                // if(res.data.data.attributes.google_auth){
-                //     navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {data: res_data})
-                //     return
-                // }else{
-                    await Storage.set("login", res_data)
-                    navigation.navigate(screenNames.PINSCREEN, {type: true, screen: screenNames.DASHBOARD})
-                    return 
-                // }
+                loginFlow(res,email)
             } 
             else {
                 alert("PIN code doesn't match")
                 return
             }
+            
         }
+
+    const loginFlow = async(res, email)=>{
+        let res_data= res.data.data;
+        res_data.email = email
+        dispatch(saveAuthAttributesAction(res_data))
+        await Storage.set("login", res_data)
+        navigation.navigate(screenNames.PINSCREEN, {type: true, screen: screenNames.DASHBOARD})
+        return 
+    }
 
     const resendCode = async()=>{
         setCode('')

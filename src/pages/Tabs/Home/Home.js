@@ -14,10 +14,10 @@ import { addMarketData, triggerMarketSocket } from '../../../redux/actions/marke
 var pako = require('pako');
 import * as ENDPOINT from '../../../api/constants'
 import { splitIt } from '../../../utils/converters'
-import { emitMarketListEvent } from '../../../api/config.ws'
+import { emitMarketListEvent, emitUnsubMarketListEvent } from '../../../api/config.ws'
 
  
-const ListItem = ({item}) =>{
+const ListItem = ({item, type}) =>{
 
     return(
         <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8}}>
@@ -25,8 +25,8 @@ const ListItem = ({item}) =>{
                 <BPText style={{color: Colors.white, fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.divider.a} <BPText style={{color: Colors.lightWhite, fontSize:10, fontFamily:'Inter-Bold'}}>/ {item?.divider.b}</BPText></BPText>
             </View>
 
-            <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
-                <BPText style={{color: Colors.lightWhite, fontFamily:'Inter-Regular', fontSize:12, }}>{parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
+            <View style={{flex:1, justifyContent:'center', alignItems:'flex-start',}}>
+                <BPText style={{color: type === 1? Colors.lightGreen: Colors.red, fontFamily:'Inter-Regular', fontSize:12, }}>{parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
                 </View>
                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-end', paddingHorizontal:30}}>
                 <BPText style={{color: Colors.lightWhite, fontFamily:'Inter-Medium' , fontSize:12}}>{parseFloat(item?.params[1]?.v).toFixed(4)}</BPText>
@@ -51,7 +51,7 @@ const Tab = ({type}) =>{
     return (
         <FlatList
                 data={data}
-                renderItem={({ item }) => <ListItem item={item} />}
+                renderItem={({ item }) => <ListItem item={item} type={type} />}
                 keyExtractor={item => item.id}
                 // ListHeaderComponent={ <HomeHeaderComp />}
                 // stickyHeaderIndices={[0]}
@@ -160,6 +160,7 @@ const Home = () => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setloading(true)
+            emitUnsubMarketListEvent(marketPairs)
           });
       
           return unsubscribe;
@@ -171,17 +172,17 @@ const Home = () => {
             <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                 <Toolbar title="Exchange" backgroundColor={Colors.darkGray2}/>
 
-                   <View style={{flex:1}}> 
-                    {!loading && <View style={{paddingVertical:8}}>
+                   <View style={{flex:1}}>
+                    {<View style={{paddingVertical:8}}>
                     <HomeHeaderComp />
 
                     <View style={{ flexDirection:'row', alignItems:'flex-start',   borderTopWidth:1, borderBottomWidth:1,borderColor: Colors.lightWhite }}>
-                        <TouchableOpacity onPress={()=> settab(1)} style={{flex:1, justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
-                            <BPText style={{color: Colors.white, fontFamily: activetab === 1 ? Fonts.FONT_MEDIUM :Fonts.FONT_REGULAR , fontSize:12}}>Gainers</BPText>
+                        <TouchableOpacity onPress={()=> settab(1)} style={{flex:1 ,backgroundColor: activetab === 1? Colors.darkGray : 'transparent',justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
+                            <BPText style={{color: Colors.white, fontFamily: activetab === 1 ? Fonts.FONT_MEDIUM :Fonts.FONT_REGULAR , fontSize:12,}}>Gainers</BPText>
                            </TouchableOpacity>
 
-                        <TouchableOpacity onPress={()=> settab(2)} style={{flex:1, justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
-                            <BPText style={{color: Colors.white, fontFamily:activetab === 2? Fonts.FONT_MEDIUM: Fonts.FONT_REGULAR, fontSize:12, }}>Losers</BPText>
+                        <TouchableOpacity onPress={()=> settab(2)} style={{flex:1 ,backgroundColor: activetab === 2? Colors.darkGray : 'transparent', justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
+                            <BPText style={{color: Colors.white, fontFamily:activetab === 2? Fonts.FONT_MEDIUM: Fonts.FONT_REGULAR, fontSize:12}}>Losers</BPText>
                              </TouchableOpacity>
                         <View style={{flex:1, justifyContent:'center', alignItems:'center', alignSelf:'center'}}>
                             <BPText style={{color: Colors.lightGreen, fontFamily:Fonts.FONT_MEDIUM , fontSize:12}}>24h Volume</BPText>
