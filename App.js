@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react';
 import { StatusBar,Text,TextInput } from 'react-native'
 import {Root} from 'native-base'

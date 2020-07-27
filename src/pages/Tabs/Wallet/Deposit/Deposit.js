@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text, Image, TouchableOpacity, Dimensions, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Dimensions, TextInput, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Button, Icon, Toast, Root, Input } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
@@ -48,17 +48,17 @@ const Tab1 = ({address, setView, activecoin, image}) =>{
     return (
       
             <View>
-                <SettingsListItem  
+                {/* <SettingsListItem  
                     onPress= {()=> setView(2)}
                     noBorder 
                     label={`${activecoin}`}
                     image = {image}
                     backgroundColor={Colors.darkGray3} 
-                    rightElement={<ChevronRight />}/>
+                    rightElement={<ChevronRight />}/> */}
                     <View style={{marginHorizontal:16}}>
 
                         <View style={{flexDirection:'row', justifyContent:'space-between', marginVertical:20 }}>
-                            <BPText style={{color: Colors.lightWhite}}>{activecoin} Deposit Address</BPText>
+                            <BPText style={{color: Colors.lightWhite}}>{activecoin.asset_code} Deposit Address</BPText>
                             <BPText style={{color: Colors.lightWhite}}>{convertDate((new Date), '-', true)} {getCurrentTime()}</BPText>
                         </View>
 
@@ -406,13 +406,13 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
     }
     return (
         <View>
-            <SettingsListItem  
+            {/* <SettingsListItem  
                 onPress= {()=> setView(1)}
                 noBorder 
                 label={"INR (Rupee)"}
                 image = {Images.rupee_icon}
                 backgroundColor={Colors.darkGray3} 
-                rightElement={<ChevronRight />}/>
+                rightElement={<ChevronRight />}/> */}
 
                 <View style={{marginHorizontal:16, }}>
                     <View style={{flexDirection:'row', alignSelf:'stretch', justifyContent:'space-between', marginVertical:27}}>
@@ -468,10 +468,12 @@ let Deposit = () => {
     const [activecoin, setactivecoin] = useState("BTC")
     const [address, setaddress] = useState(null)
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
+    const [showItems, setshowItems]= useState(false)
     const assetList = useSelector(state=>state.walletReducer.assets)
     console.log("assetlist",assetList);
     
     const callcreateassetaddress = useCallback(async (coin)=>{
+        
         try {
             let toPassHeader={
                 Authorization: getAuthToken(),
@@ -505,23 +507,52 @@ let Deposit = () => {
         }
     },[address])
 
-    useEffect(() => {
-        // setaddress('14gC4zbkDdfdn6DscjuYqBufndzzfddLQzGViAg5cdfHJ')
-        callcreateassetaddress(activecoin)
+    const changeCoin = (coin) =>{
+        let item = assetList.find(i=>i.asset_code === coin)
+        setactivecoin(item)
+        generateAddress(coin)
+       
+    }
+
+
+
+    const setActiveView =(coin)=>{
+        setaddress('')
+        if(coin !== "INR"){
+            setView(1)
+
+        }else{
+            setView(2)
+        }
+        setshowItems(false)
+        // generateAddress(coin)
+       
+        changeCoin(coin)
+    }
+   
+    useEffect(()=>{
+        if(assetList.length>0){
+            let coin =  assetList[0]
+            setActiveView(coin.asset_code)
+            callcreateassetaddress(coin)
+            
+        }
         return () => {
             setaddress('')
         }
-    }, [])
+    },[])
+
+ 
     
 
    
         const generateAddress =(item)=>{
-            setactivecoin(item);
-            setPickerOrderVal(item)
+         
+            //setPickerOrderVal(item)
             callcreateassetaddress(item)
         }
 
-    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 image={{uri:assetList.find(i=> i.asset_code == activecoin).logo_url}} address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2 assetList={assetList} activecoin={activecoin} setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
+    const tabRenderer = useCallback(() => activeView === 1 ? <Tab1   address={address} activecoin={activecoin} setView={(v)=>setView(v)}/>: <Tab2 assetList={assetList} activecoin={activecoin} setView={(v)=>setView(v)}/>,[address, activeView, setactivecoin])
 
     return (
         <SafeAreaView style={{flex:1}}>
@@ -531,7 +562,7 @@ let Deposit = () => {
             <Toolbar enableBackButton title={screenNames.DEPOSIT} rightElement={rightEl()}/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', marginTop:42}}>
-                    
+                <View style={{alignSelf:'stretch',  }}>
                     <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                      { assetList.map((item,index)=>{
                          if(item.asset_code !== "INR"){
@@ -542,7 +573,7 @@ let Deposit = () => {
                              backgroundColor={Colors.white}
                              image={{uri:item.logo_url}}
                              image_size={12}
-                             onPress={()=>{generateAddress(item.asset_code)}}
+                             onPress={()=>{setActiveView(item.asset_code)}}
                              marginRight={3}
                              />
                          }
@@ -550,34 +581,43 @@ let Deposit = () => {
                     }
                         
                     </View>
-                    <View style={{  alignSelf:'stretch', marginHorizontal:130, borderWidth:1, borderColor: Colors.white, marginTop:10, borderRadius:5}}>
-                           {assetList.length >0 &&  <PickerComp
-                                items={assetList.filter(i=> {
-                                    if(i.asset_code !== 'INR'){
-                                        return true
-                                    }else{
-                                        return false
-                                    }
-                                }).map(i=>{
+
+                    {activecoin && <SettingsListItem  
+                    onPress= {()=> setshowItems(!showItems)}
+                    noBorder 
+                    label={`${activecoin.asset_code}`}
+                    image = {{uri:activecoin?.logo_url}}
+                    backgroundColor={Colors.darkGray3} 
+                    rightElement={!showItems ?<ChevronRight /> : <ChevronRight arrow="down"
+                    />}
+                    />
+                    }
+
+                    {showItems && assetList.length >0 
+                           && 
+                           <View>
+                            {   assetList.map(i=>{
                                         let p={label: i.asset_code, value: i.asset_code } ; 
-                                        return p
-                                    })
-                                }
-                                pickerVal = {pickerOrderVal}
-                                setPickerVal = {(val)=>generateAddress(val)}
-                                chevronPositionTop= {12}
-                                height= {40}
-                                scale={1}
-                                color={Colors.white}
-                            />}
-                        </View>
+                                        // return <TouchableOpacity style={{marginHorizontal:16, paddingVertical:10, marginHorizontal:32}} onPress={()=> setActiveView(i.asset_code)}><BPText>{i.asset_code}</BPText></TouchableOpacity>
+                                        return   <SettingsListItem  
+                                        key={i.asset_code}
+                                        onPress= {()=> setActiveView(i.asset_code)}
+                                        backgroundColor={Colors.darkGray}
+                                        label={`${i.asset_code}`}
+                                        image = {{uri:i.logo_url}}
+                                         
+                                       />
+                                    })}
+                           </View> 
+                        
+                            }
                     <View style={{alignSelf:'stretch', marginTop:24}}>
                       
-                        {address ? tabRenderer() : null}
+                        {(activeView === 1 && address) ? tabRenderer(): activeView===2? tabRenderer(): <ActivityIndicator color={Colors.white} size="large"/>}
 
                     </View>
                  
-                   
+                   </View>
 
                 </View>
             </Content>

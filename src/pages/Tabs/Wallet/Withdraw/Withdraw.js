@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text, Image, Clipboard, Dimensions, DeviceEventEmitter } from 'react-native'
+import { View, Text, Image, Clipboard, Dimensions, DeviceEventEmitter, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Button, Icon, Toast, Root, Input } from 'native-base'
 import Toolbar from '../../../../components/Toolbar/Toolbar'
@@ -30,13 +30,7 @@ const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.
     return (
         <Root>
             <View style={{flex:1}}>
-                <SettingsListItem  
-                    onPress= {()=> setView(2)}
-                    noBorder 
-                    label={`${activecoin.asset_code}`}
-                    image = {{uri:activecoin.logo_url}}
-                    backgroundColor={Colors.darkGray3} 
-                    rightElement={<ChevronRight />}/>
+                
                    
                     <View style={{marginHorizontal:16}}>
                         
@@ -146,13 +140,13 @@ const Tab2 = ({setView, activecoin}) =>{
 
     return (
         <View>
-            <SettingsListItem  
+            {/* <SettingsListItem  
                 onPress= {()=> setView(1)}
                 noBorder 
                 label={"INR (Rupee)"}
                 image = {Images.rupee_icon}
                 backgroundColor={Colors.darkGray3} 
-                rightElement={<ChevronRight/>}/>
+                rightElement={<ChevronRight/>}/> */}
 
                 <View style={{marginHorizontal: 16,}}>
                     
@@ -224,6 +218,8 @@ const Withdraw = () => {
     const [withdrawAmount, setWithdrawAmount] = useState(null)
     const [address, setAddress] = useState(null)
     const assetList = useSelector(state=>state.walletReducer.assets)
+    const [showItems, setshowItems]= useState(false)
+
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
     // const address = '14gC4zbkDdfdn6DscjuYqBufndzzfddLQzGViAg5cdfHJ'
     const copyAddress =() =>{
@@ -239,7 +235,25 @@ const Withdraw = () => {
         setactivecoin(item)
         setPickerOrderVal(coin)
     }
+
+    const setActiveView =(coin)=>{
+       
+        if(coin !== "INR"){
+            setView(1)
+
+        }else{
+            setView(2)
+        }
+        setshowItems(false)
+        changeCoin(coin)
+    }
    
+    useEffect(()=>{
+        if(assetList.length>0){
+            let coin =  assetList[0]
+            setactivecoin(coin)
+        }
+    },[])
 
    
     const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 withdrawAmount={withdrawAmount} address={address}  setView={(v)=>setView(v)} activecoin={activecoin} setWithdrawAmount={(t)=>setWithdrawAmount(t)}  setAddress={(t)=>setAddress(t)}  setPaymentId={(r)=>setPaymentId(r)}  /> : <Tab2 activecoin={activecoin} setView={(v)=>setView(v)}/>,[activeView,activecoin])
@@ -276,33 +290,43 @@ const Withdraw = () => {
                         
                     </View>
 
-                    <View style={{  alignSelf:'stretch', marginHorizontal:130, borderWidth:1, borderColor: Colors.white, marginTop:10, borderRadius:5}}>
-                           {assetList.length >0 &&  <PickerComp
-                                items={assetList.filter(i=> {
-                                    if(i.asset_code !== 'INR'){
-                                        return true
-                                    }else{
-                                        return false
-                                    }
-                                }).map(i=>{
+                    <Spacer space={30}/>
+
+                     
+                    {activecoin?.logo_url && <SettingsListItem  
+                    onPress= {()=> setshowItems(true)}
+                    noBorder 
+                    label={`${activecoin.asset_code}`}
+                    image = {{uri:activecoin?.logo_url}}
+                    backgroundColor={Colors.darkGray3} 
+                    rightElement={!showItems ?<ChevronRight /> : <ChevronRight arrow="down"
+                    />}/>}
+
+                           {showItems && assetList.length >0 
+                           && 
+                           <View>
+                            {   assetList.map(i=>{
                                         let p={label: i.asset_code, value: i.asset_code } ; 
-                                        return p
-                                    })
-                                }
-                                pickerVal = {pickerOrderVal}
-                                setPickerVal = {(val)=> changeCoin(val)}
-                                chevronPositionTop= {12}
-                                height= {40}
-                                scale={1}
-                                color={Colors.white}
-                            />}
+                                        // return <TouchableOpacity style={{marginHorizontal:16, paddingVertical:10, marginHorizontal:32}} onPress={()=> setActiveView(i.asset_code)}><BPText>{i.asset_code}</BPText></TouchableOpacity>
+                                        return   <SettingsListItem  
+                                        key={i.asset_code}
+                                        onPress= {()=> setActiveView(i.asset_code)}
+                                        backgroundColor={Colors.darkGray}
+                                        label={`${i.asset_code}`}
+                                        image = {{uri:i.logo_url}}
+                                         
+                                       />
+                                    })}
+                           </View> 
+                        
+                            }
                         </View>
                       
-                       <View style={{marginVertical:16}}>
+                       <View>
                         {tabRenderer()}
                        </View>
 
-                    </View>
+                    
                  
                    
 

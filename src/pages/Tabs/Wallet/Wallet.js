@@ -92,7 +92,7 @@ const Wallet = () => {
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{flex:1, justifyContent:'flex-start'}}>
                         
-                        {balance ? <BPText style={{paddingHorizontal:12, fontSize:12, paddingVertical:16, backgroundColor: Colors.darkGray2}}>
+                        {balance && index_price ? <BPText style={{paddingHorizontal:12, fontSize:12, paddingVertical:16, backgroundColor: Colors.darkGray2}}>
                             Total Value (BTC) <BPText style={{fontFamily:Fonts.FONT_MEDIUM, fontSize:11,}}> {toDecimal(totalBTC(),100000)} BTC</BPText> = $ {toDecimal(totalBTC()*index_price.find(i=> i.asset === "USDT").amount,100000)}
                         </BPText>
                         :
