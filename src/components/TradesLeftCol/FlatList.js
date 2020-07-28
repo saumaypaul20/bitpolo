@@ -38,11 +38,11 @@ class App extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch', alignSelf:'stretch' }}>
                 {this.state.data.length > 0 ? <FlatList
                     data={this.state.data}
                     renderItem={({ item }) =>
-                        <Card item={item} type={1} />
+                        <Card item={item} type={this.props.type} />
                     }
                     //Setting the number of column
                     getItemLayout={(data, index) => {
@@ -50,6 +50,7 @@ class App extends Component {
                             index,
                             length: 30, // itemHeight is a placeholder for your amount
                             offset: index * 30,
+                            width:'100%'
                         }
                     }}
                     keyExtractor={(item, index) => item.t.toString()}

@@ -5,6 +5,7 @@ import { ActivityIndicator } from 'react-native'
 import { Colors } from '../../theme'
 import  _ from 'lodash'
 import { equalityFnDepths } from '../../utils/reduxChecker.utils'
+import HighChart from '../HighChart/HighChart'
  
 export default function DepthChart(props) {
     
@@ -222,21 +223,20 @@ function processData(data, side) {
         }
     }).reduce((arr, item, idx) => {
     
-        const bid = {
-            price: item.p,
-            amount: item.a,
-            side,
-            total:item.a,
-        }
+        const bid = [
+            
+            Number(item.p),
+           Number( item.a),
+    ]   
     
         return [...arr, bid]
     }, [])
 }
 
 let asks = processData(asksD, 'ask')
-asks =asks.slice(asks.length - 9)
+asks =asks 
 let bids = processData(bidsD, 'bid')
-bids= bids.slice(0,9)
+bids= bids 
 
     const asksProcessed = asks.map(item => {
         return {
@@ -254,8 +254,8 @@ bids= bids.slice(0,9)
     })
     if(bidsD.length === 0 || asksD.length === 0) return <ActivityIndicator size="large" color={Colors.white}/>
     return (
-        <DepthChartRenderer
-            asks={asksProcessed}
-            bids={bidProcessed} />
+        <HighChart
+            asks={asks}
+            bids={bids} />
     )
 }

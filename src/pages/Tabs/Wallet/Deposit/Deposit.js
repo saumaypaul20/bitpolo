@@ -23,6 +23,7 @@ import Modal from 'react-native-modal'
 import { addBanks } from '../../../../redux/actions/payments.action'
 import { getBankAccounts } from '../../../../api/payments.api'
 import { equalityFnBankslist } from '../../../../utils/reduxChecker.utils'
+import { useNavigation } from '@react-navigation/native'
 
 let currentTime = new Date()
 
@@ -117,6 +118,7 @@ const Tab1 = ({address, setView, activecoin, image}) =>{
  
 const Tab2 = ({setView, activecoin, assetList}) =>{
     const dispatch = useDispatch()
+    const navigation = useNavigation();
     const [depositamount, setdepositamount] = useState(null)
     const [impsid, setimpsid] = useState(null)
     const [confirm_impsid, setconfirm_impsid] = useState(null)
@@ -345,7 +347,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
 
                     <View style={{marginTop:16}}>
                         <View style={{alignSelf:'center', marginTop:44}}>
-                            <BPButton label="Deposit" style={{paddingHorizontal:60}} />
+                            <BPButton disabled={depositamount?.length ==0 || !depositamount || depositamount <=0} label="Deposit" style={{paddingHorizontal:60}} onPress={()=> navigation.navigate(screenNames.PAYMENT_WEBVIEW)} />
                         </View>
                     </View>
                     </>

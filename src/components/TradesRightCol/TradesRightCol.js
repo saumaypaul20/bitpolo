@@ -9,7 +9,7 @@ import BPButton from '../../common/BPButton/BPButton'
 import AreaChart2 from '../AreaChart/AreaChart'
 import TradesOrderTabs from '../TradesOrderTabs/TradesOrderTabs'
 import DepthChart from '../AreaChart/DepthChart'
-
+import HighChart from '../HighChart/HighChart'
 const TradesRightCol = () => {
     const [pickerOrderVal, setPickerOrderVal] = useState(null)
     const orderItems = [{label:"Limit Order", value:"val1"}]
@@ -34,12 +34,12 @@ const TradesRightCol = () => {
                                 <BPText style={{fontSize:12, fontFamily: Fonts.FONT_MEDIUM}}>Ask</BPText>
                             </View>
                     </View>
-                    <Spacer space={40}/>
+                     
 
                     {/* <AreaChart2 /> */}
                     <DepthChart />  
+                    {/* <HighChart /> */}
                 </View>
-                
             </View>
 
         </View>

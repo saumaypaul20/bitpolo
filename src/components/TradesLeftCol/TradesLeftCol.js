@@ -56,6 +56,7 @@ const TradesLeftCol = () => {
             case "0":
                 setlineNumbers(9)
                 setheight(245)
+                setactiveBPchart("0")
                 break
             default:
                 setheight(500)
