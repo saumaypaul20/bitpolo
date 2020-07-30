@@ -4,6 +4,7 @@ export const WEBSOCKET = 'wss://msocket.bitpolo.com'
 // export const BASE_URL ='https://crux.bitpolo.com/api/v1';
 // export const WEBSOCKET = 'wss://socket.bitpolo.com'
 
+export const MOBIKWIK_URL= 'https://api.zaakpay.com/api/paymentTransact/V7'
 /* -------------------------------- USERS API ------------------------------- */
 
  export const USERS = {

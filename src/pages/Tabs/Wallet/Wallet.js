@@ -32,6 +32,7 @@ const Wallet = () => {
     const [balance, setbalance] = useState(null)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
+    // alert(JSON.stringify(index_price))
     const sortByAlpha =()=>{
          console.log('soon')
     }
@@ -93,7 +94,7 @@ const Wallet = () => {
                     <View style={{flex:1, justifyContent:'flex-start'}}>
                         
                         {balance && index_price ? <BPText style={{paddingHorizontal:12, fontSize:12, paddingVertical:16, backgroundColor: Colors.darkGray2}}>
-                            Total Value (BTC) <BPText style={{fontFamily:Fonts.FONT_MEDIUM, fontSize:11,}}> {toDecimal(totalBTC(),100000)} BTC</BPText> = $ {toDecimal(totalBTC()*index_price.find(i=> i.asset === "USDT").amount,100000)}
+                            Total Value (BTC) <BPText style={{fontFamily:Fonts.FONT_MEDIUM, fontSize:11,}}> {toDecimal(totalBTC(),100000)} BTC</BPText> = $ {toDecimal((totalBTC()*index_price.find(i=> i.asset === "BTC").amount)/index_price.find(i=> i.asset === "USDT").amount,100)}
                         </BPText>
                         :
                         <ActivityIndicator color={Colors.white} size="small"/>

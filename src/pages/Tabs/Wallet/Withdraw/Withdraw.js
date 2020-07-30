@@ -255,6 +255,7 @@ const Withdraw = () => {
         }
     },[])
 
+    // alert(JSON.stringify(activecoin))
    
     const tabRenderer = useCallback(() => activeView === 1 ? <Tab1 withdrawAmount={withdrawAmount} address={address}  setView={(v)=>setView(v)} activecoin={activecoin} setWithdrawAmount={(t)=>setWithdrawAmount(t)}  setAddress={(t)=>setAddress(t)}  setPaymentId={(r)=>setPaymentId(r)}  /> : <Tab2 activecoin={activecoin} setView={(v)=>setView(v)}/>,[activeView,activecoin])
     
@@ -262,13 +263,13 @@ const Withdraw = () => {
         <SafeAreaView style={{flex:1}}>
         <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-            <Toolbar enableBackButton title={screenNames.WITHDRAW}/>
+            <Toolbar enableBackButton title={screenNames.WITHDRAW} rightElement={<TouchableOpacity onPress={()=> navigation.navigate(screenNames.ADDRESS_MANAGEMENT)}><BPText style={{fontSize:12}}>Address Management</BPText></TouchableOpacity>}/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', marginTop:10}}>
+                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', marginTop:0}}>
                     
                     <View style={{alignSelf:'stretch',  }}>
 
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                    {/* <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                      { assetList.map((item,index)=>{
                          if(item.asset_code !== "INR"){
                              return <BPButtonSmall 
@@ -288,23 +289,22 @@ const Withdraw = () => {
                         )  
                     }
                         
-                    </View>
+                    </View> */}
 
-                    <Spacer space={30}/>
-
+                    
                      
                     {activecoin?.logo_url && <SettingsListItem  
-                    onPress= {()=> setshowItems(true)}
+                    onPress= {()=> setshowItems(!showItems)}
                     noBorder 
-                    label={`${activecoin.asset_code}`}
+                    label={`${activecoin.asset_code} (${activecoin.asset_name})`}
                     image = {{uri:activecoin?.logo_url}}
-                    backgroundColor={Colors.darkGray3} 
+                    backgroundColor={Colors.darkGray} 
                     rightElement={!showItems ?<ChevronRight /> : <ChevronRight arrow="down"
                     />}/>}
 
                            {showItems && assetList.length >0 
                            && 
-                           <View>
+                           <View style={{marginTop:5}}>
                             {   assetList.map(i=>{
                                         let p={label: i.asset_code, value: i.asset_code } ; 
                                         // return <TouchableOpacity style={{marginHorizontal:16, paddingVertical:10, marginHorizontal:32}} onPress={()=> setActiveView(i.asset_code)}><BPText>{i.asset_code}</BPText></TouchableOpacity>
@@ -312,9 +312,9 @@ const Withdraw = () => {
                                         key={i.asset_code}
                                         onPress= {()=> setActiveView(i.asset_code)}
                                         backgroundColor={Colors.darkGray}
-                                        label={`${i.asset_code}`}
+                                        label={`${i.asset_code} (${i.asset_name})`}
                                         image = {{uri:i.logo_url}}
-                                         
+                                        noBorder
                                        />
                                     })}
                            </View> 

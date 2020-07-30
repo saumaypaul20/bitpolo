@@ -4,11 +4,11 @@ import BPText from '../BPText/BPText'
 import { Colors, Fonts } from '../../theme'
 import { Input } from 'native-base'
 
-const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle, secureTextEntry=false, maxLength, autoCapitalize="none", keyboardType="default"}) =>{
+const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle, secureTextEntry=false, maxLength, autoCapitalize="none", keyboardType="default", borderRadius=6, rightborderLeftWidth = 1}) =>{
     return(
         <>
             <BPText style={{fontFamily: Fonts.FONT_MEDIUM}, labelStyle}>{label}</BPText>
-            <View style={{borderColor: Colors.lightWhite, borderRadius: 6, borderWidth:1, marginTop:8, paddingHorizontal:16, flexDirection:'row', alignItems:'center'}}>
+            <View style={{borderColor: Colors.lightWhite,  borderWidth:1, marginTop:8, paddingHorizontal:16, flexDirection:'row', alignItems:'center', borderRadius:borderRadius}}>
                 <TextInput
                     autoCapitalize={autoCapitalize}
                     keyboardType={keyboardType}
@@ -19,7 +19,7 @@ const BPInput = ({label, placeholder, text, setText, rightEl, labelStyle, secure
                     secureTextEntry={secureTextEntry}
                     maxLength={maxLength}
                 />
-               {rightEl && <View style={{alignItems:'center', justifyContent:'center', borderLeftWidth:1, borderColor: Colors.lightWhite, position:'absolute', right:0, top:0, bottom:0, padding:14}}>
+               {rightEl && <View style={{alignItems:'center', justifyContent:'center', borderLeftWidth:rightborderLeftWidth, borderColor: Colors.lightWhite, position:'absolute', right:0, top:0, bottom:0, padding:14}}>
                     {rightEl}
                 </View>}
             </View>

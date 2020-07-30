@@ -30,6 +30,7 @@ import MarketTrades from '../pages/Tabs/Trades/MarketTrades/MarketTrades';
 import PINScreen from '../pages/PINScreen/PINScreen';
 import DummyRoute from './ DummyRoute';
 import PaymentGateway from '../pages/Tabs/Wallet/Deposit/PaymentGateway/PaymentGateway';
+import AddressManagement from '../pages/Tabs/Wallet/Withdraw/AddressManagement/AddressManagement';
 const Stack = createStackNavigator();
 
 const Routes = ({ login }) => {
@@ -81,6 +82,7 @@ const Routes = ({ login }) => {
                 <Stack.Screen name={screenNames.MARKET_TRADES} component={MarketTrades} />
                 <Stack.Screen name={screenNames.PINSCREEN} component={PINScreen} />
                 <Stack.Screen name={screenNames.PAYMENT_WEBVIEW} component={PaymentGateway} />
+                <Stack.Screen name={screenNames.ADDRESS_MANAGEMENT} component={AddressManagement} />
                 {/* <Stack.Screen name={screenNames.DUMMYROUTE} component={DummyRoute} /> */}
 
             </Stack.Navigator>

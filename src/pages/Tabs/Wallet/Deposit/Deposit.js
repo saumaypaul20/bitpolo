@@ -130,6 +130,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
     const banks = useSelector(state=> state.payments.banks, equalityFnBankslist)
     const bank = banks.find(i=> i.is_active)
     const balance = useSelector(state=> state.walletReducer.balance.data["INR"], shallowEqual)
+    
     // alert(JSON.stringify(balance))
     // const getBanksList = useCallback(async()=>{
     //     setloading(true)
@@ -169,15 +170,21 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
         if(res.status){
             //todo
             console.log(res)
-            alert(`Amount ${payload.data.attributes.amount} INR is deposited!`)
+            //alert("res")
+            if(pickerOrderVal === "PaymentGateway"){
+                navigation.navigate(screenNames.PAYMENT_WEBVIEW, {paymentResult: res.data})
+            }else if(pickerOrderVal === "TraditionalPayment"){
+
+                alert(`Amount ${payload.data.attributes.amount} INR is deposited!`)
+            }
         }else{
             alert(res.data.data.attributes.message)
 
         }
     }
     const options= [
-        {label: 'Traditional Payment', value: 'Traditional Payment'},
-        {label: 'Payment Gateway', value: 'Payment Gateway'},
+        {label: 'Traditional Payment', value: 'TraditionalPayment'},
+        {label: 'Payment Gateway', value: 'PaymentGateway'},
         {label: 'Instant Bank Transfer', value: 'Instant Bank Transfer'},
     ]
 
@@ -203,7 +210,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
     const viewRenderer = () =>{
         switch(pickerOrderVal){
             //Tradional Payment
-            case 'Traditional Payment':
+            case 'TraditionalPayment':
                 return (
                     <>
                         <BPText style={{fontSize:10, marginTop:16}}> For deposit use the following details only</BPText>
@@ -330,7 +337,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                     
                 )
             // Payment Gatweway
-            case 'Payment Gateway':
+            case 'PaymentGateway':
                 return (
                     <>
                      <View style={{borderColor: Colors.lightWhite, borderRadius: 6, borderWidth:1, marginTop:8, paddingHorizontal:16}}>
@@ -347,7 +354,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
 
                     <View style={{marginTop:16}}>
                         <View style={{alignSelf:'center', marginTop:44}}>
-                            <BPButton disabled={depositamount?.length ==0 || !depositamount || depositamount <=0} label="Deposit" style={{paddingHorizontal:60}} onPress={()=> navigation.navigate(screenNames.PAYMENT_WEBVIEW)} />
+                            <BPButton disabled={depositamount?.length ==0 || !depositamount || depositamount <=0} label="Deposit" style={{paddingHorizontal:60}} onPress={()=>onmodasubmit()} />
                         </View>
                     </View>
                     </>
@@ -563,9 +570,9 @@ let Deposit = () => {
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
             <Toolbar enableBackButton title={screenNames.DEPOSIT} rightElement={rightEl()}/>
             <Content contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', marginTop:42}}>
+                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', marginTop:0}}>
                 <View style={{alignSelf:'stretch',  }}>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                    {/* <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                      { assetList.map((item,index)=>{
                          if(item.asset_code !== "INR"){
                              return <BPButtonSmall 
@@ -582,14 +589,14 @@ let Deposit = () => {
                      })  
                     }
                         
-                    </View>
+                    </View> */}
 
                     {activecoin && <SettingsListItem  
                     onPress= {()=> setshowItems(!showItems)}
                     noBorder 
-                    label={`${activecoin.asset_code}`}
+                    label={`${activecoin.asset_code} (${activecoin.asset_name})`}
                     image = {{uri:activecoin?.logo_url}}
-                    backgroundColor={Colors.darkGray3} 
+                    backgroundColor={Colors.darkGray} 
                     rightElement={!showItems ?<ChevronRight /> : <ChevronRight arrow="down"
                     />}
                     />
@@ -597,7 +604,7 @@ let Deposit = () => {
 
                     {showItems && assetList.length >0 
                            && 
-                           <View>
+                           <View style={{marginTop:5}}>
                             {   assetList.map(i=>{
                                         let p={label: i.asset_code, value: i.asset_code } ; 
                                         // return <TouchableOpacity style={{marginHorizontal:16, paddingVertical:10, marginHorizontal:32}} onPress={()=> setActiveView(i.asset_code)}><BPText>{i.asset_code}</BPText></TouchableOpacity>
@@ -605,8 +612,9 @@ let Deposit = () => {
                                         key={i.asset_code}
                                         onPress= {()=> setActiveView(i.asset_code)}
                                         backgroundColor={Colors.darkGray}
-                                        label={`${i.asset_code}`}
+                                        label={`${i.asset_code} (${i.asset_name})`}
                                         image = {{uri:i.logo_url}}
+                                        noBorder
                                          
                                        />
                                     })}
