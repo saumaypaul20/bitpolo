@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab, Left } from 'native-base'
 import Toolbar from '../../../components/Toolbar/Toolbar'
@@ -108,55 +108,70 @@ const Trades = () => {
             <Container style={{ flex: 1, backgroundColor:Colors.primeBG}}>
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
             <Toolbar backgroundColor={Colors.darkGray2} title={"Exchange"}/>
-            <View   style={{flex:1}}>
-                <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
+            {/* <Content contentContainerStyle={{ flexGrow: 1 }}>
                 
-                    <View style={styles.headerContainer}>
-                         
-                        <View style={{flex:0.5, borderRadius:4, alignSelf:'flex-start'}}>
-                        { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
-                            
-                            <PickerComp
-                                items={Lcurrencies}
-                                pickerVal = {activeTradePair}
-                                setPickerVal = {(val)=>{
-                                    dispatch(addDepthSubs(null));
-                                    setCurrency(activeTradePair);
-                                    dispatch(setActiveTradePair(val))
-                                    found= null
-                                }}
-                                chevronPositionTop= {3}
-                            />
-                        }
-                           
-                        </View>
-
-                        <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
-                            <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
-                                <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
-                            </TouchableOpacity>
-                            <TouchableOpacity >
-                                <Image source={Images.list_icon} style={styles.headerIconStyles} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+            </Content> */}
+            <FlatList data={['1']}
+                nestedScrollEnabled
+                style={{ width: '100%' }}
+                keyExtractor={(data)=> data}
+                
+                ListHeaderComponent={<View style={styles.headerContainer}>
+                                    
+                <View style={{flex:0.5, borderRadius:4, alignSelf:'flex-start'}}>
+                { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
                     
-                    
-                    {/* ---------------------------------- */}
-
-                  {(Lcurrencies.length == 0 || !found || !loading) ?  
-                    <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
-                  :
-                    <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
-                        {activeTradePair && <TradesLeftCol />}
-                        {activeTradePair && <TradesRightCol /> }
-                    </View>}
-
-                    {/* {-----------------------------} */}
- 
-
+                    <PickerComp
+                        items={Lcurrencies}
+                        pickerVal = {activeTradePair}
+                        setPickerVal = {(val)=>{
+                            dispatch(addDepthSubs(null));
+                            setCurrency(activeTradePair);
+                            dispatch(setActiveTradePair(val))
+                            found= null
+                        }}
+                        chevronPositionTop= {3}
+                    />
+                }
+                
                 </View>
-            </View>
+
+                <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
+                    <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
+                        <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
+                    </TouchableOpacity>
+                    <TouchableOpacity >
+                        <Image source={Images.list_icon} style={styles.headerIconStyles} />
+                    </TouchableOpacity>
+                </View>
+            </View>}
+                renderItem={
+                    ({item,index})=>{
+                        return(
+                            <View style={{  justifyContent:'flex-start', alignItems:'center', }}>
+                
+                                
+                                
+                                
+                                {/* ---------------------------------- */}
+
+                            {(Lcurrencies.length == 0 || !found || !loading) ?  
+                                <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
+                            :
+                                <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
+                                    {activeTradePair && <TradesLeftCol />}
+                                    {activeTradePair && <TradesRightCol /> }
+                                </View>}
+
+                                {/* {-----------------------------} */}
+            
+
+                            </View>
+                        )
+                    }
+                }
+                stickyHeaderIndices={[0]}
+            />
         </Container>
         </SafeAreaView>
     )

@@ -6,7 +6,7 @@ import { Colors } from '../../theme'
 
 const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled}) => {
     return (
-        <View style={{flex:1, flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
+        <View style={{ flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
         { onIncrease && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
                 <BPText>+</BPText>
             </Button>}

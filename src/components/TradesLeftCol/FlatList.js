@@ -53,6 +53,7 @@ class App extends Component {
                             width:'100%'
                         }
                     }}
+                    listKey={(item, index) => 'D' + index.toString()}
                     keyExtractor={(item, index) => item.t.toString()}
                 /> : null}
 

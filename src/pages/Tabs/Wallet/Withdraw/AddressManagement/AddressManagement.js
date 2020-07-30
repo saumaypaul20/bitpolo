@@ -19,7 +19,12 @@ const AddressManagement = () => {
         {label: 'Select Coin...', value: null}
         
     ]
+    const filter= [
+        {label: 'All', value: 'all'}
+        
+    ]
     const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Select Coin', value: null})
+    const [filterval, setfilterval] = useState({label: 'Select Coin', value: null})
 
     let [date1, setDate1] = useState(today);
     let [date2, setDate2] = useState(today);
@@ -28,9 +33,11 @@ const AddressManagement = () => {
     const [label, setlabel] = useState('')
     const [isEnabled, setIsEnabled] = useState(false);
     const [check, setcheck] = useState(false);
+    // const [whitelists, setwhitelists] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [isVisible, setVisible] = useState(false)
     const [whitelist, setwhitelist] = useState([])
+    const items = [{id:'khdjfbksh3'}, {id:'62768332423'}, {id:'87389ndfe'}];
     const showModal =()=>{
         setVisible(!isVisible)
         setaddress('')
@@ -40,8 +47,13 @@ const AddressManagement = () => {
     const handleCheckBox = ()=>{
         setcheck(!check)
     }
+    const onStarPress =(item)=>{
+        let arr = whitelist.push(item)
+        setwhitelist(arr)
+    }
+
     const handleWhitelist = (item) =>{
-        if(whitelist.find(i=> i.id === item.id)){
+        if(whitelist.length>0 && whitelist?.find(i=> i.id === item.id)){
             let arr = whitelist.filter(i=> i.id !== item.id);
             setwhitelist(arr)
         }else{
@@ -104,9 +116,21 @@ const AddressManagement = () => {
                     </View>
                     <View style={{flexDirection:'row', paddingHorizontal:16, paddingVertical:8,backgroundColor:Colors.darkGray, justifyContent:'space-between', alignItems:'center'}}>
                                 <BPText style={{fontSize:12}}>Only display whitelisted addresses</BPText>
-                                <TouchableOpacity style={{borderWidth:1, borderRadius:4, borderColor: Colors.white, paddingVertical:8 , paddingHorizontal:16}}>
-                                    <BPText style={{fontSize:12}}>All</BPText>
-                                </TouchableOpacity>
+                                <View style={{borderWidth:1, borderRadius:4, borderColor: Colors.white, paddingVertical:8 ,}}>
+                                <PickerComp
+                                items={filter}
+                                pickerVal = {filterval}
+                                setPickerVal = {setfilterval}
+                                color={Colors.white}
+                                chevronPositionTop= {10}
+                                chevronColor= {Colors.white}
+                                 
+                                marginLeft={0}
+                                width ={80}
+                                scale={0.9}
+                                
+                            /> 
+                                </View>
                     </View>
                     <View style={{flexDirection:'row', paddingHorizontal:16, paddingVertical:8,backgroundColor:Colors.primeBG, justifyContent:'space-between', alignItems:'center'}}>
                                 <BPInput 
@@ -122,10 +146,13 @@ const AddressManagement = () => {
 
 
                     <View style={{flex:1, marginHorizontal:16, marginTop:5}}>
-
-                                <ListItem item={{id:'iusidu2232'}}   onPress={()=> handleWhitelist()}/>
-                                <ListItem id={'uipkswk872'} onPress={()=> handleWhitelist()}/>
-                                <ListItem id={'uipks1k872'} onPress={()=> handleWhitelist()}/>
+                            {
+                                items.map((item, index)=>{
+                                    return <ListItem active={whitelist.length>0 && whitelist.find(i=> item.id=== i.id )? true : false} item={item} key={item.id}  onPress={()=> handleWhitelist(item)} onStarPress={()=> onStarPress(item)}/>
+                                })
+                            }
+                                
+                                
                        </View>
 
                     <Modal isVisible={isVisible} onBackButtonPress={()=> showModal()} style={{justifyContent: 'flex-start'}}>
@@ -189,13 +216,16 @@ const AddressManagement = () => {
     )
 }
 
-const ListItem = ({item, id, onPress}) =>{
+const ListItem = ({item, active, onPress, onStarPress}) =>{
     return(
         <View style={{flexDirection:'row',justifyContent:'space-around', alignItems:'flex-start', borderWidth:1, borderColor: Colors.lightWhite, paddingVertical:12, backgroundColor: Colors.darkGray, marginBottom:10, marginVertical:5}}>
                                     
                                     <View style={{flex:0.5, justifyContent:'center', alignItems:"center"}}>
-                                        <TouchableOpacity onPress={()=> onPress(item)} style={{borderColor: Colors.white, borderWidth:1, padding:5, width:10}}>
+                                        <TouchableOpacity onPress={()=> onPress(item)} style={{borderColor: Colors.white, borderWidth:1, padding:5, width:10,height:10, justifyContent
+                                        :'center', alignItems:'center'}}>
+                                               { active && <View style={{backgroundColor:Colors.white, width:5, height:5}} />}
 
+                                                 
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{flex:1}}>
@@ -208,11 +238,13 @@ const ListItem = ({item, id, onPress}) =>{
                                     </View>
                                     <View style={{flex:2}}>
                                         <BPText style={{color: Colors.lightWhite, fontSize:12}}>Label</BPText>
-                                        <BPText style={{fontSize:12}}>jhgskdfdslfhsli</BPText>
+                                        <BPText style={{fontSize:12}}>{item.id}</BPText>
                                     </View>
                                     <View style={{flex:1, alignItems:'center'}}>
                                         <BPText style={{color: Colors.lightWhite, fontSize:12}}>Whitelist</BPText>
+                                       <TouchableOpacity onPress={()=> onStarPress(item)}>
                                         <Image source={Images.star_icon} style={{width:10, height:10, marginTop:2}}/>
+                                       </TouchableOpacity>
                                     </View>
 
                                 </View>
