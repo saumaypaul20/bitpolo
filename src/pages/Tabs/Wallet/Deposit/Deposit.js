@@ -284,6 +284,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
 
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
                                                 <TextInput
+                                                    underlineColorAndroid="transparent"
                                                     placeholder="Deposit amount"
                                                     placeholderTextColor={Colors.gray}
                                                     value={depositamount}
@@ -294,6 +295,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                             </View>
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
                                                 <TextInput
+                                                    underlineColorAndroid="transparent"
                                                     placeholder="IMPS Reference ID"
                                                     placeholderTextColor={Colors.gray}
                                                     value={impsid}
@@ -304,6 +306,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                             </View>
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
                                                 <TextInput
+                                                    underlineColorAndroid="transparent"
                                                     placeholder="Confirm IMPS Reference ID"
                                                     placeholderTextColor={Colors.gray}
                                                     value={confirm_impsid}
@@ -313,6 +316,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                             </View>
                                             <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
                                                 <TextInput
+                                                    underlineColorAndroid="transparent"
                                                     placeholder="Remarks"
                                                     placeholderTextColor={Colors.gray}
                                                     value={remarks}

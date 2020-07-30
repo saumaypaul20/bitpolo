@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Container, Content, Icon } from 'native-base'
+import { Container, Content, Icon, CheckBox, Body } from 'native-base'
 import Toolbar from '../../../../../components/Toolbar/Toolbar'
 import { Colors, Images } from '../../../../../theme'
 import BPText from '../../../../../common/BPText/BPText'
@@ -11,19 +11,43 @@ import BPButton from '../../../../../common/BPButton/BPButton'
 import BPInput from '../../../../../common/BPInput/BPInput'
 import Spacer from '../../../../../common/Spacer/Spacer'
 import Modal from 'react-native-modal'
+import PickerComp from '../../../../../components/PickerComp/PickerComp'
 
 const AddressManagement = () => {
     let today = new Date()
+    const options= [
+        {label: 'Select Coin...', value: null}
+        
+    ]
+    const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Select Coin', value: null})
+
     let [date1, setDate1] = useState(today);
     let [date2, setDate2] = useState(today);
     const [query, setquery] = useState('')
     const [address, setaddress] = useState('')
     const [label, setlabel] = useState('')
     const [isEnabled, setIsEnabled] = useState(false);
+    const [check, setcheck] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [isVisible, setVisible] = useState(false)
+    const [whitelist, setwhitelist] = useState([])
     const showModal =()=>{
         setVisible(!isVisible)
+        setaddress('')
+        setlabel('')
+    }
+
+    const handleCheckBox = ()=>{
+        setcheck(!check)
+    }
+    const handleWhitelist = (item) =>{
+        if(whitelist.find(i=> i.id === item.id)){
+            let arr = whitelist.filter(i=> i.id !== item.id);
+            setwhitelist(arr)
+        }else{
+            let arr = whitelist.concat([item])
+            setwhitelist(arr)
+        }
     }
 
     return (
@@ -97,12 +121,80 @@ const AddressManagement = () => {
                     </View>
 
 
-                    <View style={{flex:1, margin:16}}>
+                    <View style={{flex:1, marginHorizontal:16, marginTop:5}}>
 
-                                <View style={{flexDirection:'row',justifyContent:'space-around', alignItems:'flex-start', borderWidth:1, borderColor: Colors.lightWhite, paddingVertical:12, backgroundColor: Colors.darkGray, marginBottom:10}}>
+                                <ListItem item={{id:'iusidu2232'}}   onPress={()=> handleWhitelist()}/>
+                                <ListItem id={'uipkswk872'} onPress={()=> handleWhitelist()}/>
+                                <ListItem id={'uipks1k872'} onPress={()=> handleWhitelist()}/>
+                       </View>
+
+                    <Modal isVisible={isVisible} onBackButtonPress={()=> showModal()} style={{justifyContent: 'flex-start'}}>
+                        <BPText style={{marginVertical: 10}}>Add Address Management</BPText>
+                        <View style={{backgroundColor: Colors.white, padding:16, borderRadius:14}}>
+                            <View style={{borderColor: Colors.gray, borderWidth:1, }}>
+                            <PickerComp
+                                items={options}
+                                pickerVal = {pickerOrderVal}
+                                setPickerVal = {setPickerOrderVal}
+                                color={Colors.gray}
+                                chevronPositionTop= {16}
+                                chevronColor= {Colors.gray}
+                                height= {50}
+                                marginLeft={-5}
+                                width ={Dimensions.get("window").width -10}
+                                scale={0.9}
+                                
+                            /> 
+                                               
+                            </View>
+                            <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
+                                <TextInput
+                                    placeholder="Label"
+                                    placeholderTextColor={Colors.gray}
+                                    value={label}
+                                    onChangeText ={(t)=> setlabel(t)}
+                                    style={{color: Colors.gray}}
+                                    underlineColorAndroid="transparent"
+                                />
+                                               
+                            </View>
+                            <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
+                                <TextInput
+                                        placeholder="Address"
+                                        placeholderTextColor={Colors.gray}
+                                        value={address}
+                                        onChangeText ={(t)=> setaddress(t)}
+                                        style={{color: Colors.gray}}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                               
+                                </View>
+                            <TouchableOpacity  onPress={()=> handleCheckBox()} style={{marginTop:8,flexDirection:'row', justifyContent:'flex-start', alignItems:'center',  marginLeft:-10}}>
+                            
+                                <CheckBox checked={check} color={Colors.darkGray}/>
+                                
+                                <Text style={{marginLeft:15}}>Discussion with Client</Text>
+                                 
+                            
+                            </TouchableOpacity>
+                            <View style={{marginTop:8,}}>
+
+                                <BPButton borderRadius={0} backgroundColor={Colors.darkGray} label={"Submit"} textColor={Colors.white} />
+                            </View>
+                        </View>
+                    </Modal>
+                </Content>
+            </Container>
+        </SafeAreaView>
+    )
+}
+
+const ListItem = ({item, id, onPress}) =>{
+    return(
+        <View style={{flexDirection:'row',justifyContent:'space-around', alignItems:'flex-start', borderWidth:1, borderColor: Colors.lightWhite, paddingVertical:12, backgroundColor: Colors.darkGray, marginBottom:10, marginVertical:5}}>
                                     
                                     <View style={{flex:0.5, justifyContent:'center', alignItems:"center"}}>
-                                        <TouchableOpacity style={{borderColor: Colors.white, borderWidth:1, padding:5, width:10}}>
+                                        <TouchableOpacity onPress={()=> onPress(item)} style={{borderColor: Colors.white, borderWidth:1, padding:5, width:10}}>
 
                                         </TouchableOpacity>
                                     </View>
@@ -124,37 +216,6 @@ const AddressManagement = () => {
                                     </View>
 
                                 </View>
-                       </View>
-
-                    <Modal isVisible={isVisible} onBackButtonPress={()=> showModal()}>
-                        <View style={{backgroundColor: Colors.white, padding:16}}>
-                            <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
-                                <TextInput
-                                    placeholder="Label"
-                                    placeholderTextColor={Colors.gray}
-                                    value={label}
-                                    onChangeText ={(t)=> setlabel(t)}
-                                    style={{color: Colors.gray}}
-                                        
-                                />
-                                               
-                            </View>
-                            <View style={{borderColor: Colors.gray, borderWidth:1, marginTop:8, paddingHorizontal:16,}}>
-                                <TextInput
-                                        placeholder="Address"
-                                        placeholderTextColor={Colors.gray}
-                                        value={address}
-                                        onChangeText ={(t)=> setaddress(t)}
-                                        style={{color: Colors.gray}}
-                                        
-                                    />
-                            </View>
-                            
-                        </View>
-                    </Modal>
-                </Content>
-            </Container>
-        </SafeAreaView>
     )
 }
 

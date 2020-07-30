@@ -20,10 +20,10 @@ const TradesRightCol = () => {
             <TradesOrderTabs />
              
 
-            <View style={{marginRight:16, marginLeft:3}}>
+            <View style={{marginRight:16, marginLeft:3, flex:1}}>
                
 
-                <View style={{height:200}}>
+                <View style={{flex:0.3}}>
                     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginVertical:16}}>
                             <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding:10}}>
                                 <View style={{height:14, width:14, borderRadius:2, backgroundColor: Colors.lightGreen, marginHorizontal:5}}/>

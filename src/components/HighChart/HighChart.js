@@ -121,6 +121,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primeBG,
         justifyContent:'space-evenly',
  
-        height:230
+        height:250
     }
 });

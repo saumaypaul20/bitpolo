@@ -3,8 +3,9 @@ import { View, Text } from 'react-native'
 import { Picker, Icon } from 'native-base'
 import { Colors } from '../../theme'
 
-const PickerComp = (props) => {
-    const {color, scale, width, height, backgroundColor, items, marginLeft, chevronSize } = props
+ 
+    const PickerComp = ({chevronColor= Colors.lightWhite , color=Colors.lightWhite, scale, width, height, backgroundColor, items, marginLeft, chevronSize, chevronPositionTop,chevronPositionRight, pickerVal, setPickerVal}) => {
+    // const { } = props
 
     return (
         <>
@@ -14,20 +15,20 @@ const PickerComp = (props) => {
                     marginLeft: marginLeft || 0,
                     width: width || 140 , 
                     height: height || 16, 
-                    color: color ||Colors.lightWhite, 
+                    color: color, 
                     backgroundColor: backgroundColor || "transparent", 
                     transform: [
                         { scaleX: scale || 0.9 }, 
                         { scaleY: scale || 0.9 },
                         ]
                 }}
-                selectedValue={props.pickerVal}
-                onValueChange={(val)=> props.setPickerVal(val)}
+                selectedValue={pickerVal}
+                onValueChange={(val)=> setPickerVal(val)}
                 itemStyle={{
                     backgroundColor: Colors.transparent,
                 }}
                 itemTextStyle={{ 
-                    color: Colors.white
+                    color: color
                 }}
                 >
             {items.map((item, index)=>{
@@ -37,7 +38,7 @@ const PickerComp = (props) => {
                     
             </Picker>
 
-            <Icon type="FontAwesome" name="chevron-down" style={{position:'absolute', top: props.chevronPositionTop || 5, right: props.chevronPositionRight || 10, fontSize: chevronSize || 14, color: Colors.lightWhite}} />
+            <Icon type="FontAwesome" name="chevron-down" style={{position:'absolute', top: chevronPositionTop || 5, right: chevronPositionRight || 10, fontSize: chevronSize || 14, color: chevronColor}} />
          </>
     )
 }

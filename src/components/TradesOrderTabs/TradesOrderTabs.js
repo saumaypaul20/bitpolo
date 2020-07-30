@@ -82,7 +82,7 @@ const TradesOrderTabs = () => {
     }
 
     return (
-        <View>
+        <View style={{flex:1}}>
 
             <View style={{justifyContent:'space-around', alignItems:'center', backgroundColor: Colors.darkGray2, alignSelf:'stretch', flexDirection:'row'}}>
                 <Tab label ="Buy" active={tab} type={1} onPress={()=>settab(1)}/>
@@ -105,7 +105,7 @@ const TradesOrderTabs = () => {
             
             </View>
 
-            <View style={{marginRight:16, marginLeft:3}}>
+            <View style={{marginRight:16, marginLeft:3, flex:1}}>
                 <InputCounter label=  {pickerOrderVal == "limit" ?"Amount in INR" : "Market"} disabled={pickerOrderVal == "market"} onInputChange={(t)=> setinramount(t)} input={inramount} onIncrease={pickerOrderVal == "limit"  ?onIncreaseINR: null} onDecrease={pickerOrderVal == "limit"  ?onDecreaseINR: null}/> 
 
                 <Spacer space={8}/>

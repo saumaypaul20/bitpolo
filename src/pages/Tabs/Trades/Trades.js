@@ -108,7 +108,7 @@ const Trades = () => {
             <Container style={{ flex: 1, backgroundColor:Colors.primeBG}}>
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
             <Toolbar backgroundColor={Colors.darkGray2} title={"Exchange"}/>
-            <Content contentContainerStyle={{ flexGrow: 1 }}>
+            <View   style={{flex:1}}>
                 <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', }}>
                 
                     <View style={styles.headerContainer}>
@@ -156,7 +156,7 @@ const Trades = () => {
  
 
                 </View>
-            </Content>
+            </View>
         </Container>
         </SafeAreaView>
     )
