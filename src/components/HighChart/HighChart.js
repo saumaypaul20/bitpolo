@@ -106,11 +106,11 @@ export default class HighChart extends React.Component {
     }
     render() {
         return (
-            <View style={{ }}>
-                <HighchartsReactNative
+            <View style={{ backgroundColor: Colors.primeBG}}>
+                {this.props.bids.length> 0 && this.props.asks.length>0 && <HighchartsReactNative
                     styles={styles.container}
                     options={this.state.chartOptions}
-                />
+                />}
             </View>
         );
     }

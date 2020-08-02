@@ -11,10 +11,7 @@ import TradesOrderTabs from '../TradesOrderTabs/TradesOrderTabs'
 import DepthChart from '../AreaChart/DepthChart'
 import HighChart from '../HighChart/HighChart'
 const TradesRightCol = () => {
-    const [pickerOrderVal, setPickerOrderVal] = useState(null)
-    const orderItems = [{label:"Limit Order", value:"val1"}]
-   
-
+    //alert("riglt col")
     return (
         <View style={{flex:1}}>
             <TradesOrderTabs />

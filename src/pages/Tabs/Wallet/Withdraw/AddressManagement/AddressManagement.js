@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Icon, CheckBox, Body } from 'native-base'
@@ -20,7 +20,9 @@ const AddressManagement = () => {
         
     ]
     const filter= [
-        {label: 'All', value: 'all'}
+        {label: 'All', value: 'all'},
+        {label: 'Whitelisted', value: 'whitelisted'},
+        {label: 'UnWhitelisted', value: 'unwhitelisted'},
         
     ]
     const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Select Coin', value: null})
@@ -33,9 +35,9 @@ const AddressManagement = () => {
     const [label, setlabel] = useState('')
     const [isEnabled, setIsEnabled] = useState(false);
     const [check, setcheck] = useState(false);
-    // const [whitelists, setwhitelists] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [isVisible, setVisible] = useState(false)
+    const [queue, setqueue] = useState([])
     const [whitelist, setwhitelist] = useState([])
     const items = [{id:'khdjfbksh3'}, {id:'62768332423'}, {id:'87389ndfe'}];
     const showModal =()=>{
@@ -44,15 +46,12 @@ const AddressManagement = () => {
         setlabel('')
     }
 
-    const handleCheckBox = ()=>{
+    const handleCheckBox = useCallback(()=>{
         setcheck(!check)
-    }
+    },[check])
     const onStarPress =(item)=>{
-        let arr = whitelist.push(item)
-        setwhitelist(arr)
-    }
+    
 
-    const handleWhitelist = (item) =>{
         if(whitelist.length>0 && whitelist?.find(i=> i.id === item.id)){
             let arr = whitelist.filter(i=> i.id !== item.id);
             setwhitelist(arr)
@@ -61,6 +60,16 @@ const AddressManagement = () => {
             setwhitelist(arr)
         }
     }
+
+    const handleWhitelist = useCallback((item) =>{
+        if(queue.length>0 && queue?.find(i=> i.id === item.id)){
+            let arr = queue.filter(i=> i.id !== item.id);
+            setqueue(arr)
+        }else{
+            let arr = queue.concat([item])
+            setqueue(arr)
+        }
+    })
 
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
@@ -89,30 +98,11 @@ const AddressManagement = () => {
                     </View>
 
                     <View style={{flexDirection:'row', padding:16, backgroundColor:Colors.primeBG, justifyContent:'space-around'}}>
-                           
-                                <TouchableOpacity style={{borderWidth:1, borderRadius:4, borderColor: Colors.white, paddingVertical:8 , paddingHorizontal:8, flexDirection:'row', alignItems:'center'}}>
-                                    <View style={{backgroundColor: Colors.white, color: Colors.primeBG, borderRadius:7, width:14,height:14, justifyContent:"center", alignContent:'center'}}>
-                                    <Text  style={{textAlign:'center'}}>+</Text>
-                                    </View>
-                                    <Spacer space={5} />
-                                    <BPText style={{fontSize:12}}>Add to whitelist</BPText>
-                                </TouchableOpacity>
-                           
-                                <TouchableOpacity style={{borderWidth:1, borderRadius:4, borderColor: Colors.white, paddingVertical:8 , paddingHorizontal:8, flexDirection:'row', alignItems:'center'}}>
-                                    <View style={{backgroundColor: Colors.white, color: Colors.primeBG, borderRadius:7, width:14,height:14, justifyContent:"center", alignContent:'center'}}>
-                                    <Text  style={{textAlign:'center'}}>-</Text>
-                                    </View>
-                                    <Spacer space={5} />
-                                    <BPText style={{fontSize:12}}>Remove from whitelist</BPText>
-                                </TouchableOpacity>
-                           
-                                <TouchableOpacity style={{borderWidth:1, borderRadius:4, borderColor: Colors.white, paddingVertical:8 , paddingHorizontal:8, flexDirection:'row', alignItems:'center'}}>
-                                <View style={{backgroundColor: Colors.white, color: Colors.primeBG, borderRadius:7, width:14,height:14, justifyContent:"center", alignContent:'center'}}>
-                                    <Text  style={{textAlign:'center'}}>-</Text>
-                                    </View>
-                                    <Spacer space={5} />
-                                    <BPText style={{fontSize:12}}>Delete</BPText>
-                                </TouchableOpacity>
+
+                            <QuickButtons disabled={queue.length === 0} label={"Add to whitelist"} onPress={()=> console.log("i")}/>
+                            <QuickButtons disabled={queue.length === 0} label={"Remove from whitelist"} onPress={()=> console.log("i")}/>
+                            <QuickButtons disabled={queue.length === 0} label={"Delete"} onPress={()=> console.log("i")}/>
+                               
                     </View>
                     <View style={{flexDirection:'row', paddingHorizontal:16, paddingVertical:8,backgroundColor:Colors.darkGray, justifyContent:'space-between', alignItems:'center'}}>
                                 <BPText style={{fontSize:12}}>Only display whitelisted addresses</BPText>
@@ -124,11 +114,9 @@ const AddressManagement = () => {
                                 color={Colors.white}
                                 chevronPositionTop= {10}
                                 chevronColor= {Colors.white}
-                                 
                                 marginLeft={0}
                                 width ={80}
                                 scale={0.9}
-                                
                             /> 
                                 </View>
                     </View>
@@ -148,10 +136,9 @@ const AddressManagement = () => {
                     <View style={{flex:1, marginHorizontal:16, marginTop:5}}>
                             {
                                 items.map((item, index)=>{
-                                    return <ListItem active={whitelist.length>0 && whitelist.find(i=> item.id=== i.id )? true : false} item={item} key={item.id}  onPress={()=> handleWhitelist(item)} onStarPress={()=> onStarPress(item)}/>
+                                    return <ListItem active={queue.length>0 && queue.find(i=> item.id=== i.id )? true : false} item={item} key={item.id}  onPress={()=> handleWhitelist(item)} onStarPress={()=> onStarPress(item)} isWhitelist={whitelist.length>0 && whitelist?.find(i=> i.id == item.id)}/>
                                 })
                             }
-                                
                                 
                        </View>
 
@@ -196,11 +183,11 @@ const AddressManagement = () => {
                                     />
                                                
                                 </View>
-                            <TouchableOpacity  onPress={()=> handleCheckBox()} style={{marginTop:8,flexDirection:'row', justifyContent:'flex-start', alignItems:'center',  marginLeft:-10}}>
+                            <TouchableOpacity  onPress={()=> handleCheckBox()} style={{marginVertical:12,flexDirection:'row', justifyContent:'flex-start', alignItems:'center',  marginLeft:-10}}>
                             
                                 <CheckBox checked={check} color={Colors.darkGray}/>
                                 
-                                <Text style={{marginLeft:15}}>Discussion with Client</Text>
+                                <Text style={{marginLeft:15}}>Add to Whitelist</Text>
                                  
                             
                             </TouchableOpacity>
@@ -216,7 +203,7 @@ const AddressManagement = () => {
     )
 }
 
-const ListItem = ({item, active, onPress, onStarPress}) =>{
+const ListItem = ({item, active, onPress, onStarPress, isWhitelist}) =>{
     return(
         <View style={{flexDirection:'row',justifyContent:'space-around', alignItems:'flex-start', borderWidth:1, borderColor: Colors.lightWhite, paddingVertical:12, backgroundColor: Colors.darkGray, marginBottom:10, marginVertical:5}}>
                                     
@@ -240,10 +227,10 @@ const ListItem = ({item, active, onPress, onStarPress}) =>{
                                         <BPText style={{color: Colors.lightWhite, fontSize:12}}>Label</BPText>
                                         <BPText style={{fontSize:12}}>{item.id}</BPText>
                                     </View>
-                                    <View style={{flex:1, alignItems:'center'}}>
+                                    <View style={{flex:1, }}>
+                                       <TouchableOpacity style={{alignItems:'center'}} onPress={()=> onStarPress(item)}>
                                         <BPText style={{color: Colors.lightWhite, fontSize:12}}>Whitelist</BPText>
-                                       <TouchableOpacity onPress={()=> onStarPress(item)}>
-                                        <Image source={Images.star_icon} style={{width:10, height:10, marginTop:2}}/>
+                                        <Image source={!isWhitelist ?Images.star_icon : Images.star_active} style={{width:10, height:10, marginTop:2}}/>
                                        </TouchableOpacity>
                                     </View>
 
@@ -251,4 +238,16 @@ const ListItem = ({item, active, onPress, onStarPress}) =>{
     )
 }
 
+
+const QuickButtons = ({onPress, label, disabled}) =>{
+    return (
+        <TouchableOpacity disabled={disabled} onPress={()=> onPress()} style={{borderWidth:1, borderRadius:4, borderColor: Colors.white, paddingVertical:8 , paddingHorizontal:8, flexDirection:'row', alignItems:'center', opacity: disabled ? 0.5:1}}>
+            <View style={{backgroundColor: Colors.white, color: Colors.primeBG, borderRadius:7, width:14,height:14, justifyContent:"center", alignContent:'center'}}>
+            <Text  style={{textAlign:'center'}}>+</Text>
+            </View>
+            <Spacer space={5} />
+            <BPText style={{fontSize:12}}>{label}</BPText>
+        </TouchableOpacity>
+    )
+}
 export default AddressManagement

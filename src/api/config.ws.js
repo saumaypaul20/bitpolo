@@ -23,7 +23,7 @@ export const startSocket=() => {
     socket.on("connect", function() {
      
         console.log("connected scoket---------------")
-        //emitPingEvent()
+        emitPingEvent()
         // setInterval(() => {
         //     console.log("emiting ping")
         //     socket.emit("ping");

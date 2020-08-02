@@ -21,6 +21,7 @@ import { act } from 'react-test-renderer'
 import { equalityFnBankslist } from '../../../../utils/reduxChecker.utils'
 import { withdraw } from '../../../../api/wallet.api'
 import { getPublicIP } from '../../../../utils/apiHeaders.utils'
+import { imageRenderer } from '../../../../utils/component.utils'
 
 
 
@@ -297,7 +298,7 @@ const Withdraw = () => {
                     onPress= {()=> setshowItems(!showItems)}
                     noBorder 
                     label={`${activecoin.asset_code} (${activecoin.asset_name})`}
-                    image = {{uri:activecoin?.logo_url}}
+                    image = {imageRenderer(activecoin.asset_code)}
                     backgroundColor={Colors.darkGray} 
                     rightElement={!showItems ?<ChevronRight /> : <ChevronRight arrow="down"
                     />}/>}
@@ -308,12 +309,12 @@ const Withdraw = () => {
                             {   assetList.map(i=>{
                                         let p={label: i.asset_code, value: i.asset_code } ; 
                                         // return <TouchableOpacity style={{marginHorizontal:16, paddingVertical:10, marginHorizontal:32}} onPress={()=> setActiveView(i.asset_code)}><BPText>{i.asset_code}</BPText></TouchableOpacity>
-                                        return   <SettingsListItem  
+                                        return <SettingsListItem  
                                         key={i.asset_code}
                                         onPress= {()=> setActiveView(i.asset_code)}
                                         backgroundColor={Colors.darkGray}
                                         label={`${i.asset_code} (${i.asset_name})`}
-                                        image = {{uri:i.logo_url}}
+                                        image = {imageRenderer(i.asset_code)}
                                         noBorder
                                        />
                                     })}

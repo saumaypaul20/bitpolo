@@ -18,6 +18,7 @@ import { getBankAccounts } from '../../../api/payments.api'
 import { addBanks } from '../../../redux/actions/payments.action'
 import { equalityFnIndexPrice } from '../../../utils/reduxChecker.utils'
 import { toDecimal } from '../../../utils/converters'
+import { imageRenderer } from '../../../utils/component.utils'
 
 
 const rightEl =(val)=>{
@@ -36,6 +37,8 @@ const Wallet = () => {
     const sortByAlpha =()=>{
          console.log('soon')
     }
+
+    
  
     const getWalletAsset = useCallback(async () =>{
         let toPassHeader={
@@ -133,6 +136,7 @@ const Wallet = () => {
                                     label="History" 
                                     image_size={13}
                                     disabled={assets.length === 0}
+                                    onPress={()=> navigation.navigate(screenNames.MARKET_PAGE)}
                                 />
                             </View>
                             
@@ -146,7 +150,7 @@ const Wallet = () => {
                                 marginHorizontal:16
                             }}>
                                 <View style={{ flex:1, flexDirection:'row',justifyContent:'flex-start', alignItems:'flex-start', alignSelf:'stretch', paddingVertical:20}}>
-                                    <BPText style={{fontSize:15}}>Hide Other Pairs </BPText>
+                                    <BPText style={{fontSize:15}}>Show All Balances </BPText>
 
                                     <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>
                                 </View>
@@ -164,9 +168,10 @@ const Wallet = () => {
                                         <SettingsListItem 
                                         key={item._id}
                                         label={`${item.asset_code} (${item.asset_name})`}
-                                        image={{uri: item.logo_url}} 
+                                        image={imageRenderer(item.asset_code, 0)} 
                                         paddingHorizontal={20} 
                                         borderBottom
+                                        imageType={0}
                                         rightElement={rightEl(balance[item.asset_code].available.balance)}
                                         />
                                     )

@@ -17,7 +17,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../../utils/apiHeaders.utils'
 import { convertDate } from '../../../../utils/converters'
 import QRCode from 'react-native-qrcode-svg';
-import { copyText } from '../../../../utils/component.utils'
+import { copyText, imageRenderer } from '../../../../utils/component.utils'
 import PickerComp from '../../../../components/PickerComp/PickerComp'
 import Modal from 'react-native-modal'
 import { addBanks } from '../../../../redux/actions/payments.action'
@@ -599,7 +599,7 @@ let Deposit = () => {
                     onPress= {()=> setshowItems(!showItems)}
                     noBorder 
                     label={`${activecoin.asset_code} (${activecoin.asset_name})`}
-                    image = {{uri:activecoin?.logo_url}}
+                    image = {imageRenderer(activecoin.asset_code)}
                     backgroundColor={Colors.darkGray} 
                     rightElement={!showItems ?<ChevronRight /> : <ChevronRight arrow="down"
                     />}
@@ -617,7 +617,7 @@ let Deposit = () => {
                                         onPress= {()=> setActiveView(i.asset_code)}
                                         backgroundColor={Colors.darkGray}
                                         label={`${i.asset_code} (${i.asset_name})`}
-                                        image = {{uri:i.logo_url}}
+                                        image = {imageRenderer(i.asset_code)}
                                         noBorder
                                          
                                        />

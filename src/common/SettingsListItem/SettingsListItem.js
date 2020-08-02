@@ -12,6 +12,7 @@ const SettingsListItem = ({
     borderBottom, 
     noBorder, 
     borderTop, 
+    imageType,
     backgroundColor="transparent"
 }) => {
     return (
@@ -27,7 +28,9 @@ const SettingsListItem = ({
             }}
             >
            <View style={{flexDirection:'row', flex:1, alignSelf:'flex-start', alignItems:"center"}}>
-              {image &&  <Image source={image} style={{width: 18, marginRight:20, height:18}} resizeMode="contain"/>}
+              {image &&  <View style={{justifyContent:'center', alignItems:'center', backgroundColor:imageType !=0 ?'#000': 'transparent', borderRadius:14, marginRight:20, padding: imageType!==0 ?5:0}}>
+                <Image source={image} style={{width: 18,  height:18}} resizeMode="contain"/>
+                </View>}
                 <BPText style={{ fontSize:18}}>{label}</BPText>
            </View>
            {

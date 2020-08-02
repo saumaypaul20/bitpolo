@@ -53,8 +53,8 @@ class App extends Component {
                             width:'100%'
                         }
                     }}
-                    listKey={(item, index) => 'D' + index.toString()}
-                    keyExtractor={(item, index) => item.t.toString()}
+                    listKey={(item, index) => this.props.type + item.p.toString()}
+                    keyExtractor={(item, index) => this.props.type + item.p.toString()}
                 /> : null}
 
             </View>

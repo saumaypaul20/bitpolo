@@ -2,23 +2,24 @@ import React, { useState, useEffect } from 'react'
 import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab, Left } from 'native-base'
-import Toolbar from '../../../components/Toolbar/Toolbar'
-import { Colors, Images, Fonts } from '../../../theme'
-import PickerComp from '../../../components/PickerComp/PickerComp'
-import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
-import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent } from '../../../api/config.ws'
-import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
-import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
-import { getMatchingMarketList } from '../../../api/markets.api'
-import { splitIt } from '../../../utils/converters'
-import { useDispatch, useSelector, shallowEqual } from 'react-redux'
-import { storeCurrencies, setActiveTradePair } from '../../../redux/actions/markets.action'
-import { addDepthSubs } from '../../../redux/actions/depthSubs.action'
+import Toolbar from '../../components/Toolbar/Toolbar'
+import { Colors, Images, Fonts } from '../../theme'
+import PickerComp from '../../components/PickerComp/PickerComp'
+// import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
+import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent } from '../../api/config.ws'
+// import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
+// import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
+import { getMatchingMarketList } from '../../api/markets.api'
+import { splitIt } from '../../utils/converters'
+import { useDispatch, useSelector } from 'react-redux'
+import { storeCurrencies, setActiveTradePair } from '../../redux/actions/markets.action'
+import { addDepthSubs } from '../../redux/actions/depthSubs.action'
 import { useNavigation } from '@react-navigation/native'
-import { screenNames } from '../../../routes/screenNames/screenNames'
-import { equalityFnMarket } from '../../../utils/reduxChecker.utils'
+import { screenNames } from '../../routes/screenNames/screenNames'
+import { equalityFnMarket } from '../../utils/reduxChecker.utils'
+import BPText from '../../common/BPText/BPText'
 let id= 0
-const Trades = () => {
+const MarketPage = () => {
     // console.log("trdes reloads---------------------------------------------", id);
     
     // id++
@@ -26,7 +27,7 @@ const Trades = () => {
     const dispatch = useDispatch()
     const navigation= useNavigation()
     const currencies = useSelector(state=> state.marketReducer.currencies)
-    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
+    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair)
     // const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
     // let found = market_data.find(i=> i.params[0] === activeTradePair)
     // // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
@@ -63,24 +64,24 @@ const Trades = () => {
         }
     }
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            setloading(true)
-            emitDepthSubscribeEvent(currencyVal, activeTradePair)
-          });
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         setloading(true)
+    //         emitDepthSubscribeEvent(currencyVal, activeTradePair)
+    //       });
       
-          return unsubscribe;
-    }, [navigation])
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('blur', () => {
-            setloading(false)
-          //  dispatch(setActiveTradePair(null))
-            //+setActiveTradePair(null)
-            emitDepthUnsubscribeEvent(currencyVal)
-          });
+    //       return unsubscribe;
+    // }, [navigation])
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('blur', () => {
+    //         setloading(false)
+    //       //  dispatch(setActiveTradePair(null))
+    //         //+setActiveTradePair(null)
+    //         emitDepthUnsubscribeEvent(currencyVal)
+    //       });
       
-          return unsubscribe;
-    }, [navigation])
+    //       return unsubscribe;
+    // }, [navigation])
 
     useEffect(() => {
        // emitDepthSubscribeEvent()
@@ -100,7 +101,7 @@ const Trades = () => {
         console.log("statt e,mit")
       setTimeout(() => {
           if(!activeTradePair){return  }
-         emitDepthSubscribeEvent(currencyVal, activeTradePair)
+         //emitDepthSubscribeEvent(currencyVal, activeTradePair)
       }, 2000);
      }, [activeTradePair])
  
@@ -110,7 +111,7 @@ const Trades = () => {
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1, backgroundColor:Colors.primeBG}}>
             {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-            <Toolbar backgroundColor={Colors.darkGray2} title={"Exchange"}/>
+            {/* <Toolbar backgroundColor={Colors.darkGray2} title={"Exchange"}/> */}
             {/* <Content contentContainerStyle={{ flexGrow: 1 }}>
                 
             </Content> */}
@@ -126,12 +127,12 @@ const Trades = () => {
                     
                     <PickerComp
                         items={Lcurrencies}
-                        pickerVal = {activeTradePair}
+                        pickerVal = {activeTradePair} 
                         setPickerVal = {(val)=>{
                             dispatch(addDepthSubs(null));
                             setCurrency(activeTradePair);
                             dispatch(setActiveTradePair(val))
-                            //found= null
+                             
                         }}
                         chevronPositionTop= {3}
                     />
@@ -150,22 +151,68 @@ const Trades = () => {
             </View>}
                 renderItem={
                     ({item,index})=>{
-                        //alert("uyou")
                         return(
                             <View style={{  justifyContent:'flex-start', alignItems:'center', }}>
                 
+                                <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', marginHorizontal:16, borderTopColor:Colors.lightWhite, borderTopWidth:0.5}}>
+
+                                    <View style={{flexDirection:'row', flex:1, justifyContent:'space-around',paddingVertical:10,}}>
+                                        <BPText style={{ color: Colors.lightWhite}}>Last Price</BPText>
+                                        <BPText>90232.89 USDT</BPText>
+                                    </View>
+                                    <View style={{width:0.5, backgroundColor: Colors.lightWhite}}/>
+                                    <View style={{flexDirection:'row', flex:1, justifyContent:'space-around',paddingVertical:10,}}>
+                                        <BPText style={{ color: Colors.lightWhite}}>24H Change</BPText>
+                                        <BPText>-1.864%</BPText>
+                                    </View>
+
+                                </View>
+
+
+                                <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch',paddingVertical:10, marginHorizontal:16, backgroundColor: Colors.darkGray}}>
+
+                                    <View style={{ flex:1, alignItems:'flex-start'}}>
+                                        <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Highest</BPText>
+                                        <BPText style={{fontSize:12}}>8011.96 USDT</BPText>
+                                    </View>
+                                    
+                                    <View style={{ flex:1, alignItems:'center'}}>
+                                        <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Lowest</BPText>
+                                        <BPText style={{fontSize:12}}>7300 USDT</BPText>
+                                    </View>
+                                    <View style={{ flex:2,  alignItems:'flex-end'}}>
+                                        <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Volume / Value</BPText>
+                                        <BPText style={{fontSize:12}}>63.63 BTC / 466106.14 USDT</BPText>
+                                    </View>
+
+                                </View>
                                 
+                                <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16, backgroundColor: Colors.darkGray2}}>
+
+                                    <View style={{ flex:1, alignItems:'center', borderBottomWidth:1, borderBottomColor: Colors.white, paddingVertical:12}}>
+                                        <BPText style={{textTransform:'uppercase'}}>PRICE Chart</BPText>
+                                    </View>
+                                    
+                                    <View style={{ flex:1, alignItems:'center', borderBottomWidth:1, borderBottomColor: Colors.white, paddingVertical:12}}>
+                                       
+                                        <BPText style={{textTransform:'uppercase'}}>Depth Chart</BPText>
+                                    </View>
+                                    <View style={{ flex:2,  alignItems:'flex-end'}}>
+                                        <BPText>8</BPText>
+                                    </View>
+
+                                </View>
                                 
                                 
                                 {/* ---------------------------------- */}
 
-                            {(Lcurrencies.length == 0  || !loading) ?  
+                            {/* {(Lcurrencies.length == 0 || !found || !loading) ?  
                                 <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
                             :
                                 <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
                                     {activeTradePair && <TradesLeftCol />}
                                     {activeTradePair && <TradesRightCol /> }
-                                </View>}
+                                </View>} */}
 
                                 {/* {-----------------------------} */}
             
@@ -190,4 +237,4 @@ const styles= StyleSheet.create({
     headerIconStyles:{width:22, height:22}
 })
 
-export default Trades
+export default MarketPage

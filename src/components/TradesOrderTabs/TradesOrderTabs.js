@@ -27,6 +27,7 @@ const Tab =({label , onPress, active, type}) =>{
 }
 
 const TradesOrderTabs = () => {
+    //alert("ordertabs")
     const [tab, settab] = useState(1)
     const [inramount, setinramount] = useState('')
     const [cryptoamount, setcryptoamount] = useState('')

@@ -1,5 +1,6 @@
 import { Platform, ToastAndroid, Linking, Clipboard } from "react-native";
 import { Toast } from "native-base";
+import { Images } from "../theme";
 
 
 export const renderToast = (message) => {
@@ -55,4 +56,21 @@ const startSocket=(marketPairs) => {
   socket.on("disconnect", function(){
       console.log("socket disconnected");
   });
+}
+
+export const imageRenderer = (item, type)=>{
+  switch(item){
+      case 'USDT':
+          return type==0? Images.usdt_white :Images.usdt_black;
+      case 'INR':
+          return type==0? Images.inr_white :Images.inr_black;
+      case 'LTC':
+           return type==0? Images.ltc_white : Images.ltc_black;
+      case 'BTC':
+           return type==0? Images.btc_white : Images.btc_black;
+      case 'ETH':
+           return Images.eth_white;
+      default:
+           return type==0? Images.dash_white : Images.dash_black;
+  }
 }

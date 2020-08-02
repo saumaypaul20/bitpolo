@@ -38,7 +38,6 @@ export const bell_icon =  require('../assets/images/items/bell_icon.png')
 export const information_icon =  require('../assets/images/items/information_icon.png')
 export const small_qr_code_icon =  require('../assets/images/items/small_qr_code_icon.png')
 export const rupee_icon =  require('../assets/images/items/rupee_icon.png')
-export const btc_white =  require('../assets/images/items/btc_white.png')
 export const tick_active_icon =  require('../assets/images/items/tick_active_icon.png')
 export const tick_hide =  require('../assets/images/items/tick_hide.png')
 export const facebook_icon =  require('../assets/images/items/facebook_icon.png')
@@ -48,3 +47,21 @@ export const linkedin_icon =  require('../assets/images/items/linkedin_icon.png'
 export const instagram_icon =  require('../assets/images/items/instagram_icon.png')
 export const medium_icon =  require('../assets/images/items/medium_icon.png')
 export const google_authenticator_icon =  require('../assets/images/items/google_authenticator_icon.png')
+
+export const usdt_black =  require('../assets/images/items/usdt_black.png')
+export const usdt_white =  require('../assets/images/items/usdt_white.png')
+
+export const ltc_black =  require('../assets/images/items/ltc_black.png')
+export const ltc_white =  require('../assets/images/items/ltc_white.png')
+
+export const dash_black =  require('../assets/images/items/dash_black.png')
+export const dash_white =  require('../assets/images/items/dash_white.png')
+
+export const inr_black =  require('../assets/images/items/inr_black.png')
+export const inr_white =  require('../assets/images/items/inr_white.png')
+
+export const btc_black =  require('../assets/images/items/btc_black.png')
+export const btc_white =  require('../assets/images/items/btc_white.png')
+
+export const eth_black =  require('../assets/images/items/eth_black.png')
+export const eth_white =  require('../assets/images/items/eth_white.png')

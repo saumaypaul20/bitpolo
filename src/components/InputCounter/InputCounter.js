@@ -14,7 +14,7 @@ const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disa
             <TextInput
             placeholder={label} 
             editable={!disabled}
-            
+            underlineColorAndroid={'transparent'}
             placeholderTextColor={Colors.white}
             value={ input}
             onChangeText={(text)=> onInputChange((text))}
