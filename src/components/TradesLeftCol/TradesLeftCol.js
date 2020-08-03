@@ -35,8 +35,8 @@ const TradesLeftCol = () => {
     const asks = useSelector(state => state.depthSubsReducer.asks, equalityFnDepths)
     const bids = useSelector(state => state.depthSubsReducer.bids, equalityFnDepths)
     const activeTradePair = useSelector(state => state.marketReducer.activeTradePair, shallowEqual)
-    console.log("depths asks left **********", asks)
-    console.log("depths bids left **********", bids)
+    //console.log("depths asks left **********", asks)
+    //console.log("depths bids left **********", bids)
     // console.log("market ata ^^^^^^^^^^^^^^^^^^",market_data)
 
     const currencies = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
