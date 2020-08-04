@@ -97,18 +97,22 @@ const TradesOrderTabs = () => {
     const changeAmount = (t, type) => {
         console.log("total", t, type)
         if (type == 'inramount') {
-            let amt = parseFloat(t);
-            setinramount(amt.toFixed(tradeDetail.stock_prec))
-            setTotal((amt * cryptoamount).toFixed(tradeDetail.money_prec))
+            let amt = parseFloat(t).toFixed(tradeDetail.stock_prec);
+            setinramount(amt)
+            let t= (amt * cryptoamount).toFixed(tradeDetail.money_prec)
+            setTotal(t)
         } else if (type == 'cryptoamount') {
-            let crpt = parseFloat(t)
-            setcryptoamount(crpt.toFixed(tradeDetail.stock_prec))
-            setTotal((t * inramount).toFixed(tradeDetail.money_prec))
+            let crpt = parseFloat(t).toFixed(tradeDetail.stock_prec)
+            setcryptoamount(crpt)
+            let nt= (t * inramount).toFixed(tradeDetail.money_prec)
+            setTotal(nt)
         }
         else if (type == 'total') {
             console.log("total", (parseFloat(t) / inramount).toFixed(tradeDetail.money_prec))
-            setTotal(parseFloat(t).toFixed(tradeDetail.money_prec))
-            setcryptoamount((parseFloat(t) / inramount).toFixed(tradeDetail.money_prec))
+            let nt= parseFloat(t).toFixed(tradeDetail.money_prec)
+            setTotal(nt)
+            let c = (parseFloat(t) / inramount).toFixed(tradeDetail.money_prec)
+            setcryptoamount(c)
         }
 
     }
