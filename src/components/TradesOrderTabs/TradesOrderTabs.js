@@ -94,10 +94,23 @@ const TradesOrderTabs = () => {
         setinramount(t);
         setTotal(parseFloat(t * amt).toFixed(tradeDetail.money_prec))
     }
-    const changeAmount = (t) => {
-        let crpt = parseFloat(t)
-        setcryptoamount(crpt.toFixed(tradeDetail.stock_prec))
-        setTotal((t * inramount).toFixed(tradeDetail.money_prec))
+    const changeAmount = (t, type) => {
+        console.log("total", t, type)
+        if (type == 'inramount') {
+            let amt = parseFloat(t);
+            setinramount(amt.toFixed(tradeDetail.stock_prec))
+            setTotal((amt * cryptoamount).toFixed(tradeDetail.money_prec))
+        } else if (type == 'cryptoamount') {
+            let crpt = parseFloat(t)
+            setcryptoamount(crpt.toFixed(tradeDetail.stock_prec))
+            setTotal((t * inramount).toFixed(tradeDetail.money_prec))
+        }
+        else if (type == 'total') {
+            console.log("total", (parseFloat(t) / inramount).toFixed(tradeDetail.money_prec))
+            setTotal(parseFloat(t).toFixed(tradeDetail.money_prec))
+            setcryptoamount((parseFloat(t) / inramount).toFixed(tradeDetail.money_prec))
+        }
+
     }
 
     const onIncreaseINR = () => {
@@ -159,7 +172,7 @@ const TradesOrderTabs = () => {
                 </> :
 
                     <InputCounter label={"Amount in INR"} disabled={true}
-                        onInputChange={(t) => changeAmount(t)} input={inramount} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR} />
+                        onInputChange={(t) => changeAmount(t, 'inramount')} input={inramount} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR} />
                 }
 
                 <Spacer space={8} />
@@ -169,7 +182,7 @@ const TradesOrderTabs = () => {
                         <InputCounter label={`Total (${divideIt(activeTradePair).b})`} onInputChange={(t) => setTotal(t)} input={total} onIncrease={onIncreaseTOTAL} onDecrease={onDecreaseTOTAL} />
                     </View></>
                     :
-                    <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} onInputChange={(t) => changeAmount(t)} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO} />
+                    <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} onInputChange={(t) => changeAmount(t, 'cryptoamount')} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO} />
                 }
                 <Spacer space={4} />
 
@@ -188,7 +201,7 @@ const TradesOrderTabs = () => {
                         <BPText style={{ opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM }}>Total</BPText>
                     </View>
                     <View style={{ flex: 3, backgroundColor: "red" }}>
-                        <InputCounter onInputChange={(t) => setTotal(t)} input={total} />
+                        <InputCounter onInputChange={(t) => changeAmount(t, 'total')} input={total} />
                     </View>
                     <View style={{ flex: 1 }}>
                         <BPText style={{ opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM }}>{divideIt(activeTradePair).b}</BPText>
