@@ -45,6 +45,23 @@ export const createAssetAddress = (body, toPassHeaders) => {
         }
     })
 }
+export const createWithdrawAddress = (body) => {
+    return new Promise ( async (resolve, reject)=>{    
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(REST.WALLET.CREATE_WITHDRAW_ADDRESS, "POST", body, 200, headers);
+        console.log("createWithdrawAddress res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
 
 export const withdraw = (body) => {
     return new Promise ( async (resolve, reject)=>{    

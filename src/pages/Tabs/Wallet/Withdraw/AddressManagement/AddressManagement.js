@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container, Content, Icon, CheckBox, Body } from 'native-base'
@@ -12,46 +12,93 @@ import BPInput from '../../../../../common/BPInput/BPInput'
 import Spacer from '../../../../../common/Spacer/Spacer'
 import Modal from 'react-native-modal'
 import PickerComp from '../../../../../components/PickerComp/PickerComp'
+import { useNavigation } from '@react-navigation/native'
+import { screenNames } from '../../../../../routes/screenNames/screenNames'
+import { useSelector, shallowEqual } from 'react-redux'
 
 const AddressManagement = () => {
+    const navigation= useNavigation()
     let today = new Date()
-    const options= [
-        {label: 'Select Coin...', value: null}
-        
-    ]
+     
     const filter= [
         {label: 'All', value: 'all'},
         {label: 'Whitelisted', value: 'whitelisted'},
         {label: 'UnWhitelisted', value: 'unwhitelisted'},
         
     ]
+
+    const [options, setoptions] = useState([{label: 'Select Coin...', value: null}])
     const [pickerOrderVal, setPickerOrderVal] = useState({label: 'Select Coin', value: null})
     const [filterval, setfilterval] = useState({label: 'Select Coin', value: null})
-
+    const user = useSelector(state=>state.authReducer.auth_attributes, shallowEqual);
+    console.log(user)
     let [date1, setDate1] = useState(today);
     let [date2, setDate2] = useState(today);
     const [query, setquery] = useState('')
     const [address, setaddress] = useState('')
     const [label, setlabel] = useState('')
-    const [isEnabled, setIsEnabled] = useState(false);
     const [check, setcheck] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [isVisible, setVisible] = useState(false)
     const [queue, setqueue] = useState([])
     const [whitelist, setwhitelist] = useState([])
     const items = [{id:'khdjfbksh3'}, {id:'62768332423'}, {id:'87389ndfe'}];
+    const assetList = useSelector(state=>state.walletReducer.assets)
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => useCallback(setIsEnabled(previousState => !previousState),[]);
+    
+    useEffect(() => {
+        let arr = assetList.map(i=>{
+            let arr = options;
+            let item = {
+                label: i.asset_code,
+                value: i._id
+            }
+
+           return item
+            
+        })
+        setoptions(arr)
+    }, [])
     const showModal =()=>{
         setVisible(!isVisible)
         setaddress('')
         setlabel('')
     }
 
+    const onAddWithdrawAddress = async ()=>{
+        let coin= options.find(i=>
+           pickerOrderVal === i.value 
+             
+        )
+        console.log("coin", coin)
+        if(!coin){ return }
+
+        if(pickerOrderVal === null){return }
+        
+        let body ={
+            data:{
+                attributes:{
+                    asset: pickerOrderVal,
+                    address: address,
+                    label: label,
+                    coin: coin.label,
+                    is_whitelist: check,
+                }
+            }
+        }
+        if(user.attributes.google_auth){
+            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {payload:body,type:'withdraw address', id: user.id})
+        }else{
+            navigation.navigate(screenNames.OTP_SCREEN, {payload:body, type:'withdraw address'})
+        }
+
+        showModal()
+    }
     const handleCheckBox = useCallback(()=>{
         setcheck(!check)
     },[check])
-    const onStarPress =(item)=>{
-    
 
+    const onStarPress =(item)=>{
         if(whitelist.length>0 && whitelist?.find(i=> i.id === item.id)){
             let arr = whitelist.filter(i=> i.id !== item.id);
             setwhitelist(arr)
@@ -193,7 +240,7 @@ const AddressManagement = () => {
                             </TouchableOpacity>
                             <View style={{marginTop:8,}}>
 
-                                <BPButton borderRadius={0} backgroundColor={Colors.darkGray} label={"Submit"} textColor={Colors.white} />
+                                <BPButton borderRadius={0} backgroundColor={Colors.darkGray} label={"Submit"} textColor={Colors.white} onPress={()=> onAddWithdrawAddress()} />
                             </View>
                         </View>
                     </Modal>

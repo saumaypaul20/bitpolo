@@ -19,8 +19,8 @@ import Storage from '../../utils/storage.utils';
 import { changeUserPassword } from '../../api/security.api';
 import { addBankAccount } from '../../api/payments.api';
 import { addBanks } from '../../redux/actions/payments.action';
-import { withdraw } from '../../api/wallet.api';
-
+import { withdraw, createWithdrawAddress } from '../../api/wallet.api';
+    
 const GoogleVerificationCode = (props) => {
     const navigation = useNavigation()
     let email = useSelector(state => state.authReducer.email);
@@ -43,7 +43,10 @@ const GoogleVerificationCode = (props) => {
             // }
             addBankFlow()
         }else if(props.route.params.type === 'withdraw confirmation'){
-             withdrawConfirmation()
+            withdrawConfirmation()
+        
+        }else if(props.route.params.type === 'withdraw address'){
+            withdrawAddress()
         }
         else{
             changeUserPasswordFlow()
@@ -81,6 +84,44 @@ const GoogleVerificationCode = (props) => {
             }else{
                 alert("Something went wrong!")
                 navigation.dispatch(StackActions.pop(2))
+            }
+          
+        }else{
+            alert("Something went wrong. Please Re-enter the code")
+            setCode('')
+        }
+    }
+
+    const withdrawAddress = async ()=>{
+        let payload = {
+            id: props.route.params.id,
+            attributes:{
+                browser : await DeviceInfo.getModel(),
+                ip : await getPublicIP(),
+                is_browser : false,
+                is_mobile : true,
+                is_app : true,
+                os : await DeviceInfo.getSystemName(),
+                os_byte : await DeviceInfo.getSystemVersion(),
+                g2f_code : code,
+                country : geo.country,
+                city : geo.city,
+                region : geo.region
+            }
+        }
+        let res =  await g2fVerify(payload)
+        if(res.status){
+            props.route.params.payload.data.attributes.g2f_code = code;
+            console.log("payload00000", props.route.params.payload)
+            let res = await createWithdrawAddress(props.route.params.payload)
+            if(res.status){
+                console.log("create withdraw address res----#####2",res)
+                //dispatch(addBanks([...banks,props.route.params.body.data.attributes]));
+                navigation.dispatch(StackActions.pop(1))
+                alert("Success!")
+            }else{
+                alert("Something went wrong!")
+                navigation.dispatch(StackActions.pop(1))
             }
           
         }else{
