@@ -109,12 +109,17 @@ const TradesOrderTabs = () => {
         }
         else if (type == 'total') {
             console.log("total", (parseFloat(t) / inramount).toFixed(tradeDetail.money_prec))
-            let nt= parseFloat(t).toFixed(tradeDetail.money_prec)
+            let nt= Number(t) 
             setTotal(nt)
             let c = (parseFloat(t) / inramount).toFixed(tradeDetail.money_prec)
             setcryptoamount(c)
         }
 
+    }
+
+    const letItBlur=(t)=>{
+        if(t)
+        setTotal(t.toFixed(tradeDetail.money_prec));
     }
 
     const onIncreaseINR = () => {
@@ -186,7 +191,7 @@ const TradesOrderTabs = () => {
                         <InputCounter label={`Total (${divideIt(activeTradePair).b})`} onInputChange={(t) => setTotal(t)} input={total} onIncrease={onIncreaseTOTAL} onDecrease={onDecreaseTOTAL} />
                     </View></>
                     :
-                    <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} onInputChange={(t) => changeAmount(t, 'cryptoamount')} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onDecrease={onDecreaseCRYPTO} />
+                    <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} onInputChange={(t) => changeAmount(t, 'cryptoamount')} input={cryptoamount} onIncrease={onIncreaseCRYPTO} onBlurit={(t)=> letItBlur(t)} onDecrease={onDecreaseCRYPTO} />
                 }
                 <Spacer space={4} />
 
