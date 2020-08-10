@@ -140,7 +140,7 @@ const MarketPage = () => {
             setTimeout(() => {
                 //emitDepthSubscribeEvent(currencyVal, activeTradePair)
             }, 1000);
-            emitKlineSubscribeEvent(activeTradePair)}
+            emitKlineSubscribeEvent(activeTradePair, currencyVal)}
           });
       
           return unsubscribe;
@@ -170,7 +170,7 @@ const MarketPage = () => {
        return ()=>{
         //    alert("trades unmounted")
         
- 
+            emitKlineUnsubscribeEvent(currencyVal)
            //dispatch(setActiveTradePair(null))
 
            setloading(false)
@@ -185,7 +185,7 @@ const MarketPage = () => {
             //emitDepthSubscribeEvent(currencyVal, activeTradePair)
             setloading(false)
         }, 1000);
-          emitKlineSubscribeEvent(activeTradePair)
+          emitKlineSubscribeEvent(activeTradePair, currencyVal)
 
       }, 2000);
      }, [activeTradePair])

@@ -44,7 +44,7 @@ const TradesOrderTabs = () => {
     const [pickerOrderVal, setPickerOrderVal] = useState({ label: "Limit Order", value: "limit" })
     const orderItems = [{ label: "Limit Order", value: "limit" }, { label: "Market Order", value: "market" }]
     const activeTradePair = useSelector(state => state.marketReducer.activeTradePair, shallowEqual)
-    const balance = useSelector(state => state.walletReducer.balance.data[divideIt(activeTradePair).b], shallowEqual);
+    const balance = useSelector(state => state.walletReducer.balance?.data[divideIt(activeTradePair).b], shallowEqual);
     const currencies = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
     const market_data = useSelector(state => state.marketReducer.data.find(i => i.params[0] === activeTradePair), shallowEqual)
     const getMatchingMarket = async () => {

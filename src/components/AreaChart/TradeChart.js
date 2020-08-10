@@ -9,15 +9,14 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
  class TradeChart extends React.Component {
         constructor(props){
             super(props)
-            this.state={
-                klines:[]
-            }
             this.update= false
         }
 
         UNSAFE_componentWillReceiveProps(){
-            
-            if (this.webview) this.webview.postMessage(JSON.stringify(
+            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            // console.log(this.props.kline)
+            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            if (this.webview && this.props.kline.length>0) this.webview.postMessage(JSON.stringify(
                 { 
                     update:this.update,
                     width: Dimensions.get("window").width,
@@ -40,6 +39,7 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
         if (this.webview) this.webview.postMessage(JSON.stringify(
             { 
                 width: Dimensions.get("window").width,
+                update: this.update
                 
     
     }));

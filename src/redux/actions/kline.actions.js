@@ -7,6 +7,13 @@ export const addKlineData =(data) =>{
         payload: data,
       };
 }
+export const addKlineQueryData =(data) =>{
+    
+    return {
+        type: TYPES.ADD_KLINE_QUERY_DATA,
+        payload: data,
+      };
+}
  
 export const emptyKlineData =() =>{
     
