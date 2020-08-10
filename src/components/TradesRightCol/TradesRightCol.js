@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import PickerComp from '../PickerComp/PickerComp'
 import { Images, Colors, Fonts } from '../../theme'
@@ -12,6 +12,7 @@ import DepthChart from '../AreaChart/DepthChart'
 import HighChart from '../HighChart/HighChart'
 const TradesRightCol = () => {
     //alert("riglt col")
+
     return (
         <View style={{flex:1}}>
             <TradesOrderTabs />

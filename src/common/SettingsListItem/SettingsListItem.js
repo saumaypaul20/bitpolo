@@ -28,7 +28,7 @@ const SettingsListItem = ({
             }}
             >
            <View style={{flexDirection:'row', flex:1, alignSelf:'flex-start', alignItems:"center"}}>
-              {image &&  <View style={{justifyContent:'center', alignItems:'center', backgroundColor:imageType !=0 ?'#000': 'transparent', borderRadius:14, marginRight:20, padding: imageType!==0 ?5:0}}>
+              {image &&  <View style={{justifyContent:'center', alignItems:'center', borderRadius:14, marginRight:20, }}>
                 <Image source={image} style={{width: 18,  height:18}} resizeMode="contain"/>
                 </View>}
                 <BPText style={{ fontSize:18}}>{label}</BPText>

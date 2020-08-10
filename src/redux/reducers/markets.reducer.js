@@ -23,7 +23,7 @@ const  marketReducer = (state = init_state, action) => {
                 }
             }else if(state?.data?.length > 0){
                 let index = state?.data?.findIndex(i=> i.params[0] === action.payload.params[0])
-                console.log("inex found",index)
+                // console.log("inex found",index)
                 if(index > -1){
                     // console.log("eq2 bool val" ,equalityFnMarket([action.payload],[arr[index]]))
                     if(!equalityFnMarket([action.payload],[arr[index]])){
@@ -35,7 +35,7 @@ const  marketReducer = (state = init_state, action) => {
                         }
                     }
                 }else{
-                  console.log("no indx found..now in else");
+                //   console.log("no indx found..now in else");
                   
                     state = {
                         ...state,
@@ -78,7 +78,7 @@ const  marketReducer = (state = init_state, action) => {
         case TYPES.SET_ACTIVE_TRADE_PAIR:
             state = {
                 ...state,
-               activeTradePair: action.payload
+               activeTradePair: action.payload,
             }
             break
       

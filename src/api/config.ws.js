@@ -6,6 +6,7 @@ import { splitIt } from '../utils/converters';
 import { addDepthSubs, addDepthAsks, addDepthBids } from '../redux/actions/depthSubs.action';
 import _ from 'lodash'
 import { addDealsData } from '../redux/actions/deals.actions';
+import { addKlineData } from '../redux/actions/kline.actions';
 // import { emitPingEvent } from './events.ws';
 // var io = require("socket.io-client/dist/socket.io");
 const pako = require('pako');
@@ -61,7 +62,7 @@ export const startSocket=() => {
                 case "deals.update":
                      
                     if(result.params){
-                        console.log("deals resutlt 0000000000000000000000000",result)
+                        //console.log("deals resutlt 0000000000000000000000000",result)
                         let pair = result.params[0]
                         if(pair.match("INR")){
                             result.params[1].divider= splitIt(result.params[0], "INR")
@@ -71,30 +72,52 @@ export const startSocket=() => {
                        store.dispatch(addDealsData(result))
                     }
                     break
-
-                case "depth.update":
-                    // console.log(result)
-                    // console.log("depth_update res====^=^=^=^=^=",depth_update)
-                    const state = store.getState();
-                    // const depths_data = state.depthSubsReducer.data
-                    // depth_update++
-
-                    let res = result;
-                  
-                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse()
-                    // console.log("-----TEH RES ---- depth",res)
-                    res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse()
-
-                    
-                        store.dispatch(addDepthSubs(res))
-                        store.dispatch(addDepthAsks(res.params[1].asks))
-                        store.dispatch(addDepthBids(res.params[1].bids))
-            
-                    // addDepthSubs
+                case "kline.update":
+                     
+                    if(result.params){
+                        console.log("kline resutlt 0000000000000000000000000",result)
+                        
+                            if( result.params.length === 7){
+                                //alert("yooooo")
+                                store.dispatch(addKlineData(result))
+                             }
+                            // else if( result.params[0][0].length === 8){
+                            //     alert("yooooo2")
+                            //     let res = result;
+                            //     res.params= res.params[0][0]
+                            //     store.dispatch(addKlineData(res))
+                            //  }
+                             
+                         
+                    }
                     break
 
+                case "depth.update":
+                    let res = result;
+                    res.params[1].asks = _.sortBy(res.params[1].asks, "p").reverse()
+                    res.params[1].bids = _.sortBy(res.params[1].bids, "p").reverse()
+                    store.dispatch(addDepthSubs(res))
+                    store.dispatch(addDepthAsks(res.params[1].asks))
+                    store.dispatch(addDepthBids(res.params[1].bids))
+                    
+                    break
+
+                case null:
+                  
+                     if(result){
+                         console.log("kline que..==================", result)
+                         if( result[0].length === 7){
+                             alert("yo")
+                             let res = result;
+                             res.params= res[0][0]
+                            store.dispatch(addKlineData(result))
+                            emitKlineSubscribeEvent(res.params[6])
+                         }
+                     }
+                    break
                 default:
                     // console.log(result)
+                    break
             }
         });
     })
@@ -120,39 +143,62 @@ export const emitPingEvent = () =>{
 //State Subscription
 export const emitMarketListEvent = (marketPairs) =>{
     store.dispatch(triggerMarketSocket())
-    console.log("dsipacthed trigger", store.getState())
+    // console.log("dsipacthed trigger", store.getState())
 
-    console.log("soceklt mareket_paors",marketPairs)
-    socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
+    // console.log("soceklt mareket_paors",marketPairs)
+    socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "state.subscribe", "params" : marketPairs });
 }
  
 
 //State Subscription
 export const emitUnsubMarketListEvent = (marketPairs) =>{
     store.dispatch(triggerMarketSocket())
-    console.log("dsipacthed trigger", store.getState())
+    //console.log("dsipacthed trigger", store.getState())
 
-    console.log("soceklt mareket_paors",marketPairs)
-    socket.emit("message", {"id": 1, "method" : "state.unsubscribe", "params" : marketPairs });
+    //console.log("soceklt mareket_paors",marketPairs)
+    socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "state.unsubscribe", "params" : marketPairs });
 }
  
 
 //Deals Subscription
 export const emitMarketDealsEvent = (marketPairs) =>{
     //store.dispatch(triggerMarketSocket())
-    console.log("dsipacthed trigger", store.getState())
+    // console.log("dsipacthed trigger", store.getState())
 
-    console.log("soceklt mareket_paors",marketPairs)
-    socket.emit("message", {"id": 1, "method" : "deals.subscribe", "params" : [marketPairs] });
+    // console.log("soceklt mareket_paors",marketPairs)
+    socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "deals.subscribe", "params" : [marketPairs] });
+}
+
+//Kline Subscription
+export const emitKlineSubscribeEvent = (pair, interval=900) =>{
+    //store.dispatch(triggerMarketSocket())
+    //console.log("dsipacthed trigger", store.getState())
+    //emitKlineQuerySubscribeEvent(pair)
+    console.log("soceklt kline snet **************",pair)
+    socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "kline.subscribe", "params" : [pair, interval] });
+    //
+}
+export const emitKlineQuerySubscribeEvent = (pair, interval=60) =>{
+    //store.dispatch(triggerMarketSocket())
+    // console.log("dsipacthed trigger", store.getState())
+
+    console.log("soceklt klinequery snet **************",pair)
+    console.log("pair",((new Date().getTime() )- 3*24*60*60*1000),(new Date().getTime()))
+    socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "kline.query", "params" : [pair, ((new Date().getTime() )- 3*24*60*60*1000),(new Date().getTime()),interval] });
 }
 
 //Depth Subscription
 export const emitDepthSubscribeEvent = (lastpair, newpair) =>{
+   
     if(lastpair){
         emitDepthUnsubscribeEvent(lastpair)
         // socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"0"] });
         // socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.unsubscribe", "params" : [newpair] });
     }
+ if(!newpair){
+     return 
+ }
+    console.log("soceklt emitDepthSubscribeEvent snet **************",newpair)
     socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "depth.subscribe", "params" : [newpair, 9,"0"] });
     socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.subscribe", "params" : [newpair] });
 }
@@ -161,6 +207,11 @@ export const emitDepthSubscribeEvent = (lastpair, newpair) =>{
 export const emitDepthUnsubscribeEvent = (lastpair) =>{
     // alert("called unsb depths")
     socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"0"] });
+}
+
+export const emitKlineUnsubscribeEvent = (lastpair, interval=60) =>{
+    // alert("called unsb depths")
+    socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "kline.unsubscribe", "params" : [lastpair, interval] });
 }
 
 export const stopSocket = ()=>{

@@ -1,40 +1,109 @@
-import React, { useState, useEffect } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab, Left } from 'native-base'
-import Toolbar from '../../components/Toolbar/Toolbar'
-import { Colors, Images, Fonts } from '../../theme'
+import { Container } from 'native-base'
+import { Colors, Images } from '../../theme'
 import PickerComp from '../../components/PickerComp/PickerComp'
 // import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
-import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent } from '../../api/config.ws'
+import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent, emitKlineSubscribeEvent, emitKlineUnsubscribeEvent } from '../../api/config.ws'
 // import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
 // import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
 import { getMatchingMarketList } from '../../api/markets.api'
 import { splitIt } from '../../utils/converters'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { storeCurrencies, setActiveTradePair } from '../../redux/actions/markets.action'
 import { addDepthSubs } from '../../redux/actions/depthSubs.action'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../routes/screenNames/screenNames'
-import { equalityFnMarket } from '../../utils/reduxChecker.utils'
 import BPText from '../../common/BPText/BPText'
-let id= 0
+import TradeChart from '../../components/AreaChart/TradeChart'
+import MarketBottom from '../../components/MarketBottom/MarketBottom'
+import { addKlineData, emptyKlineData } from '../../redux/actions/kline.actions'
+import { equalityFnIndexPrice, equalityFnMarket } from '../../utils/reduxChecker.utils'
+import DepthChart from '../../components/AreaChart/DepthChart'
+
+
+
+const HeaderComp = () =>{
+    let index_price = useSelector(state => state.marketReducer.index_price, equalityFnIndexPrice)
+    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
+    const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
+    let found = market_data.find(i=> i.params[0] === activeTradePair)
+    const activecurrency = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
+
+    const currentMarketPrice =   useCallback(
+        () => {
+            //let found = market_data
+            //console.log("ABCD#####", found)
+            if (found && index_price) {
+                return <BPText style={{ color: parseFloat(found.params[1].cp) > -1 ? Colors.lightGreen : Colors.red, padding: 5 }}>
+                    {`${found?.divider.b === "USDT" ? (parseFloat(found?.params[1]?.l) * index_price.find(i => i.asset === "USDT").amount).toFixed(2) : (parseFloat(found?.params[1]?.l) / index_price.find(i => i.asset === "USDT").amount).toFixed(2)}`}</BPText>
+            }
+        },
+        [found],
+    )
+
+    return(
+         found && activecurrency ?
+        <>
+            <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', marginHorizontal:16, borderTopColor:Colors.lightWhite, borderTopWidth:0.5}}>
+
+            <View style={{flexDirection:'row', flex:1, justifyContent:'space-around',paddingVertical:10,}}>
+                <BPText style={{ color: Colors.lightWhite}}>Last Price</BPText>
+                <BPText>{found?.params[1].l} {`${activecurrency?.b}`}</BPText>
+            </View>
+            <View style={{width:0.5, backgroundColor: Colors.lightWhite}}/>
+            <View style={{flexDirection:'row', flex:1, justifyContent:'space-around',paddingVertical:10,}}>
+                <BPText style={{ color: Colors.lightWhite}}>24H Change</BPText>
+                <BPText>{found && parseFloat(found?.params[1].cp).toFixed(3)}%</BPText>
+            </View>
+
+        </View>
+
+
+        <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch',paddingVertical:10, marginHorizontal:16, backgroundColor: Colors.darkGray}}>
+
+            <View style={{ flex:1, alignItems:'flex-start'}}>
+                <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Highest</BPText>
+                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].h).toFixed(3)} {`${activecurrency?.b}`}</BPText>
+            </View>
+            
+            <View style={{ flex:1, alignItems:'center'}}>
+                <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Lowest</BPText>
+                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].lo).toFixed(3)} {`${activecurrency?.b}`}</BPText>
+            </View>
+            <View style={{ flex:2,  alignItems:'flex-end'}}>
+                <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Volume / Value</BPText>
+                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].v).toFixed(3)} {`${activecurrency?.a}`} / {currentMarketPrice()} {`${activecurrency?.b}`}</BPText>
+            </View>
+
+        </View>
+        </>
+        : <ActivityIndicator color={Colors.white} size="large" />
+    
+    )
+}
 const MarketPage = () => {
     // console.log("trdes reloads---------------------------------------------", id);
     
     // id++
-
+    // let index_price = useSelector(state => state.marketReducer.index_price, equalityFnIndexPrice)
     const dispatch = useDispatch()
     const navigation= useNavigation()
-    const currencies = useSelector(state=> state.marketReducer.currencies)
-    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair)
+  
+    const currencies = useSelector(state=> state.marketReducer.currencies, (l,r)=> l.payload === r.payload ? true: false)
+    const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
     // const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
     // let found = market_data.find(i=> i.params[0] === activeTradePair)
+     
+
+     
     // // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
     // console.log("market_data in trades",market_data)
     const [currencyVal, setCurrency] = useState(activeTradePair)
     const [Lcurrencies, setLcurrencies] = useState(currencies)
     const [loading, setloading]= useState(true)
+    const [view, setview]= useState(1)
 
     const callListMarket = async ()=>{
         let res = await getMatchingMarketList()
@@ -59,39 +128,50 @@ const MarketPage = () => {
                 setLcurrencies(arr)
                 
                 dispatch(setActiveTradePair(arr[1].value))
+                setloading(false)
             // setcurrencies(arr)
             
         }
     }
 
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         setloading(true)
-    //         emitDepthSubscribeEvent(currencyVal, activeTradePair)
-    //       });
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if(activeTradePair){setloading(false)
+            setTimeout(() => {
+                //emitDepthSubscribeEvent(currencyVal, activeTradePair)
+            }, 1000);
+            emitKlineSubscribeEvent(activeTradePair)}
+          });
       
-    //       return unsubscribe;
-    // }, [navigation])
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('blur', () => {
-    //         setloading(false)
-    //       //  dispatch(setActiveTradePair(null))
-    //         //+setActiveTradePair(null)
-    //         emitDepthUnsubscribeEvent(currencyVal)
-    //       });
+          return unsubscribe;
+    }, [navigation])
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            setloading(true)
+          //  dispatch(setActiveTradePair(null))
+            //setActiveTradePair(null)
+            setTimeout(() => {
+                
+                //emitDepthUnsubscribeEvent(currencyVal)
+            }, 1000);
+            emitKlineUnsubscribeEvent(currencyVal,60)
+          });
       
-    //       return unsubscribe;
-    // }, [navigation])
+          return unsubscribe;
+    }, [navigation])
 
     useEffect(() => {
-       // emitDepthSubscribeEvent()
-       callListMarket()
+       //emitKlineSubscribeEvent()
+       if(!activeTradePair){
+
+           callListMarket()
+        }
 
        return ()=>{
         //    alert("trades unmounted")
         
  
-           dispatch(setActiveTradePair(null))
+           //dispatch(setActiveTradePair(null))
 
            setloading(false)
        }
@@ -101,10 +181,18 @@ const MarketPage = () => {
         console.log("statt e,mit")
       setTimeout(() => {
           if(!activeTradePair){return  }
-         //emitDepthSubscribeEvent(currencyVal, activeTradePair)
+          setTimeout(() => {
+            //emitDepthSubscribeEvent(currencyVal, activeTradePair)
+            setloading(false)
+        }, 1000);
+          emitKlineSubscribeEvent(activeTradePair)
+
       }, 2000);
      }, [activeTradePair])
  
+
+     
+
     // const currencies = [{label: 'BTC/USDT', value:'key1'}];
     // if(currencies.length === 0){ return }
     return (
@@ -129,10 +217,14 @@ const MarketPage = () => {
                         items={Lcurrencies}
                         pickerVal = {activeTradePair} 
                         setPickerVal = {(val)=>{
-                            dispatch(addDepthSubs(null));
+                            setloading(true)
+                            //dispatch(addDepthSubs(null));
                             setCurrency(activeTradePair);
                             dispatch(setActiveTradePair(val))
-                             
+                            emptyKlineData()
+                            setTimeout(() => {
+                                setloading(false)
+                            }, 1000);
                         }}
                         chevronPositionTop= {3}
                     />
@@ -150,55 +242,21 @@ const MarketPage = () => {
                 </View>
             </View>}
                 renderItem={
-                    ({item,index})=>{
+                    ()=>{
                         return(
                             <View style={{  justifyContent:'flex-start', alignItems:'center', }}>
-                
-                                <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', marginHorizontal:16, borderTopColor:Colors.lightWhite, borderTopWidth:0.5}}>
-
-                                    <View style={{flexDirection:'row', flex:1, justifyContent:'space-around',paddingVertical:10,}}>
-                                        <BPText style={{ color: Colors.lightWhite}}>Last Price</BPText>
-                                        <BPText>90232.89 USDT</BPText>
-                                    </View>
-                                    <View style={{width:0.5, backgroundColor: Colors.lightWhite}}/>
-                                    <View style={{flexDirection:'row', flex:1, justifyContent:'space-around',paddingVertical:10,}}>
-                                        <BPText style={{ color: Colors.lightWhite}}>24H Change</BPText>
-                                        <BPText>-1.864%</BPText>
-                                    </View>
-
-                                </View>
-
-
-                                <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch',paddingVertical:10, marginHorizontal:16, backgroundColor: Colors.darkGray}}>
-
-                                    <View style={{ flex:1, alignItems:'flex-start'}}>
-                                        <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Highest</BPText>
-                                        <BPText style={{fontSize:12}}>8011.96 USDT</BPText>
-                                    </View>
-                                    
-                                    <View style={{ flex:1, alignItems:'center'}}>
-                                        <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Lowest</BPText>
-                                        <BPText style={{fontSize:12}}>7300 USDT</BPText>
-                                    </View>
-                                    <View style={{ flex:2,  alignItems:'flex-end'}}>
-                                        <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Volume / Value</BPText>
-                                        <BPText style={{fontSize:12}}>63.63 BTC / 466106.14 USDT</BPText>
-                                    </View>
-
-                                </View>
                                 
+                                <HeaderComp />
+
                                 <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16, backgroundColor: Colors.darkGray2}}>
 
-                                    <View style={{ flex:1, alignItems:'center', borderBottomWidth:1, borderBottomColor: Colors.white, paddingVertical:12}}>
-                                        <BPText style={{textTransform:'uppercase'}}>PRICE Chart</BPText>
-                                    </View>
-                                    
-                                    <View style={{ flex:1, alignItems:'center', borderBottomWidth:1, borderBottomColor: Colors.white, paddingVertical:12}}>
-                                       
-                                        <BPText style={{textTransform:'uppercase'}}>Depth Chart</BPText>
-                                    </View>
-                                    <View style={{ flex:2,  alignItems:'flex-end'}}>
-                                        <BPText>8</BPText>
+                                 
+
+                                    <Tab label={"PRICE Chart"} onPress={()=> setview(1)} active={view === 1}/>
+                                    <Tab label={"Depth Chart"} onPress={()=> setview(2)} active={view === 2}/>
+                                     
+                                    <View style={{ flex:2,  alignItems:'flex-end', paddingVertical:12}}>
+                                        <BPText>X</BPText>
                                     </View>
 
                                 </View>
@@ -216,7 +274,14 @@ const MarketPage = () => {
 
                                 {/* {-----------------------------} */}
             
-
+                                <View style={{height:400}}>
+                                    {!loading && activeTradePair ? 
+                                    view === 1 ? <TradeChart /> : <View style={{width: Dimensions.get("window").width}}><DepthChart height={400}/></View>
+                                    : <ActivityIndicator color={Colors.white} size="large"/>}
+                                </View>
+                                <View style={{alignSelf:"stretch", flex:1}}>
+                                    {!loading && activeTradePair&& <MarketBottom/>}
+                                </View>
                             </View>
                         )
                     }
@@ -228,6 +293,10 @@ const MarketPage = () => {
     )
 }
 
+
+
+
+
 const styles= StyleSheet.create({
     tabTextStyle:{ color:Colors.text.lightWhite },
     tabStyle:{ backgroundColor: Colors.darkGray3 },
@@ -238,3 +307,12 @@ const styles= StyleSheet.create({
 })
 
 export default MarketPage
+
+
+const Tab = ({label, onPress, active})=>{
+    return (
+        <TouchableOpacity onPress={()=> onPress()} style={{ flex:1, alignItems:'center', borderBottomWidth:1, borderBottomColor: active ?Colors.white: 'transparent', paddingVertical:12}}>
+            <BPText style={{textTransform:'uppercase'}}>{label}</BPText>
+        </TouchableOpacity>
+    )
+}

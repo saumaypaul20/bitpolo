@@ -24,10 +24,32 @@ import { getPublicIP } from '../../../../utils/apiHeaders.utils'
 import { imageRenderer } from '../../../../utils/component.utils'
 
 
+const isDisabled =(withdrawAmount,balance, address)=>{
+    //alert( parseFloat(withdrawAmount) > parseFloat(balance.available.balance + balance.freeze.balance ))
+    if(parseFloat(withdrawAmount) < parseFloat(balance.available.balance + balance.freeze.balance ) ){
+        // alert("amt gr8")
+        // alert(`withdr ${withdrawAmount}`)
+        // alert(parseFloat(balance.available.balance + balance.freeze.balance) )
+        // alert( parseFloat(withdrawAmount))
+        //alert( parseFloat(balance.available.balance + balance.freeze.balance ) )
+        return false
+    }
+    else if(address || address?.length > 0 ){
+        //alert("address ")
+        return false
+    }
+ 
+
+        return true
+     
+}
 
 const Tab1 = ({setView, activecoin, setWithdrawAmount, setAddress, setPaymentId,address,payment_id, withdrawAmount}) =>{
 console.log(activecoin)
 const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.asset_code], shallowEqual);
+// alert(activecoin.asset_code)
+
+
     return (
         <Root>
             <View style={{flex:1}}>
@@ -64,7 +86,7 @@ const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.
                        <WalletEndButtons />
 
                        <View style={{alignSelf:'center', marginTop:44}}>
-                            <BPButton label="Submit" style={{paddingHorizontal:60}} disabled />
+                            <BPButton label="Submit" style={{paddingHorizontal:60}} disabled={isDisabled(withdrawAmount,balance, address)} />
                         </View>
 
                     </View>
@@ -214,45 +236,47 @@ const Tab2 = ({setView, activecoin}) =>{
 
 const Withdraw = () => {
     const navigation = useNavigation()
+    const [load, setload]= useState(true)
     const [activeView, setView] = useState(1)
     const [activecoin, setactivecoin] = useState({asset_code:"BTC"})
     const [withdrawAmount, setWithdrawAmount] = useState(null)
     const [address, setAddress] = useState(null)
-    const assetList = useSelector(state=>state.walletReducer.assets)
     const [showItems, setshowItems]= useState(false)
-
-    const [pickerOrderVal, setPickerOrderVal] = useState({label:"BTC", value:"BTC"})
+    
+    const assetList = useSelector(state=>state.walletReducer.assets)
+     
     // const address = '14gC4zbkDdfdn6DscjuYqBufndzzfddLQzGViAg5cdfHJ'
-    const copyAddress =() =>{
-        Clipboard.setString(address)
-        Toast.show({
-            text: 'Copied Address!',
-            buttonText: 'Okay'
-          })
-    }
-
+ 
     const changeCoin = (coin) =>{
         let item = assetList.find(i=>i.asset_code === coin)
         setactivecoin(item)
-        setPickerOrderVal(coin)
+        
     }
 
     const setActiveView =(coin)=>{
+        setload(true)
+        setWithdrawAmount(null)
+        setAddress(null)
+        setshowItems(false)
        
+        changeCoin(coin)
         if(coin !== "INR"){
+            setload(false)
             setView(1)
 
         }else{
+            setload(false)
             setView(2)
         }
-        setshowItems(false)
-        changeCoin(coin)
+
+       
     }
    
     useEffect(()=>{
         if(assetList.length>0){
             let coin =  assetList[0]
             setactivecoin(coin)
+            setload(false)
         }
     },[])
 
@@ -324,7 +348,7 @@ const Withdraw = () => {
                         </View>
                       
                        <View>
-                        {tabRenderer()}
+                        {!load && tabRenderer()}
                        </View>
 
                     

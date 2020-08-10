@@ -6,6 +6,7 @@ import deviceReducer from './device.reducer'
 import walletReducer from './wallet.reducer'
 import depthSubsReducer from './depthSubs.reducer'
 import dealsReducer from './deals.reducer'
+import klineReducer from './kline.reducer'
 import payments from './payments.reducer'
 
 const reducers = {
@@ -15,7 +16,8 @@ const reducers = {
     walletReducer,
     depthSubsReducer,
     payments,
-    dealsReducer
+    dealsReducer,
+    klineReducer
 };
 
 const appReducer = combineReducers(reducers);

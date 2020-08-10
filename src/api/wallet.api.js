@@ -98,3 +98,55 @@ export const deposit = (body) => {
         }
     })
 }
+export const getWithdrawAddresses = () => {
+    return new Promise ( async (resolve, reject)=>{ 
+        
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+ 
+        let res = await fetchApi(`${REST.WALLET.GET_WITHDRAW_ADDRESSES}`, "GET", null, 200, headers);
+        console.log("getWithdrawAddresses res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+export const updateWithdrawAddresses = (body) => {
+    return new Promise ( async (resolve, reject)=>{    
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(REST.WALLET.CREATE_WITHDRAW_ADDRESS, "PATCH", body, 200, headers);
+        console.log("updateWithdrawAddresses res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+export const deleteWithdrawAddresses = (id) => {
+    return new Promise ( async (resolve, reject)=>{    
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(`${REST.WALLET.CREATE_WITHDRAW_ADDRESS}/${id}`, "DELETE", null, 200, headers);
+        console.log("deleteWithdrawAddresses res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}

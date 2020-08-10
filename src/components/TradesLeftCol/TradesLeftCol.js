@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { emitDepthSubscribeEvent } from '../../api/config.ws'
 import { useSelector, shallowEqual } from 'react-redux'
-import FlatLists from "./FlatList"
+import FlatLists from "../../common/FlatlistComp/FlatList"
 import _ from 'lodash'
 import { equalityFnMarket, equalityFnDepths, equalityFnIndexPrice } from '../../utils/reduxChecker.utils'
 let id = 0
@@ -35,8 +35,8 @@ const TradesLeftCol = () => {
     const asks = useSelector(state => state.depthSubsReducer.asks, equalityFnDepths)
     const bids = useSelector(state => state.depthSubsReducer.bids, equalityFnDepths)
     const activeTradePair = useSelector(state => state.marketReducer.activeTradePair, shallowEqual)
-    console.log("depths asks left **********", asks)
-    console.log("depths bids left **********", bids)
+    // console.log("depths asks left **********", asks)
+    // console.log("depths bids left **********", bids)
     // console.log("market ata ^^^^^^^^^^^^^^^^^^",market_data)
 
     const currencies = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
@@ -81,7 +81,7 @@ const TradesLeftCol = () => {
     const currentMarketPrice = () => {
         let found = market_data
         //console.log("ABCD#####", found)
-        if (found) {
+        if (found && index_price) {
             return <BPText style={{ color: parseFloat(found.params[1].cp) > -1 ? Colors.lightGreen : Colors.red, padding: 5 }}>{`${parseFloat(found.params[1].l).toFixed(2)} ${found?.divider.b === "USDT" ? (parseFloat(found?.params[1]?.l) * index_price.find(i => i.asset === "USDT").amount).toFixed(2) : (parseFloat(found?.params[1]?.l) / index_price.find(i => i.asset === "USDT").amount).toFixed(2)}`}</BPText>
         }
     }

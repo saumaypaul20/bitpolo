@@ -255,6 +255,7 @@ bids= bids
     if(bidsD.length === 0 || asksD.length === 0) return <ActivityIndicator size="large" color={Colors.white}/>
     return (
         <HighChart
+            height={props.height}
             asks={asks}
             bids={bids} />
     )

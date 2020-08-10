@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { Colors, Images, Fonts } from '../../theme'
 import BPText from '../../common/BPText/BPText'
@@ -6,8 +6,12 @@ import PickerComp from '../PickerComp/PickerComp'
 import InputCounter from '../InputCounter/InputCounter'
 import Spacer from '../../common/Spacer/Spacer'
 import BPButton from '../../common/BPButton/BPButton'
-import { useSelector, shallowEqual } from 'react-redux'
+import { useSelector, shallowEqual, useDispatch } from 'react-redux'
 import { splitIt } from '../../utils/converters'
+import { getWalletBalance, getAsset } from '../../api/wallet.api'
+import { getAuthToken, getInfoAuthToken } from '../../utils/apiHeaders.utils'
+import { getDeviceId } from 'react-native-device-info'
+import { fetchedWalletBalance, fetchedWalletAssets } from '../../redux/actions/wallet.actions'
 
 const divideIt = (i) =>{
     let divider={}
@@ -28,6 +32,7 @@ const Tab =({label , onPress, active, type}) =>{
 
 const TradesOrderTabs = () => {
     //alert("ordertabs")
+    const dispatch = useDispatch()
     const [tab, settab] = useState(1)
     const [inramount, setinramount] = useState('')
     const [cryptoamount, setcryptoamount] = useState('')
@@ -37,7 +42,7 @@ const TradesOrderTabs = () => {
     const [pickerOrderVal, setPickerOrderVal] = useState({label:"Limit Order", value:"limit"})
     const orderItems = [{label:"Limit Order", value:"limit"}, {label:"Market Order", value:"market"}]
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
-    const balance = useSelector(state=> state.walletReducer.balance.data[divideIt(activeTradePair).b], shallowEqual);
+    const balance = useSelector(state=> state.walletReducer.balance?.data[divideIt(activeTradePair).b], shallowEqual);
 
     const setTotal =(t)=>{
         settotal(parseInt(t).toString())
@@ -81,6 +86,31 @@ const TradesOrderTabs = () => {
         let amt = total ? total : 0
         settotal((parseInt(amt) - 1).toString())
     }
+
+
+    const getWalletAsset = useCallback(async () =>{
+        let toPassHeader={
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+        let assetsResult = await getAsset(toPassHeader)
+        if (assetsResult.status){
+            let balanceResult = await getWalletBalance(toPassHeader)
+
+            if(balanceResult.status){
+                
+                dispatch(fetchedWalletBalance(balanceResult.data))
+                dispatch(fetchedWalletAssets(assetsResult.data))
+                // getBanksList()
+            }
+        }
+    },[])
+
+    useEffect(() => {
+         getWalletAsset()
+    }, [])
+
 
     return (
         <View>
@@ -141,7 +171,7 @@ const TradesOrderTabs = () => {
 
                 <View style={{flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
                     <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Avbl</BPText>
-                    <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>{`${balance.available.balance}`} {divideIt(activeTradePair).b}</BPText>
+                    <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>{`${balance?.available.balance}`} {divideIt(activeTradePair).b}</BPText>
                 </View>
                 
 

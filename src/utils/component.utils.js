@@ -58,7 +58,7 @@ const startSocket=(marketPairs) => {
   });
 }
 
-export const imageRenderer = (item, type)=>{
+export const imageRenderer = (item, type=0)=>{
   switch(item){
       case 'USDT':
           return type==0? Images.usdt_white :Images.usdt_black;

@@ -108,7 +108,7 @@ export default class HighChart extends React.Component {
         return (
             <View style={{ backgroundColor: Colors.primeBG}}>
                 {this.props.bids.length> 0 && this.props.asks.length>0 && <HighchartsReactNative
-                    styles={styles.container}
+                    styles={[styles.container, {height: this.props.height? this.props.height: 230}]}
                     options={this.state.chartOptions}
                 />}
             </View>
@@ -121,6 +121,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primeBG,
         justifyContent:'space-evenly',
  
-        height:230
+         
     }
 });

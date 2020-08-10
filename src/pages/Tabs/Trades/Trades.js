@@ -65,15 +65,18 @@ const Trades = () => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            setloading(true)
-            emitDepthSubscribeEvent(currencyVal, activeTradePair)
+            //setloading(true)
+            if(activeTradePair){
+
+                emitDepthSubscribeEvent(currencyVal, activeTradePair)
+            }
           });
       
           return unsubscribe;
     }, [navigation])
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
-            setloading(false)
+            //setloading(false)
           //  dispatch(setActiveTradePair(null))
             //+setActiveTradePair(null)
             emitDepthUnsubscribeEvent(currencyVal)
@@ -90,7 +93,7 @@ const Trades = () => {
         //    alert("trades unmounted")
         
  
-           dispatch(setActiveTradePair(null))
+           //dispatch(setActiveTradePair(null))
 
            setloading(false)
        }
@@ -140,10 +143,10 @@ const Trades = () => {
                 </View>
 
                 <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
-                    <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
+                    <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE) }>
                         <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
                     </TouchableOpacity>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
                         <Image source={Images.list_icon} style={styles.headerIconStyles} />
                     </TouchableOpacity>
                 </View>

@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { Images, Colors } from '../../theme'
-import BPText from '../../common/BPText/BPText'
+import BPText from '../BPText/BPText'
 import _ from 'lodash'
 class Card extends PureComponent {
     constructor(props) {

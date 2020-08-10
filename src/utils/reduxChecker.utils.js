@@ -6,7 +6,7 @@ export const  equalityFnMarket = (l,r) =>{
     // console.log("inside eqFn",l,r);
      eq++
 
-     console.log("eq2 called", eq)
+     //console.log("eq2 called", eq)
      let change = false
      if(r.length > 0){
          
@@ -21,17 +21,17 @@ export const  equalityFnMarket = (l,r) =>{
              }
           }
      }
-     console.log("CHANGE2----", change);
+     //console.log("CHANGE2----", change);
      
      return change
     }
 
     
 export const  equalityFnDepths = (l,r) =>{
-    console.log("inside depths eqFn",l,r);
+    //console.log("inside depths eqFn",l,r);
      depths++
 
-     console.log("depths eq called", depths)
+     //console.log("depths eq called", depths)
      let change = false
      if(r.length > 0){
          
@@ -49,9 +49,9 @@ export const  equalityFnDepths = (l,r) =>{
               
         //   }
      }
-     console.log("depths cahange eq fn----", change);
+     //console.log("depths cahange eq fn----", change);
      if(!change){
-         console.log("depth reloads count))))))))))))))))))))))))))))))))))))))))))))))))))",d_reloads);
+         //console.log("depth reloads count))))))))))))))))))))))))))))))))))))))))))))))))))",d_reloads);
         d_reloads++
     }
      return change

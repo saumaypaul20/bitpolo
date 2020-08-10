@@ -34,6 +34,8 @@ export const WALLET = {
     WITHDRAW: '/wallet/withdraw',
     DEPOSIT: '/payment/deposit',
     GET_TRANSACTIONS: '/wallet/transactions/deposit',
+    GET_WITHDRAW_ADDRESSES:  '/wallet/withdraw-address',
+
     CREATE_WITHDRAW_ADDRESS: '/wallet/withdraw-address'
 }
 
