@@ -14,28 +14,29 @@ const TradesRightCol = () => {
     //alert("riglt col")
 
     return (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
+            {console.log("TradesOrderTabs1")}
             <TradesOrderTabs />
-             
 
-            <View style={{marginRight:16, marginLeft:3}}>
-               
+
+            <View style={{ marginRight: 16, marginLeft: 3 }}>
+
 
                 <View  >
-                    <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginVertical:16}}>
-                            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding:10}}>
-                                <View style={{height:14, width:14, borderRadius:2, backgroundColor: Colors.lightGreen, marginHorizontal:5}}/>
-                                <BPText style={{fontSize:12, fontFamily: Fonts.FONT_MEDIUM}}>Bid</BPText>
-                            </View>
-                            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding:10}}>
-                                <View style={{height:14, width:14, borderRadius:2, backgroundColor: Colors.red, marginHorizontal:5}}/>
-                                <BPText style={{fontSize:12, fontFamily: Fonts.FONT_MEDIUM}}>Ask</BPText>
-                            </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 16 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                            <View style={{ height: 14, width: 14, borderRadius: 2, backgroundColor: Colors.lightGreen, marginHorizontal: 5 }} />
+                            <BPText style={{ fontSize: 12, fontFamily: Fonts.FONT_MEDIUM }}>Bid</BPText>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                            <View style={{ height: 14, width: 14, borderRadius: 2, backgroundColor: Colors.red, marginHorizontal: 5 }} />
+                            <BPText style={{ fontSize: 12, fontFamily: Fonts.FONT_MEDIUM }}>Ask</BPText>
+                        </View>
                     </View>
-                     
+
 
                     {/* <AreaChart2 /> */}
-                    <DepthChart />  
+                    <DepthChart />
                     {/* <HighChart /> */}
                 </View>
             </View>
@@ -43,6 +44,6 @@ const TradesRightCol = () => {
         </View>
     )
 }
- 
+
 
 export default TradesRightCol

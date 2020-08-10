@@ -4,7 +4,7 @@ import { Button } from 'native-base'
 import BPText from '../../common/BPText/BPText'
 import { Colors } from '../../theme'
 
-const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled}) => {
+const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled, onBlurit}) => {
     return (
         <View style={{ flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
         { onIncrease && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
@@ -17,7 +17,8 @@ const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disa
             underlineColorAndroid={'transparent'}
             placeholderTextColor={Colors.white}
             value={ input}
-            onChangeText={(text)=> onInputChange((text))}
+            onChangeText={(text)=> onInputChange(text)}
+            onBlur={(event)=> onBlurit ? onBlurit(event.nativeEvent.text) : false }
             keyboardType="phone-pad"
             style={{
                 alignSelf:'stretch', 

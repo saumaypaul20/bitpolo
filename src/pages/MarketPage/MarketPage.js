@@ -233,7 +233,7 @@ const MarketPage = () => {
                 </View>
 
                 <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
-                    <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
+                    <TouchableOpacity style={{marginHorizontal:22}} >
                         <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
                     </TouchableOpacity>
                     <TouchableOpacity >

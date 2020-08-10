@@ -65,7 +65,7 @@ const Trades = () => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            //setloading(true)
+            setloading(true)
             if(activeTradePair){
 
                 emitDepthSubscribeEvent(currencyVal, activeTradePair)
@@ -76,7 +76,8 @@ const Trades = () => {
     }, [navigation])
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
-            //setloading(false)
+            //alert("blur")
+            setloading(false)
           //  dispatch(setActiveTradePair(null))
             //+setActiveTradePair(null)
             emitDepthUnsubscribeEvent(currencyVal)
