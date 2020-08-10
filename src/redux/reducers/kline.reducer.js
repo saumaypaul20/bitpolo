@@ -4,7 +4,9 @@ import _ from 'lodash';
 
 let eq = 0
 const init_state = {
-    kline:[]
+    kline:[],
+    klineQ:[],
+    update: false
 }
 
 const  klineReducer = (state = init_state, action) => {
@@ -16,7 +18,8 @@ const  klineReducer = (state = init_state, action) => {
          
                 state = {
                     ...state,
-                    kline:[...state.kline,action.payload],
+                    kline: state.update? [...state.kline,action.payload]: [...state.klineQ],
+
                 }
              
                 
@@ -29,14 +32,23 @@ const  klineReducer = (state = init_state, action) => {
                     item.params= i
                     return item
                 })
+
                 //console.log("BIG ARRRRRRRRRRAAAUUUUUU----------------------------", arr)
                 state = {
                     ...state,
-                    kline: arr,
+                    klineQ: arr,
+                   
                 }
              
-                
-                
+            break
+        case TYPES.UPDATE_KLINE_BOOL:
+             
+                state = {
+                    ...state,
+                    update: action.payload,
+                   
+                }
+             
             break
 
         case TYPES.EMPTY_KLINE_DATA:

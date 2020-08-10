@@ -22,7 +22,7 @@
 
     <script>
        
-        let width=0;
+        let width=400;
         let klineData =[]
         
         //  document.addEventListener("message", function (event) {
@@ -32,35 +32,35 @@
 
          
       var chart = LightweightCharts.createChart(document.body, {
-  width: width,
-  
-  layout: {
-          backgroundColor: '#000',
-          textColor: '#fff',
-          fontSize: 12,
-        },
-        localization: {
-          dateFormat: 'dd/MM/yy',
-          locale: 'en-US'
-        },
-        grid: {
-          vertLines: {
-            color: 'rgba(0,0,0,0)',
-            visible: true,
-          },
-          horzLines: {
-            color: 'rgba(0,0,0,0)',
-            visible: true,
-          },
-        },
-        priceScale: {
-          borderColor: 'rgba(0,0,0,0)',
-        },
-        timeScale: {
-          timeVisible: true,
-          secondsVisible: false,
-          borderColor: 'rgba(0,0,0,0)',
-        },
+      width: width,
+      
+      layout: {
+              backgroundColor: '#000',
+              textColor: '#fff',
+              fontSize: 12,
+            },
+            localization: {
+              dateFormat: 'dd/MM/yy',
+              locale: 'en-US'
+            },
+            grid: {
+              vertLines: {
+                color: 'rgba(0,0,0,0)',
+                visible: true,
+              },
+              horzLines: {
+                color: 'rgba(0,0,0,0)',
+                visible: true,
+              },
+            },
+            priceScale: {
+              borderColor: 'rgba(0,0,0,0)',
+            },
+            timeScale: {
+              timeVisible: true,
+              secondsVisible: false,
+              borderColor: 'rgba(0,0,0,0)',
+            },
       });
 
     
@@ -77,30 +77,33 @@ var series = chart.addCandlestickSeries({
           chart.width = JSON.parse(event.data).width
            klineData= JSON.parse(event.data).klineData  
            if(JSON.parse(event.data).update ){
-            series.update(klineData);
+             //alert("update")
+            series.setData(klineData);
 
            }else{
+            alert("set")
+
             series.setData(klineData);
            }
           })
 
-var datesForMarkers = [klineData[klineData.length - 19], klineData[klineData.length - 39]];
-var indexOfMinPrice = 0;
-for (var i = 1; i < datesForMarkers.length; i++) {
-	if (datesForMarkers[i].high < datesForMarkers[indexOfMinPrice].high) {
-		indexOfMinPrice = i;
-	}
-}
-var markers = [];
-for (var i = 0; i < datesForMarkers.length; i++) {
-	if (i !== indexOfMinPrice) {
-		markers.push({ time: datesForMarkers[i].time, position: 'aboveBar', color: '#e91e63', shape: 'arrowDown', text: 'Sell @ ' + Math.floor(datesForMarkers[i].high + 2) });
-	} else {
-		markers.push({ time: datesForMarkers[i].time, position: 'belowBar', color: '#2196F3', shape: 'arrowUp', text: 'Buy @ ' + Math.floor(datesForMarkers[i].low - 2) });
-	}
-}
-markers.push({ time: klineData[klineData.length - 48].time, position: 'aboveBar', color: '#f68410', shape: 'circle', text: 'D' });
-series.setMarkers(markers);
+// var datesForMarkers = [klineData[klineData.length - 19], klineData[klineData.length - 39]];
+// var indexOfMinPrice = 0;
+// for (var i = 1; i < datesForMarkers.length; i++) {
+// 	if (datesForMarkers[i].high < datesForMarkers[indexOfMinPrice].high) {
+// 		indexOfMinPrice = i;
+// 	}
+// }
+// var markers = [];
+// for (var i = 0; i < datesForMarkers.length; i++) {
+// 	if (i !== indexOfMinPrice) {
+// 		markers.push({ time: datesForMarkers[i].time, position: 'aboveBar', color: '#e91e63', shape: 'arrowDown', text: 'Sell @ ' + Math.floor(datesForMarkers[i].high + 2) });
+// 	} else {
+// 		markers.push({ time: datesForMarkers[i].time, position: 'belowBar', color: '#2196F3', shape: 'arrowUp', text: 'Buy @ ' + Math.floor(datesForMarkers[i].low - 2) });
+// 	}
+// }
+// markers.push({ time: klineData[klineData.length - 48].time, position: 'aboveBar', color: '#f68410', shape: 'circle', text: 'D' });
+// series.setMarkers(markers);
     </script>
 </body>
 </html>

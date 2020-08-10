@@ -80,7 +80,7 @@ const Trades = () => {
             setloading(false)
           //  dispatch(setActiveTradePair(null))
             //+setActiveTradePair(null)
-            emitDepthUnsubscribeEvent(currencyVal)
+            //emitDepthUnsubscribeEvent(currencyVal)
           });
       
           return unsubscribe;

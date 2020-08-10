@@ -4,25 +4,28 @@ import  _ from 'lodash'
 import WebView from 'react-native-webview'
 import { connect } from 'react-redux'
 import { Colors } from '../../theme'
+import { updateKlineBool } from '../../redux/actions/kline.actions'
 const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
 
  class TradeChart extends React.Component {
         constructor(props){
             super(props)
-            this.update= false
+           // this.update= false
         }
 
-        UNSAFE_componentWillReceiveProps(){
-            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            // console.log(this.props.kline)
-            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            if (this.webview && this.props.kline.length>0) this.webview.postMessage(JSON.stringify(
+        getdata= ()=>{
+            let arr = this.props.klineQ
+            if(this.props.kline.length>0){
+                arr = this.props.kline
+                 
+            }
+            if (this.webview) this.webview.postMessage(JSON.stringify(
                 { 
-                    update:this.update,
+                    update: this.props.kline.length > 0,
                     width: Dimensions.get("window").width,
-                    klineData: this.props.kline.map(el=>{
+                    klineData: arr.map(el=>{
                         return {
-                            time: el.params[0],
+                            time: el.params[0].length>10 ? Math.floor(new Date(el.params[0])/1000): el.params[0],
                             low: el.params[4],
                             high: el.params[3],
                             open: el.params[1],
@@ -31,18 +34,27 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
                     })
         
         }));
+        }
+        UNSAFE_componentWillReceiveProps(){
+            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            // console.log(this.props.kline)
+            // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                this.getdata()
+            
 
-        this.update= true
+     //  this.update= true
         }
  
      render() {
-        if (this.webview) this.webview.postMessage(JSON.stringify(
-            { 
-                width: Dimensions.get("window").width,
-                update: this.update
+    //     if (this.webview) this.webview.postMessage(JSON.stringify(
+    //         { 
+    //             width: Dimensions.get("window").width,
+    //             update: this.props.update
                 
     
-    }));
+    // }));
+
+        this.getdata()
         return (
             <View style={{flex:1, height: 200, width:Dimensions.get("window").width,}}>
                {this.props.kline.length>0 ? <WebView 
@@ -58,9 +70,9 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
 
  function mapStateToProps(state) {
     const { klineReducer } = state
-    return { kline: klineReducer.kline }
+    return { kline: klineReducer.kline, klineQ: klineReducer.klineQ }
   }
   
  
- export default connect(mapStateToProps,null)(TradeChart)
+ export default connect(mapStateToProps, null)(TradeChart)
  

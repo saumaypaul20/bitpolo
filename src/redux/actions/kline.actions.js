@@ -23,3 +23,13 @@ export const emptyKlineData =() =>{
       };
 }
  
+ 
+export const updateKlineBool =(bool) =>{
+    
+    return {
+        type: TYPES.UPDATE_KLINE_BOOL,
+        payload: bool
+      
+      };
+}
+ 
