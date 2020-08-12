@@ -80,9 +80,9 @@ const GoogleVerificationCode = (props) => {
                 console.log("withdraw res----#####2",res)
                 //dispatch(addBanks([...banks,props.route.params.body.data.attributes]));
                 navigation.dispatch(StackActions.pop(2))
-                alert("Success!")
+                alert(res.data.data.attributes.message)
             }else{
-                alert("Something went wrong!")
+                alert(res.data.data.attributes.message)
                 navigation.dispatch(StackActions.pop(2))
             }
           

@@ -33,10 +33,10 @@ export const WALLET = {
     CREATE_ASSET_ADDRESS : '/wallet/asset-address',
     WITHDRAW: '/wallet/withdraw',
     DEPOSIT: '/payment/deposit',
-    GET_TRANSACTIONS: '/wallet/transactions/deposit',
     GET_WITHDRAW_ADDRESSES:  '/wallet/withdraw-address',
-
-    CREATE_WITHDRAW_ADDRESS: '/wallet/withdraw-address'
+    CREATE_WITHDRAW_ADDRESS: '/wallet/withdraw-address',
+    GET_DEPOSIT_TRANSACTIONS: '/wallet/transactions/deposit',
+    GET_WITHDRAW_TRANSACTIONS: '/wallet/transactions/withdraw',
 }
 
 /* ------------------------------- MARKETS API ------------------------------- */
@@ -60,5 +60,6 @@ export const SECURITY = {
 
 export const PAYMENT = {
     ADD_BANK_ACCOUNT : '/payment/traditional-bank-account',
+    WITHDRAW_REQUEST: '/payment/withdraw'
     
 }

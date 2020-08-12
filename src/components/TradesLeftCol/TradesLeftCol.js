@@ -170,14 +170,14 @@ const TradesLeftCol = () => {
                         chevronPositionRight={0}
                         chevronSize={10}
                         height={20}
-                        width={140}
+                        width={160}
                         scale={0.7}
                         color={Colors.white}
                         marginLeft={-20}
                     />
 
                 </View>
-                <View style={{ flex: 1, borderRadius: 2, borderTopLeftRadius: 0, borderBottomLeftRadius: 0, alignSelf: 'stretch', borderWidth: 1, borderColor: Colors.gray, opacity: 0.8 }}>
+                {/* <View style={{ flex: 1, borderRadius: 2, borderTopLeftRadius: 0, borderBottomLeftRadius: 0, alignSelf: 'stretch', borderWidth: 1, borderColor: Colors.gray, opacity: 0.8 }}>
                     <PickerComp
                         items={list2}
                         pickerVal={list2val}
@@ -191,7 +191,7 @@ const TradesLeftCol = () => {
                         color={Colors.white}
                         marginLeft={-20}
                     />
-                </View>
+                </View> */}
             </View>
         </View>
     )

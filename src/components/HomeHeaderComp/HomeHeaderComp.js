@@ -44,7 +44,7 @@ const HomeHeaderComp = () => {
                         </View> */}
                     </View>
                    
-                    <View style={{ flexDirection:'row', alignItems:'flex-start', paddingVertical:10, backgroundColor: Colors.darkGray3 }}>
+                    {/* <View style={{ flexDirection:'row', alignItems:'flex-start', paddingVertical:10, backgroundColor: Colors.darkGray3 }}>
                         <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
                             <BPText style={{color: Colors.white, fontFamily:Fonts.FONT_MEDIUM , fontSize:12}}>Ranking List</BPText>
                            </View>
@@ -55,7 +55,7 @@ const HomeHeaderComp = () => {
                         <View style={{flex:1, justifyContent:'center', alignItems:'flex-end', paddingRight:16}}>
                             <BPText style={{color: '#6796FF', fontFamily:Fonts.FONT_MEDIUM , fontSize:12}}>More</BPText>
                             </View>
-                    </View>
+                    </View> */}
 
                    
         </View>

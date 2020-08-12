@@ -5,18 +5,21 @@ import WebView from 'react-native-webview'
 import { connect } from 'react-redux'
 import { Colors } from '../../theme'
 import { updateKlineBool } from '../../redux/actions/kline.actions'
-const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
+// const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
 
  class TradeChart extends React.Component {
         constructor(props){
             super(props)
            // this.update= false
+           this.width= Dimensions.get("window").width
+           this.getdata= this.getdata.bind(this)
         }
 
         getdata= ()=>{
             let arr = this.props.klineQ
             if(this.props.kline.length>0){
                 arr = this.props.kline
+                this.props.updateKlineBool(true)
                  
             }
             if (this.webview) this.webview.postMessage(JSON.stringify(
@@ -44,7 +47,11 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
 
      //  this.update= true
         }
- 
+
+        componentDidMount(){
+            this.getdata()
+        }
+       
      render() {
     //     if (this.webview) this.webview.postMessage(JSON.stringify(
     //         { 
@@ -54,9 +61,9 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
     
     // }));
 
-        this.getdata()
+        
         return (
-            <View style={{flex:1, height: 200, width:Dimensions.get("window").width,}}>
+            <View style={{flex:1, height: 200, width: this.width,}}>
                {this.props.kline.length>0 ? <WebView 
                 source={{uri:"file:///android_asset/tchart.html"}} 
                 scrollEnabled={false} 
@@ -74,5 +81,5 @@ const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
   }
   
  
- export default connect(mapStateToProps, null)(TradeChart)
+ export default connect(mapStateToProps, {updateKlineBool})(TradeChart)
  

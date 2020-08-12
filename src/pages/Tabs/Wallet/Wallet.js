@@ -44,7 +44,7 @@ const Wallet = () => {
         let toPassHeader={
             Authorization: getAuthToken(),
             info: getInfoAuthToken(),
-            device: getDeviceId()
+            device: await getDeviceId()
         }
         let assetsResult = await getAsset(toPassHeader)
         if (assetsResult.status){
@@ -136,7 +136,7 @@ const Wallet = () => {
                                     label="History" 
                                     image_size={13}
                                     disabled={assets.length === 0}
-                                    onPress={()=> navigation.navigate(screenNames.MARKET_PAGE)}
+                                    onPress={()=> navigation.navigate(screenNames.WALLET_HISTORY)}
                                 />
                             </View>
                             

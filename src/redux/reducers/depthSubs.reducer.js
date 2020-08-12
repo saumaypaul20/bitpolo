@@ -95,6 +95,16 @@ const  depthSubsReducer = (state = init_state, action) => {
                socketConnected: true
             }
             break
+        case TYPES.CLEAR_ALL:
+            state = {
+                ...state,
+                favourites: [],
+                data: null,
+                asks:[],
+                bids:[],
+                market_data:[]
+            }
+            break
       
         default:
             return state;

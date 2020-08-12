@@ -70,7 +70,7 @@ let count = 0
         // let focus = navigation.isFocused()
         console.log("INRView reloads", count)
         count++
-        let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
+        let market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0].endsWith("INR")), equalityFnMarket)
         let favourites = useSelector(state=> state.marketReducer.favourites, (l,r)=>{
             console.log("Fav eq l r ----", l,r);
             let change = false
@@ -95,7 +95,7 @@ let count = 0
             return change
         })
         
-        market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
+        // market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
 
         return(
             <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
@@ -103,7 +103,9 @@ let count = 0
                 <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/> 
                 :
                 <SwipeListView
+
                         useFlatList={true}
+                        initialNumToRender={5}
                         data={market_data}
                         renderItem={ (rowData) => {
                         //  console.log("bdx",rowData)
@@ -136,6 +138,14 @@ let count = 0
                         ListHeaderComponent={ homeHeaderComp()}
                         stickyHeaderIndices={[0]}
                         keyExtractor={item => item.id}
+                        getItemLayout={(data, index) => {
+                            return {
+                                index,
+                                length: 30, // itemHeight is a placeholder for your amount
+                                offset: index * 30,
+                                width:'100%'
+                            }
+                        }}
                         contentContainerStyle={{flexGrow:1}}
                       //  ListEmptyComponent={<ActivityIndicator color={Colors.white} size="large" />}
                         
@@ -148,15 +158,38 @@ let count = 0
      
         console.log("USDTView reloads", count)
         count++
-        let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
-        let favourites = useSelector(state=> state.marketReducer.favourites)
-        market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
+        let market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0].endsWith("USDT")), equalityFnMarket)
+        let favourites = useSelector(state=> state.marketReducer.favourites,(l,r)=>{
+            console.log("Fav eq l r ----", l,r);
+            let change = false
+
+            if( l. length + r.length === 0){
+                change = true
+            }else if(r.length > 0){
+                
+
+                for(let i=0; i <l.length ;i++){
+                    let found = r.findIndex(rItem=> rItem.name === l[i].name)
+                    if(found > -1){
+                        change = true
+                        if(!change){
+                            break;
+                        }
+                    }
+                }
+            } 
+            console.log("Fav eq change----", change);
+            
+            return change
+        } )
+        // market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
         // console.log(" USDTViewmarket_data",market_data)
 
         return(
             <View style={{ backgroundColor:Colors.primeBG, flex:1}}>
                 <SwipeListView
                         useFlatList={true}
+                        initialNumToRender={2}
                         data={market_data}
                         renderItem={ (rowData) => {
                         //  console.log("bdx",rowData)
@@ -190,6 +223,14 @@ let count = 0
                         stickyHeaderIndices={[0]}
                         keyExtractor={item => item.id}
                         contentContainerStyle={{flexGrow:1}}
+                        getItemLayout={(data, index) => {
+                            return {
+                                index,
+                                length: 30, // itemHeight is a placeholder for your amount
+                                offset: index * 30,
+                                width:'100%'
+                            }
+                        }}
                         ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
                         
                     
@@ -217,6 +258,7 @@ let count = 0
                 <SwipeListView
                             useFlatList={true}
                             data={favs}
+                            initialNumToRender={7}
                             renderItem={ (rowData) => {
                                 return(
                             // listItem(rowData.item, rowData.index)
@@ -248,7 +290,14 @@ let count = 0
                             keyExtractor={item => item?.params[1]?.l}
                             contentContainerStyle={{flex:1,}}
                             ListEmptyComponent={<ListEmpty />}
-                        
+                            getItemLayout={(data, index) => {
+                                return {
+                                    index,
+                                    length: 30, // itemHeight is a placeholder for your amount
+                                    offset: index * 30,
+                                    width:'100%'
+                                }
+                            }}
                         />  
                         
                 </View>
@@ -336,6 +385,7 @@ let count = 0
         const [socket, setSocket] = useState(null)
         const dispatch = useDispatch();
         const navigation = useNavigation()
+        const [view, setview]=  useState(1)
         // let focus = navigation.isFocused()
         // const user = useSelector(state=> state.authReducer.auth_attributes);
         const socketConnected = useSelector(state=> state.marketReducer.socketConnected, shallowEqual)
@@ -418,7 +468,33 @@ let count = 0
                 <View style={{ flex: 1, backgroundColor: Colors.primeBG }}>
                     <Toolbar title="Markets" backgroundColor={Colors.darkGray2} hasTabs />
                     
-                    { <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'30%', backgroundColor: Colors.darkGray2}} >
+                    <View>
+                       <View style={{flexDirection:'row',   backgroundColor: Colors.darkGray2,}}>
+                        <TouchableOpacity onPress={()=> requestAnimationFrame(() => {
+    setview(0)
+  })} style={{paddingHorizontal:15, borderBottomWidth:1, borderColor: view === 0? Colors.white: 'transparent', paddingBottom:10, justifyContent:'center', alignItems:'center'}}>
+                            <BPText>Favourites</BPText>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> requestAnimationFrame(() => {
+    setview(1)
+  })} style={{paddingHorizontal:15, borderBottomWidth:1, borderColor: view === 1? Colors.white: 'transparent', paddingBottom:10, justifyContent:'center', alignItems:'center'}}>
+                            <BPText>INR</BPText>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> requestAnimationFrame(() => {
+    setview(2)
+  })} style={{paddingHorizontal:15, borderBottomWidth:1, borderColor: view === 2? Colors.white: 'transparent', paddingBottom:10, justifyContent:'center', alignItems:'center'}}>
+                            <BPText>USDT</BPText>
+                        </TouchableOpacity>
+                       
+                       </View>
+                    </View>
+
+                    <View style={{flex:1}}>
+                        {view === 0 && <FavouritesTab/>}
+                        {view === 1 && <INRView/>}
+                        {view === 2 && <USDTView/>}
+                    </View>
+                    {/* { <Tabs locked initialPage={1} tabBarUnderlineStyle={{borderBottomWidth:0,width:'auto', marginHorizontal:-5 }} tabContainerStyle={{paddingRight:'30%', backgroundColor: Colors.darkGray2}} >
 
                         <Tab  heading="Favourites" 
                         textStyle={{color:Colors.text.lightWhite,}} 
@@ -442,7 +518,7 @@ let count = 0
                         </Tab>
 
 
-                    </Tabs>}
+                    </Tabs>} */}
 
                 </View>
             </SafeAreaView>

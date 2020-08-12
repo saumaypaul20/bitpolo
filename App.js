@@ -36,8 +36,10 @@ const App = () => {
       if (resIndexPrice.status) {
         dispatch(storeIndexPrice(resIndexPrice.data))
       }
+    }else{
+
+      setLogin(false)
     }
-    setLogin(false)
   }
 
   // getDeviceId for headers
@@ -63,7 +65,7 @@ const App = () => {
 
   useEffect(() => {
     // requestLocationPermission()
-    //console.log = function() {}
+     console.log = function() {}
      getUser()
      storeIP()
      deviceAccess()

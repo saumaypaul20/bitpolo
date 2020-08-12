@@ -18,6 +18,12 @@ export const addDepthBids =(data) =>{
         payload: data,
       };
 }
+export const clearDepthData =() =>{
+    return {
+        type: TYPES.CLEAR_ALL,
+         
+      };
+}
 
 // export const modifyFavs = (data) =>{
 //     return{

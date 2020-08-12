@@ -15,10 +15,11 @@ const  klineReducer = (state = init_state, action) => {
             // let found = state.kline.some(i=> 
             //          i.params[6] === action.payload.params[6]
             //      )
-         
+                // alert(`yo ${JSON.stringify(action.payload)}`)
+                //alert(` ${JSON.stringify(state.update)}`)
                 state = {
                     ...state,
-                    kline: state.update? [...state.kline,action.payload]: [...state.klineQ],
+                    kline: state.update? state.kline.concat([action.payload]): [...state.klineQ],
 
                 }
              

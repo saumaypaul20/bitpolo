@@ -19,36 +19,71 @@ import { useSelector, shallowEqual } from 'react-redux'
 import PickerComp from '../../../../components/PickerComp/PickerComp'
 import { act } from 'react-test-renderer'
 import { equalityFnBankslist } from '../../../../utils/reduxChecker.utils'
-import { withdraw } from '../../../../api/wallet.api'
+import { withdraw, withdrawRequest } from '../../../../api/wallet.api'
 import { getPublicIP } from '../../../../utils/apiHeaders.utils'
 import { imageRenderer } from '../../../../utils/component.utils'
 
 
-const isDisabled =(withdrawAmount,balance, address)=>{
-    //alert( parseFloat(withdrawAmount) > parseFloat(balance.available.balance + balance.freeze.balance ))
-    if(parseFloat(withdrawAmount) < parseFloat(balance.available.balance + balance.freeze.balance ) ){
-        // alert("amt gr8")
-        // alert(`withdr ${withdrawAmount}`)
-        // alert(parseFloat(balance.available.balance + balance.freeze.balance) )
-        // alert( parseFloat(withdrawAmount))
-        //alert( parseFloat(balance.available.balance + balance.freeze.balance ) )
-        return false
+
+
+const Tab1 = ({setView, activecoin, setPaymentId,payment_id}) =>{
+    console.log(activecoin)
+    const google_auth = useSelector(state=> state.authReducer.auth_attributes.attributes.google_auth, shallowEqual)
+    const user_id = useSelector(state=> state.authReducer.auth_attributes.id, shallowEqual)
+    const navigation = useNavigation()
+    const [withdrawAmount, setWithdrawAmount] = useState(null)
+    const [address, setAddress] = useState(null)
+
+    const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.asset_code], shallowEqual);
+    // alert(activecoin.asset_code)
+
+    const onsubmit = async()=>{
+    // alert('i')
+        let payload={
+            data:{
+                id: user_id,
+                attributes:{
+                    asset:activecoin._id,
+                    amount: withdrawAmount,
+                    ip: await getPublicIP(),
+                    // g2f_code:"122232",
+                    address:address,
+                    type_of_transfer_statement:"standard",
+                    // remarks:"test remarks"
+                }
+            }
+        }
+
+        if(google_auth){
+            // alert(user_id)
+            navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {payload: payload, id: user_id,type: 'withdraw confirmation'})
+        }else{
+            navigation.navigate(screenNames.OTP_SCREEN, {payload:payload, type: 'withdraw confirmation'})
+        }
+
+        
     }
-    else if(address || address?.length > 0 ){
-        //alert("address ")
-        return false
+    const isDisabled =(withdrawAmount,balance, address)=>{
+        //alert( parseFloat(withdrawAmount) > parseFloat(balance.available.balance + balance.freeze.balance ))
+        if(!withdrawAmount || !address){
+            return true
+        }
+        if(parseFloat(withdrawAmount) > parseFloat(balance.available.balance + balance.freeze.balance ) ){
+            return true
+        }
+        else if(parseFloat(withdrawAmount) === 0 ){
+            return true
+        }
+        else if(parseFloat(withdrawAmount) ){
+            return false
+        }
+        else if(address && address?.length > 0 ){
+            //alert("address ")
+            return false
+        }
+            return true
+        
     }
- 
-
-        return true
-     
-}
-
-const Tab1 = ({setView, activecoin, setWithdrawAmount, setAddress, setPaymentId,address,payment_id, withdrawAmount}) =>{
-console.log(activecoin)
-const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.asset_code], shallowEqual);
-// alert(activecoin.asset_code)
-
 
     return (
         <Root>
@@ -86,7 +121,7 @@ const balance = useSelector(state=> state.walletReducer.balance.data[activecoin.
                        <WalletEndButtons />
 
                        <View style={{alignSelf:'center', marginTop:44}}>
-                            <BPButton label="Submit" style={{paddingHorizontal:60}} disabled={isDisabled(withdrawAmount,balance, address)} />
+                            <BPButton label="Submit" style={{paddingHorizontal:60}} disabled={isDisabled(withdrawAmount,balance, address)} onPress={()=> onsubmit()}/>
                         </View>
 
                     </View>
@@ -127,7 +162,7 @@ const Tab2 = ({setView, activecoin}) =>{
         }
     },[])
 
-    const isDisabled = ()=>{
+    const isDisabled2 = ()=>{
         if(!remarks){
             return true
         }else if(!withdrawAmount){
@@ -138,13 +173,14 @@ const Tab2 = ({setView, activecoin}) =>{
 
     const onsubmit = async() => {
         let payload = {
+            id: user_id,
             data:{
                 attributes:{
                     asset: asset,
                     amount: withdrawAmount,
                     ip: await getPublicIP(),
                     
-                    type_of_transfer_statement: "instant",
+                    type_of_transfer_statement: "standard",
                     remarks: remarks
                 }
             }
@@ -202,7 +238,7 @@ const Tab2 = ({setView, activecoin}) =>{
                             <Spacer />
                             <BPInput label="Remarks" text={remarks} setText={(t)=>setRemarks(t)} />
                             <View style={{alignSelf:'center', marginTop:44}}>
-                                <BPButton label="Submit" style={{paddingHorizontal:60}} onPress={()=> onsubmit()} disabled={isDisabled()} />
+                                <BPButton label="Submit" style={{paddingHorizontal:60}} onPress={()=> onsubmit()} disabled={isDisabled2()} />
                             </View>
 
                     </View> 

@@ -260,7 +260,7 @@ const TradesOrderTabs = () => {
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <BPText style={{ opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM }}>Avbl</BPText>
-                    <BPText style={{ opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM }}>{`${balance.available.balance}`} {divideIt(activeTradePair).b}</BPText>
+                    <BPText style={{ opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM }}>{`${balance?.available.balance}`} {divideIt(activeTradePair).b}</BPText>
                 </View>
 
 

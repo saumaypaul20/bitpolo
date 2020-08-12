@@ -91,7 +91,7 @@ const MarketPage = () => {
     const dispatch = useDispatch()
     const navigation= useNavigation()
   
-    const currencies = useSelector(state=> state.marketReducer.currencies, (l,r)=> l.payload === r.payload ? true: false)
+    const currencies = useSelector(state=> state.marketReducer.currencies, (l,r)=> l.payload === r.payload )
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
     // const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
     // let found = market_data.find(i=> i.params[0] === activeTradePair)
@@ -221,6 +221,7 @@ const MarketPage = () => {
                             //dispatch(addDepthSubs(null));
                             setCurrency(activeTradePair);
                             dispatch(setActiveTradePair(val))
+                            dispatch(emptyKlineData())
                             emptyKlineData()
                             setTimeout(() => {
                                 setloading(false)

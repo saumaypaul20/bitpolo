@@ -49,14 +49,25 @@ const Tab = ({type}) =>{
             }
         }, [market_data,type])
     return (
-        <FlatList
+        data.length>0 ? <FlatList
                 data={data}
                 renderItem={({ item }) => <ListItem item={item} type={type} />}
                 keyExtractor={item => item.id}
+                initialNumToRender={7}
+                getItemLayout={(data, index) => {
+                    return {
+                        index,
+                        length: 30, // itemHeight is a placeholder for your amount
+                        offset: index * 30,
+                        width:'100%'
+                    }
+                }}
                 // ListHeaderComponent={ <HomeHeaderComp />}
                 // stickyHeaderIndices={[0]}
-                ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
-            />)
+                //ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
+            />:
+            <View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>
+            )
 }
 
 
@@ -177,11 +188,15 @@ const Home = () => {
                     <HomeHeaderComp />
 
                     <View style={{ flexDirection:'row', alignItems:'flex-start',   borderTopWidth:1, borderBottomWidth:1,borderColor: Colors.lightWhite }}>
-                        <TouchableOpacity onPress={()=> settab(1)} style={{flex:1 ,backgroundColor: activetab === 1? Colors.darkGray : 'transparent',justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
+                        <TouchableOpacity onPress={()=> requestAnimationFrame(() => {
+    settab(1)
+  })} style={{flex:1 ,backgroundColor: activetab === 1? Colors.darkGray : 'transparent',justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
                             <BPText style={{color: Colors.white, fontFamily: activetab === 1 ? Fonts.FONT_MEDIUM :Fonts.FONT_REGULAR , fontSize:12,}}>Gainers</BPText>
                            </TouchableOpacity>
 
-                        <TouchableOpacity onPress={()=> settab(2)} style={{flex:1 ,backgroundColor: activetab === 2? Colors.darkGray : 'transparent', justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
+                        <TouchableOpacity onPress={()=>requestAnimationFrame(() => {
+    settab(2)
+  })} style={{flex:1 ,backgroundColor: activetab === 2? Colors.darkGray : 'transparent', justifyContent:'center', alignItems:'center', borderRightWidth:0.5, borderColor:'#fff', paddingVertical:8}}>
                             <BPText style={{color: Colors.white, fontFamily:activetab === 2? Fonts.FONT_MEDIUM: Fonts.FONT_REGULAR, fontSize:12}}>Losers</BPText>
                              </TouchableOpacity>
                         <View style={{flex:1, justifyContent:'center', alignItems:'center', alignSelf:'center'}}>

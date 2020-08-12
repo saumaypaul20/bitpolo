@@ -7,7 +7,7 @@ import { MOBIKWIK_URL } from '../../../../../api/constants'
 const PaymentGateway = (props) => {
     // alert(JSON.stringify(props.route.params))
     const load = `
-        window.alert("done");
+         
         var form = document.createElement("form");
         
         form.method = "POST";

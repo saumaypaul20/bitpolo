@@ -6,14 +6,14 @@ import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Colors, Images, Fonts } from '../../../theme'
 import PickerComp from '../../../components/PickerComp/PickerComp'
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
-import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent } from '../../../api/config.ws'
+import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent, emitUnsubMarketListEvent } from '../../../api/config.ws'
 import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
 import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
 import { getMatchingMarketList } from '../../../api/markets.api'
 import { splitIt } from '../../../utils/converters'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { storeCurrencies, setActiveTradePair } from '../../../redux/actions/markets.action'
-import { addDepthSubs } from '../../../redux/actions/depthSubs.action'
+import { addDepthSubs,clearDepthData } from '../../../redux/actions/depthSubs.action'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../routes/screenNames/screenNames'
 import { equalityFnMarket } from '../../../utils/reduxChecker.utils'
@@ -27,7 +27,7 @@ const Trades = () => {
     const navigation= useNavigation()
     const currencies = useSelector(state=> state.marketReducer.currencies)
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
-    // const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
+    const market_data = useSelector(state=> state.marketReducer.data.some(i=> i.params[0] === activeTradePair), shallowEqual)
     // let found = market_data.find(i=> i.params[0] === activeTradePair)
     // // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
     // console.log("market_data in trades",market_data)
@@ -56,7 +56,7 @@ const Trades = () => {
                 )
                 dispatch(storeCurrencies(arr))
                 setLcurrencies(arr)
-                
+                setloading(false)
                 dispatch(setActiveTradePair(arr[1].value))
             // setcurrencies(arr)
             
@@ -65,7 +65,7 @@ const Trades = () => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            setloading(true)
+            setloading(false)
             if(activeTradePair){
 
                 emitDepthSubscribeEvent(currencyVal, activeTradePair)
@@ -74,10 +74,18 @@ const Trades = () => {
       
           return unsubscribe;
     }, [navigation])
+
+    // useEffect(()=>{
+
+    //     setloading(true);
+    //     setTimeout(() => {
+    //         setloading(false)
+    //     }, 1000);
+    // },[currencyVal])
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             //alert("blur")
-            setloading(false)
+            setloading(true)
           //  dispatch(setActiveTradePair(null))
             //+setActiveTradePair(null)
             //emitDepthUnsubscribeEvent(currencyVal)
@@ -96,7 +104,7 @@ const Trades = () => {
  
            //dispatch(setActiveTradePair(null))
 
-           setloading(false)
+           setloading(true)
        }
     }, [])
 
@@ -107,6 +115,16 @@ const Trades = () => {
          emitDepthSubscribeEvent(currencyVal, activeTradePair)
       }, 2000);
      }, [activeTradePair])
+
+     useEffect(()=>{
+        if(market_data){
+            setloading(false)
+        }else{
+
+            
+            setloading(true)
+        }
+     },[market_data])
  
     // const currencies = [{label: 'BTC/USDT', value:'key1'}];
     // if(currencies.length === 0){ return }
@@ -132,9 +150,16 @@ const Trades = () => {
                         items={Lcurrencies}
                         pickerVal = {activeTradePair}
                         setPickerVal = {(val)=>{
+                            setloading(true)
                             dispatch(addDepthSubs(null));
                             setCurrency(activeTradePair);
                             dispatch(setActiveTradePair(val))
+                            dispatch(clearDepthData())
+                            emitDepthUnsubscribeEvent(currencyVal)
+                            setTimeout(() => {
+                                //emitUnsubMarketListEvent([currencyVal])
+                            setloading(false)
+                           }, 1000);
                             //found= null
                         }}
                         chevronPositionTop= {3}
@@ -163,7 +188,7 @@ const Trades = () => {
                                 
                                 {/* ---------------------------------- */}
 
-                            {(Lcurrencies.length == 0  || !loading) ?  
+                            {(  loading ) ?  
                                 <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
                             :
                                 <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>

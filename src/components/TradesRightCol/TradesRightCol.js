@@ -10,9 +10,11 @@ import AreaChart2 from '../AreaChart/AreaChart'
 import TradesOrderTabs from '../TradesOrderTabs/TradesOrderTabs'
 import DepthChart from '../AreaChart/DepthChart'
 import HighChart from '../HighChart/HighChart'
+import { screenNames } from '../../routes/screenNames/screenNames'
+import { useNavigation } from '@react-navigation/native'
 const TradesRightCol = () => {
     //alert("riglt col")
-
+    const navigation = useNavigation()
     return (
         <View style={{ flex: 1 }}>
             {console.log("TradesOrderTabs1")}
@@ -36,7 +38,9 @@ const TradesRightCol = () => {
 
 
                     {/* <AreaChart2 /> */}
-                    <DepthChart />
+                    <TouchableOpacity onPress={()=> navigation.navigate(screenNames.MARKET_PAGE)}>
+                        <DepthChart />
+                    </TouchableOpacity>
                     {/* <HighChart /> */}
                 </View>
             </View>

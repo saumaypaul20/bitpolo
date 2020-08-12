@@ -150,3 +150,59 @@ export const deleteWithdrawAddresses = (id) => {
         }
     })
 }
+
+export const withdrawRequest = (body) => {
+    return new Promise ( async (resolve, reject)=>{  
+        if (!body){ resolve({status:false, data: 'no body'}) }  
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: getDeviceId()
+        }
+
+        let res = await fetchApi(REST.WALLET.WITHDRAW_REQUEST, "POST", body, 200, headers);
+        console.log("withdrawRequest res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+
+export const getDepositTransactions = () => {
+    return new Promise ( async (resolve, reject)=>{ 
+        
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: await getDeviceId()
+        }
+ 
+        let res = await fetchApi(`${REST.WALLET.GET_DEPOSIT_TRANSACTIONS}`, "GET", null, 200, headers);
+        console.log("getDepositTransactions res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
+export const getWithdrawTransactions = () => {
+    return new Promise ( async (resolve, reject)=>{ 
+        
+        let headers = {
+            Authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+            device: await getDeviceId()
+        }
+ 
+        let res = await fetchApi(`${REST.WALLET.GET_WITHDRAW_TRANSACTIONS}`, "GET", null, 200, headers);
+        console.log("getDepositTransactions res", res)
+        if(!res?.responseBody?.errors){
+            resolve({status: true , data:res.responseBody})
+        }else{
+            resolve({status: false, data:res.responseBody})
+        }
+    })
+}
