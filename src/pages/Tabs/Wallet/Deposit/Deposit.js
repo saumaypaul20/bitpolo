@@ -169,10 +169,10 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
         let res = await deposit(payload)
         if(res.status){
             //todo
-            console.log(res)
+            console.log("dposit res *******",res)
             //alert("res")
             if(pickerOrderVal === "PaymentGateway"){
-                navigation.navigate(screenNames.PAYMENT_WEBVIEW, {paymentResult: res.data})
+                navigation.navigate(screenNames.PAYMENT_WEBVIEW, {paymentResult: res.data.data.attributes.result})
             }else if(pickerOrderVal === "TraditionalPayment"){
 
                 alert(`Amount ${payload.data.attributes.amount} INR is deposited!`)

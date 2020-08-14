@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer , DefaultTheme} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { CardStyleInterpolators } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs'
@@ -33,6 +33,7 @@ import PaymentGateway from '../pages/Tabs/Wallet/Deposit/PaymentGateway/PaymentG
 import AddressManagement from '../pages/Tabs/Wallet/Withdraw/AddressManagement/AddressManagement';
 import MarketPage from '../pages/MarketPage/MarketPage';
 import WalletHistory from '../pages/Tabs/Wallet/WalletHistory/WalletHistory';
+import { Colors } from '../theme';
 const Stack = createStackNavigator();
 
 const Routes = ({ login }) => {
@@ -50,13 +51,12 @@ const Routes = ({ login }) => {
     //   };
 
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={{...DefaultTheme,colors:{...DefaultTheme.colors, background: Colors.primeBG}}}>
             <Stack.Navigator
                 initialRouteName={login ? screenNames.PINSCREEN : screenNames.SIGNIN}
                 screenOptions={{
                     headerShown: false,
                     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-
                 }}>
 
                 <Stack.Screen name={screenNames.SIGNIN} component={Signin} />

@@ -63,3 +63,10 @@ export const PAYMENT = {
     WITHDRAW_REQUEST: '/payment/withdraw'
     
 }
+/* ------------------------------- ORDERS API ------------------------------- */
+
+export const ORDERS = {
+    ORDER_PUT_LIMIT: '/order/put-limit',
+    
+    
+}

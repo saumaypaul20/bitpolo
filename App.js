@@ -1,7 +1,9 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react';
-import { StatusBar, Text, TextInput } from 'react-native'
+import { StatusBar, Text, TextInput, View } from 'react-native'
 import { Root } from 'native-base'
+import SplashScreen from 'react-native-splash-screen'
+
 import Routes from './src/routes/Routes';
 import Storage from './src/utils/storage.utils';
 import DeviceInfo from 'react-native-device-info';
@@ -14,6 +16,7 @@ import { Colors } from './src/theme';
 import { startSocket } from './src/api/config.ws';
 import { getIndexPrice } from './src/api/markets.api';
 import { storeIndexPrice } from './src/redux/actions/markets.action';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const App = () => {
 
   Text.defaultProps = {};
@@ -65,6 +68,7 @@ const App = () => {
 
   useEffect(() => {
     // requestLocationPermission()
+    SplashScreen.hide();
      console.log = function() {}
      getUser()
      storeIP()
@@ -73,7 +77,7 @@ const App = () => {
   }, [])
 
   return (
-    login !== null ? <Root><StatusBar translucent barStyle={Colors.barStyle} backgroundColor={Colors.primeBG} /><Routes login={login} /></Root> : null
+    login !== null ? <Root><StatusBar translucent barStyle={Colors.barStyle} backgroundColor={Colors.primeBG} /><Routes login={login} /></Root> : <SafeAreaView  style={{flex:1, backgroundColor: Colors.primeBG}}/>
   );
 
 };

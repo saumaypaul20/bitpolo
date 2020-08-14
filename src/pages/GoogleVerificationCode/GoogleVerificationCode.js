@@ -270,7 +270,7 @@ const GoogleVerificationCode = (props) => {
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
                 {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
                 <Toolbar enableBackButton/>
-                <Content contentContainerStyle={{ flexGrow: 1 }}>
+                
                     <View style={{flex:1, justifyContent:'flex-start', alignItems:'center',  marginHorizontal:48, marginTop:83}}>
                         <BPText style={{fontSize:24, fontFamily: Fonts.FONT_BOLD}}>Enter the Verification code</BPText>
                         <BPText style={{ fontSize:16, textAlign:'center', paddingVertical:20, lineHeight:23}}>{`Get a verification code from the\n`}<BPText style={{fontFamily:Fonts.FONT_BOLD}}>Google Authenticator app</BPText></BPText>
@@ -291,7 +291,7 @@ const GoogleVerificationCode = (props) => {
                     
 
                     </View>
-                </Content>
+                
             </Container>
         </SafeAreaView>
     )
