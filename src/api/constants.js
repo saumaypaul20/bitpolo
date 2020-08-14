@@ -66,7 +66,7 @@ export const PAYMENT = {
 /* ------------------------------- ORDERS API ------------------------------- */
 
 export const ORDERS = {
-    ORDER_PUT_LIMIT: '/order/put-limit',
+    ORDER_PUT: '/matching/order/',
     
     
 }

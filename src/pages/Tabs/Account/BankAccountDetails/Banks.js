@@ -29,8 +29,8 @@ const Chevron =({position})=>{
 
 const Banks = () => {
     const navigation = useNavigation()
-    const user = useSelector(state=>state.authReducer.auth_attributes, shallowEqual);
-    console.log(user)
+    // const user = useSelector(state=>state.authReducer.auth_attributes, shallowEqual);
+    // console.log(user)
     const dispatch = useDispatch()
     // const [banks] = useState([])
     const banks = useSelector(state=> state.payments.banks, equalityFnBankslist)
