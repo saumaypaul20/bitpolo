@@ -36,7 +36,7 @@ const TradesOrderTabs = () => {
     const dispatch = useDispatch()
     const user = useSelector(state=>state.authReducer.auth_attributes);
 
-    const [tab, settab] = useState(1)
+    const [tab, settab] = useState(2)
     const [inramount, setinramount] = useState(0)
     const [cryptoamount, setcryptoamount] = useState(0)
     const [total, settotal] = useState(0)
@@ -49,7 +49,7 @@ const TradesOrderTabs = () => {
     
     const balance = useSelector(state => state.walletReducer.balance?.data[divideIt(activeTradePair).b], shallowEqual);
     
-    const currencies = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
+    // const currencies = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
     
     const market_data = useSelector(state => state.marketReducer.data.find(i => i.params[0] === activeTradePair), shallowEqual)
     
@@ -226,8 +226,8 @@ const TradesOrderTabs = () => {
 
         </View> :<View>
             <View style={{ justifyContent: 'space-around', alignItems: 'center', backgroundColor: Colors.darkGray2, alignSelf: 'stretch', flexDirection: 'row' }}>
-                <Tab label="Buy" active={tab} type={1} onPress={() => settab(1)} />
-                <Tab label="Sell" active={tab} type={2} onPress={() => settab(2)} />
+                <Tab label="Buy" active={tab} type={2} onPress={() => settab(2)} />
+                <Tab label="Sell" active={tab} type={1} onPress={() => settab(1)} />
             </View>
 
             <View style={{ flexDirection: 'row', alignSelf: 'stretch', justifyContent: 'flex-end', paddingVertical: 15, alignItems: 'center' }}>
@@ -306,7 +306,7 @@ const TradesOrderTabs = () => {
                 <Spacer space={8} />
 
                 <View style={{ alignSelf: 'stretch' }}>
-                    <BPButton backgroundColor={tab === 1 ? Colors.lightGreen : Colors.red} textColor={Colors.white} label={tab === 1 ? "Buy" : "Sell"} width="auto" onPress={() => onsubmit()} disabled={isDisabled()}/>
+                    <BPButton backgroundColor={tab === 2 ? Colors.lightGreen : Colors.red} textColor={Colors.white} label={tab === 2 ? "Buy" : "Sell"} width="auto" onPress={() => onsubmit()} disabled={isDisabled()}/>
                 </View>
             </View>
         </View>

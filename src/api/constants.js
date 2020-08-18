@@ -67,6 +67,9 @@ export const PAYMENT = {
 
 export const ORDERS = {
     ORDER_PUT: '/matching/order/',
+    GET_PENDING_ORDERS:'/matching/order/pending',
+    CANCEL_ORDER:'/matching/order/cancel',
+    CANCEL_ALL:'/matching/all/orders/cancel'
     
     
 }

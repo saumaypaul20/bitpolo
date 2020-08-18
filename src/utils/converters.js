@@ -4,7 +4,7 @@ export function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 export const convertDate = (time, divider ='/', reverse=false) => {
-    const date = new Date(`${time}`);
+    const date = typeof time === 'string'? new Date(`${time}`) : new Date(time);
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let dt = date.getDate();
