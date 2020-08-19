@@ -57,7 +57,10 @@ const Trades = () => {
                 dispatch(storeCurrencies(arr))
                 setLcurrencies(arr)
                 setloading(false)
-                dispatch(setActiveTradePair(arr[1].value))
+                if(!activeTradePair){
+
+                    dispatch(setActiveTradePair(arr[1].value))
+                }
             // setcurrencies(arr)
             
         }

@@ -6,7 +6,7 @@ import { Images, Colors } from '../../theme'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { convertDate } from '../../utils/converters'
 
-const BPDatePicker = ({label, date, setDate, disabled}) => {
+const BPDatePicker = ({label, date, setDate, disabled, maxDate=new Date(), minDate}) => {
 
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -55,7 +55,8 @@ const BPDatePicker = ({label, date, setDate, disabled}) => {
                     is24Hour={true}
                     display="default"
                     onChange={onChange}
-                    maximumDate={new Date()}
+                    maximumDate={maxDate}
+                    minimumDate={minDate ? minDate : null}
                 />
                 )}
         </TouchableOpacity>

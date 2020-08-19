@@ -76,7 +76,7 @@ const TradesOrderTabs = () => {
     }, [activeTradePair]);
 
     useEffect(() => {
-        if (market_data) {
+        if (market_data && inramount ===0) {
             if (tradeDetail) {
                 setPrice(parseFloat(market_data.params[1].l).toFixed(tradeDetail?.money_prec))
             }
@@ -139,7 +139,7 @@ const TradesOrderTabs = () => {
         } else if (type == 'cryptoamount') {
             // let crpt = parseFloat(t).toFixed(tradeDetail?.stock_prec)
             let crpt = parseFloat(t)
-            setcryptoamount(crpt)
+            setcryptoamount(t)
             // let nt = (t * inramount).toFixed(tradeDetail?.money_prec)
             let nt = (t * inramount)
             setTotal(nt)
@@ -246,23 +246,30 @@ const TradesOrderTabs = () => {
 
             <View style={{ marginRight: 16, marginLeft: 3 }}>
 
-                {pickerOrderVal == "market" ? <>
-                    <InputCounter label={"Market"}
-                        onInputChange={(t) => changeAmount(t)} />
-                </> :
-
-                    <InputCounter label={"Amount in INR"} disabled={false}
-                        onInputChange={(t) => changeAmount(t, 'inramount')} input={ parseFloat(inramount).toFixed(tradeDetail?.money_prec)} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR} />
-                }
+                
+                <InputCounter label={"Amount in INR"} disabled={false}
+                onInputChange={(t)=> setinramount(t)}
+                        validate={() => changeAmount(inramount, 'inramount')} input={ inramount} onIncrease={onIncreaseINR} onDecrease={onDecreaseINR} />
+                
 
                 <Spacer space={8} />
-                {pickerOrderVal == "market" ? <>
+                {pickerOrderVal == "market" ? 
+                    tab === 2 ?
+                    <>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         {/* <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText> */}
-                        <InputCounter label={`Total (${divideIt(activeTradePair).b})`} onInputChange={(t) => setTotal(t)} input={total} onIncrease={onIncreaseTOTAL} onDecrease={onDecreaseTOTAL} />
+                        {/* <InputCounter label={`Total (${divideIt(activeTradePair).b})`} validate={(t) => setTotal(t)} input={total}  /> */}
+                        <InputCounter onInputChange={(t)=> settotal(t)} validate={() => changeAmount(total, 'total')} input={total} onIncrease={onIncreaseTOTAL} onDecrease={onDecreaseTOTAL}/>
                     </View></>
                     :
-                    <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} onInputChange={(t) => changeAmount(t, 'cryptoamount')} input={parseFloat(cryptoamount).toFixed(tradeDetail?.stock_prec)} onIncrease={onIncreaseCRYPTO} onBlurit={(t) => letItBlur(t)} onDecrease={onDecreaseCRYPTO} />
+                    <>
+                     <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} 
+                     onInputChange={(t)=> setcryptoamount(t)}
+                     validate={() => changeAmount(cryptoamount, 'cryptoamount')} input={cryptoamount} onIncrease={onIncreaseCRYPTO}  onDecrease={onDecreaseCRYPTO} />
+                     </>
+                    :
+                    <InputCounter label={`Amount  ${divideIt(activeTradePair).a}`} 
+                    onInputChange={(t)=> setcryptoamount(t)} validate={() => changeAmount(cryptoamount, 'cryptoamount')} input={cryptoamount} onIncrease={onIncreaseCRYPTO}  onDecrease={onDecreaseCRYPTO} />
                 }
                 <Spacer space={4} />
 
@@ -281,7 +288,7 @@ const TradesOrderTabs = () => {
                             <BPText style={{ opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM }}>Total</BPText>
                         </View>
                         <View style={{ flex: 3, }}>
-                            <InputCounter onInputChange={(t) => changeAmount(t, 'total')} input={parseFloat(total).toFixed(tradeDetail?.money_prec)} />
+                            <InputCounter onInputChange={(t)=> settotal(t)} validate={() => changeAmount(total, 'total')} input={total} />
                         </View>
 
                         <View style={{ flex: 1 }}>

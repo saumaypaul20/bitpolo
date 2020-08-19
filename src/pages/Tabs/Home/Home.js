@@ -10,17 +10,26 @@ import { equalityFnMarket } from '../../../utils/reduxChecker.utils'
 import { useNavigation } from '@react-navigation/native'
 import { getMarketList } from '../../../api/users.api'
 import io from 'socket.io-client';
-import { addMarketData, triggerMarketSocket } from '../../../redux/actions/markets.action'
+import { addMarketData, triggerMarketSocket, setActiveTradePair } from '../../../redux/actions/markets.action'
 var pako = require('pako');
 import * as ENDPOINT from '../../../api/constants'
 import { splitIt } from '../../../utils/converters'
 import { emitMarketListEvent, emitUnsubMarketListEvent } from '../../../api/config.ws'
+import { screenNames } from '../../../routes/screenNames/screenNames'
 
  
-const ListItem = ({item, type}) =>{
-
+const ListItem = ({item, type, index}) =>{
+    const dispatch = useDispatch()
+    const navigation = useNavigation()
+    let bool = index%2===0 ? true : false;
     return(
-        <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8}}>
+        <TouchableOpacity onPress={()=>{
+            dispatch(setActiveTradePair(item.params[0]))
+            navigation.navigate(screenNames.TRADES)
+        }}>
+
+        
+        <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8,  backgroundColor: bool ? Colors.primeBG: Colors.darkGray2}}>
             <View style={{flex:1, justifyContent:'center', alignItems:'flex-start', paddingHorizontal:30}}>
                 <BPText style={{color: Colors.white, fontFamily:'Inter-Medium' , fontSize:12, alignItems:'center'}}>{item?.divider.a} <BPText style={{color: Colors.lightWhite, fontSize:10, fontFamily:'Inter-Bold'}}>/ {item?.divider.b}</BPText></BPText>
             </View>
@@ -32,6 +41,7 @@ const ListItem = ({item, type}) =>{
                 <BPText style={{color: Colors.lightWhite, fontFamily:'Inter-Medium' , fontSize:12}}>{parseFloat(item?.params[1]?.v).toFixed(4)}</BPText>
                 </View>
         </View>
+        </TouchableOpacity>
     )
 }
 
@@ -51,7 +61,7 @@ const Tab = ({type}) =>{
     return (
         data.length>0 ? <FlatList
                 data={data}
-                renderItem={({ item }) => <ListItem item={item} type={type} />}
+                renderItem={({ item,index }) => <ListItem item={item} type={type} index={index} />}
                 keyExtractor={item => item.id}
                 initialNumToRender={7}
                 getItemLayout={(data, index) => {

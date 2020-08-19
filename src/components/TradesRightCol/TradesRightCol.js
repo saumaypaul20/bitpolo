@@ -25,7 +25,7 @@ const TradesRightCol = () => {
 
 
                 <View  >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 16 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 0 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
                             <View style={{ height: 14, width: 14, borderRadius: 2, backgroundColor: Colors.lightGreen, marginHorizontal: 5 }} />
                             <BPText style={{ fontSize: 12, fontFamily: Fonts.FONT_MEDIUM }}>Bid</BPText>

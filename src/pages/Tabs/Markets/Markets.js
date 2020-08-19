@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Toolbar from '../../../components/Toolbar/Toolbar'
 import { Icon, Tab, Tabs } from 'native-base'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { modifyFavs, addMarketList } from '../../../redux/actions/markets.action';
+import { modifyFavs, addMarketList, setActiveTradePair } from '../../../redux/actions/markets.action';
 import store from '../../../redux/store';
 import _ from 'lodash'
 import BPText from '../../../common/BPText/BPText';
@@ -17,6 +17,7 @@ import { emitMarketListEvent, emitUnsubMarketListEvent } from '../../../api/conf
 import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils';
 import { getMatchingMarketList } from '../../../api/markets.api';
 import { addFavCoin, updateFavCoin } from '../../../api/users.api';
+import { screenNames } from '../../../routes/screenNames/screenNames';
  
 let count = 0
      
@@ -305,12 +306,18 @@ let count = 0
     }
     const ListItem = ({item, index}) =>{
     //   console.log("item",item)
+        const dispatch = useDispatch();
+        const navigation = useNavigation(); 
         let bool = index%2===0 ? true : false;
 
         let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
 
         if(!index_price){return <></>}
         return(
+            <TouchableOpacity onPress={()=>{
+                dispatch(setActiveTradePair(item.params[0]))
+                navigation.navigate(screenNames.TRADES)
+            }}>
             <View style={{ flexDirection:'row', alignItems:'flex-start',  paddingVertical:8, backgroundColor: bool ? Colors.primeBG: Colors.darkGray2}}>
                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-start', paddingHorizontal:30}}>
                     <View style={{alignItems:'flex-start'}}>
@@ -320,10 +327,11 @@ let count = 0
                     </View>
                 </View>
 
-                <View style={{flex:1, justifyContent:'center', alignItems:'center',paddingHorizontal:30}}>
+                <View style={{flex:1, justifyContent:'center', alignItems:'flex-start',paddingHorizontal:35}}>
                     <BPText style={{fontSize:12, }}>{parseFloat(item?.params[1]?.l).toFixed(2)}</BPText>
                     <BPText style={{fontFamily:'Inter-Medium', fontSize:10, }}>$ {item?.divider.b === "USDT" ? (parseFloat(item?.params[1]?.l)* index_price.find(i=> i.asset === "USDT").amount).toFixed(2): (parseFloat(item?.params[1]?.l)/ index_price.find(i=> i.asset === "USDT").amount).toFixed(2)}</BPText>
-                    </View>
+                </View>
+
                 <View style={{flex:1, justifyContent:'center', alignItems:'flex-end', alignSelf:'center',paddingHorizontal:30}}>
                     <Text 
                     style={{
@@ -336,6 +344,7 @@ let count = 0
                         > {parseFloat(item?.params[1]?.cp === "Infinity" ? 0 : item?.params[1]?.cp ).toFixed(2)}%</Text>
                     </View>
             </View>
+            </TouchableOpacity>
         )
     }
 
