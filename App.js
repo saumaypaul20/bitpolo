@@ -34,10 +34,11 @@ const App = () => {
       console.log(user)
       dispatch(inputAction(TYPES.EMAIL_INPUT, user.email))
       dispatch(saveAuthAttributesAction(user))
-      setLogin(true)
+     
       let resIndexPrice = await getIndexPrice()
       if (resIndexPrice.status) {
         dispatch(storeIndexPrice(resIndexPrice.data))
+        setLogin(true)
       }
     }else{
 
@@ -49,6 +50,7 @@ const App = () => {
   const deviceAccess = async () => {
     // let deviceId = DeviceInfo.getUniqueId();
     let device_name = await DeviceInfo.getModel();
+    console.log("device name",device_name)
     let os = await DeviceInfo.getSystemName()
     let deviceVer = await DeviceInfo.getSystemVersion()
     let device = {
@@ -56,6 +58,8 @@ const App = () => {
       os_byte: deviceVer,
       browser: device_name
     }
+
+    console.log(device)
     dispatch(addDeviceId(device))
   }
 
@@ -69,7 +73,7 @@ const App = () => {
   useEffect(() => {
     // requestLocationPermission()
     SplashScreen.hide();
-     //console.log = function() {}
+     console.log = function() {}
      getUser()
      storeIP()
      deviceAccess()

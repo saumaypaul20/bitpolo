@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
+import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList,TouchableNativeFeedback,  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Container, Content, Picker, Icon, CardItem, Form, Tabs, Tab, Left } from 'native-base'
+import { Container } from 'native-base'
 import Toolbar from '../../../components/Toolbar/Toolbar'
-import { Colors, Images, Fonts } from '../../../theme'
+import { Colors, Images } from '../../../theme'
 import PickerComp from '../../../components/PickerComp/PickerComp'
-import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
-import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent, emitUnsubMarketListEvent } from '../../../api/config.ws'
+import { emitDepthSubscribeEvent, emitDepthUnsubscribeEvent } from '../../../api/config.ws'
 import TradesLeftCol from '../../../components/TradesLeftCol/TradesLeftCol'
 import TradesRightCol from '../../../components/TradesRightCol/TradesRightCol'
 import { getMatchingMarketList } from '../../../api/markets.api'
@@ -16,8 +15,11 @@ import { storeCurrencies, setActiveTradePair } from '../../../redux/actions/mark
 import { addDepthSubs,clearDepthData } from '../../../redux/actions/depthSubs.action'
 import { useNavigation } from '@react-navigation/native'
 import { screenNames } from '../../../routes/screenNames/screenNames'
-import { equalityFnMarket } from '../../../utils/reduxChecker.utils'
-let id= 0
+import BPText from '../../../common/BPText/BPText'
+import ChevronRight from '../../../common/ChevronRight/ChevronRight'
+import Modal from 'react-native-modal'
+// import {  } from 'react-native-gesture-handler'
+
 const Trades = () => {
     // console.log("trdes reloads---------------------------------------------", id);
     
@@ -34,6 +36,7 @@ const Trades = () => {
     const [currencyVal, setCurrency] = useState(activeTradePair)
     const [Lcurrencies, setLcurrencies] = useState(currencies)
     const [loading, setloading]= useState(true)
+    const [showcurrencies, setshowcurrencies] = useState(false)
 
     const callListMarket = async ()=>{
         let res = await getMatchingMarketList()
@@ -126,6 +129,23 @@ const Trades = () => {
         }
      },[market_data])
  
+     const handleCurrencyView =()=>{
+        setshowcurrencies(!showcurrencies)
+     }
+
+     const oncurrencyselect = (val)=>{
+        setloading(true)
+        dispatch(addDepthSubs(null));
+        setCurrency(activeTradePair);
+        dispatch(setActiveTradePair(val))
+        dispatch(clearDepthData())
+        emitDepthUnsubscribeEvent(currencyVal)
+        setshowcurrencies(false)
+        setTimeout(() => {
+            //emitUnsubMarketListEvent([currencyVal])
+        setloading(false)
+        }, 1000);
+     }
     // const currencies = [{label: 'BTC/USDT', value:'key1'}];
     // if(currencies.length === 0){ return }
     return (
@@ -136,62 +156,94 @@ const Trades = () => {
             {/* <Content contentContainerStyle={{ flexGrow: 1 }}>
                 
             </Content> */}
+
+
             <FlatList data={['1']}
                 nestedScrollEnabled
-                style={{ width: '100%' }}
+                style={{ width: '100%'}}
                 keyExtractor={(data)=> data}
                 
-                ListHeaderComponent={<View style={styles.headerContainer}>
+                ListHeaderComponent={
+                    <View style={styles.headerContainer}>
                                     
-                <View style={{flex:0.5, borderRadius:4, alignSelf:'flex-start'}}>
-                { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
+                                    <View style={{  borderRadius:4, alignSelf:'flex-start'}}>
+                                    { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
+                                        
+                                        // <PickerComp
+                                        //     items={Lcurrencies}
+                                        //     width={200}
+                                        //     pickerVal = {activeTradePair}
+                                        //     setPickerVal = {(val)=>{
+                                        //         setloading(true)
+                                        //         dispatch(addDepthSubs(null));
+                                        //         setCurrency(activeTradePair);
+                                        //         dispatch(setActiveTradePair(val))
+                                        //         dispatch(clearDepthData())
+                                        //         emitDepthUnsubscribeEvent(currencyVal)
+                                        //         setTimeout(() => {
+                                        //             //emitUnsubMarketListEvent([currencyVal])
+                                        //         setloading(false)
+                                        //        }, 1000);
+                                        //         //found= null
+                                        //     }}
+                                        //     chevronPositionTop= {3}
+                                        // />
                     
-                    <PickerComp
-                        items={Lcurrencies}
-                        pickerVal = {activeTradePair}
-                        setPickerVal = {(val)=>{
-                            setloading(true)
-                            dispatch(addDepthSubs(null));
-                            setCurrency(activeTradePair);
-                            dispatch(setActiveTradePair(val))
-                            dispatch(clearDepthData())
-                            emitDepthUnsubscribeEvent(currencyVal)
-                            setTimeout(() => {
-                                //emitUnsubMarketListEvent([currencyVal])
-                            setloading(false)
-                           }, 1000);
-                            //found= null
-                        }}
-                        chevronPositionTop= {3}
-                    />
+                                        <View style={{backgroundColor:Colors.darkGray2,  }}>
+                                            <TouchableOpacity onPress={()=> handleCurrencyView()} style={{ flexDirection:'row', alignItems:'center'}}>
+                                                <BPText style={{marginRight:10}}>{ Lcurrencies?.find(i=> i.value === activeTradePair)?.label}</BPText>
+                                                <ChevronRight arrow={'down'}/>
+                                            </TouchableOpacity>
+                    
+                                          
+                                           <Modal isVisible={showcurrencies} backdropOpacity={0} onBackButtonPress={()=> handleCurrencyView()} onBackdropPress={()=> handleCurrencyView()}
+                                           style={{justifyContent:'flex-start', marginTop:100, marginHorizontal:0, paddingHorizontal:20}}
+                                           >
+                                                    <View style={{backgroundColor: Colors.darkGray2, }}>
+                                                        {
+                                                            Lcurrencies.map((i,index)=>{
+                                                                return (
+                                                                    <TouchableOpacity key={index.toString()}
+                                                                    style={{padding:5, paddingVertical:12, borderTopColor: Colors.lightWhite, borderTopWidth: index!==0 ?1:0}}
+                                                                    onPress={()=>oncurrencyselect(i.value)}>
+                                                                        <BPText>{i.label}</BPText>
+                                                                    </TouchableOpacity>
+                                                                )
+                                                            })
+                                                        }
+                                                    </View>
+                                           </Modal>
+                                           
+                                        </View>
+                                    }
+                                    
+                                    </View>
+                    
+                                    <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
+                                        <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE) }>
+                                            <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
+                                            <Image source={Images.list_icon} style={styles.headerIconStyles} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                 }
-                
-                </View>
-
-                <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
-                    <TouchableOpacity style={{marginHorizontal:22}} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE) }>
-                        <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={()=> navigation.navigate(screenNames.MARKET_TRADES) }>
-                        <Image source={Images.list_icon} style={styles.headerIconStyles} />
-                    </TouchableOpacity>
-                </View>
-            </View>}
                 renderItem={
-                    ({item,index})=>{
+                    ()=>{
                         //alert("uyou")
                         return(
-                            <View style={{  justifyContent:'flex-start', alignItems:'center', }}>
+                            <View style={{ justifyContent:'flex-start', alignItems:'center',}}>
                 
                                 
                                 
                                 
                                 {/* ---------------------------------- */}
 
-                            {(  loading ) ?  
+                            {(  loading && !market_data ) ?  
                                 <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
                             :
-                                <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
+                                <View style={{ flex:1, flexDirection:'row', alignSelf:'stretch'}}>
                                     {activeTradePair && <TradesLeftCol />}
                                     {activeTradePair && <TradesRightCol /> }
                                 </View>}

@@ -38,7 +38,7 @@ const TradesRightCol = () => {
 
 
                     {/* <AreaChart2 /> */}
-                    <TouchableOpacity onPress={()=> navigation.navigate(screenNames.MARKET_PAGE)}>
+                    <TouchableOpacity style={{flex:1 }} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE)}>
                         <DepthChart />
                     </TouchableOpacity>
                     {/* <HighChart /> */}

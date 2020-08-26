@@ -26,7 +26,7 @@ const PINScreen = (props) => {
 
     const [nextScreen, setNextScreen] = useState(props?.route?.params?.screen || screenNames.DASHBOARD)
     const [code, setCode] = useState(''); //setting code initial STATE value
-    const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
+    const [localPin, setLocalPin] = useState(''); //setting code initial STATE value
     const [disabled, setdisabled] = useState(true); //setting code initial STATE value
     const [isNew, setNew] = useState(props?.route?.params?.type)
     const pinCount = 6
@@ -80,7 +80,7 @@ const PINScreen = (props) => {
             if(mpin){
                 setNew(false)
                 setLocalPin(mpin)
-                handleCodeFilled("111111")
+                // handleCodeFilled("111111")
             }else{
                 setNew(true)
             }

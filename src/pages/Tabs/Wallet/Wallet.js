@@ -19,6 +19,8 @@ import { addBanks } from '../../../redux/actions/payments.action'
 import { equalityFnIndexPrice } from '../../../utils/reduxChecker.utils'
 import { toDecimal } from '../../../utils/converters'
 import { imageRenderer } from '../../../utils/component.utils'
+import { getIndexPrice } from '../../../api/markets.api'
+import { storeIndexPrice } from '../../../redux/actions/markets.action'
 
 
 const rightEl =(val)=>{
@@ -33,6 +35,17 @@ const Wallet = () => {
     const [balance, setbalance] = useState(null)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
+
+
+    const callIndexPriceGetter =async()=>{
+        let resIndexPrice = await getIndexPrice()
+      if (resIndexPrice.status) {
+        dispatch(storeIndexPrice(resIndexPrice.data))
+      }
+    }
+    if(!index_price){
+        //callIndexPriceGetter()
+    }
     // alert(JSON.stringify(index_price))
     const sortByAlpha =()=>{
          console.log('soon')

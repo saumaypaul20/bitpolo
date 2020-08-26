@@ -85,8 +85,8 @@ const TradesLeftCol = () => {
             return <BPText style={{ color: parseFloat(found.params[1].cp) > -1 ? Colors.lightGreen : Colors.red, padding: 5 }}>{`${parseFloat(found.params[1].l).toFixed(2)} ${found?.divider.b === "USDT" ? (parseFloat(found?.params[1]?.l) * index_price.find(i => i.asset === "USDT").amount).toFixed(2) : (parseFloat(found?.params[1]?.l) / index_price.find(i => i.asset === "USDT").amount).toFixed(2)}`}</BPText>
         }
     }
-    const renderItem1 = ({ item }) => (<ListItem item={item} type={1} />)
-    const renderItem2 = ({ item }) => (<ListItem item={item} />)
+    // const renderItem1 = ({ item }) => (<ListItem item={item} type={1} />)
+    // const renderItem2 = ({ item }) => (<ListItem item={item} />)
 
     return (
         <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', }}>
@@ -107,7 +107,7 @@ const TradesLeftCol = () => {
 
 
             {/* Red Chart 1 */}
-            {(activeBPchart === "sells" || activeBPchart === "0") && <View style={{ height: height, alignSelf: 'stretch', width: '97%' }}>
+            {(activeBPchart === "sells" || activeBPchart === "0") && <View style={{ height: asks.length ===0? height : 'auto', alignSelf: 'stretch', width: '97%' }}>
                 {/* {asks?.length > 0 ? <BPBarChart data={_.sortBy(asks, 'price').slice(asks.length - lineNumbers).reverse()} color={Colors.lightRed} rightTextColor={Colors.red}/> : <ActivityIndicator size="large" color={Colors.white} />} */}
                 {asks?.length > 0 ?
                     // <FlatList
@@ -132,7 +132,7 @@ const TradesLeftCol = () => {
 
                 <View style={{ borderWidth: 1, borderColor: Colors.gray, borderStyle: "dashed", alignSelf: 'stretch', borderRadius: 1 }} />
 
-                {currentMarketPrice()}
+                {market_data ?currentMarketPrice() : <BPText style={{padding: 5 }}>--</BPText>}
 
                 <View style={{ borderWidth: 1, borderColor: Colors.gray, borderStyle: "dashed", alignSelf: 'stretch', borderRadius: 1 }} />
             </View>
@@ -140,7 +140,7 @@ const TradesLeftCol = () => {
             {/* Red Chart 2 */}
             {/* {(activeBPchart === "buys" || activeBPchart === "0") && <View style={{height:height,  alignSelf:'stretch', paddingBottom:2,width:'97%'}}>
                 {bids?.length > 0 ? <BPBarChart data={_.sortBy(bids, 'price').slice(0,lineNumbers)} color={'rgba(46, 213, 115, 0.3)'} rightTextColor={Colors.lightGreen}/> :  <ActivityIndicator size="large" color={Colors.white} />} */}
-            {(activeBPchart === "buys" || activeBPchart === "0") && <View style={{ height: height, alignSelf: 'stretch', paddingBottom: 2, width: '97%' }}>
+            {(activeBPchart === "buys" || activeBPchart === "0") && <View style={{  height: asks.length ===0? height : 'auto', alignSelf: 'stretch', paddingBottom: 2, width: '97%' }}>
                 {bids?.length > 0 ?
                     // <FlatList
                     //     data={bids}
