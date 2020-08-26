@@ -13,7 +13,7 @@ import HighChart from '../HighChart/HighChart'
 import { screenNames } from '../../routes/screenNames/screenNames'
 import { useNavigation } from '@react-navigation/native'
 const TradesRightCol = () => {
-    //alert("riglt col")
+    //alert("riglt col") 
     const navigation = useNavigation()
     return (
         <View style={{ flex: 1 }}>

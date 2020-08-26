@@ -220,9 +220,9 @@ const MarketPage = () => {
                             setloading(true)
                             //dispatch(addDepthSubs(null));
                             setCurrency(activeTradePair);
-                            dispatch(setActiveTradePair(val))
                             dispatch(emptyKlineData())
-                            emptyKlineData()
+                            dispatch(setActiveTradePair(val))
+                            // emptyKlineData()
                             setTimeout(() => {
                                 setloading(false)
                             }, 1000);

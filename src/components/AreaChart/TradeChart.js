@@ -14,11 +14,13 @@ import { updateKlineBool } from '../../redux/actions/kline.actions'
            this.width= Dimensions.get("window").width
            this.getdata= this.getdata.bind(this)
         }
-
+        componentDidMount(){
+            this.width = Dimensions.get("window").width
+        }
         getdata= ()=>{
             let arr = this.props.klineQ
             if(this.props.kline.length>0){
-                arr = this.props.kline
+                arr = this.props.klineQ.concat(this.props.kline)
                 this.props.updateKlineBool(true)
                  
             }
@@ -69,6 +71,8 @@ import { updateKlineBool } from '../../redux/actions/kline.actions'
                 scrollEnabled={false} 
                 originWhitelist={['*']}
                 ref={r => this.webview = r}
+                injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
+                style={{ height: '100%', width: this.width, resizeMode: 'cover', flex: 1 }}
                 /> : <ActivityIndicator color={Colors.white} size="large" />}
             </View>
        )

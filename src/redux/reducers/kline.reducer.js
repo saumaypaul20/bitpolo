@@ -12,6 +12,7 @@ const init_state = {
 const  klineReducer = (state = init_state, action) => {
     switch (action.type) {
         case TYPES.ADD_KLINE_DATA:
+             if(state.klineQ.length>0)
             // let found = state.kline.some(i=> 
             //          i.params[6] === action.payload.params[6]
             //      )
@@ -19,7 +20,7 @@ const  klineReducer = (state = init_state, action) => {
                 //alert(` ${JSON.stringify(state.update)}`)
                 state = {
                     ...state,
-                    kline: state.update? state.kline.concat([action.payload]): [...state.klineQ],
+                    kline:  [...state.kline.concat([action.payload])]
 
                 }
              
@@ -55,7 +56,8 @@ const  klineReducer = (state = init_state, action) => {
         case TYPES.EMPTY_KLINE_DATA:
             state = {
                 ...state,
-                kline:[]
+                kline:[],
+                update:false
             }
             break
         default:
