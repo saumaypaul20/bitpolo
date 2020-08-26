@@ -197,9 +197,9 @@ const Trades = () => {
                     
                                           
                                            <Modal isVisible={showcurrencies} backdropOpacity={0} onBackButtonPress={()=> handleCurrencyView()} onBackdropPress={()=> handleCurrencyView()}
-                                           style={{justifyContent:'flex-start', marginTop:100, marginHorizontal:0, paddingHorizontal:20}}
+                                           style={{justifyContent:'flex-start', marginTop:100, marginHorizontal:0, paddingHorizontal:20, backgroundColor:Colors.darkGray2}}
                                            >
-                                                    <View style={{backgroundColor: Colors.darkGray2, }}>
+                                                    <View>
                                                         {
                                                             Lcurrencies.map((i,index)=>{
                                                                 return (

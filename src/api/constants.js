@@ -1,8 +1,8 @@
-// export const BASE_URL ='https://corpus.bitpolo.com/api/v1';
-// export const WEBSOCKET = 'wss://msocket.bitpolo.com'
+export const BASE_URL ='https://corpus.bitpolo.com/api/v1';
+export const WEBSOCKET = 'wss://msocket.bitpolo.com'
 
-export const BASE_URL ='https://crux.bitpolo.com/api/v1';
-export const WEBSOCKET = 'wss://socket.bitpolo.com'
+// export const BASE_URL ='https://crux.bitpolo.com/api/v1';
+// export const WEBSOCKET = 'wss://socket.bitpolo.com'
 
 export const MOBIKWIK_URL= 'https://api.zaakpay.com/api/paymentTransact/V7'
 /* -------------------------------- USERS API ------------------------------- */
@@ -68,7 +68,6 @@ export const PAYMENT = {
 export const ORDERS = {
     ORDER_PUT: '/matching/order/',
     GET_PENDING_ORDERS:'/matching/order/pending',
-    GET_FINISHED_ORDERS:'/matching/order/finished',
     CANCEL_ORDER:'/matching/order/cancel',
     CANCEL_ALL:'/matching/all/orders/cancel'
     
