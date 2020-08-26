@@ -105,7 +105,7 @@ const OTPscreen = (props) => {
                     
                     <OTPInputView
                         keyboardType="phone-pad"
-                        // autoFocusOnLoad
+                        autoFocusOnLoad
                         style={{ height: 64, width: 300,  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
                         pinCount={pinCount}
                         code={code}

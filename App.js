@@ -1,35 +1,38 @@
-import 'react-native-gesture-handler'
-import React, { useEffect, useState } from 'react';
-import { StatusBar, Text, TextInput, View } from 'react-native'
-import { Root } from 'native-base'
-import SplashScreen from 'react-native-splash-screen'
+import 'react-native-gesture-handler';
+import React, {useEffect, useState} from 'react';
+import {StatusBar, Text, TextInput, View} from 'react-native';
+import {Root} from 'native-base';
+import SplashScreen from 'react-native-splash-screen';
 
 import Routes from './src/routes/Routes';
 import Storage from './src/utils/storage.utils';
 import DeviceInfo from 'react-native-device-info';
-import { useDispatch } from 'react-redux';
-import { addDeviceId } from './src/redux/actions/device.actions';
-import { saveIpAction, inputAction, saveAuthAttributesAction } from './src/redux/actions/auth.actions';
-import { getPublicIP } from './src/utils/apiHeaders.utils';
-import { TYPES } from './src/redux/types';
-import { Colors } from './src/theme';
-import { startSocket } from './src/api/config.ws';
-import { getIndexPrice } from './src/api/markets.api';
-import { storeIndexPrice } from './src/redux/actions/markets.action';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useDispatch} from 'react-redux';
+import {addDeviceId} from './src/redux/actions/device.actions';
+import {
+  saveIpAction,
+  inputAction,
+  saveAuthAttributesAction,
+} from './src/redux/actions/auth.actions';
+import {getPublicIP} from './src/utils/apiHeaders.utils';
+import {TYPES} from './src/redux/types';
+import {Colors} from './src/theme';
+import {startSocket} from './src/api/config.ws';
+import {getIndexPrice} from './src/api/markets.api';
+import {storeIndexPrice} from './src/redux/actions/markets.action';
+import {SafeAreaView} from 'react-native-safe-area-context';
 const App = () => {
-
   Text.defaultProps = {};
   Text.defaultProps.maxFontSizeMultiplier = 1;
 
   TextInput.defaultProps = {};
   TextInput.defaultProps.maxFontSizeMultiplier = 1;
-  const dispatch = useDispatch()
-  const [login, setLogin] = useState(null)
+  const dispatch = useDispatch();
+  const [login, setLogin] = useState(null);
 
   //get User LOGIN State
   const getUser = async () => {
-    let user = await Storage.get("login")
+    let user = await Storage.get('login');
     if (user) {
       console.log(user)
       dispatch(inputAction(TYPES.EMAIL_INPUT, user.email))
@@ -40,11 +43,10 @@ const App = () => {
         dispatch(storeIndexPrice(resIndexPrice.data))
         setLogin(true)
       }
-    }else{
-
-      setLogin(false)
+    } else {
+      setLogin(false);
     }
-  }
+  };
 
   // getDeviceId for headers
   const deviceAccess = async () => {
@@ -64,11 +66,11 @@ const App = () => {
   }
 
   const storeIP = async () => {
-    let ip = await getPublicIP()
+    let ip = await getPublicIP();
     if (ip) {
-      dispatch(saveIpAction(ip))
+      dispatch(saveIpAction(ip));
     }
-  }
+  };
 
   useEffect(() => {
     // requestLocationPermission()
@@ -80,10 +82,18 @@ const App = () => {
      startSocket()
   }, [])
 
-  return (
-    login !== null ? <Root><StatusBar translucent barStyle={Colors.barStyle} backgroundColor={Colors.primeBG} /><Routes login={login} /></Root> : <SafeAreaView  style={{flex:1, backgroundColor: Colors.primeBG}}/>
+  return login !== null ? (
+    <Root>
+      <StatusBar
+        translucent
+        barStyle={Colors.barStyle}
+        backgroundColor={Colors.primeBG}
+      />
+      <Routes login={login} />
+    </Root>
+  ) : (
+    <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}} />
   );
-
 };
 
 export default App;

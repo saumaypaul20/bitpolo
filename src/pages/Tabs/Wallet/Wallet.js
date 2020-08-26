@@ -22,6 +22,7 @@ import { imageRenderer } from '../../../utils/component.utils'
 import { getIndexPrice } from '../../../api/markets.api'
 import { storeIndexPrice } from '../../../redux/actions/markets.action'
 
+import _ from 'lodash'
 
 const rightEl =(val)=>{
     return <BPText>{val}</BPText>
@@ -33,7 +34,7 @@ const Wallet = () => {
     const [isEnabled, setIsEnabled] = useState(false);
     const [assets, setassets] = useState([])
     const [balance, setbalance] = useState(null)
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    
     let index_price = useSelector(state=> state.marketReducer.index_price, equalityFnIndexPrice)
 
 
@@ -47,8 +48,15 @@ const Wallet = () => {
         //callIndexPriceGetter()
     }
     // alert(JSON.stringify(index_price))
+    
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+        
+    
     const sortByAlpha =()=>{
          console.log('soon')
+        //  alert(JSON.stringify(assets))
+         let arr = _.orderBy(assets, ['asset_name'],['asc'])
+         setassets(arr)
     }
 
     
@@ -163,7 +171,7 @@ const Wallet = () => {
                                 marginHorizontal:16
                             }}>
                                 <View style={{ flex:1, flexDirection:'row',justifyContent:'flex-start', alignItems:'flex-start', alignSelf:'stretch', paddingVertical:20}}>
-                                    <BPText style={{fontSize:15}}>Show All Balances </BPText>
+                                    <BPText style={{fontSize:15}}>Hide Zero Balances </BPText>
 
                                     <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>
                                 </View>
@@ -177,6 +185,11 @@ const Wallet = () => {
 
                             <View>
                                 {assets.length > 0 && balance && assets.map(item=>{
+                                    if(isEnabled){
+                                        if(balance[item.asset_code].available.balance === 0){
+                                            return null
+                                        }
+                                    }
                                     return (
                                         <SettingsListItem 
                                         key={item._id}

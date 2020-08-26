@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TextInput, Keyboard } from 'react-native'
 import { primaryColors } from '../../theme/colors';
 import { Container, Content } from 'native-base';
@@ -25,7 +25,7 @@ const GoogleVerificationCode = (props) => {
     const navigation = useNavigation()
     let email = useSelector(state => state.authReducer.email);
     let banks = useSelector(state=> state.payments.banks)
-
+    const inputref = useRef(null)
     const [code, setCode] = useState(''); //setting code initial STATE value        
     const [geo, setgeo] = useState(null); //setting code initial STATE value        
     const [disabled, setdisabled] = useState(true); //setting code initial STATE value        
@@ -253,8 +253,13 @@ const GoogleVerificationCode = (props) => {
         }
 
     }
+ 
     useEffect(() => {
         getGeoInfo() 
+        // Keyboard
+        setTimeout(() => {
+            inputref.current.focus()
+        }, 500);
     }, [])
 
     const onkeypress = (code) =>{
@@ -265,6 +270,8 @@ const GoogleVerificationCode = (props) => {
              //onSubmit()
         }
     }
+
+    
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
@@ -277,7 +284,8 @@ const GoogleVerificationCode = (props) => {
                         
                         <TextInput
                             keyboardType="number-pad"
-                            // autoFocusOnLoad
+                            ref={inputref}
+                            autoFocus={true}
                             placeholder="Enter 6-digit code"
                             placeholderTextColor={Colors.gray}
                             style={styles.inputStyle}

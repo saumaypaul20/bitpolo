@@ -8,7 +8,7 @@ export const addKlineData =(data) =>{
       };
 }
 export const addKlineQueryData =(data) =>{
-    
+    //alert(JSON.stringify(data))
     return {
         type: TYPES.ADD_KLINE_QUERY_DATA,
         payload: data,

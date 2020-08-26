@@ -19,10 +19,10 @@ const ListItem = ({item, onPress}) => {
                             <View>
                                <View style={{flexDirection:'row', marginBottom:3, alignItems:'center'}}>
                                 <BPText>{item.divider.a} / {item.divider.b}</BPText>
-                                <Text style={{backgroundColor: item.type===1 ? Colors.lightGreen: Colors.red, color: Colors.white, marginHorizontal:5, paddingHorizontal:5, fontSize:10}}>{item.type === 1 ? 'BUY': 'SELL'}</Text>
+                                <Text style={{backgroundColor: item.type===2 ? Colors.lightGreen: Colors.red, color: Colors.white, marginHorizontal:5, paddingHorizontal:5, fontSize:10}}>{item.type === 2 ? 'BUY': 'SELL'}</Text>
                                 {/* <Text style={{backgroundColor: Colors.lightGreen, color: Colors.white, marginHorizontal:5, paddingHorizontal:10}}>BUY</Text> */}
                                </View>
-                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{convertTime(item.ctime)} {convertDate(item.ctime,'-')}</BPText>
+                                <BPText style={{fontSize:10, color:Colors.lightWhite}}>{convertTime(item.ctime*1000)} {convertDate(item.ctime*1000,'-')}</BPText>
                             </View>
                             <View >
                                 <Button onPress={()=> onPress()} style={{backgroundColor: Colors.white, width: 40, height:14, justifyContent:'center', opacity:0.8}}>

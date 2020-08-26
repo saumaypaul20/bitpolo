@@ -38,6 +38,22 @@ export const getPendingOrders = (payload) => {
         }
     })
 }
+export const getFinishedOrders = (payload) => {
+    return new Promise(async (resolve,reject) => {
+        if(!payload){reject({status:false, data:'no payload'});return}
+        let headers = {
+            authorization: getAuthToken(),
+            info: getInfoAuthToken(),
+        }
+        let res = await fetchApi(REST.ORDERS.GET_FINISHED_ORDERS, "POST", payload, 200, headers);
+        console.log("getFinishedOrders res", res)
+        if (!res?.responseBody?.errors) {
+            resolve({ status: true, data: res.responseBody })
+        } else {
+            resolve({ status: false, data: res.responseBody })
+        }
+    })
+}
 export const cancelOrder = (payload) => {
     return new Promise(async (resolve,reject) => {
         if(!payload){reject({status:false, data:'no payload'})}

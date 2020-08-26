@@ -1,24 +1,27 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { View, StyleSheet, TextInput } from 'react-native'
 import { Button } from 'native-base'
 import BPText from '../../common/BPText/BPText'
 import { Colors } from '../../theme'
 
-const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled, onBlurit}) => {
+const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disabled, onBlurit,validate}) => {
+    const ref = useRef(null)
     return (
         <View style={{ flexDirection:'row', alignItems:'center',justifyContent:'center', alignSelf:'stretch'}}>
-        { onIncrease && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
-                <BPText>+</BPText>
+        { onDecrease && <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
+                <BPText>-</BPText>
             </Button>}
 
             <TextInput
+            ref={ref}
             placeholder={label} 
             editable={!disabled}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={Colors.white}
             value={ input}
             onChangeText={(text)=> onInputChange(text)}
-            onBlur={(event)=> onBlurit ? onBlurit(event.nativeEvent.text) : false }
+            onBlur={(e)=> validate(e.nativeEvent.text)}
+            // onBlur={(event)=> onBlurit ? onBlurit(event.nativeEvent.text) : false }
             keyboardType="phone-pad"
             style={{
                 alignSelf:'stretch', 
@@ -29,8 +32,10 @@ const InputCounter = ({onIncrease, onDecrease, input, onInputChange, label, disa
                 fontSize:12
                 }} />
             
-          { onDecrease && <Button style={styles.counterBtns} onPress={()=>onDecrease()}>
-                <BPText>-</BPText>
+         
+
+            { onIncrease && <Button style={styles.counterBtns} onPress={()=> onIncrease()}>
+                <BPText>+</BPText>
             </Button>}
 
         </View>
