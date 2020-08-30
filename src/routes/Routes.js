@@ -34,6 +34,7 @@ import AddressManagement from '../pages/Tabs/Wallet/Withdraw/AddressManagement/A
 import MarketPage from '../pages/MarketPage/MarketPage';
 import WalletHistory from '../pages/Tabs/Wallet/WalletHistory/WalletHistory';
 import { Colors } from '../theme';
+import MarketPageLandscape from '../pages/MarketPageLandscape/MarketPageLandscape';
 const Stack = createStackNavigator();
 
 const Routes = ({ login }) => {
@@ -86,6 +87,7 @@ const Routes = ({ login }) => {
                 <Stack.Screen name={screenNames.PAYMENT_WEBVIEW} component={PaymentGateway} />
                 <Stack.Screen name={screenNames.ADDRESS_MANAGEMENT} component={AddressManagement} />
                 <Stack.Screen name={screenNames.MARKET_PAGE} component={MarketPage} />
+                <Stack.Screen name={screenNames.MARKET_PAGE_LANDSCAPE} component={MarketPageLandscape} />
                 <Stack.Screen name={screenNames.WALLET_HISTORY} component={WalletHistory} />
                 {/* <Stack.Screen name={screenNames.DUMMYROUTE} component={DummyRoute} /> */}
 

@@ -11,11 +11,19 @@ import { updateKlineBool } from '../../redux/actions/kline.actions'
         constructor(props){
             super(props)
            // this.update= false
-           this.width= Dimensions.get("window").width
+           this.width= this.props.width
            this.getdata= this.getdata.bind(this)
+           this.state={
+               load: false
+           }
         }
         componentDidMount(){
-            this.width = Dimensions.get("window").width
+            this.width = this.props.width
+            setTimeout(() => {
+                this.setState({load:true})
+            }, 1000);
+
+            this.getdata()
         }
         getdata= ()=>{
             let arr = this.props.klineQ
@@ -27,7 +35,8 @@ import { updateKlineBool } from '../../redux/actions/kline.actions'
             if (this.webview) this.webview.postMessage(JSON.stringify(
                 { 
                     update: this.props.kline.length > 0,
-                    width: Dimensions.get("window").width,
+                    width: this.props.width,
+                    height:this.props.height,
                     klineData: arr.map(el=>{
                         return {
                             time: el.params[0].length>10 ? Math.floor(new Date(el.params[0])/1000): el.params[0],
@@ -49,10 +58,7 @@ import { updateKlineBool } from '../../redux/actions/kline.actions'
 
      //  this.update= true
         }
-
-        componentDidMount(){
-            this.getdata()
-        }
+ 
        
      render() {
     //     if (this.webview) this.webview.postMessage(JSON.stringify(
@@ -64,18 +70,22 @@ import { updateKlineBool } from '../../redux/actions/kline.actions'
     // }));
 
         
-        return (
-            <View style={{flex:1, height: 200, width: this.width,}}>
-               {this.props.kline.length>0 ? <WebView 
-                source={{uri:"file:///android_asset/tchart.html"}} 
-                scrollEnabled={false} 
-                originWhitelist={['*']}
-                ref={r => this.webview = r}
-                injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
-                style={{ height: '100%', width: this.width, resizeMode: 'cover', flex: 1 }}
-                /> : <ActivityIndicator color={Colors.white} size="large" />}
-            </View>
-       )
+        if(this.state.load){
+            return (
+                <View style={{flex:1, height: this.props.height? this.props.height : 200, width: this.width,}}>
+                   {this.props.kline.length>0 ? <WebView 
+                    source={{uri:"file:///android_asset/tchart.html"}} 
+                    scrollEnabled={false} 
+                    originWhitelist={['*']}
+                    ref={r => this.webview = r}
+                    injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
+                    style={{ height: '100%', width: this.width, resizeMode: 'cover', flex: 1 }}
+                    /> : <ActivityIndicator color={Colors.white} size="large" />}
+                </View>
+           )
+        }else{
+            return null
+        }
      }
  }
 

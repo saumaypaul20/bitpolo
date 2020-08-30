@@ -192,19 +192,19 @@ const Trades = () => {
                                         <View style={{backgroundColor:Colors.darkGray2,  }}>
                                             <TouchableOpacity onPress={()=> handleCurrencyView()} style={{ flexDirection:'row', alignItems:'center'}}>
                                                 <BPText style={{marginRight:10}}>{ Lcurrencies?.find(i=> i.value === activeTradePair)?.label}</BPText>
-                                                <ChevronRight arrow={'down'}/>
+                                                <ChevronRight arrow={showcurrencies ?'up' :'down'}/>
                                             </TouchableOpacity>
                     
                                           
                                            <Modal isVisible={showcurrencies} backdropOpacity={0} onBackButtonPress={()=> handleCurrencyView()} onBackdropPress={()=> handleCurrencyView()}
-                                           style={{justifyContent:'flex-start', marginTop:100, marginHorizontal:0, paddingHorizontal:20, backgroundColor:Colors.darkGray2}}
+                                           style={{justifyContent:'flex-start', marginTop:100, marginHorizontal:0, }}
                                            >
-                                                    <View>
+                                                    <View style={{backgroundColor:Colors.darkGray2}}>
                                                         {
                                                             Lcurrencies.map((i,index)=>{
                                                                 return (
                                                                     <TouchableOpacity key={index.toString()}
-                                                                    style={{padding:5, paddingVertical:12, borderTopColor: Colors.lightWhite, borderTopWidth: index!==0 ?1:0}}
+                                                                    style={{ paddingHorizontal:20, paddingVertical:15, borderTopColor: Colors.darkGray, borderTopWidth: index!==0 ?1:0}}
                                                                     onPress={()=>oncurrencyselect(i.value)}>
                                                                         <BPText>{i.label}</BPText>
                                                                     </TouchableOpacity>

@@ -15,7 +15,7 @@ const BottomTabs = () => {
        
             <Tab.Navigator
              
-              initialRouteName="Trades"
+              initialRouteName="Wallet"
               
               tabBarOptions={{
                 activeTintColor: Colors.tabActiveTintColor,

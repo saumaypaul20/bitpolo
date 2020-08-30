@@ -108,7 +108,7 @@ const Tab1 = ({address, setView, activecoin, image}) =>{
                             <BPText>Copy Address</BPText>
                         </Button>
 
-                       <WalletEndButtons />
+                       <WalletEndButtons activecoin={activecoin} type={1}/>
                     </View>
         </View>
        
@@ -127,6 +127,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
     const [showModal, setModal] = useState(false)
     const [activeTPM, setTPM] = useState(0)
     const [loading,setloading] = useState(true)
+    const [shownote,setshownote] = useState(false)
     const banks = useSelector(state=> state.payments.banks, equalityFnBankslist)
     const bank = banks.find(i=> i.is_active)
     const balance = useSelector(state=> state.walletReducer.balance.data["INR"], shallowEqual)
@@ -184,7 +185,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
     }
     const options= [
         {label: 'Traditional Payment', value: 'TraditionalPayment'},
-        {label: 'Payment Gateway', value: 'PaymentGateway'},
+        // {label: 'Payment Gateway', value: 'PaymentGateway'},
         {label: 'Instant Bank Transfer', value: 'Instant Bank Transfer'},
     ]
 
@@ -417,6 +418,7 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                 return null
         }
     }
+    
     return (
         <View>
             {/* <SettingsListItem  
@@ -465,8 +467,16 @@ const Tab2 = ({setView, activecoin, assetList}) =>{
                                 "Minimum deposit 10 INR.",
                                 "Maximum deposit 1 lakh per transaction."
                             ]}/> */}
-                            <BPButtonSmall label="Please Note" image={Images.bell_icon} image_size={12} noBorder labelStyle={{fontSize:12}}/>
+                         {pickerOrderVal == 'TraditionalPayment'  &&  <BPButtonSmall label="Please Note" image={Images.bell_icon} image_size={12} noBorder labelStyle={{fontSize:12}} onPress={()=> setshownote(true)}/>}
+                            
 
+                            <Modal isVisible={shownote} onBackButtonPress={()=> setshownote(false)} onBackdropPress={()=>setshownote(false)} style={{margin:20, justifyContent:'center', alignItems:'center'}}>
+                                <View style={{backgroundColor: Colors.white, padding:20}}>
+                                    <BPText style={{color: Colors.primeBG}}>{'\u2022'} All deposits made between 9AM to 10PM will be processed within one hour. Deposits made outside the specified time will be processed in the next day.</BPText>
+                                    <BPText style={{color: Colors.primeBG}}>{'\u2022'} While making a bank transfer, ensure that you provide the payment reference ID. Deposits without reference ID will not be credited to your BitPolo account.</BPText>
+                                    <BPText style={{color: Colors.primeBG}}>{'\u2022'} You can deposit a maximum of 50 Lakhs per day.</BPText>
+                                </View>
+                            </Modal>
                     </View>
 
                 </View>

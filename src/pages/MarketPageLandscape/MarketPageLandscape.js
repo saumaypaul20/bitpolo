@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native'
+import { Text,View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, StatusBar, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Container } from 'native-base'
 import { Colors, Images } from '../../theme'
@@ -21,7 +21,10 @@ import MarketBottom from '../../components/MarketBottom/MarketBottom'
 import { addKlineData, emptyKlineData } from '../../redux/actions/kline.actions'
 import { equalityFnIndexPrice, equalityFnMarket } from '../../utils/reduxChecker.utils'
 import DepthChart from '../../components/AreaChart/DepthChart'
+import TimeComp from '../../components/TimeComp/TimeComp'
 
+const DEV_HEIGHT = Dimensions.get("window").height
+const DEV_WIDTH = Dimensions.get("window").width
 
 
 const HeaderComp = () =>{
@@ -45,23 +48,23 @@ const HeaderComp = () =>{
 
     return(
          found && activecurrency ?
-        <>
-            <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16, borderTopColor:Colors.darkGray, borderTopWidth:0.5,}}>
+        <View style={{flex:1, justifyContent:'center'}}>
+            <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16,  }}>
 
-            <View style={{flexDirection:'row', flex:1, justifyContent:'space-between',paddingVertical:10, paddingRight:10}}>
-                <BPText style={{ color: Colors.lightWhite}}>Last Price</BPText>
-                <BPText>{found?.params[1].l} {`${activecurrency?.b}`}</BPText>
-            </View>
-            <View style={{width:0.5, backgroundColor: Colors.darkGray}}/>
-            <View style={{flexDirection:'row', flex:1, justifyContent:'space-between',paddingVertical:10, paddingLeft:10}}>
-                <BPText style={{ color: Colors.lightWhite}}>24H Change</BPText>
-                <BPText>{found && parseFloat(found?.params[1].cp).toFixed(3)}%</BPText>
-            </View>
+                <View style={{flexDirection:'row', flex:1, justifyContent:'space-between', paddingRight:10}}>
+                    <BPText style={{ color: Colors.lightWhite}}>Last Price</BPText>
+                    <BPText>{found?.params[1].l} {`${activecurrency?.b}`}</BPText>
+                </View>
+                <View style={{width:0.5, backgroundColor: Colors.darkGray}}/>
+                <View style={{flexDirection:'row', flex:1, justifyContent:'space-between', paddingLeft:10}}>
+                    <BPText style={{ color: Colors.lightWhite}}>24H Change</BPText>
+                    <BPText>{found && parseFloat(found?.params[1].cp).toFixed(3)}%</BPText>
+                </View>
 
-        </View>
+                </View>
 
 
-        <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch',paddingVertical:10, paddingHorizontal:16, backgroundColor: Colors.darkGray}}>
+        {/* <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch',paddingVertical:10, paddingHorizontal:16, backgroundColor: Colors.darkGray}}>
 
             <View style={{ flex:1, alignItems:'flex-start'}}>
                 <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Highest</BPText>
@@ -77,13 +80,13 @@ const HeaderComp = () =>{
                 <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].v).toFixed(3)} {`${activecurrency?.a}`} / {currentMarketPrice()} {`${activecurrency?.b}`}</BPText>
             </View>
 
+        </View> */}
         </View>
-        </>
         : <ActivityIndicator color={Colors.white} size="large" />
     
     )
 }
-const MarketPage = () => {
+const MarketPageLandscape = () => {
     // console.log("trdes reloads---------------------------------------------", id);
     
     // id++
@@ -134,31 +137,31 @@ const MarketPage = () => {
         }
     }
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            if(activeTradePair){setloading(false)
-            setTimeout(() => {
-                //emitDepthSubscribeEvent(currencyVal, activeTradePair)
-            }, 1000);
-            emitKlineSubscribeEvent(activeTradePair, currencyVal)}
-          });
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         if(activeTradePair){setloading(false)
+    //         setTimeout(() => {
+    //             //emitDepthSubscribeEvent(currencyVal, activeTradePair)
+    //         }, 1000);
+    //         emitKlineSubscribeEvent(activeTradePair, currencyVal)}
+    //       });
       
-          return unsubscribe;
-    }, [navigation])
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('blur', () => {
-            setloading(true)
-          //  dispatch(setActiveTradePair(null))
-            //setActiveTradePair(null)
-            setTimeout(() => {
+    //       return unsubscribe;
+    // }, [navigation])
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('blur', () => {
+    //         setloading(true)
+    //       //  dispatch(setActiveTradePair(null))
+    //         //setActiveTradePair(null)
+    //         setTimeout(() => {
                 
-                //emitDepthUnsubscribeEvent(currencyVal)
-            }, 1000);
-            emitKlineUnsubscribeEvent(currencyVal,60)
-          });
+    //             //emitDepthUnsubscribeEvent(currencyVal)
+    //         }, 1000);
+    //         emitKlineUnsubscribeEvent(currencyVal,60)
+    //       });
       
-          return unsubscribe;
-    }, [navigation])
+    //       return unsubscribe;
+    // }, [navigation])
 
     useEffect(() => {
        //emitKlineSubscribeEvent()
@@ -197,99 +200,65 @@ const MarketPage = () => {
     // if(currencies.length === 0){ return }
     return (
         <SafeAreaView style={{flex:1, backgroundColor: Colors.primeBG}}>
-            <Container style={{ flex: 1, backgroundColor:Colors.primeBG}}>
-            {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-            {/* <Toolbar backgroundColor={Colors.darkGray2} title={"Exchange"}/> */}
-            {/* <Content contentContainerStyle={{ flexGrow: 1 }}>
+            <StatusBar hidden />
+            <View style={{ flex:1, backgroundColor:Colors.primeBG, flexDirection:'row'}}>
                 
-            </Content> */}
-            <FlatList data={['1']}
-                nestedScrollEnabled
-                style={{ width: '100%' }}
-                keyExtractor={(data)=> data}
-                
-                ListHeaderComponent={<View style={styles.headerContainer}>
-                                    
-                <View style={{flex:0.5, borderRadius:4, alignSelf:'flex-start'}}>
-                { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
-                    
-                    <PickerComp
-                        items={Lcurrencies}
-                        pickerVal = {activeTradePair} 
-                        setPickerVal = {(val)=>{
-                            setloading(true)
-                            //dispatch(addDepthSubs(null));
-                            setCurrency(activeTradePair);
-                            dispatch(emptyKlineData())
-                            dispatch(setActiveTradePair(val))
-                            // emptyKlineData()
-                            setTimeout(() => {
-                                setloading(false)
-                            }, 1000);
-                        }}
-                        chevronPositionTop= {3}
-                    />
-                }
-                
-                </View>
-
-                <View style={{flex:1, justifyContent:'flex-end', alignItems:'center', flexDirection:'row', width:'100%'}}>
-                    <TouchableOpacity style={{marginHorizontal:22}} >
-                        <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
-                    </TouchableOpacity>
-                    <TouchableOpacity >
-                        <Image source={Images.list_icon} style={styles.headerIconStyles} />
-                    </TouchableOpacity>
-                </View>
-            </View>}
-                renderItem={
-                    ()=>{
-                        return(
-                            <View style={{  justifyContent:'flex-start', alignItems:'center', }}>
-                                
-                                <HeaderComp />
-
-                                <View style={{flexDirection:'row', justifyContent:'space-between', alignSelf:'stretch', paddingHorizontal:16, backgroundColor: Colors.darkGray2}}>
-
-                                 
-
-                                    <Tab label={"PRICE Chart"} onPress={()=> setview(1)} active={view === 1}/>
-                                    <Tab label={"Depth Chart"} onPress={()=> setview(2)} active={view === 2}/>
-                                     
-                                    <TouchableOpacity style={{ flex:2,  alignItems:'flex-end', paddingVertical:12}} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE_LANDSCAPE)}>
-                                        <BPText>X</BPText>
-                                    </TouchableOpacity>
-
-                                </View>
-                                
-                                
-                                {/* ---------------------------------- */}
-
-                            {/* {(Lcurrencies.length == 0 || !found || !loading) ?  
-                                <ActivityIndicator color={Colors.white} size="large" style={{marginTop:50}}/>
-                            :
-                                <View style={{flex:1, flexDirection:'row', alignSelf:'stretch'}}>
-                                    {activeTradePair && <TradesLeftCol />}
-                                    {activeTradePair && <TradesRightCol /> }
-                                </View>} */}
-
-                                {/* {-----------------------------} */}
             
-                                <View style={{height:400}}>
-                                    {!loading && activeTradePair ? 
-                                    view === 1 ? <TradeChart height={400} width={Dimensions.get("window").width}/> : <View style={{width: Dimensions.get("window").width}}><DepthChart height={400}/></View>
-                                    : <ActivityIndicator color={Colors.white} size="large"/>}
+                <View style={{justifyContent:'center', alignItems:'center', flex:1}}>
+                    {/* <View style={{transform:[{rotate:"90deg"}], width:DEV_HEIGHT,   flexDirection:'row',}}>
+                        <TradeChart width={Dimensions.get("window").height} height={ DEV_WIDTH - (DEV_WIDTH*0.2)}/>
+                    </View> */}
+                    <View  style={{transform:[{rotate:"90deg"}], width:DEV_HEIGHT,   flexDirection:'row',}}>
+                        {!loading && activeTradePair ? 
+                        view === 1 ? <TradeChart width={Dimensions.get("window").height} height={ DEV_WIDTH - (DEV_WIDTH*0.4)}/> : <View style={{width: Dimensions.get("window").height}}><DepthChart width={Dimensions.get("window").height} height={ DEV_WIDTH - (DEV_WIDTH*0.4)}/></View>
+                        : <ActivityIndicator color={Colors.white} size="large"/>}
+                    </View>
+                </View>
+                {/* graphs here */}
+
+                <View style={{justifyContent:'center', alignItems:'center', flex:0.1,paddingRight:16, borderWidth:1}}>
+                    
+                        <View style={{transform:[{rotate:"90deg"}], width:DEV_HEIGHT, flexDirection:'row', justifyContent:'space-between',     backgroundColor: Colors.darkGray2}}>
+
+                                        
+
+                            <Tab label={"PRICE Chart"} onPress={()=> setview(1)} active={view === 1}/>
+                            <Tab label={"Depth Chart"} onPress={()=> setview(2)} active={view === 2}/>
+                            
+                            <TouchableOpacity style={{ flex:2,  alignItems:'flex-end', paddingVertical:12}} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE_LANDSCAPE)}>
+                                <BPText>X</BPText>
+                            </TouchableOpacity>
+
+                        </View>  
+                </View>
+
+                <View style={{justifyContent:'center', alignItems:'center', flex:0.1,paddingRight:16, borderWidth:1}}>
+                    <View style={{transform:[{rotate:"90deg"}], width:DEV_HEIGHT, flexDirection:'row',}}>
+                        <View style={{flex:0.5}}>
+                            <View style={styles.headerContainer}>
+                                    <View style={{flex:0.5,   alignItems:'center', flexDirection:'row', width:'100%'}}>
+                                        <TouchableOpacity style={{marginHorizontal:22}} >
+                                            <Image source={Images.market_chart_icon} style={styles.headerIconStyles} />
+                                        </TouchableOpacity>
+                                        
+                                    </View>
+                                    <View style={{flex:1, borderRadius:4, justifyContent:'center', alignItems:'center'}}>
+                                    { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
+
+                                        <BPText>{Lcurrencies?.find(i=> i.value === activeTradePair)?.label}</BPText>
+                                    }
+                                    </View>
                                 </View>
-                                <View style={{alignSelf:"stretch", flex:1}}>
-                                    {!loading && activeTradePair&& <MarketBottom/>}
-                                </View>
-                            </View>
-                        )
-                    }
-                }
-                stickyHeaderIndices={[0]}
-            />
-        </Container>
+                        </View>
+                        <View style={{flex:1,}}>
+                            <HeaderComp/>
+                        </View>
+                        <View style={{flex:0.5, justifyContent:'center', alignItems:'flex-end'}}>
+                            <TimeComp/>
+                        </View>
+                    </View>
+                </View>
+        </View>
         </SafeAreaView>
     )
 }
@@ -303,11 +272,11 @@ const styles= StyleSheet.create({
     tabStyle:{ backgroundColor: Colors.darkGray3 },
     activeTabStyle:{ backgroundColor: Colors.darkGray3, borderBottomWidth:1, borderBottomColor:'#fff' },
 
-    headerContainer:{ alignItems:'center', flexDirection:'row', justifyContent:'space-between', width:'100%', paddingVertical:10, backgroundColor: Colors.darkGray2, paddingHorizontal:16},
+    headerContainer:{ alignItems:'center', flexDirection:'row', justifyContent:'space-between', width:'100%', paddingVertical:10,     },
     headerIconStyles:{width:22, height:22}
 })
 
-export default MarketPage
+export default MarketPageLandscape
 
 
 const Tab = ({label, onPress, active})=>{

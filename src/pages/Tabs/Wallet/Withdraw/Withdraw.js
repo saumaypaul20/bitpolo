@@ -118,7 +118,7 @@ const Tab1 = ({setView, activecoin, setPaymentId,payment_id}) =>{
                             
                        </View>
 
-                       <WalletEndButtons />
+                       <WalletEndButtons activecoin={activecoin} type={2}/>
 
                        <View style={{alignSelf:'center', marginTop:44}}>
                             <BPButton label="Submit" style={{paddingHorizontal:60}} disabled={isDisabled(withdrawAmount,balance, address)} onPress={()=> onsubmit()}/>

@@ -23,6 +23,7 @@
     <script>
        
         let width=00;
+        let height =00
         let klineData =[]
         
         //  document.addEventListener("message", function (event) {
@@ -33,7 +34,7 @@
          
       var chart = LightweightCharts.createChart(document.body, {
       width: width,
-      height:400,
+      height:height,
       layout: {
               backgroundColor: '#000',
               textColor: '#fff',
@@ -75,6 +76,7 @@ var series = chart.addCandlestickSeries({
   });
   document.addEventListener("message", function (event) {
           chart.width = JSON.parse(event.data).width
+          chart.height = JSON.parse(event.data).height
            klineData= JSON.parse(event.data).klineData  
         
              //alert("update")
