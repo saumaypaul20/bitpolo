@@ -37,7 +37,11 @@ const  dealsReducer = (state = init_state, action) => {
                 
                 
             break
-
+        case TYPES.CLEAR_DEALS_DATA:
+                state={
+                    ...state,
+                    deals:[]
+                }
         default:
             return state;
     }

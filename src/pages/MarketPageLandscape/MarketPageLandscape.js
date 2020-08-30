@@ -225,7 +225,7 @@ const MarketPageLandscape = () => {
                             <Tab label={"PRICE Chart"} onPress={()=> setview(1)} active={view === 1}/>
                             <Tab label={"Depth Chart"} onPress={()=> setview(2)} active={view === 2}/>
                             
-                            <TouchableOpacity style={{ flex:2,  alignItems:'flex-end', paddingVertical:12}} onPress={()=> navigation.navigate(screenNames.MARKET_PAGE_LANDSCAPE)}>
+                            <TouchableOpacity style={{ flex:2,  alignItems:'flex-end', paddingVertical:12}} onPress={()=> navigation.goBack()}>
                                 <BPText>X</BPText>
                             </TouchableOpacity>
 

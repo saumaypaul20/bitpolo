@@ -35,17 +35,15 @@ const ListItem =({item,type}) =>{
 const renderItem = ({item})=>( <ListItem item={item.params[1][0]} type={item.params[1][0].s === "buy" ? 2 : 1} />)
 
 const MarketTrades = () => {
-    let today = new Date()
-    let [date1, setDate1] = useState(today);
-    let [date2, setDate2] = useState(today);
-
+    const [nowpair, setnowpair] = useState(null)
     const activeTradePair = useSelector(state=> state.marketReducer.activeTradePair, shallowEqual)
     const deals = useSelector(state=> state.dealsReducer.deals, equalityFnDepths)
 
     useEffect(()=>{
         if(activeTradePair){
            
-            emitMarketDealsEvent(activeTradePair)
+            emitMarketDealsEvent(activeTradePair, nowpair)
+            setnowpair(activeTradePair)
         }
     },[])
 
@@ -54,7 +52,7 @@ const MarketTrades = () => {
             <Container style={{ flex: 1,  backgroundColor: Colors.primeBG}}>
                 {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
                 <Toolbar enableBackButton title="Market Trades"/>
-                <Content contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={{ flex: 1 }}>
                     <View style={{  justifyContent:'flex-start', alignItems:'stretch', backgroundColor: Colors.darkGray3, paddingHorizontal:20}}>
                       
 
@@ -79,7 +77,7 @@ const MarketTrades = () => {
 
 
                     <View style={{flex:1,marginTop:16}}>
-                                {deals && 
+                                {deals?.length>0 && 
                                 <FlatList
                                 data={_.orderBy(deals, function(e){return e.params[1][0].t}, ['desc'])}
                                 renderItem={renderItem}
@@ -95,7 +93,7 @@ const MarketTrades = () => {
 
                                 </View>
  
-                </Content>
+                </View>
             </Container>
         </SafeAreaView>
     )

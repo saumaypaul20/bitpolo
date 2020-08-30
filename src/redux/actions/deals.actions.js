@@ -7,3 +7,11 @@ export const addDealsData =(data) =>{
       };
 }
  
+
+export const clearDealsData =(data) =>{
+    return {
+        type: TYPES.CLEAR_DEALS_DATA,
+        
+      };
+}
+ 

@@ -172,14 +172,27 @@ export const emitUnsubMarketListEvent = marketPairs => {
 };
 
 //Deals Subscription
-export const emitMarketDealsEvent = marketPairs => {
+export const emitMarketDealsEvent = (marketPairs, lastpair) => {
+  //store.dispatch(triggerMarketSocket())
+  // console.log("dsipacthed trigger", store.getState())
+ if(lastpair){
+  emitMarketDealsUnsubscribeEvent(lastpair)
+ }
+  // console.log("soceklt mareket_paors",marketPairs)
+  socket.emit('message', {
+    id: Math.floor(Math.random() * 9000000),
+    method: 'deals.subscribe',
+    params: [marketPairs],
+  });
+};
+export const emitMarketDealsUnsubscribeEvent = marketPairs => {
   //store.dispatch(triggerMarketSocket())
   // console.log("dsipacthed trigger", store.getState())
 
   // console.log("soceklt mareket_paors",marketPairs)
   socket.emit('message', {
     id: Math.floor(Math.random() * 9000000),
-    method: 'deals.subscribe',
+    method: 'deals.unsubscribe',
     params: [marketPairs],
   });
 };
@@ -240,6 +253,7 @@ export const emitKlineQuerySubscribeEvent = (pair, interval = 900) => {
 //Depth Subscription
 export const emitDepthSubscribeEvent = (lastpair, newpair) => {
   if (lastpair) {
+    emitMarketDealsUnsubscribeEvent(lastpair)
     emitDepthUnsubscribeEvent(lastpair);
     // socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"0"] });
     // socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.unsubscribe", "params" : [newpair] });

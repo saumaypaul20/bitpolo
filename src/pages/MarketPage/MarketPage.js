@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, Image, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Container } from 'native-base'
+import { Container, Icon } from 'native-base'
 import { Colors, Images } from '../../theme'
 import PickerComp from '../../components/PickerComp/PickerComp'
 // import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
@@ -212,23 +212,27 @@ const MarketPage = () => {
                                     
                 <View style={{flex:0.5, borderRadius:4, alignSelf:'flex-start'}}>
                 { !activeTradePair && Lcurrencies.length == 0 ?  <ActivityIndicator color={Colors.white}/> :
-                    
-                    <PickerComp
-                        items={Lcurrencies}
-                        pickerVal = {activeTradePair} 
-                        setPickerVal = {(val)=>{
-                            setloading(true)
-                            //dispatch(addDepthSubs(null));
-                            setCurrency(activeTradePair);
-                            dispatch(emptyKlineData())
-                            dispatch(setActiveTradePair(val))
-                            // emptyKlineData()
-                            setTimeout(() => {
-                                setloading(false)
-                            }, 1000);
-                        }}
-                        chevronPositionTop= {3}
-                    />
+                   <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+                        <TouchableOpacity onPress={()=> navigation.goBack()}>
+                            <Icon  name='arrow-back' style={{fontSize:20, color: Colors.white}} />
+                        </TouchableOpacity>
+                        <PickerComp
+                            items={Lcurrencies}
+                            pickerVal = {activeTradePair} 
+                            setPickerVal = {(val)=>{
+                                setloading(true)
+                                //dispatch(addDepthSubs(null));
+                                setCurrency(activeTradePair);
+                                dispatch(emptyKlineData())
+                                dispatch(setActiveTradePair(val))
+                                // emptyKlineData()
+                                setTimeout(() => {
+                                    setloading(false)
+                                }, 1000);
+                            }}
+                            chevronPositionTop= {3}
+                        />
+                   </View>
                 }
                 
                 </View>
