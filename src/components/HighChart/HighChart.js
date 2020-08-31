@@ -14,7 +14,7 @@ export default class HighChart extends React.Component {
         super(props);
         this.chartOptions = {
             chart: {
-                type: 'area',
+                type: 'areaspline',
                 zoomType: 'xy',
                 backgroundColor: Colors.primeBG,
                 borderWidth: 0,
