@@ -144,7 +144,7 @@ const INRView = () => {
       }
 
       return arr
-  },[orderBY,orderDirection])
+  },[orderBY,orderDirection, market_data])
   // market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
 
   return (
@@ -160,6 +160,7 @@ const INRView = () => {
           useFlatList={true}
           initialNumToRender={5}
           data={renderData()}
+          style={{flex:1}}
           renderItem={rowData => {
             //  console.log("bdx",rowData)
 
@@ -274,13 +275,20 @@ const USDTView = () => {
       }
 
       return arr
-  },[orderBY,orderDirection])
+  },[orderBY,orderDirection,market_data])
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
-      <SwipeListView
+      {market_data.length === 0 ? (
+        <ActivityIndicator
+          color={Colors.white}
+          size="large"
+          style={{marginTop: 50}}
+        />
+      ) : <SwipeListView
         useFlatList={true}
         initialNumToRender={2}
         data={renderData()}
+        style={{flex:1}}
         renderItem={rowData => {
           //  console.log("bdx",rowData)
 
@@ -333,18 +341,18 @@ const USDTView = () => {
             width: '100%',
           };
         }}
-        ListEmptyComponent={
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              paddingTop: 50,
-            }}>
-            <ActivityIndicator color={Colors.white} size="large" />
-          </View>
-        }
-      />
+        // ListEmptyComponent={
+        //   <View
+        //     style={{
+        //       flex: 1,
+        //       justifyContent: 'flex-start',
+        //       alignItems: 'center',
+        //       paddingTop: 50,
+        //     }}>
+        //     <ActivityIndicator color={Colors.white} size="large" />
+        //   </View>
+        // }
+      />}
     </View>
   );
 };
@@ -388,7 +396,7 @@ const [orderDirection, setorderDirection]= useState(true);
       }
 
       return arr
-  },[orderBY,orderDirection])
+  },[orderBY,orderDirection,favs])
 
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
