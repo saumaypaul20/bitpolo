@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Keyboard, StyleSheet } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Container, Content } from 'native-base';
@@ -20,10 +20,10 @@ import Storage from '../../utils/storage.utils';
 const PINScreen = (props) => {
     const dispatch =useDispatch()
     const navigation = useNavigation()
-    let email = useSelector(state => state.authReducer.email);
-    let user_id = useSelector(state => state.authReducer.user_id);
-    let ip = useSelector(state=> state.authReducer.ip)
-
+    // let email = useSelector(state => state.authReducer.email);
+    // let user_id = useSelector(state => state.authReducer.user_id);
+    // let ip = useSelector(state=> state.authReducer.ip)
+    let inputref = useRef(null)
     const [nextScreen, setNextScreen] = useState(props?.route?.params?.screen || screenNames.DASHBOARD)
     const [code, setCode] = useState(''); //setting code initial STATE value
     const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
@@ -80,7 +80,7 @@ const PINScreen = (props) => {
             if(mpin){
                 setNew(false)
                 setLocalPin(mpin)
-                handleCodeFilled("111111")
+               handleCodeFilled("111111")
             }else{
                 setNew(true)
             }
@@ -88,7 +88,7 @@ const PINScreen = (props) => {
 
         useEffect(() => {
            getSavedPin();
-         
+            // Keyboard.addListener("keyboardDidHide", )
            
             
         }, [])
@@ -105,7 +105,8 @@ const PINScreen = (props) => {
                     
                     <OTPInputView
                         keyboardType="phone-pad"
-                        // autoFocusOnLoad
+                        //ref={inputref}
+                        autoFocusOnLoad
                         style={{ height: 64, width: 300,  marginTop: 30, borderRadius:6, borderWidth:1, borderColor:Colors.gray , overflow: 'hidden' }}
                         pinCount={pinCount}
                         code={code}

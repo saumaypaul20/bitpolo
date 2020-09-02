@@ -469,7 +469,7 @@ const TradesOrderTabs = () => {
             Avbl
           </BPText>
           <BPText style={{opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM}}>
-            {`${balance?.available.balance}`} {divideIt(activeTradePair).b}
+            {`${balance?.available.balance.toFixed(2)}`} {divideIt(activeTradePair).b}
           </BPText>
         </View>
 

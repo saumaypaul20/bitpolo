@@ -35,9 +35,11 @@ export default class HighChart extends React.Component {
                 title: null,
                 tickWidth: 1,
                 tickLength: 5,
+                color:'white',
                 tickPosition: 'inside',
                 labels: {
                   align: 'left',
+                  color:'white',
                  x:8
                 }
               }, {
@@ -51,7 +53,8 @@ export default class HighChart extends React.Component {
                 tickPosition: 'inside',
                 labels: {
                   align: 'right',
-                  x: -8
+                  x: -8,
+                  color:'white',
                 }
               }],
               legend: {

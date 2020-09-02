@@ -55,7 +55,7 @@ const HeaderComp = () =>{
             <View style={{width:0.5, backgroundColor: Colors.darkGray}}/>
             <View style={{flexDirection:'row', flex:1, justifyContent:'space-between',paddingVertical:10, paddingLeft:10}}>
                 <BPText style={{ color: Colors.lightWhite}}>24H Change</BPText>
-                <BPText>{found && parseFloat(found?.params[1].cp).toFixed(3)}%</BPText>
+                <BPText>{found && parseFloat(found?.params[1].cp).toFixed(2)}%</BPText>
             </View>
 
         </View>
@@ -65,12 +65,12 @@ const HeaderComp = () =>{
 
             <View style={{ flex:1, alignItems:'flex-start'}}>
                 <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Highest</BPText>
-                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].h).toFixed(3)} {`${activecurrency?.b}`}</BPText>
+                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].h).toFixed(2)} {`${activecurrency?.b}`}</BPText>
             </View>
             
             <View style={{ flex:1, alignItems:'center'}}>
                 <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Lowest</BPText>
-                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].lo).toFixed(3)} {`${activecurrency?.b}`}</BPText>
+                <BPText style={{fontSize:12}}>{parseFloat(found?.params[1].lo).toFixed(2)} {`${activecurrency?.b}`}</BPText>
             </View>
             <View style={{ flex:2,  alignItems:'flex-end'}}>
                 <BPText style={{ color: Colors.lightWhite, fontSize:12}}>24H Volume / Value</BPText>

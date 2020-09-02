@@ -86,7 +86,7 @@ const Signin = () => {
             return
         }else{
             setloading(false)
-          alert(res.data.data.attributes.message)
+         // alert(res.data.data.attributes.message)
           dispatch(saveUserId(res.data.data.id))
           navigation.navigate(screenNames.OTP_SCREEN, {data: res.data.data})}
         }

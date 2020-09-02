@@ -13,7 +13,7 @@ export default function DepthChart(props) {
     const rawasks = useSelector(state=> state.depthSubsReducer.data?.params[1]?.asks, equalityFnDepths)
     const rawbids = useSelector(state=> state.depthSubsReducer.data?.params[1]?.bids, equalityFnDepths)
     // let askLen = rawasks.length
-    const bidsD = _.sortBy(rawbids, 'amount').reverse() || []
+    const bidsD = _.sortBy(rawbids, 'amount')  || []
     const asksD =  _.sortBy(rawasks, 'amount').reverse() || []
     // console.log("depths-----------",depths)
 
@@ -52,6 +52,7 @@ export default function DepthChart(props) {
 
 
 function processData(data, side) {
+    let bidsAmtCount = 0;
     return  data.map(item => {
         return {
             p: item.p,
@@ -59,11 +60,11 @@ function processData(data, side) {
             t: item.t
         }
     }).reduce((arr, item, idx) => {
-    
+        bidsAmtCount = bidsAmtCount + item.a;
         const bid = [
             
             Number(item.p),
-           Number( item.a),
+            bidsAmtCount,
     ]   
     
         return [...arr, bid]
@@ -71,9 +72,9 @@ function processData(data, side) {
 }
 
 let asks = processData(asksD, 'ask')
-asks =asks 
+ 
 let bids = processData(bidsD, 'bid')
-bids= bids 
+ 
 
     const asksProcessed = asks.map(item => {
         return {

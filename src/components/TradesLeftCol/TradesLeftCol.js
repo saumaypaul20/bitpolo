@@ -82,7 +82,7 @@ const TradesLeftCol = () => {
         let found = market_data
         //console.log("ABCD#####", found)
         if (found && index_price) {
-            return <BPText style={{ color: parseFloat(found.params[1].cp) > -1 ? Colors.lightGreen : Colors.red, padding: 5 }}>{`${parseFloat(found.params[1].l).toFixed(2)} ${found?.divider.b === "USDT" ? (parseFloat(found?.params[1]?.l) * index_price.find(i => i.asset === "USDT").amount).toFixed(2) : (parseFloat(found?.params[1]?.l) / index_price.find(i => i.asset === "USDT").amount).toFixed(2)}`}</BPText>
+            return <BPText style={{ color: parseFloat(found.params[1].cp) > -1 ? Colors.lightGreen : Colors.red, padding: 5 }}>{`${parseFloat(found.params[1].l).toFixed(2)}`} <BPText style={{color: Colors.lightWhite, fontSize:12}}>{found?.divider.b === "USDT" ? `₹` + (parseFloat(found?.params[1]?.l) * index_price.find(i => i.asset === "USDT").amount).toFixed(2) : `$` + (parseFloat(found?.params[1]?.l) / index_price.find(i => i.asset === "USDT").amount).toFixed(2)}</BPText></BPText>
         }
     }
     // const renderItem1 = ({ item }) => (<ListItem item={item} type={1} />)
