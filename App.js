@@ -34,14 +34,14 @@ const App = () => {
   const getUser = async () => {
     let user = await Storage.get('login');
     if (user) {
-      console.log(user)
-      dispatch(inputAction(TYPES.EMAIL_INPUT, user.email))
-      dispatch(saveAuthAttributesAction(user))
-     
-      let resIndexPrice = await getIndexPrice()
+      console.log(user);
+      dispatch(inputAction(TYPES.EMAIL_INPUT, user.email));
+      dispatch(saveAuthAttributesAction(user));
+
+      let resIndexPrice = await getIndexPrice();
       if (resIndexPrice.status) {
-        dispatch(storeIndexPrice(resIndexPrice.data))
-        setLogin(true)
+        dispatch(storeIndexPrice(resIndexPrice.data));
+        setLogin(true);
       }
     } else {
       setLogin(false);
@@ -52,18 +52,18 @@ const App = () => {
   const deviceAccess = async () => {
     // let deviceId = DeviceInfo.getUniqueId();
     let device_name = await DeviceInfo.getModel();
-    console.log("device name",device_name)
-    let os = await DeviceInfo.getSystemName()
-    let deviceVer = await DeviceInfo.getSystemVersion()
+    console.log('device name', device_name);
+    let os = await DeviceInfo.getSystemName();
+    let deviceVer = await DeviceInfo.getSystemVersion();
     let device = {
       os: os,
       os_byte: deviceVer,
-      browser: device_name
-    }
+      browser: device_name,
+    };
 
-    console.log(device)
-    dispatch(addDeviceId(device))
-  }
+    console.log(device);
+    dispatch(addDeviceId(device));
+  };
 
   const storeIP = async () => {
     let ip = await getPublicIP();
@@ -71,16 +71,16 @@ const App = () => {
       dispatch(saveIpAction(ip));
     }
   };
-
+  console.log('app reloads');
   useEffect(() => {
     // requestLocationPermission()
     SplashScreen.hide();
-     console.log = function() {}
-     getUser()
-     storeIP()
-     deviceAccess()
-     startSocket()
-  }, [])
+    // console.log = function() {};
+    getUser();
+    storeIP();
+    deviceAccess();
+    startSocket();
+  }, []);
 
   return login !== null ? (
     <Root>

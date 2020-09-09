@@ -76,7 +76,7 @@ export const startSocket = () => {
           break;
         case 'kline.update':
           if (result.params) {
-            console.log('kline resutlt 0000000000000000000000000', result);
+            // console.log('kline resutlt 0000000000000000000000000', result);
 
             if (result.params.length === 7) {
               //alert("yooooo")
@@ -92,7 +92,6 @@ export const startSocket = () => {
           break;
 
         case 'depth.update':
-         
           let res = result;
           res.params[1].asks = _.sortBy(res.params[1].asks, 'p').reverse();
           res.params[1].bids = _.sortBy(res.params[1].bids, 'p').reverse();
@@ -110,13 +109,17 @@ export const startSocket = () => {
         case undefined:
           //alert(typeof result)
           if (Array.isArray(result.result)) {
-              // alert("yo")
-               
-              //console.log("kline que..==================", result)
-              //alert(result.result[6])
-              if (result.result[0].length === 7 && state.marketReducer.activeTradePair && state.marketReducer.activeTradePair === result.result[0][6]) {
-                  //alert("yo")
-                //   alert(JSON.stringify(result.result))
+            // alert("yo")
+
+            //console.log("kline que..==================", result)
+            //alert(result.result[6])
+            if (
+              result.result[0].length === 7 &&
+              state.marketReducer.activeTradePair &&
+              state.marketReducer.activeTradePair === result.result[0][6]
+            ) {
+              //alert("yo")
+              //   alert(JSON.stringify(result.result))
               //  let res = result;
               //  res.params= res[0][0]
               store.dispatch(addKlineQueryData(result.result));
@@ -175,9 +178,9 @@ export const emitUnsubMarketListEvent = marketPairs => {
 export const emitMarketDealsEvent = (marketPairs, lastpair) => {
   //store.dispatch(triggerMarketSocket())
   // console.log("dsipacthed trigger", store.getState())
- if(lastpair){
-  emitMarketDealsUnsubscribeEvent(lastpair)
- }
+  if (lastpair) {
+    emitMarketDealsUnsubscribeEvent(lastpair);
+  }
   // console.log("soceklt mareket_paors",marketPairs)
   socket.emit('message', {
     id: Math.floor(Math.random() * 9000000),
@@ -206,7 +209,7 @@ export const emitKlineSubscribeEvent = (pair, lastpair, interval = 900) => {
     emitKlineUnsubscribeEvent(lastpair);
   }
   emitKlineQuerySubscribeEvent(pair);
-  console.log('soceklt kline snet **************', pair);
+  // console.log('soceklt kline snet **************', pair);
   socket.emit('message', {
     id: Math.floor(Math.random() * 9000000),
     method: 'kline.subscribe',
@@ -218,32 +221,32 @@ export const emitKlineQuerySubscribeEvent = (pair, interval = 900) => {
   //store.dispatch(triggerMarketSocket())
   // console.log("dsipacthed trigger", store.getState())
 
-  console.log('soceklt klinequery snet **************', pair);
-  console.log(
-    JSON.stringify({
-      id: Math.floor(Math.random() * 6000000),
-      method: 'kline.query',
-      params: [
-        pair,
-        Math.floor(new Date().getTime() / 1000) - 3 * 24 * 60 * 60,
-        Math.floor(new Date().getTime() / 1000),
-        interval,
-      ],
-    }),
-  );
-  console.log(
-    '^^^^^^^^^^^^^^^^^^^$$$$$$$$$$$**************)))))))))))))))###########',
-  );
-  console.log(
-    '^^^^^^^^^^^^^^^^^^^$$$$$$$$$$$**************)))))))))))))))###########',
-  );
+  // console.log('soceklt klinequery snet **************', pair);
+  // console.log(
+  //   JSON.stringify({
+  //     id: Math.floor(Math.random() * 6000000),
+  //     method: 'kline.query',
+  //     params: [
+  //       pair,
+  //       Math.floor(new Date().getTime() / 1000) - 3 * 24 * 60 * 60,
+  //       Math.floor(new Date().getTime() / 1000),
+  //       interval,
+  //     ],
+  //   }),
+  // );
+  // console.log(
+  //   '^^^^^^^^^^^^^^^^^^^$$$$$$$$$$$**************)))))))))))))))###########',
+  // );
+  // console.log(
+  //   '^^^^^^^^^^^^^^^^^^^$$$$$$$$$$$**************)))))))))))))))###########',
+  // );
   // console.log("pair",((new Date().getTime() )- 3*24*60*60*1000),(new Date().getTime()))
   socket.emit('message', {
     id: Math.floor(Math.random() * 6000000),
     method: 'kline.query',
     params: [
       pair,
-      (Math.floor(new Date().getTime()) - 3 * 24 * 60 * 60*1000)/1000,
+      (Math.floor(new Date().getTime()) - 3 * 24 * 60 * 60 * 1000) / 1000,
       Math.floor(new Date().getTime() / 1000),
       interval,
     ],
@@ -253,7 +256,7 @@ export const emitKlineQuerySubscribeEvent = (pair, interval = 900) => {
 //Depth Subscription
 export const emitDepthSubscribeEvent = (lastpair, newpair) => {
   if (lastpair) {
-    emitMarketDealsUnsubscribeEvent(lastpair)
+    emitMarketDealsUnsubscribeEvent(lastpair);
     emitDepthUnsubscribeEvent(lastpair);
     // socket.emit("message", {"id": Math.floor(Math.random() * 9000000), "method" : "depth.unsubscribe", "params" : [lastpair, 9,"0"] });
     // socket.emit("message", {"id": Math.floor(Math.random() * 90000000), "method" : "state.unsubscribe", "params" : [newpair] });
@@ -261,14 +264,14 @@ export const emitDepthSubscribeEvent = (lastpair, newpair) => {
   if (!newpair) {
     return;
   }
-  console.log('soceklt emitDepthSubscribeEvent snet **************', newpair);
-  console.log(
-    JSON.stringify({
-      id: Math.floor(Math.random() * 90000000),
-      method: 'depth.subscribe',
-      params: [newpair, 9, '0'],
-    }),
-  );
+  // console.log('soceklt emitDepthSubscribeEvent snet **************', newpair);
+  // console.log(
+  //   JSON.stringify({
+  //     id: Math.floor(Math.random() * 90000000),
+  //     method: 'depth.subscribe',
+  //     params: [newpair, 9, '0'],
+  //   }),
+  // );
   socket.emit('message', {
     id: Math.floor(Math.random() * 90000000),
     method: 'depth.subscribe',

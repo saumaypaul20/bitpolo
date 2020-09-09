@@ -27,6 +27,12 @@ import {
   fetchedWalletAssets,
 } from '../../redux/actions/wallet.actions';
 import {orderPut} from '../../api/orders.api';
+import {
+  setordertab,
+  setordertabprice,
+  setordertabtotal,
+  setordertabamount,
+} from '../../redux/actions/ordertab.actions';
 const divideIt = i => {
   let divider = {};
   if (i.match('INR')) {
@@ -58,8 +64,11 @@ const TradesOrderTabs = () => {
   //alert("ordertabs")
   const dispatch = useDispatch();
   const user = useSelector(state => state.authReducer.auth_attributes);
-
-  const [tab, settab] = useState(2);
+  const currentordertab = useSelector(state => state.ordertab.tab);
+  const currentprice = useSelector(state => state.ordertab.price);
+  const currentamount = useSelector(state => state.ordertab.amount);
+  const currenttotal = useSelector(state => state.ordertab.total);
+  // const [tab, settab] = useState(2);
   const [inramount, setinramount] = useState(0);
   const [cryptoamount, setcryptoamount] = useState(0);
   const [total, settotal] = useState(0);
@@ -120,7 +129,7 @@ const TradesOrderTabs = () => {
   }, [activeTradePair]);
 
   useEffect(() => {
-    if (market_data && inramount === 0) {
+    if (market_data && currentprice === 0) {
       if (tradeDetail) {
         setPrice(
           parseFloat(market_data.params[1].l).toFixed(tradeDetail?.money_prec),
@@ -131,14 +140,15 @@ const TradesOrderTabs = () => {
 
   const setTotal = t => {
     settotal(t.toString());
+    dispatch(setordertabtotal(t.toString()));
   };
 
   const isDisabled = () => {
     if (
-      parseFloat(total) === 0 ||
-      parseFloat(cryptoamount) === 0 ||
-      parseFloat(total) === 0 ||
-      parseFloat(total) < tradeDetail?.min_amount
+      parseFloat(currenttotal) === 0 ||
+      parseFloat(currentamount) === 0 ||
+      parseFloat(currenttotal) === 0 ||
+      parseFloat(currenttotal) < tradeDetail?.min_amount
     ) {
       return true;
     }
@@ -149,9 +159,9 @@ const TradesOrderTabs = () => {
       data: {
         attributes: {
           market: activeTradePair,
-          side: tab,
-          amount: total,
-          pride: inramount,
+          side: currentordertab,
+          amount: currenttotal,
+          pride: currentprice,
           takerFeeRate: user.attributes.taker_fee,
           source: 'Bitpolo source',
         },
@@ -173,9 +183,13 @@ const TradesOrderTabs = () => {
     }
   };
   const setPrice = t => {
-    let amt = cryptoamount ? cryptoamount : 0;
+    let amt = currentamount ? currentamount : 0;
     setinramount(t);
+    dispatch(setordertabprice(t));
     setTotal(parseFloat(t * amt).toFixed(tradeDetail?.money_prec));
+    dispatch(
+      setordertabtotal(parseFloat(t * amt).toFixed(tradeDetail?.money_prec)),
+    );
   };
   const changeAmount = (t, type) => {
     //console.log("changeAmount", t, type, parseFloat(t))
@@ -183,22 +197,27 @@ const TradesOrderTabs = () => {
       let amt = parseFloat(t);
       //console.log("changeAmount", amt)
       setinramount(amt);
-      let tt = amt * cryptoamount;
+      dispatch(setordertabprice(amt));
+      let tt = amt * currentamount;
       //console.log("changeAmount", tt)
       setTotal(tt);
     } else if (type == 'cryptoamount') {
       // let crpt = parseFloat(t).toFixed(tradeDetail?.stock_prec)
       let crpt = parseFloat(t);
       setcryptoamount(t);
+      dispatch(setordertabamount(t));
       // let nt = (t * inramount).toFixed(tradeDetail?.money_prec)
-      let nt = t * inramount;
+      let nt = t * currentprice;
       setTotal(nt);
     } else if (type == 'total') {
       //console.log("total", (parseFloat(t) / inramount).toFixed(tradeDetail?.money_prec))
       // let nt = Number(t)
       setTotal(t);
-      let c = parseFloat(t) / inramount;
+      let c = t / parseFloat(currentprice);
+      c = parseFloat(c);
+      // alert(c);
       setcryptoamount(c);
+      dispatch(setordertabamount(c.toFixed(tradeDetail?.stock_prec)));
     }
   };
 
@@ -207,68 +226,113 @@ const TradesOrderTabs = () => {
   };
 
   const onIncreaseINR = () => {
-    let amt = inramount ? inramount : 0;
+    let amt = currentprice ? currentprice : 0;
     setinramount(
       (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.money_prec))
         .toFixed(tradeDetail?.money_prec)
         .toString(),
     );
-    let nt = (cryptoamount * inramount).toFixed(tradeDetail?.money_prec);
+
+    dispatch(
+      setordertabprice(
+        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.money_prec))
+          .toFixed(tradeDetail?.money_prec)
+          .toString(),
+      ),
+    );
+    let nt = (currentamount * currentprice).toFixed(tradeDetail?.money_prec);
     setTotal(nt);
   };
   const onDecreaseINR = () => {
-    if (inramount == 0) {
+    if (currentprice == 0) {
       return;
     }
-    let amt = inramount ? inramount : 0;
+    let amt = currentprice ? currentprice : 0;
     setinramount(
       (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.money_prec))
         .toFixed(tradeDetail?.money_prec)
         .toString(),
     );
-    let nt = (cryptoamount * inramount).toFixed(tradeDetail?.money_prec);
+    dispatch(
+      setordertabprice(
+        (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.money_prec))
+          .toFixed(tradeDetail?.money_prec)
+          .toString(),
+      ),
+    );
+
+    let nt = (currentamount * currentprice).toFixed(tradeDetail?.money_prec);
     setTotal(nt);
   };
   const onIncreaseCRYPTO = () => {
-    let amt = cryptoamount ? cryptoamount : 0;
+    let amt = currentamount ? currentamount : 0;
     setcryptoamount(
       (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
         .toFixed(tradeDetail?.stock_prec)
         .toString(),
     );
-    let nt = (cryptoamount * inramount).toFixed(tradeDetail?.money_prec);
+
+    dispatch(
+      setordertabamount(
+        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
+          .toFixed(tradeDetail?.stock_prec)
+          .toString(),
+      ),
+    );
+    let nt = (currentamount * currentprice).toFixed(tradeDetail?.money_prec);
     setTotal(nt);
   };
   const onDecreaseCRYPTO = () => {
-    if (cryptoamount == 0) {
+    if (currentamount == 0) {
       return;
     }
-    let amt = cryptoamount ? cryptoamount : 0;
+    let amt = currentamount ? currentamount : 0;
     setcryptoamount(
       (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
         .toFixed(tradeDetail?.stock_prec)
         .toString(),
     );
-    let nt = (cryptoamount * inramount).toFixed(tradeDetail?.money_prec);
+    dispatch(
+      setordertabamount(
+        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
+          .toFixed(tradeDetail?.stock_prec)
+          .toString(),
+      ),
+    );
+    let nt = (currentamount * currentprice).toFixed(tradeDetail?.money_prec);
     setTotal(nt);
   };
   const onIncreaseTOTAL = () => {
-    let amt = total ? total : 0;
+    let amt = currenttotal ? currenttotal : 0;
     settotal(
       (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
         .toFixed(tradeDetail?.stock_prec)
         .toString(),
     );
+    dispatch(
+      setordertabtotal(
+        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
+          .toFixed(tradeDetail?.stock_prec)
+          .toString(),
+      ),
+    );
   };
   const onDecreaseTOTAL = () => {
-    if (total === 0) {
+    if (currenttotal === 0) {
       return;
     }
-    let amt = total ? total : 0;
+    let amt = currenttotal ? currenttotal : 0;
     settotal(
       (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
         .toFixed(tradeDetail?.stock_prec)
         .toString(),
+    );
+    dispatch(
+      setordertabtotal(
+        (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
+          .toFixed(tradeDetail?.stock_prec)
+          .toString(),
+      ),
     );
   };
 
@@ -314,8 +378,18 @@ const TradesOrderTabs = () => {
           alignSelf: 'stretch',
           flexDirection: 'row',
         }}>
-        <Tab label="Buy" active={tab} type={2} onPress={() => settab(2)} />
-        <Tab label="Sell" active={tab} type={1} onPress={() => settab(1)} />
+        <Tab
+          label="Buy"
+          active={currentordertab}
+          type={2}
+          onPress={() => dispatch(setordertab(2))}
+        />
+        <Tab
+          label="Sell"
+          active={currentordertab}
+          type={1}
+          onPress={() => dispatch(setordertab(1))}
+        />
       </View>
 
       <View
@@ -343,24 +417,24 @@ const TradesOrderTabs = () => {
         <InputCounter
           label={'Amount in INR'}
           disabled={false}
-          onInputChange={t => setinramount(t)}
-          validate={() => changeAmount(inramount, 'inramount')}
-          input={inramount}
+          onInputChange={t => dispatch(setordertabprice(t))}
+          validate={() => changeAmount(currentprice, 'inramount')}
+          input={currentprice}
           onIncrease={onIncreaseINR}
           onDecrease={onDecreaseINR}
         />
 
         <Spacer space={8} />
         {pickerOrderVal == 'market' ? (
-          tab === 2 ? (
+          currentordertab === 2 ? (
             <>
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 {/* <BPText style={{opacity:0.5, fontFamily: Fonts.FONT_MEDIUM}}>Total (BDX)</BPText> */}
                 {/* <InputCounter label={`Total (${divideIt(activeTradePair).b})`} validate={(t) => setTotal(t)} input={total}  /> */}
                 <InputCounter
-                  onInputChange={t => settotal(t)}
-                  validate={() => changeAmount(total, 'total')}
-                  input={total}
+                  onInputChange={t => dispatch(setordertabtotal(t))}
+                  validate={() => changeAmount(currenttotal, 'total')}
+                  input={currenttotal}
                   onIncrease={onIncreaseTOTAL}
                   onDecrease={onDecreaseTOTAL}
                 />
@@ -370,9 +444,9 @@ const TradesOrderTabs = () => {
             <>
               <InputCounter
                 label={`Amount  ${divideIt(activeTradePair).a}`}
-                onInputChange={t => setcryptoamount(t)}
-                validate={() => changeAmount(cryptoamount, 'cryptoamount')}
-                input={cryptoamount}
+                onInputChange={t => dispatch(setordertabamount(t))}
+                validate={() => changeAmount(currentamount, 'cryptoamount')}
+                input={currentamount}
                 onIncrease={onIncreaseCRYPTO}
                 onDecrease={onDecreaseCRYPTO}
               />
@@ -381,9 +455,9 @@ const TradesOrderTabs = () => {
         ) : (
           <InputCounter
             label={`Amount  ${divideIt(activeTradePair).a}`}
-            onInputChange={t => setcryptoamount(t)}
-            validate={() => changeAmount(cryptoamount, 'cryptoamount')}
-            input={cryptoamount}
+            onInputChange={t => dispatch(setordertabamount(t))}
+            validate={() => changeAmount(currentamount, 'cryptoamount')}
+            input={currentamount}
             onIncrease={onIncreaseCRYPTO}
             onDecrease={onDecreaseCRYPTO}
           />
@@ -432,9 +506,9 @@ const TradesOrderTabs = () => {
               </View>
               <View style={{flex: 3}}>
                 <InputCounter
-                  onInputChange={t => settotal(t)}
-                  validate={() => changeAmount(total, 'total')}
-                  input={total}
+                  onInputChange={t => dispatch(setordertabtotal(t))}
+                  validate={() => changeAmount(currenttotal, 'total')}
+                  input={currenttotal}
                 />
               </View>
 
@@ -469,7 +543,8 @@ const TradesOrderTabs = () => {
             Avbl
           </BPText>
           <BPText style={{opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM}}>
-            {`${balance?.available.balance.toFixed(2)}`} {divideIt(activeTradePair).b}
+            {`${balance?.available.balance.toFixed(2)}`}{' '}
+            {divideIt(activeTradePair).b}
           </BPText>
         </View>
 
@@ -477,9 +552,11 @@ const TradesOrderTabs = () => {
 
         <View style={{alignSelf: 'stretch'}}>
           <BPButton
-            backgroundColor={tab === 2 ? Colors.lightGreen : Colors.red}
+            backgroundColor={
+              currentordertab === 2 ? Colors.lightGreen : Colors.red
+            }
             textColor={Colors.white}
-            label={tab === 2 ? 'Buy' : 'Sell'}
+            label={currentordertab === 2 ? 'Buy' : 'Sell'}
             width="auto"
             onPress={() => onsubmit()}
             disabled={isDisabled()}

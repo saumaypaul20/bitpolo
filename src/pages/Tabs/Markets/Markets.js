@@ -16,6 +16,7 @@ import {
   modifyFavs,
   addMarketList,
   setActiveTradePair,
+  storeIndexPrice,
 } from '../../../redux/actions/markets.action';
 import store from '../../../redux/store';
 import _ from 'lodash';
@@ -35,7 +36,7 @@ import {
   getInfoAuthToken,
   getDeviceId,
 } from '../../../utils/apiHeaders.utils';
-import {getMatchingMarketList} from '../../../api/markets.api';
+import {getMatchingMarketList, getIndexPrice} from '../../../api/markets.api';
 import {addFavCoin, updateFavCoin} from '../../../api/users.api';
 import {screenNames} from '../../../routes/screenNames/screenNames';
 
@@ -94,9 +95,9 @@ const INRView = () => {
     equalityFnMarket,
   );
 
-//   const [renderData, setrenderData]= useState(market_data);
-  const [orderDirection, setorderDirection]= useState(true);
-  const [orderBY, setorderBY]= useState(false);
+  //   const [renderData, setrenderData]= useState(market_data);
+  const [orderDirection, setorderDirection] = useState(true);
+  const [orderBY, setorderBY] = useState(false);
   let favourites = useSelector(
     state => state.marketReducer.favourites,
     (l, r) => {
@@ -122,29 +123,41 @@ const INRView = () => {
     },
   );
 
-  const onSort =(by_action)=>{
-        setorderDirection(!orderDirection)
-        setorderBY(by_action)
-  }
+  const onSort = by_action => {
+    setorderDirection(!orderDirection);
+    setorderBY(by_action);
+  };
 
-  const renderData =useCallback(()=>{
-      let arr = market_data
-      switch(orderBY){
-        case 'pair':
-            arr = _.orderBy(market_data,['params[0]'], [orderDirection ? 'asc':'desc'])
-             
-        case 'last-price':
-            arr = _.orderBy(market_data,['params[1].l'], [orderDirection ? 'asc':'desc'])
-             
-        case '24h-change':
-            arr = _.orderBy(market_data,['params[1].cp'], [orderDirection ? 'asc':'desc'])
-            
-        default:
-            arr = arr
-      }
+  const renderData = useCallback(() => {
+    let arr = market_data;
+    switch (orderBY) {
+      case 'pair':
+        arr = _.orderBy(
+          market_data,
+          ['params[0]'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
 
-      return arr
-  },[orderBY,orderDirection, market_data])
+      case 'last-price':
+        arr = _.orderBy(
+          market_data,
+          ['params[1].l'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
+
+      case '24h-change':
+        arr = _.orderBy(
+          market_data,
+          ['params[1].cp'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
+
+      default:
+        arr = arr;
+    }
+
+    return arr;
+  }, [orderBY, orderDirection, market_data]);
   // market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
 
   return (
@@ -160,7 +173,7 @@ const INRView = () => {
           useFlatList={true}
           initialNumToRender={5}
           data={renderData()}
-          style={{flex:1}}
+          style={{flex: 1}}
           renderItem={rowData => {
             //  console.log("bdx",rowData)
 
@@ -226,8 +239,8 @@ const USDTView = () => {
     state => state.marketReducer.data.filter(i => i.params[0].endsWith('USDT')),
     equalityFnMarket,
   );
-  const [orderDirection, setorderDirection]= useState(true);
-  const [orderBY, setorderBY]= useState(false);
+  const [orderDirection, setorderDirection] = useState(true);
+  const [orderBY, setorderBY] = useState(false);
   let favourites = useSelector(
     state => state.marketReducer.favourites,
     (l, r) => {
@@ -254,28 +267,40 @@ const USDTView = () => {
   );
   // market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
   // console.log(" USDTViewmarket_data",market_data)
-  const onSort =(by_action)=>{
-    setorderDirection(!orderDirection)
-    setorderBY(by_action)
-}
- const renderData =useCallback(()=>{
-      let arr = market_data
-      switch(orderBY){
-        case 'pair':
-            arr = _.orderBy(market_data,['params[0]'], [orderDirection ? 'asc':'desc'])
-             
-        case 'last-price':
-            arr = _.orderBy(market_data,['params[1].l'], [orderDirection ? 'asc':'desc'])
-             
-        case '24h-change':
-            arr = _.orderBy(market_data,['params[1].cp'], [orderDirection ? 'asc':'desc'])
-            
-        default:
-            arr = arr
-      }
+  const onSort = by_action => {
+    setorderDirection(!orderDirection);
+    setorderBY(by_action);
+  };
+  const renderData = useCallback(() => {
+    let arr = market_data;
+    switch (orderBY) {
+      case 'pair':
+        arr = _.orderBy(
+          market_data,
+          ['params[0]'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
 
-      return arr
-  },[orderBY,orderDirection,market_data])
+      case 'last-price':
+        arr = _.orderBy(
+          market_data,
+          ['params[1].l'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
+
+      case '24h-change':
+        arr = _.orderBy(
+          market_data,
+          ['params[1].cp'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
+
+      default:
+        arr = arr;
+    }
+
+    return arr;
+  }, [orderBY, orderDirection, market_data]);
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
       {market_data.length === 0 ? (
@@ -284,75 +309,77 @@ const USDTView = () => {
           size="large"
           style={{marginTop: 50}}
         />
-      ) : <SwipeListView
-        useFlatList={true}
-        initialNumToRender={2}
-        data={renderData()}
-        style={{flex:1}}
-        renderItem={rowData => {
-          //  console.log("bdx",rowData)
+      ) : (
+        <SwipeListView
+          useFlatList={true}
+          initialNumToRender={2}
+          data={renderData()}
+          style={{flex: 1}}
+          renderItem={rowData => {
+            //  console.log("bdx",rowData)
 
-          return (
-            // listItem(rowData.item, rowData.index)
-            <ListItem item={rowData.item} index={rowData.index} />
-          );
-        }}
-        renderHiddenItem={(rowData, rowMap) => (
-          <View
-            style={{
-              right: 0,
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              backgroundColor: Colors.darkGray,
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 64,
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                onStarClicked(rowData.item, favourites);
-                setTimeout(() => {
-                  rowMap[rowData.item.id]?.closeRow();
-                }, 1000);
+            return (
+              // listItem(rowData.item, rowData.index)
+              <ListItem item={rowData.item} index={rowData.index} />
+            );
+          }}
+          renderHiddenItem={(rowData, rowMap) => (
+            <View
+              style={{
+                right: 0,
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                backgroundColor: Colors.darkGray,
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 64,
               }}>
-              {isFavourite(rowData.item, favourites)}
-            </TouchableOpacity>
-          </View>
-        )}
-        onRowOpen={(rowKey, rowMap) => {
-          setTimeout(() => {
-            rowMap[rowKey]?.closeRow();
-          }, 1000);
-        }}
-        rightOpenValue={-64}
-        disableRightSwipe
-        stopRightSwipe={-64}
-        ListHeaderComponent={homeHeaderComp(onSort)}
-        stickyHeaderIndices={[0]}
-        keyExtractor={item => item.id}
-        contentContainerStyle={{flexGrow: 1}}
-        getItemLayout={(data, index) => {
-          return {
-            index,
-            length: 30, // itemHeight is a placeholder for your amount
-            offset: index * 30,
-            width: '100%',
-          };
-        }}
-        // ListEmptyComponent={
-        //   <View
-        //     style={{
-        //       flex: 1,
-        //       justifyContent: 'flex-start',
-        //       alignItems: 'center',
-        //       paddingTop: 50,
-        //     }}>
-        //     <ActivityIndicator color={Colors.white} size="large" />
-        //   </View>
-        // }
-      />}
+              <TouchableOpacity
+                onPress={() => {
+                  onStarClicked(rowData.item, favourites);
+                  setTimeout(() => {
+                    rowMap[rowData.item.id]?.closeRow();
+                  }, 1000);
+                }}>
+                {isFavourite(rowData.item, favourites)}
+              </TouchableOpacity>
+            </View>
+          )}
+          onRowOpen={(rowKey, rowMap) => {
+            setTimeout(() => {
+              rowMap[rowKey]?.closeRow();
+            }, 1000);
+          }}
+          rightOpenValue={-64}
+          disableRightSwipe
+          stopRightSwipe={-64}
+          ListHeaderComponent={homeHeaderComp(onSort)}
+          stickyHeaderIndices={[0]}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{flexGrow: 1}}
+          getItemLayout={(data, index) => {
+            return {
+              index,
+              length: 30, // itemHeight is a placeholder for your amount
+              offset: index * 30,
+              width: '100%',
+            };
+          }}
+          // ListEmptyComponent={
+          //   <View
+          //     style={{
+          //       flex: 1,
+          //       justifyContent: 'flex-start',
+          //       alignItems: 'center',
+          //       paddingTop: 50,
+          //     }}>
+          //     <ActivityIndicator color={Colors.white} size="large" />
+          //   </View>
+          // }
+        />
+      )}
     </View>
   );
 };
@@ -373,30 +400,38 @@ const FavouritesTab = () => {
       }
     }
   });
-const [orderDirection, setorderDirection]= useState(true);
-  const [orderBY, setorderBY]= useState(false);
-  const onSort =(by_action)=>{
-    setorderDirection(!orderDirection)
-    setorderBY(by_action)
-}
- const renderData =useCallback(()=>{
-      let arr = favs
-      switch(orderBY){
-        case 'pair':
-            arr = _.orderBy(arr,['params[0]'], [orderDirection ? 'asc':'desc'])
-             
-        case 'last-price':
-            arr = _.orderBy(arr,['params[1].l'], [orderDirection ? 'asc':'desc'])
-             
-        case '24h-change':
-            arr = _.orderBy(arr,['params[1].cp'], [orderDirection ? 'asc':'desc'])
-            
-        default:
-            arr = arr
-      }
+  const [orderDirection, setorderDirection] = useState(true);
+  const [orderBY, setorderBY] = useState(false);
+  const onSort = by_action => {
+    setorderDirection(!orderDirection);
+    setorderBY(by_action);
+  };
+  const renderData = useCallback(() => {
+    let arr = favs;
+    switch (orderBY) {
+      case 'pair':
+        arr = _.orderBy(arr, ['params[0]'], [orderDirection ? 'asc' : 'desc']);
 
-      return arr
-  },[orderBY,orderDirection,favs])
+      case 'last-price':
+        arr = _.orderBy(
+          arr,
+          ['params[1].l'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
+
+      case '24h-change':
+        arr = _.orderBy(
+          arr,
+          ['params[1].cp'],
+          [orderDirection ? 'asc' : 'desc'],
+        );
+
+      default:
+        arr = arr;
+    }
+
+    return arr;
+  }, [orderBY, orderDirection, favs]);
 
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
@@ -446,7 +481,9 @@ const [orderDirection, setorderDirection]= useState(true);
         rightOpenValue={-64}
         disableRightSwipe
         stopRightSwipe={-64}
-        ListHeaderComponent={favourites.length > 0 ? homeHeaderComp(onSort) : <></>}
+        ListHeaderComponent={
+          favourites.length > 0 ? homeHeaderComp(onSort) : <></>
+        }
         stickyHeaderIndices={[0]}
         keyExtractor={item => item?.params[1]?.l}
         contentContainerStyle={{flex: 1}}
@@ -579,7 +616,7 @@ const ListItem = ({item, index}) => {
   );
 };
 
-const homeHeaderComp = (onSort) => {
+const homeHeaderComp = onSort => {
   return (
     <View style={{backgroundColor: Colors.primeBG}}>
       <View
@@ -691,6 +728,21 @@ let Markets = () => {
   const [, setfavs] = useState([]);
   // console.log("usert",user)
 
+  let index_price = useSelector(
+    state => state.marketReducer.index_price,
+    equalityFnIndexPrice,
+  );
+
+  const callIndexPriceGetter = async () => {
+    let resIndexPrice = await getIndexPrice();
+    if (resIndexPrice.status) {
+      dispatch(storeIndexPrice(resIndexPrice.data));
+    }
+  };
+  if (!index_price) {
+    callIndexPriceGetter();
+  }
+
   const callgetMarketList = useCallback(async () => {
     try {
       let attr = {
@@ -723,22 +775,27 @@ let Markets = () => {
   useEffect(() => {
     // alert("re_mounted markerts")
     // getMarketPairs()
-    if (!socketConnected) {
-      callgetMarketList();
-    }
+    // if (!socketConnected) {
+    callgetMarketList();
+    // }
   }, []);
 
   useEffect(() => {
     console.log('socketConnected', socketConnected);
     // console.log("foucs", focus)
     if (socket) {
-      if (!socketConnected) {
-        emitMarketListEvent(marketPairs.map(i => i.name));
-      }
+      // if (!socketConnected) {
+      emitMarketListEvent(marketPairs.map(i => i.name));
+      // }
     }
     // return () => {
     //     if(socket) socket.disconnect()
     // }
+
+    return () => {
+      // alert('unmounted home');
+      emitUnsubMarketListEvent(marketPairs.map(i => i.name));
+    };
   }, [socket, navigation]);
 
   // useEffect(() => {
@@ -749,14 +806,14 @@ let Markets = () => {
   //       return unsubscribe;
   // }, [navigation])
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      setloading(true);
-      emitUnsubMarketListEvent(marketPairs);
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('blur', () => {
+  //     setloading(true);
+  //     emitUnsubMarketListEvent(marketPairs);
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
