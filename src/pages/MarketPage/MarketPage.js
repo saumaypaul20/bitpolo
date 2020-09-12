@@ -27,8 +27,10 @@ import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {
   storeCurrencies,
   setActiveTradePair,
+  modifyFavs,
 } from '../../redux/actions/markets.action';
 import {addDepthSubs} from '../../redux/actions/depthSubs.action';
+import store from '../../redux/store';
 import {useNavigation} from '@react-navigation/native';
 import {screenNames} from '../../routes/screenNames/screenNames';
 import BPText from '../../common/BPText/BPText';
@@ -38,9 +40,45 @@ import {addKlineData, emptyKlineData} from '../../redux/actions/kline.actions';
 import {
   equalityFnIndexPrice,
   equalityFnMarket,
+  equalityFnFavs,
 } from '../../utils/reduxChecker.utils';
 import DepthChart from '../../components/AreaChart/DepthChart';
 import {setordertab} from '../../redux/actions/ordertab.actions';
+import {updateFavCoin, addFavCoin} from '../../api/users.api';
+import {getDeviceId} from 'react-native-device-info';
+import {getInfoAuthToken, getAuthToken} from '../../utils/apiHeaders.utils';
+import Modal from 'react-native-modal';
+import ChevronRight from '../../common/ChevronRight/ChevronRight';
+const currentMarketPrice = (found, index_price) => {
+  // let found = market_data;
+  // console.log(
+  //   'currentMarketPrice**********************************************************',
+  // );
+  if (found && index_price) {
+    return (
+      <BPText
+        style={{
+          color:
+            parseFloat(found.params[1].cp) > -1
+              ? Colors.lightGreen
+              : Colors.red,
+          padding: 5,
+        }}>
+        {`${
+          found?.divider.b === 'USDT'
+            ? (
+                parseFloat(found?.params[1]?.l) *
+                index_price.find(i => i.asset === 'USDT').amount
+              ).toFixed(2)
+            : (
+                parseFloat(found?.params[1]?.l) /
+                index_price.find(i => i.asset === 'USDT').amount
+              ).toFixed(2)
+        }`}
+      </BPText>
+    );
+  }
+};
 
 const HeaderComp = () => {
   let index_price = useSelector(
@@ -56,41 +94,12 @@ const HeaderComp = () => {
       state.marketReducer.data.filter(i => i.params[0] === activeTradePair),
     equalityFnMarket,
   );
-  let found = market_data.find(i => i.params[0] === activeTradePair);
+  const found = market_data[0];
   const activecurrency = useSelector(
     state =>
       state.marketReducer.currencies.find(i => i.value === activeTradePair),
     shallowEqual,
   );
-
-  const currentMarketPrice = useCallback(() => {
-    //let found = market_data
-    //console.log("ABCD#####", found)
-    if (found && index_price) {
-      return (
-        <BPText
-          style={{
-            color:
-              parseFloat(found.params[1].cp) > -1
-                ? Colors.lightGreen
-                : Colors.red,
-            padding: 5,
-          }}>
-          {`${
-            found?.divider.b === 'USDT'
-              ? (
-                  parseFloat(found?.params[1]?.l) *
-                  index_price.find(i => i.asset === 'USDT').amount
-                ).toFixed(2)
-              : (
-                  parseFloat(found?.params[1]?.l) /
-                  index_price.find(i => i.asset === 'USDT').amount
-                ).toFixed(2)
-          }`}
-        </BPText>
-      );
-    }
-  }, [found]);
 
   return found && activecurrency ? (
     <>
@@ -165,7 +174,7 @@ const HeaderComp = () => {
           </BPText>
           <BPText style={{fontSize: 12}}>
             {parseFloat(found?.params[1].v).toFixed(3)} {`${activecurrency?.a}`}{' '}
-            / {currentMarketPrice()} {`${activecurrency?.b}`}
+            / {currentMarketPrice(found, index_price)} {`${activecurrency?.b}`}
           </BPText>
         </View>
       </View>
@@ -188,11 +197,80 @@ const HeaderComp = () => {
 //     </TouchableOpacity>
 //   );
 // };
-const MarketPage = () => {
-  // console.log("trdes reloads---------------------------------------------", id);
 
-  // id++
-  // let index_price = useSelector(state => state.marketReducer.index_price, equalityFnIndexPrice)
+const callAddFavCoin = async item => {
+  let payload = {lang: 'en', data: {attributes: {market: item}}};
+  let headers = {
+    Authorizaton: getAuthToken(),
+    info: getInfoAuthToken(),
+    device: getDeviceId(),
+  };
+  let res = await addFavCoin(payload, headers);
+  if (res.status) {
+    console.log(res.data);
+  }
+};
+
+const callDeleteFavCoin = async item => {
+  let payload = {lang: 'en', data: {attributes: {market: item}}};
+  let res = await updateFavCoin(payload);
+  if (res.status) {
+    console.log(res.data);
+  }
+};
+
+const setFav = (item, favourites) => {
+  let state = store.getState();
+
+  let market_list = state.marketReducer.market_list;
+  //   if (market_list.length === 0) {
+  //     return;
+  //   }
+  //   alert(JSON.stringify(market_list));
+  if (favourites.find(i => i.name == item)) {
+    onDeleteClick(item, favourites);
+  } else {
+    let itemRes = market_list.find(i => i.name === item);
+    let newData = favourites.concat([itemRes]);
+    console.log('onstart click data', newData);
+    store.dispatch(modifyFavs(newData));
+    callAddFavCoin(itemRes.name);
+  }
+};
+
+const onDeleteClick = (item, favourites) => {
+  // let state = store.getState();
+  // let favourites = state.marketReducer.favourites;
+
+  let newData = favourites.filter(i => i.name !== item);
+  store.dispatch(modifyFavs(newData));
+  callDeleteFavCoin(item);
+};
+
+const isFavourite = (item, favs) => {
+  if (favs.length > 0 && favs.find(i => i.name === item)) {
+    return (
+      <Image
+        source={Images.star_active}
+        style={{width: 19, height: 19}}
+        resizeMode="contain"
+      />
+    );
+  } else
+    return (
+      <Image
+        source={Images.star_icon}
+        style={{width: 19, height: 19}}
+        resizeMode="contain"
+      />
+    );
+};
+
+const MarketPage = () => {
+  // console.log(
+  //   'MarketPage reloads---------------------------------------------',
+  // );
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -204,17 +282,18 @@ const MarketPage = () => {
     state => state.marketReducer.activeTradePair,
     shallowEqual,
   );
-  // const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
-  // let found = market_data.find(i=> i.params[0] === activeTradePair)
 
-  // // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
-  // console.log("market_data in trades",market_data)
+  let favourites = useSelector(
+    state => state.marketReducer.favourites,
+    equalityFnFavs,
+  );
+
   const [currencyVal, setCurrency] = useState(activeTradePair);
   const [Lcurrencies, setLcurrencies] = useState(currencies);
   const [loading, setloading] = useState(true);
   const [view, setview] = useState(1);
   const [tab, settab] = useState(1);
-
+  const [showcurrencies, setshowcurrencies] = useState(false);
   const callListMarket = async () => {
     let res = await getMatchingMarketList();
     if (res.status) {
@@ -233,6 +312,14 @@ const MarketPage = () => {
         };
         return payload;
       });
+      let favs = res.data[0][0]['USDT']
+        .concat(res.data[0][1]['INR'])
+        .filter(i => i.is_favourite);
+      // console.log(
+      //   'FAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVSFAVS',
+      //   favs,
+      // );
+      dispatch(modifyFavs(favs));
       dispatch(storeCurrencies(arr));
       setLcurrencies(arr);
 
@@ -271,9 +358,8 @@ const MarketPage = () => {
 
   useEffect(() => {
     //emitKlineSubscribeEvent()
-    if (!activeTradePair) {
-      callListMarket();
-    }
+
+    callListMarket();
 
     return () => {
       //    alert("trades unmounted")
@@ -299,8 +385,43 @@ const MarketPage = () => {
     }, 2000);
   }, [activeTradePair]);
 
-  // const currencies = [{label: 'BTC/USDT', value:'key1'}];
-  // if(currencies.length === 0){ return }
+  const handleCurrencyView = () => {
+    setshowcurrencies(!showcurrencies);
+  };
+
+  const oncurrencyselect = val => {
+    if (val === activeTradePair) {
+      setshowcurrencies(false);
+      return;
+    }
+    // setloading(true);
+    // dispatch(addDepthSubs(null));
+    // setCurrency(activeTradePair);
+    // dispatch(setordertabprice(0));
+    // dispatch(setordertabamount(0));
+    // dispatch(setActiveTradePair(val));
+    // dispatch(clearDepthData());
+    // emitDepthUnsubscribeEvent(currencyVal);
+    // emitUnsubMarketListEvent([val]);
+    // emitDepthSubscribeEvent(val);
+    // setshowcurrencies(false);
+    // setTimeout(() => {
+    //   //emitUnsubMarketListEvent([currencyVal])
+    //   setloading(false);
+    // }, 1000);
+
+    setloading(true);
+    //dispatch(addDepthSubs(null));
+    setCurrency(activeTradePair);
+    dispatch(emptyKlineData());
+    dispatch(setActiveTradePair(val));
+    setshowcurrencies(false);
+    // emptyKlineData()
+    setTimeout(() => {
+      setloading(false);
+    }, 1000);
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>
@@ -333,7 +454,7 @@ const MarketPage = () => {
                         style={{fontSize: 20, color: Colors.white}}
                       />
                     </TouchableOpacity>
-                    <PickerComp
+                    {/* <PickerComp
                       items={Lcurrencies}
                       pickerVal={activeTradePair}
                       setPickerVal={val => {
@@ -348,7 +469,50 @@ const MarketPage = () => {
                         }, 1000);
                       }}
                       chevronPositionTop={3}
-                    />
+                    /> */}
+
+                    <View style={{backgroundColor: Colors.darkGray2}}>
+                      <TouchableOpacity
+                        onPress={() => handleCurrencyView()}
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <BPText style={{marginRight: 10}}>
+                          {
+                            Lcurrencies?.find(i => i.value === activeTradePair)
+                              ?.label
+                          }
+                        </BPText>
+                        <ChevronRight arrow={showcurrencies ? 'up' : 'down'} />
+                      </TouchableOpacity>
+
+                      <Modal
+                        isVisible={showcurrencies}
+                        backdropOpacity={0}
+                        onBackButtonPress={() => handleCurrencyView()}
+                        onBackdropPress={() => handleCurrencyView()}
+                        style={{
+                          justifyContent: 'flex-start',
+                          marginTop: 100,
+                          marginHorizontal: 0,
+                        }}>
+                        <View style={{backgroundColor: Colors.darkGray2}}>
+                          {Lcurrencies.map((i, index) => {
+                            return (
+                              <TouchableOpacity
+                                key={index.toString()}
+                                style={{
+                                  paddingHorizontal: 20,
+                                  paddingVertical: 15,
+                                  borderTopColor: Colors.darkGray,
+                                  borderTopWidth: index !== 0 ? 1 : 0,
+                                }}
+                                onPress={() => oncurrencyselect(i.value)}>
+                                <BPText>{i.label}</BPText>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </View>
+                      </Modal>
+                    </View>
                   </View>
                 )}
               </View>
@@ -363,15 +527,13 @@ const MarketPage = () => {
                 }}>
                 <TouchableOpacity style={{marginHorizontal: 22}}>
                   <Image
-                    source={Images.market_chart_icon}
+                    source={Images.see_favs}
                     style={styles.headerIconStyles}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image
-                    source={Images.list_icon}
-                    style={styles.headerIconStyles}
-                  />
+                <TouchableOpacity
+                  onPress={() => setFav(activeTradePair, favourites)}>
+                  {isFavourite(activeTradePair, favourites)}
                 </TouchableOpacity>
               </View>
             </View>
@@ -410,7 +572,10 @@ const MarketPage = () => {
                     onPress={() =>
                       navigation.navigate(screenNames.MARKET_PAGE_LANDSCAPE)
                     }>
-                    <BPText>X</BPText>
+                    <Image
+                      source={Images.expand}
+                      style={styles.headerIconStyles}
+                    />
                   </TouchableOpacity>
                 </View>
 
@@ -476,7 +641,9 @@ const MarketPage = () => {
                       />
                     </View>
                   </View>
-                  {!loading && activeTradePair && <MarketBottom />}
+                  {!loading &&
+                    activeTradePair &&
+                    (tab === 1 ? <MarketBottom /> : null)}
                 </View>
               </View>
             );
@@ -496,9 +663,6 @@ const MarketPage = () => {
             alignItems: 'center',
             flexDirection: 'row',
           }}>
-          <View>
-            <BPText>Currency</BPText>
-          </View>
           <View
             style={{
               justifyContent: 'center',
@@ -520,9 +684,6 @@ const MarketPage = () => {
                 navigation.goBack();
               }}
             />
-          </View>
-          <View>
-            <BPText>Alert</BPText>
           </View>
         </View>
       </Container>
@@ -577,7 +738,7 @@ const ColoredButton = ({onPress, label, bgColor = Colors.red}) => {
       onPress={() => onPress()}
       style={{
         backgroundColor: bgColor,
-        paddingHorizontal: 20,
+        paddingHorizontal: 30,
         paddingVertical: 5,
         justifyContent: 'center',
         alignItems: 'center',

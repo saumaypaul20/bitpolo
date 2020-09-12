@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Container, Content, Card, Button, View, Toast} from 'native-base';
 import LabelInput from '../../components/LabelInput/LabelInput';
@@ -15,6 +15,7 @@ import {loginUser, getGeolocation} from '../../api/users.api';
 import {getPublicIP, getDeviceId} from '../../utils/apiHeaders.utils';
 import {useNavigation} from '@react-navigation/native';
 import {TYPES} from '../../redux/types';
+import DeviceInfo from 'react-native-device-info';
 
 const Signin = () => {
   const navigation = useNavigation();
@@ -76,8 +77,8 @@ const Signin = () => {
       ip: ip,
       email: email,
       password: password,
-      browser: getDeviceId().browser,
-      os: getDeviceId().os,
+      browser: await DeviceInfo.getModel(),
+      os: await DeviceInfo.getSystemName(),
     };
 
     let res = await loginUser({...payload, ...location.data});
@@ -102,7 +103,12 @@ const Signin = () => {
       }
     }
   };
-
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(inputAction(TYPES.EMAIL_INPUT, ''));
+      dispatch(inputAction(TYPES.PASSWORD_INPUT, ''));
+    }, 100);
+  }, []);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>

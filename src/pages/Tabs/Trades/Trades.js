@@ -6,13 +6,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   FlatList,
-  TouchableNativeFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Container} from 'native-base';
 import Toolbar from '../../../components/Toolbar/Toolbar';
 import {Colors, Images} from '../../../theme';
-import PickerComp from '../../../components/PickerComp/PickerComp';
 import {
   emitDepthSubscribeEvent,
   emitDepthUnsubscribeEvent,
@@ -27,6 +25,7 @@ import {
   storeCurrencies,
   setActiveTradePair,
   storeIndexPrice,
+  modifyFavs,
 } from '../../../redux/actions/markets.action';
 import {
   addDepthSubs,
@@ -38,10 +37,14 @@ import BPText from '../../../common/BPText/BPText';
 import ChevronRight from '../../../common/ChevronRight/ChevronRight';
 import Modal from 'react-native-modal';
 import {equalityFnIndexPrice} from '../../../utils/reduxChecker.utils';
+import {
+  setordertabprice,
+  setordertabamount,
+} from '../../../redux/actions/ordertab.actions';
 // import {  } from 'react-native-gesture-handler'
 
 const Trades = () => {
-  // console.log("trdes reloads---------------------------------------------", id);
+  // console.log('trdes reloads---------------------------------------------');
 
   // id++
 
@@ -81,6 +84,10 @@ const Trades = () => {
   const callListMarket = async () => {
     let res = await getMatchingMarketList();
     if (res.status) {
+      // console.log(
+      //   'favfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavsfavfavs',
+      //   res.data,
+      // );
       let arr = res.data[1].map(i => {
         let divider = {};
         if (i.match('INR')) {
@@ -96,6 +103,11 @@ const Trades = () => {
         };
         return payload;
       });
+      let favs = res.data[0][0]['USDT']
+        .concat(res.data[0][1]['INR'])
+        .filter(i => i.is_favourite);
+
+      dispatch(modifyFavs(favs));
       dispatch(storeCurrencies(arr));
       setLcurrencies(arr);
       setloading(false);
@@ -107,7 +119,6 @@ const Trades = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setloading(false);
       if (activeTradePair) {
         emitDepthSubscribeEvent(currencyVal, activeTradePair);
       }
@@ -127,6 +138,7 @@ const Trades = () => {
     const unsubscribe = navigation.addListener('blur', () => {
       //alert("blur")
       setloading(true);
+      setLcurrencies([]);
       //  dispatch(setActiveTradePair(null))
       //+setActiveTradePair(null)
       //emitDepthUnsubscribeEvent(currencyVal)
@@ -136,6 +148,8 @@ const Trades = () => {
   }, [navigation]);
 
   useEffect(() => {
+    setloading(true);
+    dispatch(setActiveTradePair(null));
     // emitDepthSubscribeEvent()
     callListMarket();
 
@@ -199,9 +213,15 @@ const Trades = () => {
   };
 
   const oncurrencyselect = val => {
+    if (val === activeTradePair) {
+      setshowcurrencies(false);
+      return;
+    }
     setloading(true);
     dispatch(addDepthSubs(null));
     setCurrency(activeTradePair);
+    dispatch(setordertabprice(0));
+    dispatch(setordertabamount(0));
     dispatch(setActiveTradePair(val));
     dispatch(clearDepthData());
     emitDepthUnsubscribeEvent(currencyVal);
@@ -232,29 +252,9 @@ const Trades = () => {
           ListHeaderComponent={
             <View style={styles.headerContainer}>
               <View style={{borderRadius: 4, alignSelf: 'flex-start'}}>
-                {!activeTradePair && Lcurrencies.length == 0 ? (
+                {!activeTradePair || Lcurrencies.length == 0 ? (
                   <ActivityIndicator color={Colors.white} />
                 ) : (
-                  // <PickerComp
-                  //     items={Lcurrencies}
-                  //     width={200}
-                  //     pickerVal = {activeTradePair}
-                  //     setPickerVal = {(val)=>{
-                  //         setloading(true)
-                  //         dispatch(addDepthSubs(null));
-                  //         setCurrency(activeTradePair);
-                  //         dispatch(setActiveTradePair(val))
-                  //         dispatch(clearDepthData())
-                  //         emitDepthUnsubscribeEvent(currencyVal)
-                  //         setTimeout(() => {
-                  //             //emitUnsubMarketListEvent([currencyVal])
-                  //         setloading(false)
-                  //        }, 1000);
-                  //         //found= null
-                  //     }}
-                  //     chevronPositionTop= {3}
-                  // />
-
                   <View style={{backgroundColor: Colors.darkGray2}}>
                     <TouchableOpacity
                       onPress={() => handleCurrencyView()}

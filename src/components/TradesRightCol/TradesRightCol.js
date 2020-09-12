@@ -1,23 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import PickerComp from '../PickerComp/PickerComp';
-import {Images, Colors, Fonts} from '../../theme';
-import InputCounter from '../InputCounter/InputCounter';
-import Spacer from '../../common/Spacer/Spacer';
+import React from 'react';
+import {View, TouchableOpacity} from 'react-native';
+import {Colors, Fonts} from '../../theme';
 import BPText from '../../common/BPText/BPText';
-import BPButton from '../../common/BPButton/BPButton';
-import AreaChart2 from '../AreaChart/AreaChart';
 import TradesOrderTabs from '../TradesOrderTabs/TradesOrderTabs';
 import DepthChart from '../AreaChart/DepthChart';
-import HighChart from '../HighChart/HighChart';
 import {screenNames} from '../../routes/screenNames/screenNames';
 import {useNavigation} from '@react-navigation/native';
 const TradesRightCol = () => {
-  //alert("riglt col")
+  // alert('riglt col');
   const navigation = useNavigation();
   return (
     <View style={{flex: 1}}>
-      {console.log('TradesOrderTabs1')}
+      {/* {console.log('TradesOrderTabs1')} */}
       <TradesOrderTabs />
 
       <View style={{marginRight: 16, marginLeft: 3}}>

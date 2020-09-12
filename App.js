@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
-import {StatusBar, Text, TextInput, View} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {StatusBar, Text, TextInput, View, AppState} from 'react-native';
 import {Root} from 'native-base';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -29,6 +29,31 @@ const App = () => {
   TextInput.defaultProps.maxFontSizeMultiplier = 1;
   const dispatch = useDispatch();
   const [login, setLogin] = useState(null);
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    AppState.addEventListener('change', _handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', _handleAppStateChange);
+    };
+  }, []);
+
+  const _handleAppStateChange = nextAppState => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      console.log('App has come to the foreground!');
+      // startSocket();
+    }
+
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+    console.log('AppState', appState.current);
+  };
 
   //get User LOGIN State
   const getUser = async () => {
@@ -71,7 +96,7 @@ const App = () => {
       dispatch(saveIpAction(ip));
     }
   };
-  console.log('app reloads');
+  // console.log('app reloads');
   useEffect(() => {
     // requestLocationPermission()
     SplashScreen.hide();

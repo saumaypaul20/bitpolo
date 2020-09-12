@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Wallet"
+      initialRouteName="Home"
       tabBarOptions={{
         activeTintColor: Colors.tabActiveTintColor,
         style: {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ import ListEmpty from '../../../components/ListEmpty/ListEmpty';
 import {
   equalityFnMarket,
   equalityFnIndexPrice,
+  equalityFnFavs,
 } from '../../../utils/reduxChecker.utils';
 import {
   emitMarketListEvent,
@@ -86,41 +87,21 @@ const onDeleteClick = item => {
   callDeleteFavCoin(item.params[0]);
 };
 
-const INRView = () => {
+let INRView = () => {
   // let focus = navigation.isFocused()
-  console.log('INRView reloads', count);
-  count++;
+  // console.log('INRView reloads', count);
+  // count++;
   let market_data = useSelector(
     state => state.marketReducer.data.filter(i => i.params[0].endsWith('INR')),
     equalityFnMarket,
   );
-
+  console.log('reloads');
   //   const [renderData, setrenderData]= useState(market_data);
   const [orderDirection, setorderDirection] = useState(true);
   const [orderBY, setorderBY] = useState(false);
   let favourites = useSelector(
     state => state.marketReducer.favourites,
-    (l, r) => {
-      console.log('Fav eq l r ----', l, r);
-      let change = false;
-
-      if (l.length + r.length === 0) {
-        change = true;
-      } else if (r.length > 0) {
-        for (let i = 0; i < l.length; i++) {
-          let found = r.findIndex(rItem => rItem.name === l[i].name);
-          if (found > -1) {
-            change = true;
-            if (!change) {
-              break;
-            }
-          }
-        }
-      }
-      console.log('Fav eq change----', change);
-
-      return change;
-    },
+    equalityFnFavs,
   );
 
   const onSort = by_action => {
@@ -128,7 +109,9 @@ const INRView = () => {
     setorderBY(by_action);
   };
 
-  const renderData = useCallback(() => {
+  const renderData = useMemo(() => {
+    // console.log(orderBY);
+    // console.log(orderDirection);
     let arr = market_data;
     switch (orderBY) {
       case 'pair':
@@ -159,7 +142,48 @@ const INRView = () => {
     return arr;
   }, [orderBY, orderDirection, market_data]);
   // market_data = market_data.filter(i=> i.params[0].endsWith("INR"))
+  const renderRowItem = rowData => (
+    <ListItem item={rowData.item} index={rowData.index} />
+  );
+  const renderHiddenRowItem = (rowData, rowMap) => (
+    <View
+      style={{
+        right: 0,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        backgroundColor: Colors.darkGray,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 64,
+      }}>
+      <TouchableOpacity
+        onPress={() => {
+          onStarClicked(rowData.item, favourites);
+          setTimeout(() => {
+            rowMap[rowData.item.id]?.closeRow();
+          }, 1000);
+        }}>
+        {isFavourite(rowData.item, favourites)}
+      </TouchableOpacity>
+    </View>
+  );
 
+  const renderItemLayout = (data, index) => {
+    return {
+      index,
+      length: 30, // itemHeight is a placeholder for your amount
+      offset: index * 30,
+      width: '100%',
+    };
+  };
+
+  const onRowOpen = (rowKey, rowMap) => {
+    setTimeout(() => {
+      rowMap[rowKey]?.closeRow();
+    }, 1000);
+  };
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
       {market_data.length === 0 ? (
@@ -172,59 +196,18 @@ const INRView = () => {
         <SwipeListView
           useFlatList={true}
           initialNumToRender={5}
-          data={renderData()}
+          data={renderData}
           style={{flex: 1}}
-          renderItem={rowData => {
-            //  console.log("bdx",rowData)
-
-            return (
-              // listItem(rowData.item, rowData.index)
-              <ListItem item={rowData.item} index={rowData.index} />
-            );
-          }}
-          renderHiddenItem={(rowData, rowMap) => (
-            <View
-              style={{
-                right: 0,
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                backgroundColor: Colors.darkGray,
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: 64,
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  onStarClicked(rowData.item, favourites);
-                  setTimeout(() => {
-                    rowMap[rowData.item.id]?.closeRow();
-                  }, 1000);
-                }}>
-                {isFavourite(rowData.item, favourites)}
-              </TouchableOpacity>
-            </View>
-          )}
-          onRowOpen={(rowKey, rowMap) => {
-            setTimeout(() => {
-              rowMap[rowKey]?.closeRow();
-            }, 1000);
-          }}
+          renderItem={renderRowItem}
+          renderHiddenItem={renderHiddenRowItem}
+          onRowOpen={onRowOpen}
           rightOpenValue={-64}
           disableRightSwipe
           stopRightSwipe={-64}
           ListHeaderComponent={homeHeaderComp(onSort)}
           stickyHeaderIndices={[0]}
           keyExtractor={item => item.id}
-          getItemLayout={(data, index) => {
-            return {
-              index,
-              length: 30, // itemHeight is a placeholder for your amount
-              offset: index * 30,
-              width: '100%',
-            };
-          }}
+          getItemLayout={renderItemLayout}
           contentContainerStyle={{flexGrow: 1}}
           //  ListEmptyComponent={<ActivityIndicator color={Colors.white} size="large" />}
         />
@@ -232,9 +215,11 @@ const INRView = () => {
     </View>
   );
 };
-const USDTView = () => {
-  console.log('USDTView reloads', count);
-  count++;
+INRView = React.memo(INRView);
+
+let USDTView = () => {
+  // console.log('USDTView reloads', count);
+  // count++;
   let market_data = useSelector(
     state => state.marketReducer.data.filter(i => i.params[0].endsWith('USDT')),
     equalityFnMarket,
@@ -243,27 +228,7 @@ const USDTView = () => {
   const [orderBY, setorderBY] = useState(false);
   let favourites = useSelector(
     state => state.marketReducer.favourites,
-    (l, r) => {
-      console.log('Fav eq l r ----', l, r);
-      let change = false;
-
-      if (l.length + r.length === 0) {
-        change = true;
-      } else if (r.length > 0) {
-        for (let i = 0; i < l.length; i++) {
-          let found = r.findIndex(rItem => rItem.name === l[i].name);
-          if (found > -1) {
-            change = true;
-            if (!change) {
-              break;
-            }
-          }
-        }
-      }
-      console.log('Fav eq change----', change);
-
-      return change;
-    },
+    equalityFnFavs,
   );
   // market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
   // console.log(" USDTViewmarket_data",market_data)
@@ -271,7 +236,7 @@ const USDTView = () => {
     setorderDirection(!orderDirection);
     setorderBY(by_action);
   };
-  const renderData = useCallback(() => {
+  const renderData = useMemo(() => {
     let arr = market_data;
     switch (orderBY) {
       case 'pair':
@@ -301,6 +266,50 @@ const USDTView = () => {
 
     return arr;
   }, [orderBY, orderDirection, market_data]);
+
+  const renderRowItem = rowData => (
+    <ListItem item={rowData.item} index={rowData.index} />
+  );
+  const renderHiddenRowItem = (rowData, rowMap) => (
+    <View
+      style={{
+        right: 0,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        backgroundColor: Colors.darkGray,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 64,
+      }}>
+      <TouchableOpacity
+        onPress={() => {
+          onStarClicked(rowData.item, favourites);
+          setTimeout(() => {
+            rowMap[rowData.item.id]?.closeRow();
+          }, 1000);
+        }}>
+        {isFavourite(rowData.item, favourites)}
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderItemLayout = (data, index) => {
+    return {
+      index,
+      length: 30, // itemHeight is a placeholder for your amount
+      offset: index * 30,
+      width: '100%',
+    };
+  };
+
+  const onRowOpen = (rowKey, rowMap) => {
+    setTimeout(() => {
+      rowMap[rowKey]?.closeRow();
+    }, 1000);
+  };
+
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
       {market_data.length === 0 ? (
@@ -313,45 +322,11 @@ const USDTView = () => {
         <SwipeListView
           useFlatList={true}
           initialNumToRender={2}
-          data={renderData()}
+          data={renderData}
           style={{flex: 1}}
-          renderItem={rowData => {
-            //  console.log("bdx",rowData)
-
-            return (
-              // listItem(rowData.item, rowData.index)
-              <ListItem item={rowData.item} index={rowData.index} />
-            );
-          }}
-          renderHiddenItem={(rowData, rowMap) => (
-            <View
-              style={{
-                right: 0,
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                backgroundColor: Colors.darkGray,
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: 64,
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  onStarClicked(rowData.item, favourites);
-                  setTimeout(() => {
-                    rowMap[rowData.item.id]?.closeRow();
-                  }, 1000);
-                }}>
-                {isFavourite(rowData.item, favourites)}
-              </TouchableOpacity>
-            </View>
-          )}
-          onRowOpen={(rowKey, rowMap) => {
-            setTimeout(() => {
-              rowMap[rowKey]?.closeRow();
-            }, 1000);
-          }}
+          renderItem={renderRowItem}
+          renderHiddenItem={renderHiddenRowItem}
+          onRowOpen={onRowOpen}
           rightOpenValue={-64}
           disableRightSwipe
           stopRightSwipe={-64}
@@ -359,14 +334,7 @@ const USDTView = () => {
           stickyHeaderIndices={[0]}
           keyExtractor={item => item.id}
           contentContainerStyle={{flexGrow: 1}}
-          getItemLayout={(data, index) => {
-            return {
-              index,
-              length: 30, // itemHeight is a placeholder for your amount
-              offset: index * 30,
-              width: '100%',
-            };
-          }}
+          getItemLayout={renderItemLayout}
           // ListEmptyComponent={
           //   <View
           //     style={{
@@ -384,14 +352,18 @@ const USDTView = () => {
   );
 };
 
-const FavouritesTab = () => {
-  console.log('called favstab');
+USDTView = React.memo(USDTView);
+
+let FavouritesTab = () => {
   const market_data = useSelector(
     state => state.marketReducer.data,
     equalityFnMarket,
   );
-  const favourites = useSelector(state => state.marketReducer.favourites);
-  console.log('fav tabs favsssss', favourites);
+  const favourites = useSelector(
+    state => state.marketReducer.favourites,
+    equalityFnFavs,
+  );
+
   let favs = favourites.map(i => {
     // let into =false
     for (let j = 0; j < market_data.length; j++) {
@@ -400,13 +372,14 @@ const FavouritesTab = () => {
       }
     }
   });
+
   const [orderDirection, setorderDirection] = useState(true);
   const [orderBY, setorderBY] = useState(false);
   const onSort = by_action => {
     setorderDirection(!orderDirection);
     setorderBY(by_action);
   };
-  const renderData = useCallback(() => {
+  const renderData = useMemo(() => {
     let arr = favs;
     switch (orderBY) {
       case 'pair':
@@ -433,18 +406,19 @@ const FavouritesTab = () => {
     return arr;
   }, [orderBY, orderDirection, favs]);
 
+  const renderHeaderComp = () =>
+    favourites.length > 0 ? homeHeaderComp(onSort) : null;
+
+  const renderRowItem = rowData => (
+    <ListItem item={rowData.item} index={rowData.index} />
+  );
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
       <SwipeListView
         useFlatList={true}
-        data={renderData()}
+        data={renderData}
         initialNumToRender={7}
-        renderItem={rowData => {
-          return (
-            // listItem(rowData.item, rowData.index)
-            <ListItem item={rowData.item} index={rowData.index} />
-          );
-        }}
+        renderItem={renderRowItem}
         renderHiddenItem={(rowData, rowMap) => (
           <View
             style={{
@@ -481,9 +455,7 @@ const FavouritesTab = () => {
         rightOpenValue={-64}
         disableRightSwipe
         stopRightSwipe={-64}
-        ListHeaderComponent={
-          favourites.length > 0 ? homeHeaderComp(onSort) : <></>
-        }
+        ListHeaderComponent={renderHeaderComp}
         stickyHeaderIndices={[0]}
         keyExtractor={item => item?.params[1]?.l}
         contentContainerStyle={{flex: 1}}
@@ -500,7 +472,9 @@ const FavouritesTab = () => {
     </View>
   );
 };
-const ListItem = ({item, index}) => {
+
+FavouritesTab = React.memo(FavouritesTab);
+let ListItem = ({item, index}) => {
   //   console.log("item",item)
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -615,7 +589,7 @@ const ListItem = ({item, index}) => {
     </TouchableOpacity>
   );
 };
-
+ListItem = React.memo(ListItem);
 const homeHeaderComp = onSort => {
   return (
     <View style={{backgroundColor: Colors.primeBG}}>
@@ -712,7 +686,7 @@ const isFavourite = (item, favs) => {
 };
 
 let Markets = () => {
-  // console.log('reload')
+  // console.log('Markets reload************************************');
   const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -824,11 +798,8 @@ let Markets = () => {
           <View
             style={{flexDirection: 'row', backgroundColor: Colors.darkGray2}}>
             <TouchableOpacity
-              onPress={() =>
-                requestAnimationFrame(() => {
-                  setview(0);
-                })
-              }
+              disabled={view == 0}
+              onPress={() => setview(0)}
               style={{
                 paddingHorizontal: 15,
                 borderBottomWidth: 1,
@@ -840,11 +811,8 @@ let Markets = () => {
               <BPText>Favourites</BPText>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                requestAnimationFrame(() => {
-                  setview(1);
-                })
-              }
+              disabled={view == 1}
+              onPress={() => setview(1)}
               style={{
                 paddingHorizontal: 15,
                 borderBottomWidth: 1,
@@ -856,11 +824,8 @@ let Markets = () => {
               <BPText>INR</BPText>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                requestAnimationFrame(() => {
-                  setview(2);
-                })
-              }
+              disabled={view == 2}
+              onPress={() => setview(2)}
               style={{
                 paddingHorizontal: 15,
                 borderBottomWidth: 1,

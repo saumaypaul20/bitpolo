@@ -1,15 +1,17 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useMemo} from 'react';
 import {
   View,
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
+  Image,
+  Dimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Toolbar from '../../../components/Toolbar/Toolbar';
 import HomeHeaderComp from '../../../components/HomeHeaderComp/HomeHeaderComp';
 import BPText from '../../../common/BPText/BPText';
-import {Colors, Fonts} from '../../../theme';
+import {Colors, Fonts, Images} from '../../../theme';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 import {
   equalityFnMarket,
@@ -17,24 +19,20 @@ import {
 } from '../../../utils/reduxChecker.utils';
 import {useNavigation} from '@react-navigation/native';
 import {getMarketList} from '../../../api/users.api';
-import io from 'socket.io-client';
 import {
-  addMarketData,
-  triggerMarketSocket,
   setActiveTradePair,
   storeIndexPrice,
+  modifyFavs,
 } from '../../../redux/actions/markets.action';
-var pako = require('pako');
-import * as ENDPOINT from '../../../api/constants';
-import {splitIt} from '../../../utils/converters';
 import {
   emitMarketListEvent,
   emitUnsubMarketListEvent,
 } from '../../../api/config.ws';
 import {screenNames} from '../../../routes/screenNames/screenNames';
 import {getIndexPrice} from '../../../api/markets.api';
+import Spacer from '../../../common/Spacer/Spacer';
 
-const ListItem = ({item, type, index}) => {
+let ListItem = ({item, type, index}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   let bool = index % 2 === 0 ? true : false;
@@ -108,31 +106,46 @@ const ListItem = ({item, type, index}) => {
     </TouchableOpacity>
   );
 };
+ListItem = React.memo(ListItem);
 
-const Tab = ({type}) => {
+let Tab = ({type}) => {
   let market_data = useSelector(
     state => state.marketReducer.data,
     equalityFnMarket,
   );
-  console.log('tab makerketdata', market_data);
-  console.log('tab type', type);
-  const [data, setdata] = useState([]);
-  useEffect(() => {
-    if (type === 1) {
-      setdata(market_data.filter(i => !i.params[1].cp.match('-')));
-    } else {
-      setdata(market_data.filter(i => i.params[1].cp.match('-')));
-    }
-  }, [market_data, type]);
-  return data.length > 0 ? (
+
+  // console.log('tab makerketdata', market_data);
+  // console.log('tab type', type);
+
+  // const [data, setdata] = useState([]);
+  // useEffect(() => {
+  //   if (type === 1) {
+  //     setdata(market_data.filter(i => !i.params[1].cp.match('-')));
+  //   } else {
+  //     setdata(market_data.filter(i => i.params[1].cp.match('-')));
+  //   }
+  // }, [market_data, type]);
+
+  const renderItem = useCallback(
+    ({item, index}) => <ListItem item={item} type={type} index={index} />,
+
+    [market_data],
+  );
+
+  const renderData = useMemo(
+    () =>
+      type === 1
+        ? market_data.filter(i => !i.params[1].cp.match('-'))
+        : market_data.filter(i => i.params[1].cp.match('-')),
+    [market_data, type],
+  );
+  return market_data.length > 0 ? (
     <FlatList
-      data={data}
-      renderItem={({item, index}) => (
-        <ListItem item={item} type={type} index={index} />
-      )}
+      data={renderData}
+      renderItem={renderItem}
       keyExtractor={item => item.id}
       initialNumToRender={7}
-      getItemLayout={(data, index) => {
+      getItemLayout={(_, index) => {
         return {
           index,
           length: 30, // itemHeight is a placeholder for your amount
@@ -157,20 +170,29 @@ const Tab = ({type}) => {
   );
 };
 
-const Home = () => {
+Tab = React.memo(Tab);
+
+let Home = () => {
   const [socket, setSocket] = useState(null);
   const [activetab, settab] = useState(1);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [loading, setloading] = useState(true);
-  // let focus = navigation.isFocused()
-  const user = useSelector(state => state.authReducer.auth_attributes);
+
+  const user = useSelector(
+    state => state.authReducer.auth_attributes,
+    (l, r) => {
+      let bool = l.id === r.id;
+
+      return bool;
+    },
+  );
+
   const socketConnected = useSelector(
     state => state.marketReducer.socketConnected,
     shallowEqual,
   );
   const [marketPairs, setmarketPairs] = useState([]);
-  // let market_data = useSelector(state=> state.marketReducer.data, equalityFnMarket)
+
   let index_price = useSelector(
     state => state.marketReducer.index_price,
     equalityFnIndexPrice,
@@ -195,12 +217,14 @@ const Home = () => {
       console.log('getmarkets', res);
 
       if (res.status) {
-        let arr = res.data.data.attributes.filter((i, index) => {
+        let arr = res.data.data.attributes.filter(i => {
           if (i.market_pair === 'INR' || i.market_pair === 'USDT') {
             return i;
           }
         });
         let final = arr.map(i => i.market_name);
+        let favs = arr.filter(i => i.is_favourite);
+        dispatch(modifyFavs(favs));
         setmarketPairs(final);
         setSocket(true);
       }
@@ -208,39 +232,6 @@ const Home = () => {
       //  console.log(e)
     }
   }, []);
-
-  // const startSocket= (marketPairs,socket) => {
-  //     console.log("soceklt mareket_paors",marketPairs)
-  //     // const reduxState = store.getState()
-  //     dispatch(triggerMarketSocket())
-  //     socket.on("connect", function() {
-  //          console.log("connected home")
-
-  //         socket.emit("message", {"id": 1, "method" : "state.subscribe", "params" : marketPairs });
-  //         socket.on("message", function(data) {
-  //             const result = JSON.parse(pako.inflate(data, { to: "string" }));
-  //             // console.log("count-socket",count2);
-  //             // console.log("soclet00000",result);
-  //             // console.log("id",id);
-
-  //             result.id = Math.random().toString()
-  //             // setData([result])
-  //             if(result.params){
-  //                 let pair = result.params[0]
-  //                 if(pair.match("INR")){
-  //                     result.divider= splitIt(result.params[0], "INR")
-  //                 }else if(pair.match("USDT")){
-  //                     result.divider= splitIt(result.params[0], "USDT")
-  //                 }
-  //                 dispatch(addMarketData(result))
-  //             }
-  //         });
-  //     })
-
-  //     socket.on("disconnect", function(){
-  //         console.log("socket disconnected");
-  //     });
-  // }
 
   useEffect(() => {
     // getMarketPairs()
@@ -257,33 +248,12 @@ const Home = () => {
       emitMarketListEvent(marketPairs);
       // }
     }
-    // return () => {
-    //     if(socket) socket.disconnect()
-    // }
 
     return () => {
       // alert('unmounted home');
       emitUnsubMarketListEvent(marketPairs);
     };
   }, [socket, navigation]);
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setloading(false);
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('blur', () => {
-  //     setloading(true);
-
-  //     emitUnsubMarketListEvent(marketPairs);
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
@@ -292,7 +262,18 @@ const Home = () => {
 
         <View style={{flex: 1}}>
           {
-            <View style={{paddingVertical: 8}}>
+            <View style={{}}>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Image
+                  source={Images.banner}
+                  style={{
+                    width: Dimensions.get('window').width,
+                    height: 200,
+                  }}
+                  resizeMode="cover"
+                />
+              </View>
+              <Spacer />
               <HomeHeaderComp />
 
               <View
@@ -304,11 +285,8 @@ const Home = () => {
                   borderColor: Colors.lightWhite,
                 }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    requestAnimationFrame(() => {
-                      settab(1);
-                    })
-                  }
+                  onPress={() => settab(1)}
+                  disabled={activetab == 1}
                   style={{
                     flex: 1,
                     backgroundColor:
@@ -333,11 +311,8 @@ const Home = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() =>
-                    requestAnimationFrame(() => {
-                      settab(2);
-                    })
-                  }
+                  onPress={() => settab(2)}
+                  disabled={activetab == 2}
                   style={{
                     flex: 1,
                     backgroundColor:
@@ -386,5 +361,5 @@ const Home = () => {
     </SafeAreaView>
   );
 };
-
+Home = React.memo(Home);
 export default Home;

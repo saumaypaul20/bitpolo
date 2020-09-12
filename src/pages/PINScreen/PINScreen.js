@@ -2,34 +2,27 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Keyboard, StyleSheet} from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {Container, Content} from 'native-base';
-import BPButton from '../../common/BPButton/BPButton';
-import QueryActions from '../../components/QueryActions/QueryActions';
 import BPTitle from '../../common/BPTitle/BPTitle';
 import BPSubtitle from '../../common/BPSubTitle/BPSubtitle';
 import Toolbar from '../../components/Toolbar/Toolbar';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from '../../theme';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {validateOtp, resendOtp} from '../../api/users.api';
-import {getPublicIP} from '../../utils/apiHeaders.utils';
-import {saveAuthAttributesAction} from '../../redux/actions/auth.actions';
 import {screenNames} from '../../routes/screenNames/screenNames';
 import Storage from '../../utils/storage.utils';
 
 const PINScreen = props => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
   // let email = useSelector(state => state.authReducer.email);
   // let user_id = useSelector(state => state.authReducer.user_id);
   // let ip = useSelector(state=> state.authReducer.ip)
-  let inputref = useRef(null);
-  const [nextScreen, setNextScreen] = useState(
+  const [nextScreen] = useState(
     props?.route?.params?.screen || screenNames.DASHBOARD,
   );
   const [code, setCode] = useState(''); //setting code initial STATE value
   const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
-  const [disabled, setdisabled] = useState(true); //setting code initial STATE value
+  const [, setdisabled] = useState(true); //setting code initial STATE value
   const [isNew, setNew] = useState(props?.route?.params?.type);
   const pinCount = 6;
 

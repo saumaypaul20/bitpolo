@@ -1,56 +1,82 @@
-import React, { useState } from 'react'
-import { View, ActivityIndicator } from 'react-native'
-import BPText from '../../common/BPText/BPText'
-import { Colors } from '../../theme'
-import { useNavigation } from '@react-navigation/native'
-import { useSelector, shallowEqual } from 'react-redux'
-import FlatLists from "../../common/FlatlistComp/FlatList"
-import _ from 'lodash'
-import { equalityFnDepths, equalityFnIndexPrice } from '../../utils/reduxChecker.utils'
+import React, {useState} from 'react';
+import {View, ActivityIndicator} from 'react-native';
+import BPText from '../../common/BPText/BPText';
+import {Colors} from '../../theme';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector, shallowEqual} from 'react-redux';
+import FlatLists from '../../common/FlatlistComp/FlatList';
+import _ from 'lodash';
+import {
+  equalityFnDepths,
+  equalityFnIndexPrice,
+} from '../../utils/reduxChecker.utils';
 
- 
 const MarketBottom = () => {
+  const [lineNumbers] = useState(10);
+  const asksLength = useSelector(
+    state => state.depthSubsReducer.asks.slice(0, lineNumbers).length,
+    shallowEqual,
+  );
+  const bidsLength = useSelector(
+    state => state.depthSubsReducer.bids.slice(0, lineNumbers).length,
+    shallowEqual,
+  );
 
-    //let index_price = useSelector(state => state.marketReducer.index_price, equalityFnIndexPrice)
-    // const depths = useSelector(state=> state.depthSubsReducer.data)
-    const asks = useSelector(state => state.depthSubsReducer.asks, equalityFnDepths)
-    const bids = useSelector(state => state.depthSubsReducer.bids, equalityFnDepths)
-    //const activeTradePair = useSelector(state => state.marketReducer.activeTradePair, shallowEqual)
-    // console.log("depths asks left **********", asks)
-    // console.log("depths bids left **********", bids)
-    //const market_data = useSelector(state => state.marketReducer.data.find(i => i.params[0] === activeTradePair), shallowEqual)
-    const [] = useState(null)
-    const [] = useState(null)
-    const [lineNumbers] = useState(10)
-    const [height] = useState(245)
-    const [] = useState("0")
-  
-     
+  const [] = useState(null);
+  const [] = useState(null);
 
-    return (
-        <View style={{ flexDirection:'row' , alignSelf:'stretch',}}>
-
-            {/* Red Chart 1 */}
-            { <View style={{  alignSelf: 'stretch', flex:1,  }}>
-                
-                {asks?.length > 0 ?
-                     
-                    <FlatLists data={asks} lineNumbers={lineNumbers} type={1}></FlatLists>
-                    : <ActivityIndicator size="large" color={Colors.white} />}
-            </View>
-            }
-     
-
-            { <View style={{  alignSelf: 'stretch', flex:1  }}>
-                {bids?.length > 0 ?
-                    
-                    <FlatLists data={bids} lineNumbers={lineNumbers} type={0}></FlatLists>
-                    : <ActivityIndicator size="large" color={Colors.white} />}
-            </View>
-            }
-             
+  return (
+    <View style={{flexDirection: 'row', alignSelf: 'stretch'}}>
+      {/* Red Chart 1 */}
+      {
+        <View style={{alignSelf: 'stretch', flex: 1}}>
+          {asksLength > 0 ? (
+            <AsksList lineNumbers={lineNumbers} />
+          ) : (
+            <ActivityIndicator size="large" color={Colors.white} />
+          )}
         </View>
-    )
-}
+      }
 
-export default MarketBottom
+      {/* Green Chart 1 */}
+      {
+        <View style={{alignSelf: 'stretch', flex: 1}}>
+          {bidsLength > 0 ? (
+            <BidsList lineNumbers={lineNumbers} />
+          ) : (
+            <ActivityIndicator size="large" color={Colors.white} />
+          )}
+        </View>
+      }
+    </View>
+  );
+};
+
+const BidsList = ({lineNumbers}) => {
+  const bids = useSelector(
+    state => state.depthSubsReducer.bids,
+    equalityFnDepths,
+  );
+  //   console.log(
+  //     'BidsList cahnged **********************************************',
+  //   );
+  return (
+    <FlatLists inMarketPage data={bids} lineNumbers={lineNumbers} type={0} />
+  );
+};
+
+const AsksList = ({lineNumbers}) => {
+  const asks = useSelector(
+    state => state.depthSubsReducer.asks,
+    equalityFnDepths,
+  );
+
+  //   console.log(
+  //     'AsksList cahnged **********************************************',
+  //   );
+  return (
+    <FlatLists inMarketPage data={asks} lineNumbers={lineNumbers} type={1} />
+  );
+};
+
+export default MarketBottom;

@@ -9,17 +9,23 @@ import {
   setordertabprice,
   setordertab,
 } from '../../redux/actions/ordertab.actions';
+import {useNavigation} from '@react-navigation/native';
 const Card = props => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => {
         dispatch(setordertabamount(props.item.a.toFixed(2)));
         dispatch(setordertabprice(props.item.p.toFixed(2)));
         if (props.type === 1) {
-          dispatch(setordertab(1));
-        } else {
           dispatch(setordertab(2));
+        } else {
+          dispatch(setordertab(1));
+        }
+
+        if (props.inMarketPage) {
+          navigation.goBack();
         }
       }}
       style={{
@@ -85,7 +91,13 @@ class App extends Component {
         {this.state.data.length > 0 ? (
           <FlatList
             data={this.state.data}
-            renderItem={({item}) => <Card item={item} type={this.props.type} />}
+            renderItem={({item}) => (
+              <Card
+                item={item}
+                type={this.props.type}
+                inMarketPage={this.props.inMarketPage}
+              />
+            )}
             //Setting the number of column
             getItemLayout={(data, index) => {
               return {

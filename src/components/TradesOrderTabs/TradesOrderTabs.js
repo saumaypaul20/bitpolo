@@ -1,12 +1,11 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {
   View,
-  Image,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import {Colors, Images, Fonts} from '../../theme';
+import {Colors, Fonts} from '../../theme';
 import BPText from '../../common/BPText/BPText';
 import PickerComp from '../PickerComp/PickerComp';
 import InputCounter from '../InputCounter/InputCounter';
@@ -15,7 +14,6 @@ import BPButton from '../../common/BPButton/BPButton';
 import {useSelector, shallowEqual, useDispatch} from 'react-redux';
 import {splitIt} from '../../utils/converters';
 import {getMatchingMarketList} from '../../api/markets.api';
-import {cos} from 'react-native-reanimated';
 import {
   getAuthToken,
   getInfoAuthToken,
@@ -60,29 +58,39 @@ const Tab = ({label, onPress, active, type}) => {
   );
 };
 
-const TradesOrderTabs = () => {
+const orderItems = [
+  {label: 'Limit Order', value: 'limit'},
+  {label: 'Market Order', value: 'market'},
+];
+
+let TradesOrderTabs = () => {
   //alert("ordertabs")
+
   const dispatch = useDispatch();
-  const user = useSelector(state => state.authReducer.auth_attributes);
-  const currentordertab = useSelector(state => state.ordertab.tab);
-  const currentprice = useSelector(state => state.ordertab.price);
-  const currentamount = useSelector(state => state.ordertab.amount);
-  const currenttotal = useSelector(state => state.ordertab.total);
-  // const [tab, settab] = useState(2);
-  const [inramount, setinramount] = useState(0);
-  const [cryptoamount, setcryptoamount] = useState(0);
-  const [total, settotal] = useState(0);
+  const user = useSelector(
+    state => state.authReducer.auth_attributes,
+    (l, r) => l.id == r.id,
+  );
+  const currentordertab = useSelector(
+    state => state.ordertab.tab,
+    shallowEqual,
+  );
+  const currentprice = useSelector(state => state.ordertab.price, shallowEqual);
+  const currentamount = useSelector(
+    state => state.ordertab.amount,
+    shallowEqual,
+  );
+  const currenttotal = useSelector(state => state.ordertab.total, shallowEqual);
+
   const [range, setrange] = useState(null);
   const [tradeDetail, setTradeDetail] = useState(null);
   const [parts] = useState([25, 50, 75, 100]);
+  const [posting, setposting] = useState(false);
   const [pickerOrderVal, setPickerOrderVal] = useState({
     label: 'Limit Order',
     value: 'limit',
   });
-  const orderItems = [
-    {label: 'Limit Order', value: 'limit'},
-    {label: 'Market Order', value: 'market'},
-  ];
+
   const activeTradePair = useSelector(
     state => state.marketReducer.activeTradePair,
     shallowEqual,
@@ -93,15 +101,42 @@ const TradesOrderTabs = () => {
     shallowEqual,
   );
 
-  // const currencies = useSelector(state => state.marketReducer.currencies.find(i => i.value === activeTradePair), shallowEqual)
-
   const market_data = useSelector(
     state =>
       state.marketReducer.data.find(i => i.params[0] === activeTradePair),
-    shallowEqual,
+    l => {
+      let change = false;
+      if (l) {
+        change = true;
+      }
+      return change;
+    },
   );
 
+  const getWalletAsset = useCallback(async () => {
+    let toPassHeader = {
+      Authorization: getAuthToken(),
+      info: getInfoAuthToken(),
+      device: getDeviceId(),
+    };
+    let assetsResult = await getAsset(toPassHeader);
+    if (assetsResult.status) {
+      let balanceResult = await getWalletBalance(toPassHeader);
+
+      if (balanceResult.status) {
+        dispatch(fetchedWalletBalance(balanceResult.data));
+        dispatch(fetchedWalletAssets(assetsResult.data));
+        // getBanksList()
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    getWalletAsset();
+  }, []);
+
   const getMatchingMarket = async () => {
+    // alert('indisde getmatch');
     let res = await getMatchingMarketList();
     //console.log("getMatchingMarketList", JSON.stringify(res));
     if (res.status) {
@@ -129,17 +164,18 @@ const TradesOrderTabs = () => {
   }, [activeTradePair]);
 
   useEffect(() => {
-    if (market_data && currentprice === 0) {
+    // alert('tradeDetail');
+    if (currentprice === 0) {
       if (tradeDetail) {
         setPrice(
           parseFloat(market_data.params[1].l).toFixed(tradeDetail?.money_prec),
         );
       }
     }
-  }, [tradeDetail, market_data]);
+  }, [tradeDetail]);
 
   const setTotal = t => {
-    settotal(t.toString());
+    // settotal(t.toString());
     dispatch(setordertabtotal(t.toString()));
   };
 
@@ -148,13 +184,16 @@ const TradesOrderTabs = () => {
       parseFloat(currenttotal) === 0 ||
       parseFloat(currentamount) === 0 ||
       parseFloat(currenttotal) === 0 ||
-      parseFloat(currenttotal) < tradeDetail?.min_amount
+      parseFloat(balance?.available.balance) >=
+        parseFloat(currenttotal) <
+        tradeDetail?.min_amount
     ) {
       return true;
     }
     return false;
   };
   const onsubmit = async () => {
+    setposting(true);
     let payload = {
       data: {
         attributes: {
@@ -177,14 +216,16 @@ const TradesOrderTabs = () => {
     if (res.status) {
       console.log(res.data);
       alert('Success!');
+      setposting(false);
       //setcryptoamount(0)
     } else {
+      setposting(false);
       alert(res.data.data.attributes.message);
     }
   };
   const setPrice = t => {
     let amt = currentamount ? currentamount : 0;
-    setinramount(t);
+    // setinramount(t);
     dispatch(setordertabprice(t));
     setTotal(parseFloat(t * amt).toFixed(tradeDetail?.money_prec));
     dispatch(
@@ -196,15 +237,14 @@ const TradesOrderTabs = () => {
     if (type == 'inramount') {
       let amt = parseFloat(t);
       //console.log("changeAmount", amt)
-      setinramount(amt);
+      // setinramount(amt);
       dispatch(setordertabprice(amt));
       let tt = amt * currentamount;
       //console.log("changeAmount", tt)
       setTotal(tt);
     } else if (type == 'cryptoamount') {
       // let crpt = parseFloat(t).toFixed(tradeDetail?.stock_prec)
-      let crpt = parseFloat(t);
-      setcryptoamount(t);
+      // setcryptoamount(t);
       dispatch(setordertabamount(t));
       // let nt = (t * inramount).toFixed(tradeDetail?.money_prec)
       let nt = t * currentprice;
@@ -216,22 +256,22 @@ const TradesOrderTabs = () => {
       let c = t / parseFloat(currentprice);
       c = parseFloat(c);
       // alert(c);
-      setcryptoamount(c);
+      // setcryptoamount(c);
       dispatch(setordertabamount(c.toFixed(tradeDetail?.stock_prec)));
     }
   };
 
-  const letItBlur = t => {
-    if (t) setTotal(t.toFixed(tradeDetail?.money_prec));
-  };
+  // const letItBlur = t => {
+  //   if (t) setTotal(t.toFixed(tradeDetail?.money_prec));
+  // };
 
   const onIncreaseINR = () => {
     let amt = currentprice ? currentprice : 0;
-    setinramount(
-      (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.money_prec))
-        .toFixed(tradeDetail?.money_prec)
-        .toString(),
-    );
+    // setinramount(
+    //   (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.money_prec))
+    //     .toFixed(tradeDetail?.money_prec)
+    //     .toString(),
+    // );
 
     dispatch(
       setordertabprice(
@@ -248,11 +288,11 @@ const TradesOrderTabs = () => {
       return;
     }
     let amt = currentprice ? currentprice : 0;
-    setinramount(
-      (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.money_prec))
-        .toFixed(tradeDetail?.money_prec)
-        .toString(),
-    );
+    // setinramount(
+    //   (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.money_prec))
+    //     .toFixed(tradeDetail?.money_prec)
+    //     .toString(),
+    // );
     dispatch(
       setordertabprice(
         (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.money_prec))
@@ -266,11 +306,11 @@ const TradesOrderTabs = () => {
   };
   const onIncreaseCRYPTO = () => {
     let amt = currentamount ? currentamount : 0;
-    setcryptoamount(
-      (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
-        .toFixed(tradeDetail?.stock_prec)
-        .toString(),
-    );
+    // setcryptoamount(
+    //   (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
+    //     .toFixed(tradeDetail?.stock_prec)
+    //     .toString(),
+    // );
 
     dispatch(
       setordertabamount(
@@ -287,11 +327,11 @@ const TradesOrderTabs = () => {
       return;
     }
     let amt = currentamount ? currentamount : 0;
-    setcryptoamount(
-      (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
-        .toFixed(tradeDetail?.stock_prec)
-        .toString(),
-    );
+    // setcryptoamount(
+    //   (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
+    //     .toFixed(tradeDetail?.stock_prec)
+    //     .toString(),
+    // );
     dispatch(
       setordertabamount(
         (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
@@ -304,11 +344,11 @@ const TradesOrderTabs = () => {
   };
   const onIncreaseTOTAL = () => {
     let amt = currenttotal ? currenttotal : 0;
-    settotal(
-      (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
-        .toFixed(tradeDetail?.stock_prec)
-        .toString(),
-    );
+    // settotal(
+    //   (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
+    //     .toFixed(tradeDetail?.stock_prec)
+    //     .toString(),
+    // );
     dispatch(
       setordertabtotal(
         (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
@@ -322,11 +362,11 @@ const TradesOrderTabs = () => {
       return;
     }
     let amt = currenttotal ? currenttotal : 0;
-    settotal(
-      (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
-        .toFixed(tradeDetail?.stock_prec)
-        .toString(),
-    );
+    // settotal(
+    //   (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
+    //     .toFixed(tradeDetail?.stock_prec)
+    //     .toString(),
+    // );
     dispatch(
       setordertabtotal(
         (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
@@ -336,28 +376,13 @@ const TradesOrderTabs = () => {
     );
   };
 
-  const getWalletAsset = useCallback(async () => {
-    let toPassHeader = {
-      Authorization: getAuthToken(),
-      info: getInfoAuthToken(),
-      device: getDeviceId(),
-    };
-    let assetsResult = await getAsset(toPassHeader);
-    if (assetsResult.status) {
-      let balanceResult = await getWalletBalance(toPassHeader);
-
-      if (balanceResult.status) {
-        dispatch(fetchedWalletBalance(balanceResult.data));
-        dispatch(fetchedWalletAssets(assetsResult.data));
-        // getBanksList()
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    getWalletAsset();
-  }, []);
-
+  const onpressrange = i => {
+    setrange(i);
+    let t = (i / 100) * balance?.available.balance;
+    t = parseFloat(t);
+    setordertabtotal(t);
+    changeAmount(t, 'total');
+  };
   return !tradeDetail && !market_data ? (
     <View
       style={{
@@ -476,7 +501,7 @@ const TradesOrderTabs = () => {
             return (
               <TouchableOpacity
                 key={index.toString()}
-                onPress={() => setrange(i)}>
+                onPress={() => onpressrange(i)}>
                 <BPText
                   style={[
                     styles.percentages,
@@ -560,6 +585,7 @@ const TradesOrderTabs = () => {
             width="auto"
             onPress={() => onsubmit()}
             disabled={isDisabled()}
+            loading={posting}
           />
         </View>
       </View>
@@ -578,5 +604,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+TradesOrderTabs = React.memo(TradesOrderTabs);
+// TradesOrderTabs.whyDidYouRender = true;
 
 export default TradesOrderTabs;

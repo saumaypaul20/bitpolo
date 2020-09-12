@@ -3,7 +3,8 @@ let eq = 0;
 let depths = 0;
 let d_reloads = 0;
 export const equalityFnMarket = (l, r) => {
-  // console.log("inside eqFn",l,r);
+  // l = old, r = new
+  // console.log('inside eqFn', l, r);
   eq++;
 
   //console.log("eq2 called", eq)
@@ -12,6 +13,7 @@ export const equalityFnMarket = (l, r) => {
     for (let i = 0; i < l.length; i++) {
       let found = r.findIndex(rItem => rItem.params[0] === l[i].params[0]);
       if (found > -1) {
+        console.log();
         change = _.isEqual(l[i].params[1], r[found].params[1]);
         if (!change) {
           break;
@@ -19,7 +21,9 @@ export const equalityFnMarket = (l, r) => {
       }
     }
   }
-  console.log('CHANGE2----', change);
+  if (!change) {
+    // console.log('CHANGE2----', change);
+  }
 
   return change;
 };
@@ -45,12 +49,12 @@ export const equalityFnDepths = (l, r) => {
 
     //   }
   }
-  //console.log("depths cahange eq fn----", change);
   if (!change) {
-    console.log(
-      'depth reloads count))))))))))))))))))))))))))))))))))))))))))))))))))',
-      d_reloads,
-    );
+    // console.log('depths cahange eq fn----', change);
+    // console.log(
+    //   // 'depth reloads count))))))))))))))))))))))))))))))))))))))))))))))))))',
+    //   d_reloads,
+    // );
     d_reloads++;
   }
   return change;
@@ -60,7 +64,7 @@ export const equalityFnIndexPrice = (l, r) => {
   let change = false;
   if (r.length > 0) {
     for (let i = 0; i < l.length; i++) {
-      let found = r.findIndex(rItem => rItem.amout === l[i].amount);
+      let found = r.findIndex(rItem => rItem.amount === l[i].amount);
       if (found > -1) {
         change = _.isEqual(l[i], r[found]);
         if (!change) {
@@ -71,6 +75,41 @@ export const equalityFnIndexPrice = (l, r) => {
   }
   return change;
 };
+export const equalityFnFavs = (l, r) => {
+  // console.log('Fav eq l r ----', l, r);
+
+  // return _(x)
+  //   .differenceWith(y, _.isEqual)
+  //   .isEmpty();
+
+  let change = false;
+  if (r.length > 0) {
+    if (JSON.stringify(l) === JSON.stringify(r)) {
+      //arrays are equal
+      change = true;
+    }
+  }
+  return change;
+  // let change = false;
+  // let old = _.cloneDeep(l);
+  // let newitems = r;
+
+  // if (r.length > 0) {
+  //   for (let i = 0; i < l.length; i++) {
+  //     let found = r.findIndex(rItem => rItem.name === l[i].name);
+  //     if (found > -1) {
+  //       change = true;
+  //       if (!change) {
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
+  // // console.log('Fav eq change----', change);
+
+  // return change;
+};
+
 export const equalityFnBankslist = (l, r) => {
   let change = false;
   if (r.length > 0) {

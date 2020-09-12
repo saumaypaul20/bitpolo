@@ -35,7 +35,7 @@ export const startSocket = () => {
     // }, 3000);
 
     socket.on('message', function(data) {
-      console.log('pako data', data);
+      // console.log('pako data', data);
       let result;
       let state = store.getState();
       if (data != 'pong') {
@@ -44,13 +44,13 @@ export const startSocket = () => {
       } else {
         result = data;
       }
-      console.log('socket', result);
+      // console.log('socket', result);
 
       // Event handlers
       switch (result.method) {
         case 'state.update':
           // console.log("state_update res====~$~$~$~$~$",state_update)
-          state_update++;
+          // state_update++;
           if (result.params) {
             let pair = result.params[0];
             if (pair.match('INR')) {

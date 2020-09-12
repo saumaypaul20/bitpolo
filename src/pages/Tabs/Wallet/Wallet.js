@@ -30,6 +30,7 @@ import {getIndexPrice} from '../../../api/markets.api';
 import {storeIndexPrice} from '../../../redux/actions/markets.action';
 
 import _ from 'lodash';
+import {setordertab} from '../../../redux/actions/ordertab.actions';
 
 const rightEl = val => {
   return <BPText>{val}</BPText>;
@@ -49,6 +50,7 @@ const Wallet = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [assets, setassets] = useState([]);
   const [balance, setbalance] = useState(null);
+  const [order, setorder] = useState(false);
 
   let index_price = useSelector(
     state => state.marketReducer.index_price,
@@ -70,8 +72,9 @@ const Wallet = () => {
 
   const sortByAlpha = () => {
     console.log('soon');
+    setorder(!order);
     //  alert(JSON.stringify(assets))
-    let arr = _.orderBy(assets, ['asset_name'], ['asc']);
+    let arr = _.orderBy(assets, ['asset_name'], [!order ? 'asc' : 'desc']);
     setassets(arr);
   };
 
@@ -205,7 +208,9 @@ const Wallet = () => {
                   image_size={13}
                   disabled={assets.length === 0}
                   onPress={() =>
-                    navigation.navigate(screenNames.WALLET_HISTORY)
+                    navigation.navigate(screenNames.WALLET_HISTORY, {
+                      defaultview: 1,
+                    })
                   }
                 />
               </View>
