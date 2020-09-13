@@ -30,6 +30,8 @@ import {
   setordertabprice,
   setordertabtotal,
   setordertabamount,
+  setordermoneyprec,
+  setorderstockprec,
 } from '../../redux/actions/ordertab.actions';
 const divideIt = i => {
   let divider = {};
@@ -153,7 +155,11 @@ let TradesOrderTabs = () => {
             'getMatchingMarketList1',
             i[tt].filter(key => key.name == activeTradePair),
           );
+          let tdetail = i[tt].filter(key => key.name == activeTradePair)[0];
           setTradeDetail(i[tt].filter(key => key.name == activeTradePair)[0]);
+          // alert(JSON.stringify(tdetail));
+          dispatch(setordermoneyprec(tdetail.money_prec));
+          dispatch(setorderstockprec(tdetail.stock_prec));
         }
       });
     }
@@ -167,9 +173,13 @@ let TradesOrderTabs = () => {
     // alert('tradeDetail');
     if (currentprice === 0) {
       if (tradeDetail) {
-        setPrice(
-          parseFloat(market_data.params[1].l).toFixed(tradeDetail?.money_prec),
+        // setPrice(
+        //   parseFloat(market_data.params[1].l).toFixed(tradeDetail?.money_prec),
+        // );
+        let t = parseFloat(market_data.params[1].l).toFixed(
+          tradeDetail?.money_prec,
         );
+        dispatch(setordertabprice(t));
       }
     }
   }, [tradeDetail]);
@@ -241,7 +251,7 @@ let TradesOrderTabs = () => {
       dispatch(setordertabprice(amt));
       let tt = amt * currentamount;
       //console.log("changeAmount", tt)
-      setTotal(tt);
+      // setTotal(tt);
     } else if (type == 'cryptoamount') {
       // let crpt = parseFloat(t).toFixed(tradeDetail?.stock_prec)
       // setcryptoamount(t);
@@ -443,7 +453,7 @@ let TradesOrderTabs = () => {
           label={'Amount in INR'}
           disabled={false}
           onInputChange={t => dispatch(setordertabprice(t))}
-          validate={() => changeAmount(currentprice, 'inramount')}
+          // validate={() => changeAmount(currentprice, 'inramount')}
           input={currentprice}
           onIncrease={onIncreaseINR}
           onDecrease={onDecreaseINR}

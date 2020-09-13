@@ -5,6 +5,8 @@ const init_state = {
   price: 0,
   amount: 0,
   total: 0,
+  money_prec: null,
+  stock_prec: null,
 };
 
 const ordertab = (state = init_state, action) => {
@@ -20,6 +22,9 @@ const ordertab = (state = init_state, action) => {
         ...state,
 
         amount: action.payload,
+        total: parseFloat(state.price * action.payload).toFixed(
+          state.money_prec,
+        ),
       };
       break;
     case TYPES.SET_ORDER_TAB_PRICE:
@@ -27,6 +32,9 @@ const ordertab = (state = init_state, action) => {
         ...state,
 
         price: action.payload,
+        total: parseFloat(state.amount * action.payload).toFixed(
+          state.money_prec,
+        ),
       };
       break;
     case TYPES.SET_ORDER_TAB_TOTAL:
@@ -34,6 +42,23 @@ const ordertab = (state = init_state, action) => {
         ...state,
 
         total: action.payload,
+        amount: parseFloat(action.payload / state.price).toFixed(
+          state.stock_prec,
+        ),
+      };
+      break;
+    case TYPES.SET_ORDER_MONEY_PREC:
+      state = {
+        ...state,
+
+        money_prec: action.payload,
+      };
+      break;
+    case TYPES.SET_ORDER_STOCK_PREC:
+      state = {
+        ...state,
+
+        stock_prec: action.payload,
       };
       break;
 

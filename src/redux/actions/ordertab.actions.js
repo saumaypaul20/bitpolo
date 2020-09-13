@@ -24,3 +24,15 @@ export const setordertabtotal = val => {
     payload: val,
   };
 };
+export const setordermoneyprec = val => {
+  return {
+    type: TYPES.SET_ORDER_MONEY_PREC,
+    payload: val,
+  };
+};
+export const setorderstockprec = val => {
+  return {
+    type: TYPES.SET_ORDER_STOCK_PREC,
+    payload: val,
+  };
+};

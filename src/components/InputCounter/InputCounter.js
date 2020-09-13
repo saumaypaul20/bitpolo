@@ -37,7 +37,7 @@ const InputCounter = ({
         placeholderTextColor={Colors.white}
         value={input}
         onChangeText={text => onInputChange(text)}
-        onBlur={e => validate(e.nativeEvent.text)}
+        // onBlur={e => validate(e.nativeEvent.text)}
         // onBlur={(event)=> onBlurit ? onBlurit(event.nativeEvent.text) : false }
         keyboardType="phone-pad"
         style={{
