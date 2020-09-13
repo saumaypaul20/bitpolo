@@ -14,6 +14,12 @@ import BPButton from '../../../../../common/BPButton/BPButton';
 import {useNavigation} from '@react-navigation/native';
 import {addBankAccount} from '../../../../../api/payments.api';
 import {useSelector, shallowEqual} from 'react-redux';
+import {generateOtp} from '../../../../../api/users.api';
+import {
+  getAuthToken,
+  getInfoAuthToken,
+  getDeviceId,
+} from '../../../../../utils/apiHeaders.utils';
 
 const IMPS = () => {
   const navigation = useNavigation();
@@ -70,15 +76,31 @@ const IMPS = () => {
 
     handleModal();
     if (!user.attributes.google_auth) {
-      navigation.navigate(screenNames.OTP_SCREEN, {
-        screen: screenNames.IMPS,
-        type: 'add-bank',
-        body: body,
-      });
+      let body1 = {
+        lang: 'en',
+        data: {
+          id: user.id,
+          attributes: {type: 'bank-details'},
+        },
+      };
+      let toPassHeader = {
+        Authorization: getAuthToken(),
+        info: getInfoAuthToken(),
+        device: getDeviceId(),
+      };
+
+      let res = await generateOtp(body1, toPassHeader);
+      if (res.status) {
+        navigation.navigate(screenNames.OTP_SCREEN, {
+          screen: screenNames.IMPS,
+          type: 'bank-details',
+          body: body,
+        });
+      }
     } else {
       navigation.navigate(screenNames.GOOGLE_VERIFICATION_CODE, {
         screen: screenNames.IMPS,
-        type: 'add-bank',
+        type: 'bank-details',
         body: body,
       });
     }

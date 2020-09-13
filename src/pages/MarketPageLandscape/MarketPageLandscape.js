@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {
-  Text,
   View,
   Image,
   TouchableOpacity,
@@ -10,13 +9,10 @@ import {
   Dimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Container} from 'native-base';
+import {Icon} from 'native-base';
 import {Colors, Images} from '../../theme';
-import PickerComp from '../../components/PickerComp/PickerComp';
 // import { getAuthToken, getInfoAuthToken, getDeviceId } from '../../../utils/apiHeaders.utils'
 import {
-  emitDepthSubscribeEvent,
-  emitDepthUnsubscribeEvent,
   emitKlineSubscribeEvent,
   emitKlineUnsubscribeEvent,
 } from '../../api/config.ws';
@@ -29,19 +25,17 @@ import {
   storeCurrencies,
   setActiveTradePair,
 } from '../../redux/actions/markets.action';
-import {addDepthSubs} from '../../redux/actions/depthSubs.action';
 import {useNavigation} from '@react-navigation/native';
-import {screenNames} from '../../routes/screenNames/screenNames';
 import BPText from '../../common/BPText/BPText';
 import TradeChart from '../../components/AreaChart/TradeChart';
-import MarketBottom from '../../components/MarketBottom/MarketBottom';
-import {addKlineData, emptyKlineData} from '../../redux/actions/kline.actions';
 import {
   equalityFnIndexPrice,
   equalityFnMarket,
+  equalityFnFavs,
 } from '../../utils/reduxChecker.utils';
 import DepthChart from '../../components/AreaChart/DepthChart';
 import TimeComp from '../../components/TimeComp/TimeComp';
+import Modal from 'react-native-modal';
 
 const DEV_HEIGHT = Dimensions.get('window').height;
 const DEV_WIDTH = Dimensions.get('window').width;
@@ -66,35 +60,6 @@ const HeaderComp = () => {
       state.marketReducer.currencies.find(i => i.value === activeTradePair),
     shallowEqual,
   );
-
-  const currentMarketPrice = useCallback(() => {
-    //let found = market_data
-    //console.log("ABCD#####", found)
-    if (found && index_price) {
-      return (
-        <BPText
-          style={{
-            color:
-              parseFloat(found.params[1].cp) > -1
-                ? Colors.lightGreen
-                : Colors.red,
-            padding: 5,
-          }}>
-          {`${
-            found?.divider.b === 'USDT'
-              ? (
-                  parseFloat(found?.params[1]?.l) *
-                  index_price.find(i => i.asset === 'USDT').amount
-                ).toFixed(2)
-              : (
-                  parseFloat(found?.params[1]?.l) /
-                  index_price.find(i => i.asset === 'USDT').amount
-                ).toFixed(2)
-          }`}
-        </BPText>
-      );
-    }
-  }, [found]);
 
   return found && activecurrency ? (
     <View style={{flex: 1, justifyContent: 'center'}}>
@@ -173,15 +138,22 @@ const MarketPageLandscape = () => {
     state => state.marketReducer.activeTradePair,
     shallowEqual,
   );
+
+  let favourites = useSelector(
+    state => state.marketReducer.favourites,
+    equalityFnFavs,
+  );
+  // alert(JSON.stringify(favourites));
   // const market_data = useSelector(state=> state.marketReducer.data.filter(i=> i.params[0] === activeTradePair), equalityFnMarket)
   // let found = market_data.find(i=> i.params[0] === activeTradePair)
 
   // // let user = useSelector(state=> state.authReducer.auth_attributes, shallowEqual);
   // console.log("market_data in trades",market_data)
-  const [currencyVal, setCurrency] = useState(activeTradePair);
+  const [currencyVal] = useState(activeTradePair);
   const [Lcurrencies, setLcurrencies] = useState(currencies);
   const [loading, setloading] = useState(true);
   const [view, setview] = useState(1);
+  const [showfavmodal, setfavmodal] = useState(false);
 
   const callListMarket = async () => {
     let res = await getMatchingMarketList();
@@ -379,7 +351,9 @@ const MarketPageLandscape = () => {
                     flexDirection: 'row',
                     width: '100%',
                   }}>
-                  <TouchableOpacity style={{marginHorizontal: 22}}>
+                  <TouchableOpacity
+                    onPress={() => setfavmodal(true)}
+                    style={{marginHorizontal: 22}}>
                     <Image
                       source={Images.see_favs}
                       style={styles.headerIconStyles}
@@ -421,6 +395,73 @@ const MarketPageLandscape = () => {
           </View>
         </View>
       </View>
+
+      <Modal
+        isVisible={showfavmodal}
+        onBackButtonPress={() => setfavmodal()}
+        onBackdropPress={() => setfavmodal()}
+        animationOut={'slideOutUp'}
+        animationIn={'slideInDown'}
+        style={{
+          flex: 1,
+          margin: 0,
+          marginVertical: 16,
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+        }}>
+        <View
+          style={{
+            backgroundColor: Colors.darkGray,
+
+            alignSelf: 'stretch',
+            transform: [{rotate: '90deg'}],
+            height: DEV_WIDTH,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              backgroundColor: Colors.darkGray2,
+              paddingVertical: 18,
+              paddingHorizontal: 18,
+            }}>
+            <TouchableOpacity>
+              <Icon
+                name="search"
+                type="FontAwesome5"
+                style={{color: Colors.white, fontSize: 26}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setfavmodal(false)}>
+              <BPText style={{fontSize: 20}}>Cancel</BPText>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{padding: 10, backgroundColor: Colors.darkGray3}}>
+            <BPText>Favourites</BPText>
+          </View>
+          <View style={{paddingVertical: 10, paddingHorizontal: 18}}>
+            {favourites.map((i, index) => (
+              <TouchableOpacity
+                key={index.toString()}
+                onPress={() => {
+                  let val = i.stock + i.money;
+                  if (val !== activeTradePair) {
+                    dispatch(setActiveTradePair(val));
+                    setloading(true);
+                  }
+                  setfavmodal(false);
+                }}
+                style={{paddingTop: 8}}>
+                <BPText style={{fontSize: 18}}>
+                  {i.stock}/{i.money}
+                </BPText>
+              </TouchableOpacity>
+            ))}
+            {/* <BPText style={{fontSize: 18}}>BDX/ETH</BPText> */}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

@@ -173,7 +173,7 @@ export const validateOtp = async payload => {
     console.log(payload);
     if (!payload) reject({msg: 'No payload'});
 
-    let headers = {device: getDeviceId()};
+    let headers = {device: await getDeviceId()};
 
     console.log(payload);
 
@@ -193,7 +193,7 @@ export const validateOtp = async payload => {
       headers,
     );
     // alert(JSON.stringify(res));
-    console.log(res);
+    console.log('validate email otp', res);
     if (!res?.responseBody?.errors) {
       resolve({status: true, data: res.responseBody});
     } else {

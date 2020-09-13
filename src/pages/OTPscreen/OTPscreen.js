@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Keyboard, StyleSheet} from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {Container, Content} from 'native-base';
@@ -10,12 +10,21 @@ import Toolbar from '../../components/Toolbar/Toolbar';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from '../../theme';
 import {useSelector, useDispatch} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
-import {validateOtp, resendOtp} from '../../api/users.api';
-import {getPublicIP} from '../../utils/apiHeaders.utils';
+import {useNavigation, StackActions} from '@react-navigation/native';
+import {validateOtp, resendOtp, getGeolocation} from '../../api/users.api';
+import {
+  getPublicIP,
+  getAuthToken,
+  getInfoAuthToken,
+  getDeviceId,
+} from '../../utils/apiHeaders.utils';
 import {saveAuthAttributesAction} from '../../redux/actions/auth.actions';
 import {screenNames} from '../../routes/screenNames/screenNames';
 import Storage from '../../utils/storage.utils';
+import DeviceInfo from 'react-native-device-info';
+import {addBankAccount} from '../../api/payments.api';
+import {changeUserPassword} from '../../api/security.api';
+import {createWithdrawAddress, withdraw} from '../../api/wallet.api';
 
 const OTPscreen = props => {
   const dispatch = useDispatch();
@@ -26,6 +35,7 @@ const OTPscreen = props => {
 
   const [code, setCode] = useState(''); //setting code initial STATE value
   const [disabled, setdisabled] = useState(true); //setting code initial STATE value
+  const [geo, setgeo] = useState(null); //setting code initial STATE value
 
   const pinCount = 6;
 
@@ -47,30 +57,22 @@ const OTPscreen = props => {
       return;
     }
 
-    let payload = {
-      id: user_id || props.data.data.id,
-      attributes: {
-        is_browser: false,
-        is_mobile: true,
-        ip: ip,
-        country: 'India',
-        otp: `BEL-${code}`,
-      },
-    };
-    // alert(JSON.stringify(payload));
-    let res = await validateOtp(payload);
-    console.log(res);
-    // alert(JSON.stringify(res));
-
-    if (res.status) {
-      loginFlow(res, email);
-      setdisabled(false);
-    } else {
-      // alert("PIN code doesn't match");
-      alert(res.data.data.attributes.message);
-      setCode('');
-      setdisabled(false);
-      return;
+    switch (props.route.params.type) {
+      case 'login':
+        loginVerfivationFlow();
+        break;
+      case 'bank-details':
+        addBankFlow();
+        break;
+      case 'withdraw address':
+        withdrawAddress();
+        break;
+      case 'withdraw confirmation':
+        withdrawConfirmation();
+        break;
+      default:
+        // changeUserPasswordFlow();
+        break;
     }
   };
 
@@ -86,11 +88,200 @@ const OTPscreen = props => {
     return;
   };
 
+  const loginVerfivationFlow = async () => {
+    if (props.route.params.screen) {
+      navigation.dispatch(StackActions.pop(2));
+    } else {
+      let payload = {
+        id: props.route.params.data.id,
+        attributes: {
+          browser: await DeviceInfo.getModel(),
+          ip: await getPublicIP(),
+          is_browser: false,
+          is_mobile: true,
+          is_app: true,
+          os: await DeviceInfo.getSystemName(),
+          os_byte: await DeviceInfo.getSystemVersion(),
+
+          country: geo.country || 'India',
+          city: geo.city,
+          region: geo.region,
+          otp: `BEL-${code}`,
+        },
+      };
+      try {
+        let res = await validateOtp(payload);
+        console.log(res);
+        if (res.status) {
+          let res_data = res.data.data;
+          res_data.email = email;
+          dispatch(saveAuthAttributesAction(res_data));
+          await Storage.set('login', res_data);
+          navigation.navigate(screenNames.PINSCREEN, {
+            type: true,
+            screen: screenNames.DASHBOARD,
+          });
+          // navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
+        } else {
+          // alert('Something went wrong. Please Re-enter the code');
+          alert(res.data.data.attributes.message);
+          setCode('');
+        }
+      } catch (error) {
+        console.log(error);
+        setdisabled(false);
+        alert('Something went wrong!');
+      }
+    }
+  };
+
+  const withdrawAddress = async () => {
+    let payload = {
+      id: props.route.params.id,
+      attributes: {
+        browser: await DeviceInfo.getModel(),
+        ip: await getPublicIP(),
+        is_browser: false,
+        is_mobile: true,
+        is_app: true,
+        os: await DeviceInfo.getSystemName(),
+        os_byte: await DeviceInfo.getSystemVersion(),
+        otp: `BEL-${code}`,
+        country: geo.country,
+        city: geo.city,
+        region: geo.region,
+      },
+    };
+    let res = await validateOtp(payload);
+    if (res.status) {
+      props.route.params.payload.data.attributes.otp = `BEL-${code}`;
+      console.log('payload00000', props.route.params.payload);
+      let res = await createWithdrawAddress(props.route.params.payload);
+      if (res.status) {
+        console.log('create withdraw address res----#####2', res);
+        //dispatch(addBanks([...banks,props.route.params.body.data.attributes]));
+        navigation.dispatch(StackActions.pop(1));
+        alert('Success!');
+      } else {
+        alert('Something went wrong!');
+        navigation.dispatch(StackActions.pop(1));
+      }
+    } else {
+      // alert('Something went wrong. Please Re-enter the code');
+      alert(res.data.data.attributes.message);
+      setCode('');
+    }
+  };
+
+  const withdrawConfirmation = async () => {
+    let payload = {
+      id: props.route.params.id,
+      attributes: {
+        browser: await DeviceInfo.getModel(),
+        ip: await getPublicIP(),
+        is_browser: false,
+        is_mobile: true,
+        is_app: true,
+        os: await DeviceInfo.getSystemName(),
+        os_byte: await DeviceInfo.getSystemVersion(),
+        otp: `BEL-${code}`,
+        country: geo.country,
+        city: geo.city,
+        region: geo.region,
+      },
+    };
+    let res = await validateOtp(payload);
+    if (res.status) {
+      props.route.params.payload.data.attributes.otp = `BEL-${code}`;
+      console.log('payload00000', props.route.params.payload);
+      let res = await withdraw(props.route.params.payload);
+      if (res.status) {
+        console.log('withdraw res----#####2', res);
+        //dispatch(addBanks([...banks,props.route.params.body.data.attributes]));
+        navigation.dispatch(StackActions.pop(2));
+        alert(res.data.data.attributes.message);
+      } else {
+        alert(res.data.data.attributes.message);
+        navigation.dispatch(StackActions.pop(2));
+      }
+    } else {
+      // alert('Something went wrong. Please Re-enter the code');
+      alert(res.data.data.attributes.message);
+      setCode('');
+    }
+  };
+
+  const addBankFlow = async () => {
+    let payload = {
+      id: props.route.params.body.data.id,
+      attributes: {
+        browser: await DeviceInfo.getModel(),
+        ip: await getPublicIP(),
+        is_browser: false,
+        is_mobile: true,
+        is_app: true,
+        os: await DeviceInfo.getSystemName(),
+        os_byte: await DeviceInfo.getSystemVersion(),
+        otp: `BEL-${code}`,
+        country: geo.country,
+        city: geo.city,
+        region: geo.region,
+      },
+    };
+    let res = await validateOtp(payload);
+    if (res.status) {
+      props.route.params.body.data.attributes.otp = `BEL-${code}`;
+      let res = await addBankAccount(props.route.params.body);
+      if (res.status) {
+        console.log('added banks to server***********************', res);
+        dispatch(addBanks([...banks, props.route.params.body.data.attributes]));
+        navigation.dispatch(StackActions.pop(2));
+      } else {
+        alert('Something went wwrong!');
+        navigation.dispatch(StackActions.pop(2));
+      }
+    } else {
+      // alert('Something went wrong. Please Re-enter the code');
+      alert(res.data.data.attributes.message);
+      setCode('');
+    }
+  };
+
+  const changeUserPasswordFlow = async () => {
+    let toPassHeader = {
+      Authorization: getAuthToken(),
+      info: getInfoAuthToken(),
+      device: getDeviceId(),
+    };
+
+    let payload1 = {
+      data: {
+        id: props.route.params.id,
+        attributes: {
+          otp: `BEL-${code}`,
+          old_password: props.route.params.passwords.old_password,
+          password: props.route.params.passwords.password,
+          password_confirmation: props.route.params.passwords.c_password,
+        },
+      },
+    };
+    let ress = await changeUserPassword(payload1, toPassHeader);
+    console.log('cahnge pwd', ress);
+    if (ress.status) {
+      alert('Password has been changed');
+      // navigation.navigate(screenNames.SIGNIN)
+      navigation.dispatch(StackActions.pop(2));
+    } else {
+      alert('Something went wrong!');
+      return;
+    }
+  };
+
   const resendCode = async () => {
     setCode('');
     let attributes = {
       user_id: user_id,
-      type: 'login',
+      type: props.route.params.type,
     };
     let res = await resendOtp(attributes);
     if (res.status) {
@@ -100,6 +291,23 @@ const OTPscreen = props => {
     }
   };
 
+  const getGeoInfo = async () => {
+    try {
+      let res = await getGeolocation();
+      if (res) {
+        console.log('geo res', res);
+        setgeo(res.data);
+        setdisabled(false);
+      }
+    } catch (error) {
+      getGeoInfo();
+    }
+  };
+
+  useEffect(() => {
+    setdisabled(true);
+    getGeoInfo();
+  }, []);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>

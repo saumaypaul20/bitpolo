@@ -1,15 +1,10 @@
 import React, {useState} from 'react';
 import {View, ActivityIndicator} from 'react-native';
-import BPText from '../../common/BPText/BPText';
-import {Colors} from '../../theme';
-import {useNavigation} from '@react-navigation/native';
+import {Colors} from '../../../theme';
 import {useSelector, shallowEqual} from 'react-redux';
-import FlatLists from '../../common/FlatlistComp/FlatList';
+import FlatLists from '../../../common/FlatlistComp/FlatList';
 import _ from 'lodash';
-import {
-  equalityFnDepths,
-  equalityFnIndexPrice,
-} from '../../utils/reduxChecker.utils';
+import {equalityFnDepths} from '../../../utils/reduxChecker.utils';
 
 const MarketBottom = () => {
   const [lineNumbers] = useState(10);
@@ -26,21 +21,38 @@ const MarketBottom = () => {
   const [] = useState(null);
 
   return (
-    <View style={{flexDirection: 'row', alignSelf: 'stretch'}}>
+    <View style={{flexDirection: 'row', alignSelf: 'stretch', flex: 1}}>
       {/* Red Chart 1 */}
       {
-        <View style={{alignSelf: 'stretch', flex: 1}}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           {asksLength > 0 ? (
             <AsksList lineNumbers={lineNumbers} />
           ) : (
-            <ActivityIndicator size="large" color={Colors.white} />
+            <View
+              style={{
+                height: 200,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator size="large" color={Colors.white} />
+            </View>
           )}
         </View>
       }
 
       {/* Green Chart 1 */}
       {
-        <View style={{alignSelf: 'stretch', flex: 1}}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           {bidsLength > 0 ? (
             <BidsList lineNumbers={lineNumbers} />
           ) : (

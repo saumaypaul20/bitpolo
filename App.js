@@ -62,17 +62,21 @@ const App = () => {
       console.log(user);
       dispatch(inputAction(TYPES.EMAIL_INPUT, user.email));
       dispatch(saveAuthAttributesAction(user));
-
-      let resIndexPrice = await getIndexPrice();
-      if (resIndexPrice.status) {
-        dispatch(storeIndexPrice(resIndexPrice.data));
-        setLogin(true);
-      }
+      getmyindexprice();
     } else {
       setLogin(false);
     }
   };
 
+  const getmyindexprice = async () => {
+    let resIndexPrice = await getIndexPrice();
+    if (resIndexPrice.status) {
+      dispatch(storeIndexPrice(resIndexPrice.data));
+      setLogin(true);
+    } else {
+      getmyindexprice();
+    }
+  };
   // getDeviceId for headers
   const deviceAccess = async () => {
     // let deviceId = DeviceInfo.getUniqueId();
@@ -100,6 +104,7 @@ const App = () => {
   useEffect(() => {
     // requestLocationPermission()
     SplashScreen.hide();
+    //uncomment the below to hide all console.log
     console.log = function() {};
     getUser();
     storeIP();
