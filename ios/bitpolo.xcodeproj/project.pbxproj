@@ -14,6 +14,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		145A3956C62730A857D2BEF4 /* libPods-bitpolo-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0DD7910E5F341615B358EB /* libPods-bitpolo-tvOSTests.a */; };
 		14A5AA0EE0D04FC0B1E951CD /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF10830C340B4E97AD57B6FB /* MaterialIcons.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -24,9 +25,7 @@
 		4CC9C31D1AEE45258CA44947 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8900675D669E4A8AA8FEC864 /* Inter-Bold.ttf */; };
 		5134A96675EC48359960D064 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB7D0DE5C664CF49A248487 /* Inter-Light.ttf */; };
 		521062A7E8614BF79AA62F42 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D93A2FB167464A02B4AFEB9C /* FontAwesome.ttf */; };
-		53A627262DAC1D29503DFCAF /* libPods-bitpoloTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C720C8E95472D4A5FD74ABE1 /* libPods-bitpoloTests.a */; };
 		581E891EF1E54EFF825EEA54 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44B07A35C49F414EB10D601F /* Zocial.ttf */; };
-		643C311C9DEAF34AFBAF7115 /* libPods-bitpolo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A44E6C178A6336A23B6DD9 /* libPods-bitpolo-tvOS.a */; };
 		64D0EDE2684B4429B9DD39E4 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD4CC443C32E496C9375EABC /* Octicons.ttf */; };
 		67F085D0E97F40DAB7F02864 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 538C6E4A317140239C692861 /* MaterialCommunityIcons.ttf */; };
 		68065217B32944A5A3E96765 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43567F339E3B46B4B51391CC /* Feather.ttf */; };
@@ -34,18 +33,19 @@
 		6C06DD5C7B4B444498AEEBB9 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EB96C219A8C24FE3A6816307 /* Inter-Medium.ttf */; };
 		730B3A3408BB4A5AB79E34E9 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 98655AE441D94270AAA34F0B /* EvilIcons.ttf */; };
 		81A0ED07AA94494687B54006 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0A9C88FFD44CB8B8A6286E /* Foundation.ttf */; };
-		8D13C48CF3B853E164FD97BB /* libPods-bitpolo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B160EDA53B8185080936A95A /* libPods-bitpolo.a */; };
 		9156F862695F4CB48465F092 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CDA5CEB2B5541C4A54DA7C2 /* Inter-SemiBold.ttf */; };
 		967B16B132504BD486E8579B /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96820DCB55CE406293461672 /* Entypo.ttf */; };
 		96DAC06777BE45E386CA5AAD /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 03C9EA63775A4E209591FB7B /* Roboto.ttf */; };
 		985A2BF9149644C59A27401F /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 745914B22D3545318E859D9C /* Inter-Regular.ttf */; };
 		A1E397B8A00F4B1AAF1C17C1 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4082E964AD74E70A5D15032 /* Inter-Thin.ttf */; };
+		A6FB784F8A0E8E4C94A04A88 /* libPods-bitpolo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F36CFEBDC3F5BF21B14F9D4 /* libPods-bitpolo.a */; };
 		AB5C2B04CFC74C8F8EA7955D /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0F30EE535B74FC084A2830A /* FontAwesome5_Regular.ttf */; };
+		B4455EC768A77D0AE9BBA252 /* libPods-bitpolo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9948C7880854DA0123AF545D /* libPods-bitpolo-tvOS.a */; };
 		C19806B792BB4863B69B9001 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 330609C1C8E74D11932A779E /* rubicon-icon-font.ttf */; };
 		CAF0C103FC5F478DA80183D1 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68E6E06E9E274A63B03AB2B9 /* Roboto_medium.ttf */; };
 		CB436398A13E48F9BFE70A63 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCA2691A9E2A489FB127E7E4 /* SimpleLineIcons.ttf */; };
+		CEFBCEA79E7A244135E9C37A /* libPods-bitpoloTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4719B40923D46D03AFCB32C /* libPods-bitpoloTests.a */; };
 		D8D3CF75B1E74EADBB2E492D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ECFCB043537D4A03A7FA8A08 /* Ionicons.ttf */; };
-		FC2E008A7C208344B8749A66 /* libPods-bitpolo-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F1437BCCE49DB054603405 /* libPods-bitpolo-tvOSTests.a */; };
 		FC3DE80E64F44498A784E9F6 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1CA48BA7A15747C78DA5D1EF /* Fontisto.ttf */; };
 		FE595A5C16CC4DA7AF075383 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA977333E01846E6A7356E2C /* FontAwesome5_Brands.ttf */; };
 /* End PBXBuildFile section */
@@ -68,15 +68,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0073758533B13EB40073247B /* Pods-bitpolo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo.debug.xcconfig"; path = "Target Support Files/Pods-bitpolo/Pods-bitpolo.debug.xcconfig"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* bitpoloTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bitpoloTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* bitpoloTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bitpoloTests.m; sourceTree = "<group>"; };
-		00F1437BCCE49DB054603405 /* libPods-bitpolo-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpolo-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03C9EA63775A4E209591FB7B /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
-		05360CB78B571C7CC4A8D9DD /* Pods-bitpoloTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpoloTests.debug.xcconfig"; path = "Target Support Files/Pods-bitpoloTests/Pods-bitpoloTests.debug.xcconfig"; sourceTree = "<group>"; };
-		0738A01B88F4058F16630B13 /* Pods-bitpolo-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOS.release.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOS/Pods-bitpolo-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		0F36CFEBDC3F5BF21B14F9D4 /* libPods-bitpolo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpolo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		139063692D5D44618EEA5C49 /* Inter-Medium-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium-slnt=0.ttf"; path = "../src/assets/fonts/Inter-Medium-slnt=0.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* bitpolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitpolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = bitpolo/AppDelegate.h; sourceTree = "<group>"; };
@@ -86,12 +83,12 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = bitpolo/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = bitpolo/main.m; sourceTree = "<group>"; };
 		1CA48BA7A15747C78DA5D1EF /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
-		1D6E9735719B3FDC1C6748A9 /* Pods-bitpolo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo.release.xcconfig"; path = "Target Support Files/Pods-bitpolo/Pods-bitpolo.release.xcconfig"; sourceTree = "<group>"; };
-		25E527812947548E8E0F41DC /* Pods-bitpolo-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOSTests/Pods-bitpolo-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2AB7D0DE5C664CF49A248487 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; };
+		2ACE88797EA09359FC3374E1 /* Pods-bitpoloTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpoloTests.release.xcconfig"; path = "Target Support Files/Pods-bitpoloTests/Pods-bitpoloTests.release.xcconfig"; sourceTree = "<group>"; };
+		2C0DD7910E5F341615B358EB /* libPods-bitpolo-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpolo-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E47B1E0B4A5D006451C7 /* bitpolo-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bitpolo-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* bitpolo-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "bitpolo-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		30FAD001C94143DD7EDAF0BC /* Pods-bitpolo-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOSTests/Pods-bitpolo-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		2EBE2BD8C0B91A913730E0DA /* Pods-bitpolo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo.debug.xcconfig"; path = "Target Support Files/Pods-bitpolo/Pods-bitpolo.debug.xcconfig"; sourceTree = "<group>"; };
 		330609C1C8E74D11932A779E /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		38407A4B36D543F88532F2D6 /* Inter-ExtraBold-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold-slnt=0.ttf"; path = "../src/assets/fonts/Inter-ExtraBold-slnt=0.ttf"; sourceTree = "<group>"; };
 		3CB8600C9008450C930059A2 /* Inter-Black-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Black-slnt=0.ttf"; path = "../src/assets/fonts/Inter-Black-slnt=0.ttf"; sourceTree = "<group>"; };
@@ -103,34 +100,37 @@
 		5866F19FD2B14E65BC494E32 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		65C68B846F17496AB64BE165 /* Inter-ExtraLight-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraLight-slnt=0.ttf"; path = "../src/assets/fonts/Inter-ExtraLight-slnt=0.ttf"; sourceTree = "<group>"; };
 		68E6E06E9E274A63B03AB2B9 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
+		6B7489A31DC94E5C83CACE06 /* Pods-bitpolo-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOS/Pods-bitpolo-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		6CDA5CEB2B5541C4A54DA7C2 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		745914B22D3545318E859D9C /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
-		7C238E2A1CFF5A758111BD1C /* Pods-bitpoloTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpoloTests.release.xcconfig"; path = "Target Support Files/Pods-bitpoloTests/Pods-bitpoloTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EB0EAD1A72943CB971F317A /* Inter-Thin-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin-slnt=0.ttf"; path = "../src/assets/fonts/Inter-Thin-slnt=0.ttf"; sourceTree = "<group>"; };
+		82247898BE60E11B5F62BAA2 /* Pods-bitpolo-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOSTests/Pods-bitpolo-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		824D19944746044A538F0D8B /* Pods-bitpolo-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOS.release.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOS/Pods-bitpolo-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		8900675D669E4A8AA8FEC864 /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		8AE3DC061747498393F567DA /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		9677C88A3AD947278230EB39 /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraLight.ttf"; path = "../src/assets/fonts/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
 		96820DCB55CE406293461672 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		98655AE441D94270AAA34F0B /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		992AAF4A07C24502AC97B75D /* Inter-Regular-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular-slnt=0.ttf"; path = "../src/assets/fonts/Inter-Regular-slnt=0.ttf"; sourceTree = "<group>"; };
+		9948C7880854DA0123AF545D /* libPods-bitpolo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpolo-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A566B9438C584B2BAD4ADBEA /* Inter-Bold-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold-slnt=0.ttf"; path = "../src/assets/fonts/Inter-Bold-slnt=0.ttf"; sourceTree = "<group>"; };
+		A583B9BD953054E78D00AB6D /* Pods-bitpolo-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOSTests/Pods-bitpolo-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		AB8AB7D889B84625B14B0F13 /* Inter-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Black.ttf"; path = "../src/assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
-		B160EDA53B8185080936A95A /* libPods-bitpolo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpolo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4082E964AD74E70A5D15032 /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../src/assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		B55425E1535E4DF5AC737EE5 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		BA977333E01846E6A7356E2C /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
-		C720C8E95472D4A5FD74ABE1 /* libPods-bitpoloTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpoloTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C8A44E6C178A6336A23B6DD9 /* libPods-bitpolo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpolo-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF10830C340B4E97AD57B6FB /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		D93A2FB167464A02B4AFEB9C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		DD4CC443C32E496C9375EABC /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		DEDAB4E54E7CE15D2F2E36BE /* Pods-bitpolo-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-bitpolo-tvOS/Pods-bitpolo-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E0F30EE535B74FC084A2830A /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		E4480B59939DEA0D7C6B9E96 /* Pods-bitpoloTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpoloTests.debug.xcconfig"; path = "Target Support Files/Pods-bitpoloTests/Pods-bitpoloTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E4719B40923D46D03AFCB32C /* libPods-bitpoloTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bitpoloTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CB6A80DE544D0D89F855C2 /* Inter-Light-slnt=0.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light-slnt=0.ttf"; path = "../src/assets/fonts/Inter-Light-slnt=0.ttf"; sourceTree = "<group>"; };
 		EB96C219A8C24FE3A6816307 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		ECFCB043537D4A03A7FA8A08 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F01479F27B13C39E43BE8CC0 /* Pods-bitpolo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpolo.release.xcconfig"; path = "Target Support Files/Pods-bitpolo/Pods-bitpolo.release.xcconfig"; sourceTree = "<group>"; };
 		FCA2691A9E2A489FB127E7E4 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,7 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53A627262DAC1D29503DFCAF /* libPods-bitpoloTests.a in Frameworks */,
+				CEFBCEA79E7A244135E9C37A /* libPods-bitpoloTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D13C48CF3B853E164FD97BB /* libPods-bitpolo.a in Frameworks */,
+				A6FB784F8A0E8E4C94A04A88 /* libPods-bitpolo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				643C311C9DEAF34AFBAF7115 /* libPods-bitpolo-tvOS.a in Frameworks */,
+				B4455EC768A77D0AE9BBA252 /* libPods-bitpolo-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC2E008A7C208344B8749A66 /* libPods-bitpolo-tvOSTests.a in Frameworks */,
+				145A3956C62730A857D2BEF4 /* libPods-bitpolo-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,10 +206,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				B160EDA53B8185080936A95A /* libPods-bitpolo.a */,
-				C8A44E6C178A6336A23B6DD9 /* libPods-bitpolo-tvOS.a */,
-				00F1437BCCE49DB054603405 /* libPods-bitpolo-tvOSTests.a */,
-				C720C8E95472D4A5FD74ABE1 /* libPods-bitpoloTests.a */,
+				0F36CFEBDC3F5BF21B14F9D4 /* libPods-bitpolo.a */,
+				9948C7880854DA0123AF545D /* libPods-bitpolo-tvOS.a */,
+				2C0DD7910E5F341615B358EB /* libPods-bitpolo-tvOSTests.a */,
+				E4719B40923D46D03AFCB32C /* libPods-bitpoloTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -295,14 +295,14 @@
 		A06F22D31AFF078DF418A871 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0073758533B13EB40073247B /* Pods-bitpolo.debug.xcconfig */,
-				1D6E9735719B3FDC1C6748A9 /* Pods-bitpolo.release.xcconfig */,
-				DEDAB4E54E7CE15D2F2E36BE /* Pods-bitpolo-tvOS.debug.xcconfig */,
-				0738A01B88F4058F16630B13 /* Pods-bitpolo-tvOS.release.xcconfig */,
-				25E527812947548E8E0F41DC /* Pods-bitpolo-tvOSTests.debug.xcconfig */,
-				30FAD001C94143DD7EDAF0BC /* Pods-bitpolo-tvOSTests.release.xcconfig */,
-				05360CB78B571C7CC4A8D9DD /* Pods-bitpoloTests.debug.xcconfig */,
-				7C238E2A1CFF5A758111BD1C /* Pods-bitpoloTests.release.xcconfig */,
+				2EBE2BD8C0B91A913730E0DA /* Pods-bitpolo.debug.xcconfig */,
+				F01479F27B13C39E43BE8CC0 /* Pods-bitpolo.release.xcconfig */,
+				6B7489A31DC94E5C83CACE06 /* Pods-bitpolo-tvOS.debug.xcconfig */,
+				824D19944746044A538F0D8B /* Pods-bitpolo-tvOS.release.xcconfig */,
+				82247898BE60E11B5F62BAA2 /* Pods-bitpolo-tvOSTests.debug.xcconfig */,
+				A583B9BD953054E78D00AB6D /* Pods-bitpolo-tvOSTests.release.xcconfig */,
+				E4480B59939DEA0D7C6B9E96 /* Pods-bitpoloTests.debug.xcconfig */,
+				2ACE88797EA09359FC3374E1 /* Pods-bitpoloTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -314,7 +314,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "bitpoloTests" */;
 			buildPhases = (
-				AA72C348922DBF24BC664C60 /* [CP] Check Pods Manifest.lock */,
+				D8B42D9902F312F705537907 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -333,7 +333,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "bitpolo" */;
 			buildPhases = (
-				D9BA65260A8AF75CB3ECA318 /* [CP] Check Pods Manifest.lock */,
+				D22214C8554CB071D2B0FD54 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -353,7 +353,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "bitpolo-tvOS" */;
 			buildPhases = (
-				F407E81FF375D61441C1EA88 /* [CP] Check Pods Manifest.lock */,
+				1B62CD7C003CC05CADB81ACE /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -373,7 +373,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "bitpolo-tvOSTests" */;
 			buildPhases = (
-				200B916E80A64A01B57BD9FD /* [CP] Check Pods Manifest.lock */,
+				7466DC5D9B94A4195A266F7C /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -511,7 +511,43 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		200B916E80A64A01B57BD9FD /* [CP] Check Pods Manifest.lock */ = {
+		1B62CD7C003CC05CADB81ACE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-bitpolo-tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		7466DC5D9B94A4195A266F7C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -533,43 +569,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		AA72C348922DBF24BC664C60 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-bitpoloTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D9BA65260A8AF75CB3ECA318 /* [CP] Check Pods Manifest.lock */ = {
+		D22214C8554CB071D2B0FD54 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -591,7 +591,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F407E81FF375D61441C1EA88 /* [CP] Check Pods Manifest.lock */ = {
+		D8B42D9902F312F705537907 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -606,7 +606,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-bitpolo-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-bitpoloTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -718,7 +718,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05360CB78B571C7CC4A8D9DD /* Pods-bitpoloTests.debug.xcconfig */;
+			baseConfigurationReference = E4480B59939DEA0D7C6B9E96 /* Pods-bitpoloTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -741,7 +741,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C238E2A1CFF5A758111BD1C /* Pods-bitpoloTests.release.xcconfig */;
+			baseConfigurationReference = 2ACE88797EA09359FC3374E1 /* Pods-bitpoloTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -761,7 +761,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0073758533B13EB40073247B /* Pods-bitpolo.debug.xcconfig */;
+			baseConfigurationReference = 2EBE2BD8C0B91A913730E0DA /* Pods-bitpolo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -781,7 +781,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D6E9735719B3FDC1C6748A9 /* Pods-bitpolo.release.xcconfig */;
+			baseConfigurationReference = F01479F27B13C39E43BE8CC0 /* Pods-bitpolo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -800,7 +800,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DEDAB4E54E7CE15D2F2E36BE /* Pods-bitpolo-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 6B7489A31DC94E5C83CACE06 /* Pods-bitpolo-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -828,7 +828,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0738A01B88F4058F16630B13 /* Pods-bitpolo-tvOS.release.xcconfig */;
+			baseConfigurationReference = 824D19944746044A538F0D8B /* Pods-bitpolo-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -856,7 +856,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 25E527812947548E8E0F41DC /* Pods-bitpolo-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 82247898BE60E11B5F62BAA2 /* Pods-bitpolo-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -883,7 +883,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30FAD001C94143DD7EDAF0BC /* Pods-bitpolo-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = A583B9BD953054E78D00AB6D /* Pods-bitpolo-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;

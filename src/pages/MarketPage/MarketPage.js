@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   FlatList,
   Dimensions,
+  StatusBar,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Container, Icon} from 'native-base';
@@ -49,6 +51,9 @@ import {getDeviceId} from 'react-native-device-info';
 import {getInfoAuthToken, getAuthToken} from '../../utils/apiHeaders.utils';
 import Modal from 'react-native-modal';
 import ChevronRight from '../../common/ChevronRight/ChevronRight';
+import {useHeaderHeight} from '@react-navigation/stack';
+
+// alert(JSON.stringify(StatusBarHeight));
 const currentMarketPrice = (found, index_price) => {
   // let found = market_data;
   // console.log(
@@ -475,10 +480,16 @@ const MarketPage = () => {
                         onBackdropPress={() => handleCurrencyView()}
                         style={{
                           justifyContent: 'flex-start',
-                          marginTop: 90,
+                          marginTop:
+                            useHeaderHeight() +
+                            (Platform.OS === 'android' ? 50 : 90),
+
                           marginHorizontal: 0,
                         }}>
-                        <View style={{backgroundColor: Colors.darkGray2}}>
+                        <View
+                          style={{
+                            backgroundColor: Colors.darkGray2,
+                          }}>
                           {Lcurrencies.map((i, index) => {
                             return (
                               <TouchableOpacity

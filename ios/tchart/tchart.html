@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0" />
     <title>Document</title>
-    <script src="./tchart.js"></script>
+    <script src="./tchart.hcscript"></script>
     <script></script>
     <style>
       body {
@@ -16,6 +16,7 @@
 
   <body>
     <script>
+      // alert('update');
       let width = 00;
       let height = 00;
       let klineData = [];
@@ -70,7 +71,7 @@
         chart.height = JSON.parse(event.data).height;
         klineData = JSON.parse(event.data).klineData;
 
-        //alert("update")
+        // alert('update');
         series.setData(klineData);
       });
 

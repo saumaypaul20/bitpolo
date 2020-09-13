@@ -1,11 +1,15 @@
 import React from 'react';
-import {View, Dimensions, ActivityIndicator} from 'react-native';
+import {View, Dimensions, ActivityIndicator, Platform} from 'react-native';
 import _ from 'lodash';
 import WebView from 'react-native-webview';
 import {connect} from 'react-redux';
 import {Colors} from '../../theme';
 import {updateKlineBool} from '../../redux/actions/kline.actions';
-// const myHtmlFile = require("../../../android/app/src/main/assets/tchart.html");
+const myHtmlFile = require('../../../ios/tchart/tchart.html');
+
+function LoadingIndicatorView() {
+  return <ActivityIndicator color={Colors.white} size="large" />;
+}
 
 class TradeChart extends React.PureComponent {
   constructor(props) {
@@ -79,7 +83,13 @@ class TradeChart extends React.PureComponent {
           }}>
           {this.props.kline.length > 0 ? (
             <WebView
-              source={{uri: 'file:///android_asset/tchart.html'}}
+              baseURL="/"
+              source={
+                Platform.OS === 'android'
+                  ? {uri: 'file:///android_asset/tchart.html'}
+                  : myHtmlFile
+              }
+              renderLoading={this.LoadingIndicatorView}
               scrollEnabled={false}
               originWhitelist={['*']}
               ref={r => (this.webview = r)}

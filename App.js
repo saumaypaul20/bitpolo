@@ -100,7 +100,7 @@ const App = () => {
   useEffect(() => {
     // requestLocationPermission()
     SplashScreen.hide();
-    // console.log = function() {};
+    console.log = function() {};
     getUser();
     storeIP();
     deviceAccess();
