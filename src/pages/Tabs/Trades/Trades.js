@@ -138,7 +138,7 @@ const Trades = () => {
     const unsubscribe = navigation.addListener('blur', () => {
       //alert("blur")
       setloading(true);
-      setLcurrencies([]);
+      // setLcurrencies([]);
       //  dispatch(setActiveTradePair(null))
       //+setActiveTradePair(null)
       //emitDepthUnsubscribeEvent(currencyVal)
