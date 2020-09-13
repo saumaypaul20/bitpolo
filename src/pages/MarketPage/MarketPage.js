@@ -433,7 +433,7 @@ const MarketPage = () => {
         <FlatList
           data={['1']}
           nestedScrollEnabled
-          style={{width: '100%'}}
+          style={{width: '100%', marginBottom: 60}}
           keyExtractor={data => data}
           ListHeaderComponent={
             <View style={styles.headerContainer}>
@@ -454,22 +454,6 @@ const MarketPage = () => {
                         style={{fontSize: 20, color: Colors.white}}
                       />
                     </TouchableOpacity>
-                    {/* <PickerComp
-                      items={Lcurrencies}
-                      pickerVal={activeTradePair}
-                      setPickerVal={val => {
-                        setloading(true);
-                        //dispatch(addDepthSubs(null));
-                        setCurrency(activeTradePair);
-                        dispatch(emptyKlineData());
-                        dispatch(setActiveTradePair(val));
-                        // emptyKlineData()
-                        setTimeout(() => {
-                          setloading(false);
-                        }, 1000);
-                      }}
-                      chevronPositionTop={3}
-                    /> */}
 
                     <View style={{backgroundColor: Colors.darkGray2}}>
                       <TouchableOpacity
@@ -491,7 +475,7 @@ const MarketPage = () => {
                         onBackdropPress={() => handleCurrencyView()}
                         style={{
                           justifyContent: 'flex-start',
-                          marginTop: 100,
+                          marginTop: 90,
                           marginHorizontal: 0,
                         }}>
                         <View style={{backgroundColor: Colors.darkGray2}}>
@@ -525,12 +509,12 @@ const MarketPage = () => {
                   flexDirection: 'row',
                   width: '100%',
                 }}>
-                <TouchableOpacity style={{marginHorizontal: 22}}>
+                {/* <TouchableOpacity style={{marginHorizontal: 22}}>
                   <Image
                     source={Images.see_favs}
                     style={styles.headerIconStyles}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                   onPress={() => setFav(activeTradePair, favourites)}>
                   {isFavourite(activeTradePair, favourites)}
@@ -549,8 +533,9 @@ const MarketPage = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignSelf: 'stretch',
-                    paddingHorizontal: 16,
+
                     backgroundColor: Colors.darkGray2,
+                    flex: 1,
                   }}>
                   <Tab
                     label={'PRICE Chart'}
@@ -563,20 +548,23 @@ const MarketPage = () => {
                     active={view === 2}
                   />
 
-                  <TouchableOpacity
+                  <View
                     style={{
-                      flex: 2,
+                      flex: 1,
                       alignItems: 'flex-end',
                       paddingVertical: 12,
-                    }}
-                    onPress={() =>
-                      navigation.navigate(screenNames.MARKET_PAGE_LANDSCAPE)
-                    }>
-                    <Image
-                      source={Images.expand}
-                      style={styles.headerIconStyles}
-                    />
-                  </TouchableOpacity>
+                      paddingHorizontal: 16,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate(screenNames.MARKET_PAGE_LANDSCAPE)
+                      }>
+                      <Image
+                        source={Images.expand}
+                        style={styles.headerIconStyles}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 {/* ---------------------------------- */}
@@ -614,32 +602,20 @@ const MarketPage = () => {
                       flexDirection: 'row',
                       alignItems: 'flex-start',
                     }}>
-                    <View
-                      style={{
-                        paddingHorizontal: 16,
-                        alignSelf: 'stretch',
-                        alignItems: 'stretch',
-                      }}>
-                      <Tab
-                        textTransform
-                        onPress={() => settab(1)}
-                        label="Book"
-                        active={tab === 1}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        paddingHorizontal: 16,
-                        alignSelf: 'stretch',
-                        alignItems: 'stretch',
-                      }}>
-                      <Tab
-                        textTransform
-                        onPress={() => settab(2)}
-                        label="Market Trades"
-                        active={tab === 2}
-                      />
-                    </View>
+                    <Tab
+                      textTransform
+                      onPress={() => settab(1)}
+                      label="Book"
+                      active={tab === 1}
+                    />
+
+                    <Tab
+                      textTransform
+                      onPress={() => settab(2)}
+                      label="Market Trades"
+                      active={tab === 2}
+                    />
+                    <View style={{flex: 2}} />
                   </View>
                   {!loading &&
                     activeTradePair &&
@@ -655,13 +631,13 @@ const MarketPage = () => {
           style={{
             position: 'absolute',
             bottom: 0,
-            left: 0,
-            right: 0,
             padding: 16,
             backgroundColor: Colors.darkGray,
             justifyContent: 'space-around',
             alignItems: 'center',
             flexDirection: 'row',
+            alignSelf: 'stretch',
+            width: '100%',
           }}>
           <View
             style={{

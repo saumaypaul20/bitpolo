@@ -246,7 +246,7 @@ const TradesLeftCol = () => {
             chevronPositionTop={5}
             chevronPositionRight={0}
             chevronSize={10}
-            height={20}
+            height={Platform.OS == 'android' ? 20 : 30}
             width={160}
             scale={0.7}
             color={Platform.OS === 'android' ? Colors.white : Colors.primeBG}

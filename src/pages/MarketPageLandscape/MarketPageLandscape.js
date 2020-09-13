@@ -342,11 +342,17 @@ const MarketPageLandscape = () => {
               active={view === 2}
             />
 
-            <TouchableOpacity
-              style={{flex: 2, alignItems: 'flex-end', paddingVertical: 12}}
-              onPress={() => navigation.goBack()}>
-              <Image source={Images.expand} style={styles.headerIconStyles} />
-            </TouchableOpacity>
+            <View
+              style={{
+                flex: 2,
+                alignItems: 'flex-end',
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+              }}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Image source={Images.expand} style={styles.headerIconStyles} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -375,7 +381,7 @@ const MarketPageLandscape = () => {
                   }}>
                   <TouchableOpacity style={{marginHorizontal: 22}}>
                     <Image
-                      source={Images.market_chart_icon}
+                      source={Images.see_favs}
                       style={styles.headerIconStyles}
                     />
                   </TouchableOpacity>
@@ -408,6 +414,7 @@ const MarketPageLandscape = () => {
                 flex: 0.5,
                 justifyContent: 'center',
                 alignItems: 'flex-end',
+                paddingHorizontal: 16,
               }}>
               <TimeComp />
             </View>

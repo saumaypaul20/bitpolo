@@ -14,8 +14,8 @@ const TradesRightCol = () => {
       {/* {console.log('TradesOrderTabs1')} */}
       <TradesOrderTabs />
 
-      <View style={{marginRight: 16, marginLeft: 3}}>
-        <View>
+      <View style={{marginRight: 16, marginLeft: 3, flex: 1}}>
+        <View style={{flex: 1}}>
           <View
             style={{
               flexDirection: 'row',
@@ -67,9 +67,11 @@ const TradesRightCol = () => {
 
           {/* <AreaChart2 /> */}
           <TouchableOpacity
-            style={{flex: 1}}
+            style={{
+              flex: 1,
+            }}
             onPress={() => navigation.navigate(screenNames.MARKET_PAGE)}>
-            <DepthChart />
+            <DepthChart height="100%" />
           </TouchableOpacity>
           {/* <HighChart /> */}
         </View>
