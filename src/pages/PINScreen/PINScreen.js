@@ -11,6 +11,9 @@ import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {screenNames} from '../../routes/screenNames/screenNames';
 import Storage from '../../utils/storage.utils';
+import Spacer from '../../common/Spacer/Spacer';
+import BPButton from '../../common/BPButton/BPButton';
+import BPText from '../../common/BPText/BPText';
 
 const PINScreen = props => {
   const navigation = useNavigation();
@@ -21,21 +24,28 @@ const PINScreen = props => {
     props?.route?.params?.screen || screenNames.DASHBOARD,
   );
   const [code, setCode] = useState(''); //setting code initial STATE value
-  const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
+  const [recode, setreCode] = useState(''); //setting code initial STATE value
+  const [localPin, setLocalPin] = useState(''); //setting code initial STATE value
   const [, setdisabled] = useState(true); //setting code initial STATE value
   const [isNew, setNew] = useState(props?.route?.params?.type);
   const pinCount = 6;
 
   const handleCodeFilled = code => {
-    setCode(code);
-    if (code.length == pinCount) {
-      setdisabled(false);
-      Keyboard.dismiss();
-      verifyOtp(code);
+    if (!isNew) {
+      setCode(code);
+      if (code.length == pinCount) {
+        setdisabled(false);
+        Keyboard.dismiss();
+        verifyOtp();
+      }
+    } else {
+      setCode(code);
+      if (code.length == pinCount) {
+        Keyboard.dismiss();
+      }
     }
   };
-
-  const verifyOtp = async code => {
+  const verifyOtp = async () => {
     setdisabled(true);
     if (code.length !== pinCount) {
       alert('Fill in the the 6 digit code');
@@ -44,6 +54,11 @@ const PINScreen = props => {
 
     switch (isNew) {
       case true:
+        if (code !== recode) {
+          alert("PINs doesn't match!");
+          setreCode('');
+          return;
+        }
         await Storage.set('mpin', code);
         navigation.reset({index: 0, routes: [{name: screenNames.DASHBOARD}]});
         break;
@@ -76,7 +91,7 @@ const PINScreen = props => {
     if (mpin) {
       setNew(false);
       setLocalPin(mpin);
-      handleCodeFilled('111111');
+      // handleCodeFilled('111111');
     } else {
       setNew(true);
     }
@@ -107,7 +122,7 @@ const PINScreen = props => {
             <OTPInputView
               keyboardType="phone-pad"
               //ref={inputref}
-              autoFocusOnLoad
+              autoFocusOnLoad={isNew}
               style={{
                 height: 64,
                 width: 300,
@@ -124,6 +139,48 @@ const PINScreen = props => {
               codeInputHighlightStyle={styles.underlineStyleHighLighted}
               onCodeFilled={code => setCode(code)}
             />
+            {isNew && (
+              <>
+                <Spacer />
+                <BPText>Confirm PIN</BPText>
+                <OTPInputView
+                  keyboardType="phone-pad"
+                  //ref={inputref}
+                  autoFocusOnLoad={!isNew}
+                  style={{
+                    height: 64,
+                    width: 300,
+                    marginTop: 10,
+                    marginBottom: 30,
+                    borderRadius: 6,
+                    borderWidth: 1,
+                    borderColor: Colors.gray,
+                    overflow: 'hidden',
+                  }}
+                  pinCount={pinCount}
+                  code={recode}
+                  onCodeChanged={c => {
+                    setreCode(c);
+                    if (c.length == pinCount) {
+                      setdisabled(false);
+                      Keyboard.dismiss();
+                    }
+                  }}
+                  codeInputFieldStyle={styles.underlineStyleBase}
+                  codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                  onCodeFilled={recode => setreCode(recode)}
+                />
+
+                <Spacer />
+
+                <BPButton
+                  disabled={recode.length !== 6}
+                  label="Confirm"
+                  onPress={() => verifyOtp()}
+                  style={{alignSelf: 'stretch'}}
+                />
+              </>
+            )}
 
             {/* <BPButton disabled={disabled} label="Confirm" onPress={()=> verifyOtp()} style={{alignSelf:'stretch'}}/> */}
           </View>
