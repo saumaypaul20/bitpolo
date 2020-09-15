@@ -73,7 +73,14 @@
         //alert("update")
         series.setData(klineData);
       });
+    window.addEventListener('message', function(event) {
+      chart.width = JSON.parse(event.data).width;
+      chart.height = JSON.parse(event.data).height;
+      klineData = JSON.parse(event.data).klineData;
 
+      //alert("update")
+      series.setData(klineData);
+    });
       // var datesForMarkers = [klineData[klineData.length - 19], klineData[klineData.length - 39]];
       // var indexOfMinPrice = 0;
       // for (var i = 1; i < datesForMarkers.length; i++) {

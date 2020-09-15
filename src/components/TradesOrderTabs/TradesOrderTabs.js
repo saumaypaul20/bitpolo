@@ -218,7 +218,7 @@ let TradesOrderTabs = () => {
     };
 
     let api = 'put-limit';
-    if (pickerOrderVal !== 'limit') {
+    if (pickerOrderVal.value !== 'limit') {
       api = 'put-market';
     }
 
@@ -324,9 +324,9 @@ let TradesOrderTabs = () => {
 
     dispatch(
       setordertabamount(
-        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
-          .toFixed(tradeDetail?.stock_prec)
-          .toString(),
+        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec)).toFixed(
+          tradeDetail?.stock_prec,
+        ),
       ),
     );
     let nt = (currentamount * currentprice).toFixed(tradeDetail?.money_prec);
@@ -344,7 +344,7 @@ let TradesOrderTabs = () => {
     // );
     dispatch(
       setordertabamount(
-        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
+        (parseFloat(amt) - 1 / Math.pow(10, tradeDetail?.stock_prec))
           .toFixed(tradeDetail?.stock_prec)
           .toString(),
       ),
@@ -448,7 +448,13 @@ let TradesOrderTabs = () => {
         </View>
       </View>
 
-      <View style={{marginRight: 16, marginLeft: 3}}>
+      <View
+        style={{
+          marginRight: 16,
+          marginLeft: 3,
+          position: 'relative',
+          zIndex: -1,
+        }}>
         <InputCounter
           label={'Amount in INR'}
           disabled={false}
@@ -460,7 +466,7 @@ let TradesOrderTabs = () => {
         />
 
         <Spacer space={8} />
-        {pickerOrderVal == 'market' ? (
+        {pickerOrderVal.value == 'market' ? (
           currentordertab === 2 ? (
             <>
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -525,7 +531,7 @@ let TradesOrderTabs = () => {
         </View>
 
         <Spacer space={17} />
-        {pickerOrderVal == 'limit' ? (
+        {pickerOrderVal.value == 'limit' ? (
           <>
             <View
               style={{

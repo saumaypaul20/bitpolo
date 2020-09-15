@@ -91,36 +91,40 @@ const TradesLeftCol = () => {
       state.marketReducer.currencies.find(i => i.value === activeTradePair),
     shallowEqual,
   );
-
-  const [list1val, setList1Val] = useState(null);
-  const [lineNumbers, setlineNumbers] = useState(10);
-  const [height, setheight] = useState(245);
-  const [activeBPchart, setactiveBPchart] = useState('0');
-
   const list1 = [
     {label: 'Default', value: '0'},
     {label: 'Sells', value: 'sells'},
     {label: 'Buys', value: 'buys'},
   ];
-
+  const [list1val, setList1Val] = useState(null);
+  const [lineNumbers, setlineNumbers] = useState(10);
+  const [height, setheight] = useState(245);
+  const [activeBPchart, setactiveBPchart] = useState(list1[0]);
+  // alert(JSON.stringify(activeBPchart));
   const onBPValChange = val => {
     setList1Val(val);
-    switch (val) {
+    // alert(val.value);
+    switch (val.value) {
       case '0':
         setlineNumbers(10);
         setheight(245);
-        setactiveBPchart('0');
+        setactiveBPchart(val);
         break;
       default:
         setheight(490);
         setactiveBPchart(val);
         setlineNumbers(20);
+        break;
     }
   };
 
   const OpenOrders = () => {
     navigation.navigate(screenNames.ORDERS);
   };
+
+  // useEffect(() => {
+  //   onBPValChange(list1[0]);
+  // }, []);
 
   return (
     <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -160,7 +164,7 @@ const TradesLeftCol = () => {
       </View>
 
       {/* Red Chart 1 */}
-      {(activeBPchart === 'sells' || activeBPchart === '0') && (
+      {(activeBPchart.value === 'sells' || activeBPchart.value === '0') && (
         <View
           style={{
             height: asksLength === 0 ? height : 'auto',
@@ -206,7 +210,7 @@ const TradesLeftCol = () => {
         />
       </View>
 
-      {(activeBPchart === 'buys' || activeBPchart === '0') && (
+      {(activeBPchart.value === 'buys' || activeBPchart.value === '0') && (
         <View
           style={{
             height: asksLength === 0 ? height : 'auto',
@@ -237,20 +241,22 @@ const TradesLeftCol = () => {
             alignSelf: 'stretch',
             borderWidth: 1,
             borderColor: Colors.gray,
-            opacity: 0.8,
+            opacity: 1,
+            padding: 5,
           }}>
           <PickerComp
             items={list1}
-            pickerVal={list1val}
-            setPickerVal={val => onBPValChange(val)}
-            chevronPositionTop={5}
+            pickerVal={activeBPchart}
+            setPickerVal={onBPValChange}
+            chevronPositionTop={8}
             chevronPositionRight={0}
             chevronSize={10}
-            height={Platform.OS == 'android' ? 20 : 30}
+            // height={Platform.OS == 'android' ? 20 : 30}
             width={160}
             scale={0.7}
             color={Platform.OS === 'android' ? Colors.white : Colors.primeBG}
             marginLeft={-20}
+            placement={'top'}
           />
         </View>
       </View>
@@ -264,6 +270,7 @@ const BidsList = ({lineNumbers}) => {
     equalityFnDepths,
   );
   return <FlatLists data={bids} lineNumbers={lineNumbers} type={0} />;
+  // return <BPBarChart data={bids} color={Colors.lightRed} rightTextColor={Colors.red}/>
 };
 
 const AsksList = ({lineNumbers}) => {

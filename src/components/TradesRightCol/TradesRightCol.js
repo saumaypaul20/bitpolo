@@ -67,6 +67,7 @@ const TradesRightCol = () => {
 
           {/* <AreaChart2 /> */}
           <TouchableOpacity
+            activeOpacity={1}
             style={{
               flex: 1,
             }}

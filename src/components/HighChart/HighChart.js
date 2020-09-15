@@ -110,19 +110,33 @@ export default class HighChart extends React.Component {
     });
   }
 
-  UNSAFE_componentWillReceiveProps(props) {
-    this.chartUpdate();
+  // UNSAFE_componentWillReceiveProps(props) {
+  //   this.chartUpdate();
+  // }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      JSON.stringify(this.props.bids) !== JSON.stringify(nextProps.bids) ||
+      JSON.stringify(this.props.asks) !== JSON.stringify(nextProps.asks)
+    ) {
+      this.chartUpdate();
+      return true;
+    } else {
+      return false;
+    }
   }
   render() {
     return (
-      <View style={{backgroundColor: Colors.primeBG}}>
+      <View style={{backgroundColor: Colors.transparent}}>
         {this.props.bids.length > 0 && this.props.asks.length > 0 && (
           <HighchartsReactNative
+            webviewStyles={{opacity: 0.99, backgroundColor: Colors.transparent}}
             styles={[
               styles.container,
               {height: this.props.height ? this.props.height : 230},
             ]}
             options={this.state.chartOptions}
+            // loader
           />
         )}
       </View>
@@ -132,7 +146,8 @@ export default class HighChart extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.primeBG,
+    backgroundColor: Colors.transparent,
     justifyContent: 'space-evenly',
+    opacity: 0.99,
   },
 });

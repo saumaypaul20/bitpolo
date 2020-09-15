@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {Button} from 'native-base';
 import BPText from '../../common/BPText/BPText';
 import {Colors} from '../../theme';
@@ -24,9 +24,11 @@ const InputCounter = ({
         alignSelf: 'stretch',
       }}>
       {onDecrease && (
-        <Button style={styles.counterBtns} onPress={() => onDecrease()}>
+        <TouchableOpacity
+          style={styles.counterBtns}
+          onPress={() => onDecrease()}>
           <BPText>-</BPText>
-        </Button>
+        </TouchableOpacity>
       )}
 
       <TextInput
@@ -51,9 +53,11 @@ const InputCounter = ({
       />
 
       {onIncrease && (
-        <Button style={styles.counterBtns} onPress={() => onIncrease()}>
+        <TouchableOpacity
+          style={styles.counterBtns}
+          onPress={() => onIncrease()}>
           <BPText>+</BPText>
-        </Button>
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -65,7 +69,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.darkGray2,
-    height: '100%',
+    // height: '100%',
+    height: 48,
+    zIndex: 1,
   },
 });
 

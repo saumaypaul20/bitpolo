@@ -37,7 +37,7 @@ import {useNavigation} from '@react-navigation/native';
 import {screenNames} from '../../routes/screenNames/screenNames';
 import BPText from '../../common/BPText/BPText';
 import TradeChart from '../../components/AreaChart/TradeChart';
-import MarketBottom from './MarketBottom/MarketBottom';
+import MarketBottom from '../../components/MarketBottom/MarketBottom';
 import {addKlineData, emptyKlineData} from '../../redux/actions/kline.actions';
 import {
   equalityFnIndexPrice,
@@ -52,7 +52,7 @@ import {getInfoAuthToken, getAuthToken} from '../../utils/apiHeaders.utils';
 import Modal from 'react-native-modal';
 import ChevronRight from '../../common/ChevronRight/ChevronRight';
 import {useHeaderHeight} from '@react-navigation/stack';
-import MarketTradesBottom from './MarketTradesBottom/MarketTradesBottom';
+import MarketTradesBottom from '../../components/MarketTradesBottom/MarketTradesBottom';
 
 // alert(JSON.stringify(StatusBarHeight));
 const currentMarketPrice = (found, index_price) => {

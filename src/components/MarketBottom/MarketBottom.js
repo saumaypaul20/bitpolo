@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {View, ActivityIndicator} from 'react-native';
-import {Colors} from '../../../theme';
+import {Colors} from '../../theme';
 import {useSelector, shallowEqual} from 'react-redux';
-import FlatLists from '../../../common/FlatlistComp/FlatList';
+import FlatLists from '../../common/FlatlistComp/FlatList';
 import _ from 'lodash';
-import {equalityFnDepths} from '../../../utils/reduxChecker.utils';
+import {equalityFnDepths} from '../../utils/reduxChecker.utils';
 
 const MarketBottom = () => {
   const [lineNumbers] = useState(10);

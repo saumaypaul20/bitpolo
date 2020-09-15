@@ -490,6 +490,7 @@ let ListItem = ({item, index}) => {
   }
   return (
     <TouchableOpacity
+      activeOpacity={1}
       onPress={() => {
         dispatch(setActiveTradePair(item.params[0]));
         navigation.navigate(screenNames.TRADES);

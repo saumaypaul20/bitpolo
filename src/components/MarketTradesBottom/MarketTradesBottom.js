@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList} from 'react-native';
-import {Colors} from '../../../theme';
-import BPText from '../../../common/BPText/BPText';
+import {Colors} from '../../theme';
+import BPText from '../../common/BPText/BPText';
 import {useSelector, shallowEqual} from 'react-redux';
 import {
   emitMarketDealsEvent,
   emitMarketDealsUnsubscribeEvent,
-} from '../../../api/config.ws';
-import {equalityFnDepths} from '../../../utils/reduxChecker.utils';
+} from '../../api/config.ws';
+import {equalityFnDepths} from '../../utils/reduxChecker.utils';
 import _ from 'lodash';
-import {convertTime} from '../../../utils/converters';
+import {convertTime} from '../../utils/converters';
 
 const ListItem = ({item, type}) => {
   console.log('liostitem deals', item);

@@ -25,36 +25,30 @@ const PINScreen = props => {
   );
   const [code, setCode] = useState(''); //setting code initial STATE value
   const [recode, setreCode] = useState(''); //setting code initial STATE value
-  const [localPin, setLocalPin] = useState(''); //setting code initial STATE value
+  const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
   const [, setdisabled] = useState(true); //setting code initial STATE value
   const [isNew, setNew] = useState(props?.route?.params?.type);
   const pinCount = 6;
 
   const handleCodeFilled = code => {
-    if (!isNew) {
-      setCode(code);
-      if (code.length == pinCount) {
-        setdisabled(false);
-        Keyboard.dismiss();
-        verifyOtp();
-      }
-    } else {
-      setCode(code);
-      if (code.length == pinCount) {
-        Keyboard.dismiss();
-      }
+    setCode(code);
+    if (code.length == pinCount) {
+      setdisabled(false);
+      Keyboard.dismiss();
+      isNew ? null : verifyOtp(code);
     }
   };
-  const verifyOtp = async () => {
+  const verifyOtp = async c => {
     setdisabled(true);
-    if (code.length !== pinCount) {
+    // alert(code);
+    if (c.length !== pinCount) {
       alert('Fill in the the 6 digit code');
       return;
     }
 
     switch (isNew) {
       case true:
-        if (code !== recode) {
+        if (code !== c) {
           alert("PINs doesn't match!");
           setreCode('');
           return;
@@ -63,7 +57,7 @@ const PINScreen = props => {
         navigation.reset({index: 0, routes: [{name: screenNames.DASHBOARD}]});
         break;
       default:
-        if (localPin === code) {
+        if (localPin === c) {
           switch (nextScreen) {
             case screenNames.DASHBOARD:
               navigation.reset({index: 0, routes: [{name: nextScreen}]});
@@ -91,7 +85,8 @@ const PINScreen = props => {
     if (mpin) {
       setNew(false);
       setLocalPin(mpin);
-      // handleCodeFilled('111111');
+      // setCode('111111');
+      handleCodeFilled('111111');
     } else {
       setNew(true);
     }
@@ -176,7 +171,7 @@ const PINScreen = props => {
                 <BPButton
                   disabled={recode.length !== 6}
                   label="Confirm"
-                  onPress={() => verifyOtp()}
+                  onPress={() => verifyOtp(recode)}
                   style={{alignSelf: 'stretch'}}
                 />
               </>

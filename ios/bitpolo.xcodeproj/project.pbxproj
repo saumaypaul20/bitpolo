@@ -42,6 +42,8 @@
 		AB5C2B04CFC74C8F8EA7955D /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0F30EE535B74FC084A2830A /* FontAwesome5_Regular.ttf */; };
 		B4455EC768A77D0AE9BBA252 /* libPods-bitpolo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9948C7880854DA0123AF545D /* libPods-bitpolo-tvOS.a */; };
 		C19806B792BB4863B69B9001 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 330609C1C8E74D11932A779E /* rubicon-icon-font.ttf */; };
+		C2912FB02510AFF600B6068B /* tchart.html in Resources */ = {isa = PBXBuildFile; fileRef = C2912FAE2510AFF600B6068B /* tchart.html */; };
+		C2912FB12510AFF600B6068B /* tchart.js in Resources */ = {isa = PBXBuildFile; fileRef = C2912FAF2510AFF600B6068B /* tchart.js */; };
 		CAF0C103FC5F478DA80183D1 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68E6E06E9E274A63B03AB2B9 /* Roboto_medium.ttf */; };
 		CB436398A13E48F9BFE70A63 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCA2691A9E2A489FB127E7E4 /* SimpleLineIcons.ttf */; };
 		CEFBCEA79E7A244135E9C37A /* libPods-bitpoloTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4719B40923D46D03AFCB32C /* libPods-bitpoloTests.a */; };
@@ -119,6 +121,8 @@
 		B4082E964AD74E70A5D15032 /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../src/assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		B55425E1535E4DF5AC737EE5 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		BA977333E01846E6A7356E2C /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		C2912FAE2510AFF600B6068B /* tchart.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = tchart.html; path = ../../android/app/src/main/assets/tchart.html; sourceTree = "<group>"; };
+		C2912FAF2510AFF600B6068B /* tchart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = tchart.js; path = ../../android/app/src/main/assets/tchart.js; sourceTree = "<group>"; };
 		CF10830C340B4E97AD57B6FB /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		D93A2FB167464A02B4AFEB9C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		DD4CC443C32E496C9375EABC /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -190,6 +194,7 @@
 		13B07FAE1A68108700A75B9A /* bitpolo */ = {
 			isa = PBXGroup;
 			children = (
+				C2912FA92510AEE200B6068B /* webview */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -305,6 +310,15 @@
 				2ACE88797EA09359FC3374E1 /* Pods-bitpoloTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C2912FA92510AEE200B6068B /* webview */ = {
+			isa = PBXGroup;
+			children = (
+				C2912FAE2510AFF600B6068B /* tchart.html */,
+				C2912FAF2510AFF600B6068B /* tchart.js */,
+			);
+			path = webview;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -470,7 +484,9 @@
 				4CC9C31D1AEE45258CA44947 /* Inter-Bold.ttf in Resources */,
 				136876FC44DB4B598444FA31 /* Inter-Black.ttf in Resources */,
 				113BCB67886B4563B173EE2C /* Inter-ExtraBold.ttf in Resources */,
+				C2912FB02510AFF600B6068B /* tchart.html in Resources */,
 				695BF0A1CD284BC8931DA8CB /* Inter-ExtraLight.ttf in Resources */,
+				C2912FB12510AFF600B6068B /* tchart.js in Resources */,
 				5134A96675EC48359960D064 /* Inter-Light.ttf in Resources */,
 				6C06DD5C7B4B444498AEEBB9 /* Inter-Medium.ttf in Resources */,
 				985A2BF9149644C59A27401F /* Inter-Regular.ttf in Resources */,

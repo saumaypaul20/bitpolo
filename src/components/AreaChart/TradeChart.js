@@ -5,13 +5,27 @@ import WebView from 'react-native-webview';
 import {connect} from 'react-redux';
 import {Colors} from '../../theme';
 import {updateKlineBool} from '../../redux/actions/kline.actions';
-const myHtmlFile = require('../../../ios/tchart/tchart.html');
+const myHtmlFile = './tchart/files/tchart.html';
 
 function LoadingIndicatorView() {
-  return <ActivityIndicator color={Colors.white} size="large" />;
+  return (
+    <ActivityIndicator
+      color={Colors.white}
+      size="large"
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    />
+  );
 }
 
-class TradeChart extends React.PureComponent {
+class TradeChart extends React.Component {
   constructor(props) {
     super(props);
     // this.update= false
@@ -64,7 +78,9 @@ class TradeChart extends React.PureComponent {
 
     //  this.update= true
   }
-
+  ActivityIndicatorLoadingView() {
+    return <LoadingIndicatorView />;
+  }
   render() {
     //     if (this.webview) this.webview.postMessage(JSON.stringify(
     //         {
@@ -81,32 +97,29 @@ class TradeChart extends React.PureComponent {
             height: this.props.height ? this.props.height : 200,
             width: this.width,
           }}>
-          {this.props.kline.length > 0 ? (
-            <WebView
-              baseURL="/"
-              source={
+          <WebView
+            source={{
+              uri:
                 Platform.OS === 'android'
-                  ? {uri: 'file:///android_asset/tchart.html'}
-                  : myHtmlFile
-              }
-              renderLoading={this.LoadingIndicatorView}
-              scrollEnabled={false}
-              originWhitelist={['*']}
-              ref={r => (this.webview = r)}
-              injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
-              style={{
-                height: '100%',
-                width: this.width,
-                resizeMode: 'cover',
-                flex: 1,
-              }}
-            />
-          ) : (
-            <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <ActivityIndicator color={Colors.white} size="large" />
-            </View>
-          )}
+                  ? 'file:///android_asset/tchart.html'
+                  : './tchart.html',
+            }}
+            // renderLoading={this.LoadingIndicatorView}
+            scrollEnabled={false}
+            originWhitelist={['*']}
+            ref={r => (this.webview = r)}
+            injectedJavaScript={`settimeout(()=>{const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=1, maximum-scale=1, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); true;},100) ; true`}
+            style={{
+              height: '100%',
+              width: this.width,
+              resizeMode: 'cover',
+              flex: 1,
+              backgroundColor: Colors.transparent,
+              opacity: 0.99,
+            }}
+            startInLoadingState={true}
+            renderLoading={this.ActivityIndicatorLoadingView}
+          />
         </View>
       );
     } else {

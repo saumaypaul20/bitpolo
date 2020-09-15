@@ -1,7 +1,15 @@
-import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Platform,
+  TouchableOpacity as TouchableOpacity2,
+} from 'react-native';
 import {Picker, Icon} from 'native-base';
 import {Colors} from '../../theme';
+import BPText from '../../common/BPText/BPText';
+import {pick} from 'lodash';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const PickerComp = ({
   chevronColor = Colors.lightWhite,
@@ -15,23 +23,53 @@ const PickerComp = ({
   chevronSize,
   chevronPositionTop,
   chevronPositionRight,
+  placement,
   pickerVal,
   setPickerVal,
 }) => {
   // const { } = props
+  // alert(JSON.stringify(pickerVal));
+  // alert(JSON.stringify(items));
+  // const [selectedVal, setVal] = useState(pickerVal);
+  const [vis, setvis] = useState(false);
+  // alert(pickerVal?.value);
+  const handleItemPress = item => {
+    // alert('called');
+    // alert(JSON.stringify(item));
+    setPickerVal(item);
+    setvis(false);
+  };
+
+  const calculatePositions = () => {
+    switch (placement) {
+      case 'top':
+        return {
+          bottom: 30,
+          right: 10,
+        };
+      default:
+        return {
+          top: 30,
+          right: 10,
+        };
+    }
+  };
 
   return (
     <>
-      <Picker
+      {/* <Picker
         mode="dropdown"
-        style={{
-          marginLeft: marginLeft || 0,
-          width: width || 140,
-          height: height || 16,
-          color: color,
-          backgroundColor: backgroundColor || 'transparent',
-          transform: [{scaleX: scale || 0.9}, {scaleY: scale || 0.9}],
-        }}
+        style={[
+          {
+            marginLeft: marginLeft || 0,
+            width: width || 140,
+            height: height || 16,
+            // color: color,
+            backgroundColor: backgroundColor || 'transparent',
+            transform: [{scaleX: scale || 0.9}, {scaleY: scale || 0.9}],
+          },
+          Platform.OS === 'android' ? {color: color} : null,
+        ]}
         selectedValue={pickerVal}
         onValueChange={val => setPickerVal(val)}
         iosHeader="Select"
@@ -39,7 +77,7 @@ const PickerComp = ({
           backgroundColor: Colors.transparent,
         }}
         itemTextStyle={{
-          color: color,
+          color: Colors.primeBG,
         }}>
         {items.map((item, index) => {
           return (
@@ -50,20 +88,72 @@ const PickerComp = ({
             />
           );
         })}
-        {/* <Picker.Item label="INR/USDT" value="key1" /> */}
-      </Picker>
+      </Picker> */}
 
-      <Icon
-        type="FontAwesome"
-        name="chevron-down"
+      <View style={{position: 'relative', flex: 1}}>
+        <TouchableOpacity
+          onPress={() => setvis(!vis)}
+          style={{
+            position: 'relative',
+            zIndex: 1,
+          }}>
+          <BPText>{pickerVal?.label}</BPText>
+        </TouchableOpacity>
+
+        {vis && (
+          <View
+            style={[
+              {
+                position: 'absolute',
+
+                flex: 1,
+                paddingVertical: 5,
+                minWidth: '100%',
+                zIndex: 1,
+                backgroundColor: '#000',
+                opacity: 1,
+              },
+              calculatePositions(),
+            ]}>
+            {items.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => handleItemPress(item)}
+                  key={index.toString()}>
+                  <BPText
+                    style={{
+                      fontSize: 16,
+                      paddingVertical: 8,
+                      paddingHorizontal: 8,
+                      borderBottomWidth: index !== items.length - 1 ? 1 : 0,
+                      borderBottomColor: Colors.gray,
+                    }}>
+                    {item.label}
+                  </BPText>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+      </View>
+
+      <TouchableOpacity2
+        onPress={() => setvis(!vis)}
         style={{
           position: 'absolute',
           top: chevronPositionTop || 5,
           right: chevronPositionRight || 10,
-          fontSize: chevronSize || 14,
-          color: chevronColor,
-        }}
-      />
+          zIndex: 10,
+        }}>
+        <Icon
+          type="FontAwesome"
+          name="chevron-down"
+          style={{
+            fontSize: chevronSize || 14,
+            color: chevronColor,
+          }}
+        />
+      </TouchableOpacity2>
     </>
   );
 };

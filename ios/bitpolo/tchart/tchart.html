@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0" />
     <title>Document</title>
-    <script src="./tchart.hcscript"></script>
+    <script src="./tchart.js"></script>
     <script></script>
     <style>
       body {
@@ -67,6 +67,14 @@
         wickUpColor: '#2BAB64',
       });
       document.addEventListener('message', function(event) {
+        chart.width = JSON.parse(event.data).width;
+        chart.height = JSON.parse(event.data).height;
+        klineData = JSON.parse(event.data).klineData;
+
+        // alert('update');
+        series.setData(klineData);
+      });
+      window.addEventListener('message', function(event) {
         chart.width = JSON.parse(event.data).width;
         chart.height = JSON.parse(event.data).height;
         klineData = JSON.parse(event.data).klineData;
