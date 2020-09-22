@@ -13,7 +13,7 @@ export const equalityFnMarket = (l, r) => {
     for (let i = 0; i < l.length; i++) {
       let found = r.findIndex(rItem => rItem.params[0] === l[i].params[0]);
       if (found > -1) {
-        console.log();
+        // console.log();
         change = _.isEqual(l[i].params[1], r[found].params[1]);
         if (!change) {
           break;

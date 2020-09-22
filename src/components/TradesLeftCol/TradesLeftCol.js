@@ -209,7 +209,7 @@ const TradesLeftCol = () => {
           }}
         />
       </View>
-
+      {/* Green Chart 1 */}
       {(activeBPchart.value === 'buys' || activeBPchart.value === '0') && (
         <View
           style={{
@@ -269,7 +269,13 @@ const BidsList = ({lineNumbers}) => {
     state => state.depthSubsReducer.bids,
     equalityFnDepths,
   );
-  return <FlatLists data={bids} lineNumbers={lineNumbers} type={0} />;
+  return bids.length > 0 ? (
+    <FlatLists data={bids} lineNumbers={lineNumbers} type={0} />
+  ) : (
+    <ActivityIndicator
+      style={{height: 245, justifyContent: 'center', alignItems: 'center'}}
+    />
+  );
   // return <BPBarChart data={bids} color={Colors.lightRed} rightTextColor={Colors.red}/>
 };
 
@@ -278,7 +284,13 @@ const AsksList = ({lineNumbers}) => {
     state => state.depthSubsReducer.asks,
     equalityFnDepths,
   );
-  return <FlatLists data={asks} lineNumbers={lineNumbers} type={1} />;
+  return asks.length > 0 ? (
+    <FlatLists data={asks} lineNumbers={lineNumbers} type={1} />
+  ) : (
+    <ActivityIndicator
+      style={{height: 245, justifyContent: 'center', alignItems: 'center'}}
+    />
+  );
 };
 
 export default TradesLeftCol;

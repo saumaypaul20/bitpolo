@@ -91,7 +91,7 @@ const Security = () => {
       let newUser = user;
       newUser.attributes.google_auth = false;
       setmodal(false);
-      setg2fenabled(!g2fenabled);
+      setg2fenabled(false);
       dispatch(saveAuthAttributesAction(newUser));
       await Storage.set('login', newUser);
     } else {
@@ -121,7 +121,7 @@ const Security = () => {
               onPress={() => navigation.navigate(screenNames.DEVICE_MANAGEMENT)}
             />
 
-            <SettingsListItem
+            {/* <SettingsListItem
               label="Touch ID"
               paddingHorizontal={20}
               borderBottom
@@ -137,7 +137,7 @@ const Security = () => {
               rightElement={
                 <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch} />
               }
-            />
+            /> */}
 
             <SettingsListItem
               label="Google Authenticator"
@@ -149,14 +149,15 @@ const Security = () => {
               // onPress={()=> navigation.navigate(screenNames.GOOGLE_AUTHENTICATOR)}
             />
 
-            <SettingsListItem
+            {/* <SettingsListItem
               label="SMS Authenticator"
               paddingHorizontal={20}
               borderBottom
               rightElement={<ChevronRight />}
-            />
+            /> */}
 
             <SettingsListItem
+              disabled={!g2fenabled}
               label="Anti-Spoofing Code"
               paddingHorizontal={20}
               borderBottom

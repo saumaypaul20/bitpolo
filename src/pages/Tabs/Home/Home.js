@@ -108,40 +108,15 @@ let ListItem = ({item, type, index}) => {
 };
 ListItem = React.memo(ListItem);
 
-let Tab = ({type}) => {
-  let market_data = useSelector(
-    state => state.marketReducer.data,
-    equalityFnMarket,
-  );
-
-  // console.log('tab makerketdata', market_data);
-  // console.log('tab type', type);
-
-  // const [data, setdata] = useState([]);
-  // useEffect(() => {
-  //   if (type === 1) {
-  //     setdata(market_data.filter(i => !i.params[1].cp.match('-')));
-  //   } else {
-  //     setdata(market_data.filter(i => i.params[1].cp.match('-')));
-  //   }
-  // }, [market_data, type]);
-
+let Tab = ({type, data}) => {
   const renderItem = useCallback(
     ({item, index}) => <ListItem item={item} type={type} index={index} />,
-
-    [market_data],
+    [data],
   );
 
-  const renderData = useMemo(
-    () =>
-      type === 1
-        ? market_data.filter(i => !i.params[1].cp.match('-'))
-        : market_data.filter(i => i.params[1].cp.match('-')),
-    [market_data, type],
-  );
-  return market_data.length > 0 ? (
+  return (
     <FlatList
-      data={renderData}
+      data={data}
       renderItem={renderItem}
       keyExtractor={item => item.id}
       initialNumToRender={7}
@@ -153,24 +128,11 @@ let Tab = ({type}) => {
           width: '100%',
         };
       }}
-      // ListHeaderComponent={ <HomeHeaderComp />}
-      // stickyHeaderIndices={[0]}
-      //ListEmptyComponent={<View style={{flex:1, justifyContent:'flex-start', alignItems:'center', paddingTop:50}}><ActivityIndicator color={Colors.white} size="large" /></View>}
     />
-  ) : (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingTop: 50,
-      }}>
-      <ActivityIndicator color={Colors.white} size="large" />
-    </View>
   );
 };
 
-Tab = React.memo(Tab);
+// Tab = React.memo(Tab);
 
 let Home = () => {
   const [socket, setSocket] = useState(null);
@@ -353,7 +315,7 @@ let Home = () => {
                 </View>
               </View>
 
-              {activetab === 1 ? <Tab type={1} /> : <Tab type={2} />}
+              {activetab === 1 ? <Gainers /> : <Losers />}
             </View>
           }
         </View>
@@ -363,3 +325,24 @@ let Home = () => {
 };
 Home = React.memo(Home);
 export default Home;
+
+const Gainers = () => {
+  let market_data = useSelector(
+    state => state.marketReducer.data,
+    equalityFnMarket,
+  );
+
+  return (
+    <Tab type={1} data={market_data.filter(i => !i.params[1].cp.match('-'))} />
+  );
+};
+const Losers = () => {
+  let market_data = useSelector(
+    state => state.marketReducer.data,
+    equalityFnMarket,
+  );
+
+  return (
+    <Tab type={2} data={market_data.filter(i => i.params[1].cp.match('-'))} />
+  );
+};

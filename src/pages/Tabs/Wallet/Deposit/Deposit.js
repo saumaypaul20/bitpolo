@@ -50,12 +50,15 @@ let currentTime = new Date();
 const getCurrentTime = () => {
   return currentTime.toTimeString().split(' ')[0];
 };
-const rightEl = () => {
+const rightEl = coin => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate(screenNames.WALLET_HISTORY, {defaultview: 1})
+        navigation.navigate(screenNames.WALLET_HISTORY, {
+          defaultview: 1,
+          coin: coin.asset_code,
+        })
       }>
       <BPText style={{color: Colors.lightWhite, fontSize: 15}}>History</BPText>
     </TouchableOpacity>
@@ -165,7 +168,7 @@ const Tab2 = ({setView, activecoin, assetList}) => {
   const [remarks, setremarks] = useState(null);
   const [pickerOrderVal, setPickerOrderVal] = useState({
     label: 'Traditional Payment',
-    value: 'Traditional Payment',
+    value: 'TraditionalPayment',
   });
   const [showModal, setModal] = useState(false);
   const [activeTPM, setTPM] = useState(0);
@@ -177,6 +180,12 @@ const Tab2 = ({setView, activecoin, assetList}) => {
     state => state.walletReducer.balance.data['INR'],
     shallowEqual,
   );
+
+  const onBPChange = val => {
+    alert(JSON.stringify(val));
+    // let item = options.find(i => i.value === val.value);
+    setPickerOrderVal(val);
+  };
 
   // alert(JSON.stringify(balance))
   // const getBanksList = useCallback(async()=>{
@@ -252,11 +261,11 @@ const Tab2 = ({setView, activecoin, assetList}) => {
     }
   };
   const viewRenderer = () => {
-    switch (pickerOrderVal) {
+    switch (pickerOrderVal.value) {
       //Tradional Payment
       case 'TraditionalPayment':
         return (
-          <>
+          <View style={{position: 'relative', zIndex: 0}}>
             <BPText style={{fontSize: 10, marginTop: 16}}>
               {' '}
               For deposit use the following details only
@@ -573,7 +582,7 @@ const Tab2 = ({setView, activecoin, assetList}) => {
                 </View>
               </Modal>
             </View>
-          </>
+          </View>
         );
       // Payment Gatweway
       case 'PaymentGateway':
@@ -615,7 +624,7 @@ const Tab2 = ({setView, activecoin, assetList}) => {
         );
       case 'Instant Bank Transfer':
         return (
-          <>
+          <View style={{position: 'relative', zIndex: 0}}>
             <BPText style={{fontSize: 10, marginTop: 16}}>
               {' '}
               For deposit use the following details only
@@ -765,7 +774,7 @@ const Tab2 = ({setView, activecoin, assetList}) => {
                 </TouchableOpacity>
               </View>
             </View>
-          </>
+          </View>
         );
 
       default:
@@ -828,16 +837,23 @@ const Tab2 = ({setView, activecoin, assetList}) => {
             borderColor: Colors.lightWhite,
             marginTop: 10,
             borderRadius: 5,
+            height: 50,
+            justifyContent: 'center',
+            paddingLeft: 5,
+            position: 'relative',
+            zIndex: 1,
           }}>
           <PickerComp
             items={options}
             pickerVal={pickerOrderVal}
-            setPickerVal={setPickerOrderVal}
+            setPickerVal={onBPChange}
             chevronPositionTop={16}
             height={50}
             width={Dimensions.get('window').width - 32}
             scale={0.9}
             color={Colors.white}
+            verticalOffet={25}
+            horizontalOffet={-5}
           />
         </View>
 
@@ -848,7 +864,7 @@ const Tab2 = ({setView, activecoin, assetList}) => {
                                 "Minimum deposit 10 INR.",
                                 "Maximum deposit 1 lakh per transaction."
                             ]}/> */}
-          {pickerOrderVal == 'TraditionalPayment' && (
+          {pickerOrderVal.value == 'TraditionalPayment' && (
             <BPButtonSmall
               label="Please Note"
               image={Images.bell_icon}
@@ -997,7 +1013,7 @@ let Deposit = () => {
           <Toolbar
             enableBackButton
             title={screenNames.DEPOSIT}
-            rightElement={rightEl()}
+            rightElement={rightEl(activecoin)}
           />
           <Content contentContainerStyle={{flexGrow: 1}}>
             <View

@@ -111,8 +111,12 @@ const Trades = () => {
       dispatch(storeCurrencies(arr));
       setLcurrencies(arr);
       setloading(false);
-      dispatch(setActiveTradePair(arr[1].value));
-      emitDepthSubscribeEvent(arr[1].value);
+      if (!activeTradePair) {
+        dispatch(setActiveTradePair(arr[1].value));
+        emitDepthSubscribeEvent(arr[1].value);
+      } else {
+        emitDepthSubscribeEvent(activeTradePair);
+      }
       // setcurrencies(arr)
     }
   };
@@ -149,7 +153,7 @@ const Trades = () => {
 
   useEffect(() => {
     setloading(true);
-    dispatch(setActiveTradePair(null));
+    // dispatch(setActiveTradePair(null));
     // emitDepthSubscribeEvent()
     callListMarket();
 

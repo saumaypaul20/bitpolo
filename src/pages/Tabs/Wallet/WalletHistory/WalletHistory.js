@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -7,18 +7,17 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Container, Content, Switch, Button} from 'native-base';
+import {Container} from 'native-base';
 import Toolbar from '../../../../components/Toolbar/Toolbar';
 import {Colors} from '../../../../theme';
 import BPText from '../../../../common/BPText/BPText';
-import {screenNames} from '../../../../routes/screenNames/screenNames';
-import BPSwitch from '../../../../common/BPSwitch/BPSwitch';
-import {useNavigation} from '@react-navigation/native';
 import {
   getDepositTransactions,
   getWithdrawTransactions,
 } from '../../../../api/wallet.api';
 import {convertDate, convertTime} from '../../../../utils/converters';
+import {useSelector, shallowEqual} from 'react-redux';
+import {imageRenderer} from '../../../../utils/component.utils';
 import SettingsListItem from '../../../../common/SettingsListItem/SettingsListItem';
 import ChevronRight from '../../../../common/ChevronRight/ChevronRight';
 
@@ -93,7 +92,7 @@ const ListItem = ({item, index}) => {
               marginBottom: 3,
               alignItems: 'center',
             }}>
-            <BPText>INR</BPText>
+            <BPText>{item.asset.asset_code}</BPText>
             <Text
               style={{
                 backgroundColor:
@@ -125,7 +124,7 @@ const ListItem = ({item, index}) => {
         }}>
         <View style={{alignItems: 'flex-start', flex: 1}}>
           <BPText numberOfLines={1} style={{fontSize: 10}}>
-            {item.type_of_payment_process}
+            {item.type_of_payment_process ? item.type_of_payment_process : '--'}
           </BPText>
           <BPText style={{fontSize: 8, color: Colors.lightWhite}}>
             Payment Type
@@ -141,7 +140,7 @@ const ListItem = ({item, index}) => {
         </View>
         <View style={{alignItems: 'flex-end', flex: 1}}>
           <BPText selectable numberOfLines={1} style={{fontSize: 10}}>
-            {item.tx_hash}
+            {item.tx_hash ? item.tx_hash : '--'}
           </BPText>
           <BPText style={{fontSize: 8, color: Colors.lightWhite}}>
             Transaction ID
@@ -152,8 +151,16 @@ const ListItem = ({item, index}) => {
   );
 };
 const WalletHistory = props => {
-  const {defaultview} = props.route.params;
+  const {defaultview, coin} = props.route.params;
+  const assetList = useSelector(
+    state => state.walletReducer.assets,
+    shallowEqual,
+  );
+  const [filters, setfilters] = useState([{asset_code: 'ALL'}]);
 
+  const [showItems, setshowItems] = useState(false);
+  // const [activecoin, setactivecoin] = useState();
+  const [filteritem, setfilteritem] = useState('ALL');
   const [view, setview] = useState(defaultview);
   const [deposits, setdeposits] = useState([]);
   const [withdraws, setwithdraws] = useState([]);
@@ -194,6 +201,39 @@ const WalletHistory = props => {
     }
   }, [view]);
 
+  useEffect(() => {
+    if (filters.length === 1) {
+      let nwfilters = filters.concat(assetList);
+
+      setfilters(nwfilters);
+    }
+  }, [assetList]);
+
+  useEffect(() => {
+    if (coin) {
+      setfilteritem(coin);
+    }
+  }, []);
+  const renderLabel = useCallback(() => {
+    let isfilter = filters.find(i => i.asset_code === filteritem);
+    if (isfilter) {
+      if (isfilter.asset_name) {
+        return `${isfilter.asset_code} - ${isfilter.asset_name}`;
+      } else {
+        return `${isfilter.asset_code}`;
+      }
+    } else {
+      return 'ALL';
+    }
+  }, [filteritem]);
+
+  const renderArr = arr => {
+    let arrtodisplay = arr;
+    if (filteritem !== 'ALL') {
+      arrtodisplay = arrtodisplay.filter(i => i.asset.asset_code == filteritem);
+    }
+    return arrtodisplay;
+  };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>
@@ -207,27 +247,44 @@ const WalletHistory = props => {
             alignSelf: 'stretch',
             marginHorizontal: 16,
           }}>
-          {/* 
-                     <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+          <SettingsListItem
+            onPress={() => setshowItems(!showItems)}
+            noBorder
+            label={renderLabel()}
+            // image={imageRenderer(activecoin.asset_code)}
+            backgroundColor={Colors.darkGray}
+            rightElement={
+              !showItems ? (
+                <ChevronRight arrow="down" />
+              ) : (
+                <ChevronRight arrow="up" />
+              )
+            }
+          />
 
-                        <View style={{ flex:1, flexDirection:'row',justifyContent:'flex-start', alignItems:'flex-start', alignSelf:'stretch', paddingVertical:20}}>
-                            <BPText style={{fontSize:15}}>Hide Other Pairs </BPText>
-
-                            <BPSwitch isEnabled={isEnabled} onToggleSwitch={toggleSwitch}/>
-                        </View>
-
-                        <View style={{flex:1, alignItems:'flex-end', justifyContent:'center'}}>
-                            <Button style={{backgroundColor: Colors.white, width: 60, height:19, justifyContent:'center', opacity:0.8}}>
-                                <BPText style={{color: Colors.darkGray3, fontSize: 12}}>Clear All</BPText>
-                            </Button>
-                        </View>
-
-                     </View> 
-
-                     <ListItem item/>
-
-                     
-                    */}
+          {showItems && filters.length > 0 && (
+            <View style={{marginTop: 5}}>
+              {filters.map(i => {
+                let p = {label: i.asset_code, value: i.asset_code};
+                // return <TouchableOpacity style={{marginHorizontal:16, paddingVertical:10, marginHorizontal:32}} onPress={()=> setActiveView(i.asset_code)}><BPText>{i.asset_code}</BPText></TouchableOpacity>
+                return (
+                  <SettingsListItem
+                    key={i.asset_code}
+                    onPress={() => {
+                      setfilteritem(i.asset_code);
+                      setshowItems(!showItems);
+                    }}
+                    backgroundColor={Colors.darkGray}
+                    label={`${i.asset_code}${i.asset_name ? '- ' : ''}${
+                      i.asset_name ? i.asset_name : ''
+                    }`}
+                    // image={imageRenderer(i.asset_code)}
+                    noBorder
+                  />
+                );
+              })}
+            </View>
+          )}
 
           <View style={{flexDirection: 'row', alignSelf: 'stretch'}}>
             <TouchableOpacity
@@ -275,9 +332,10 @@ const WalletHistory = props => {
               style={{marginTop: 20}}
             />
           )}
+
           {view === 1 && (
             <FlatList
-              data={deposits}
+              data={renderArr(deposits)}
               renderItem={({item, index}) => (
                 <ListItem item={item} index={index} />
               )}
@@ -286,7 +344,7 @@ const WalletHistory = props => {
           )}
           {view === 2 && (
             <FlatList
-              data={withdraws}
+              data={renderArr(withdraws)}
               renderItem={({item, index}) => (
                 <ListItem item={item} index={index} />
               )}

@@ -2,9 +2,9 @@ import {TYPES} from '../types';
 
 const init_state = {
   tab: 2,
-  price: 0,
-  amount: 0,
-  total: 0,
+  price: '',
+  amount: '',
+  total: '',
   money_prec: null,
   stock_prec: null,
 };

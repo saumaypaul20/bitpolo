@@ -26,6 +26,8 @@ const PickerComp = ({
   placement,
   pickerVal,
   setPickerVal,
+  verticalOffet = 0,
+  horizontalOffet = 0,
 }) => {
   // const { } = props
   // alert(JSON.stringify(pickerVal));
@@ -44,13 +46,13 @@ const PickerComp = ({
     switch (placement) {
       case 'top':
         return {
-          bottom: 30,
-          right: 10,
+          bottom: 30 + verticalOffet,
+          right: 10 + horizontalOffet,
         };
       default:
         return {
-          top: 30,
-          right: 10,
+          top: 30 + verticalOffet,
+          right: 10 + horizontalOffet,
         };
     }
   };
@@ -90,7 +92,7 @@ const PickerComp = ({
         })}
       </Picker> */}
 
-      <View style={{position: 'relative', flex: 1}}>
+      <View style={{position: 'relative', flex: 1, justifyContent: 'center'}}>
         <TouchableOpacity
           onPress={() => setvis(!vis)}
           style={{
@@ -105,13 +107,14 @@ const PickerComp = ({
             style={[
               {
                 position: 'absolute',
-
+                zIndex: 1,
                 flex: 1,
                 paddingVertical: 5,
                 minWidth: '100%',
                 zIndex: 1,
-                backgroundColor: '#000',
+                backgroundColor: Colors.darkGray3,
                 opacity: 1,
+                borderRadius: 4,
               },
               calculatePositions(),
             ]}>

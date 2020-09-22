@@ -60,9 +60,10 @@ const Account = () => {
               {email}
             </Text>
 
-            <Button bordered style={styles.btnContainer}>
+            {/* <Button bordered style={styles.btnContainer}>
               <Text style={styles.btnText}>Edit Profile</Text>
-            </Button>
+            </Button> */}
+
             <View style={{alignSelf: 'stretch', marginTop: 25}}>
               <SettingsListItem
                 label="Bank Account Details"
@@ -88,13 +89,13 @@ const Account = () => {
                 image={Images.settings_icon}
                 onPress={() => navigation.navigate(screenNames.SETTINGS)}
               />
-              <SettingsListItem label="Support" image={Images.support_icon} />
-              <SettingsListItem label="Rate Us" image={Images.rate_us_icon} />
-              <SettingsListItem
+              {/* <SettingsListItem label="Support" image={Images.support_icon} /> */}
+              {/* <SettingsListItem label="Rate Us" image={Images.rate_us_icon} /> */}
+              {/* <SettingsListItem
                 label="About Us"
                 image={Images.about_us_icon}
                 onPress={() => navigation.navigate(screenNames.ABOUT)}
-              />
+              /> */}
               <SettingsListItem
                 label="Logout"
                 image={Images.about_us_icon}

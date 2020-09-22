@@ -346,6 +346,10 @@ const Tab2 = ({setView, activecoin}) => {
                 borderColor: Colors.lightWhite,
                 marginVertical: 10,
                 borderRadius: 5,
+                height: 50,
+                paddingLeft: 10,
+                position: 'relative',
+                zIndex: 1,
               }}>
               <PickerComp
                 items={options}
