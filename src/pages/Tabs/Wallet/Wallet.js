@@ -126,6 +126,7 @@ const Wallet = () => {
     }, 0);
     return res;
   }, [index_price, balance]);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <StatusBar
@@ -147,14 +148,22 @@ const Wallet = () => {
                 Total Value (BTC){' '}
                 <BPText style={{fontFamily: Fonts.FONT_MEDIUM, fontSize: 11}}>
                   {' '}
-                  {toDecimal(totalBTC(), 100000)} BTC
+                  {toDecimal(
+                    totalBTC(),
+                    Math.pow(
+                      10,
+                      assets.find(i => i.asset_code === 'BTC')?.precision,
+                    ),
+                  )}{' '}
+                  BTC
                 </BPText>{' '}
-                = ${' '}
+                = ₹{' '}
                 {toDecimal(
-                  (totalBTC() *
-                    index_price.find(i => i.asset === 'BTC').amount) /
-                    index_price.find(i => i.asset === 'USDT').amount,
-                  100,
+                  totalBTC() * index_price.find(i => i.asset === 'BTC').amount,
+                  Math.pow(
+                    10,
+                    assets.find(i => i.asset_code === 'INR')?.precision,
+                  ),
                 )}
               </BPText>
             ) : (
@@ -175,7 +184,14 @@ const Wallet = () => {
                     letterSpacing: 1.89,
                     fontSize: 24,
                   }}>
-                  {toDecimal(totalBTC(), 100000000)} BTC{' '}
+                  {toDecimal(
+                    totalBTC(),
+                    Math.pow(
+                      10,
+                      assets.find(i => i.asset_code === 'BTC')?.precision,
+                    ),
+                  )}{' '}
+                  BTC{' '}
                 </BPText>
               ) : (
                 <ActivityIndicator color={Colors.white} size="large" />
@@ -196,7 +212,7 @@ const Wallet = () => {
                 />
 
                 <BPButtonSmall
-                  image={Images.deposit_icon}
+                  image={Images.withdraw_icon}
                   label="Withdraw"
                   image_size={20}
                   onPress={() => navigation.navigate(screenNames.WITHDRAW)}
@@ -274,7 +290,9 @@ const Wallet = () => {
                         borderBottom
                         imageType={0}
                         rightElement={rightEl(
-                          balance[item.asset_code]?.available.balance,
+                          balance[item.asset_code]?.available.balance.toFixed(
+                            item?.precision,
+                          ),
                         )}
                       />
                     );

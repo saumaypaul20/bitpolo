@@ -28,6 +28,7 @@ const PickerComp = ({
   setPickerVal,
   verticalOffet = 0,
   horizontalOffet = 0,
+  inversetouchable,
 }) => {
   // const { } = props
   // alert(JSON.stringify(pickerVal));
@@ -57,6 +58,10 @@ const PickerComp = ({
     }
   };
 
+  let TouchableOpacity22 = TouchableOpacity;
+  if (inversetouchable) {
+    TouchableOpacity22 = TouchableOpacity2;
+  }
   return (
     <>
       {/* <Picker
@@ -93,14 +98,14 @@ const PickerComp = ({
       </Picker> */}
 
       <View style={{position: 'relative', flex: 1, justifyContent: 'center'}}>
-        <TouchableOpacity
+        <TouchableOpacity22
           onPress={() => setvis(!vis)}
           style={{
             position: 'relative',
             zIndex: 1,
           }}>
-          <BPText>{pickerVal?.label}</BPText>
-        </TouchableOpacity>
+          <BPText style={{color: color}}>{pickerVal?.label}</BPText>
+        </TouchableOpacity22>
 
         {vis && (
           <View
@@ -120,7 +125,7 @@ const PickerComp = ({
             ]}>
             {items.map((item, index) => {
               return (
-                <TouchableOpacity
+                <TouchableOpacity22
                   onPress={() => handleItemPress(item)}
                   key={index.toString()}>
                   <BPText
@@ -133,7 +138,7 @@ const PickerComp = ({
                     }}>
                     {item.label}
                   </BPText>
-                </TouchableOpacity>
+                </TouchableOpacity22>
               );
             })}
           </View>

@@ -84,18 +84,22 @@ const Account = () => {
                 image={Images.security_icon}
                 onPress={() => navigation.navigate(screenNames.SECURITY)}
               />
-              <SettingsListItem
+              {/* <SettingsListItem
                 label="Settings"
                 image={Images.settings_icon}
                 onPress={() => navigation.navigate(screenNames.SETTINGS)}
+              /> */}
+              <SettingsListItem
+                label="Support"
+                image={Images.support_icon}
+                onPress={() => Linking.openURL('mailto:support@beldex.io')}
               />
-              {/* <SettingsListItem label="Support" image={Images.support_icon} /> */}
               {/* <SettingsListItem label="Rate Us" image={Images.rate_us_icon} /> */}
-              {/* <SettingsListItem
+              <SettingsListItem
                 label="About Us"
                 image={Images.about_us_icon}
                 onPress={() => navigation.navigate(screenNames.ABOUT)}
-              /> */}
+              />
               <SettingsListItem
                 label="Logout"
                 image={Images.about_us_icon}

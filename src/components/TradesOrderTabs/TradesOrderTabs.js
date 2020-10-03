@@ -296,8 +296,8 @@ let TradesOrderTabs = () => {
 
     dispatch(
       setordertabtotal(
-        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.stock_prec))
-          .toFixed(tradeDetail?.stock_prec)
+        (parseFloat(amt) + 1 / Math.pow(10, tradeDetail?.money_prec))
+          .toFixed(tradeDetail?.money_prec)
           .toString(),
       ),
     );
@@ -386,15 +386,17 @@ let TradesOrderTabs = () => {
           position: 'relative',
           zIndex: -1,
         }}>
-        <InputCounter
-          label={'Amount in INR'}
-          disabled={false}
-          onInputChange={t => dispatch(setordertabprice(t))}
-          // validate={() => changeAmount(currentprice, 'inramount')}
-          input={currentprice}
-          onIncrease={onIncreaseINR}
-          onDecrease={onDecreaseINR}
-        />
+        {pickerOrderVal.value == 'market' ? null : (
+          <InputCounter
+            label={'Amount in INR'}
+            disabled={false}
+            onInputChange={t => dispatch(setordertabprice(t))}
+            // validate={() => changeAmount(currentprice, 'inramount')}
+            input={currentprice}
+            onIncrease={onIncreaseINR}
+            onDecrease={onDecreaseINR}
+          />
+        )}
 
         <Spacer space={8} />
         {pickerOrderVal.value == 'market' ? (

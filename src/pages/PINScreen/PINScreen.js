@@ -25,7 +25,7 @@ const PINScreen = props => {
   );
   const [code, setCode] = useState(''); //setting code initial STATE value
   const [recode, setreCode] = useState(''); //setting code initial STATE value
-  const [localPin, setLocalPin] = useState('111111'); //setting code initial STATE value
+  const [localPin, setLocalPin] = useState(''); //setting code initial STATE value
   const [, setdisabled] = useState(true); //setting code initial STATE value
   const [isNew, setNew] = useState(props?.route?.params?.type);
   const pinCount = 6;
@@ -86,7 +86,7 @@ const PINScreen = props => {
       setNew(false);
       setLocalPin(mpin);
       // setCode('111111');
-      handleCodeFilled('111111');
+      // handleCodeFilled('111111');
     } else {
       setNew(true);
     }

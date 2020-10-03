@@ -47,6 +47,7 @@ export const linkedin_icon = require('../assets/images/items/linkedin_icon.png')
 export const instagram_icon = require('../assets/images/items/instagram_icon.png');
 export const medium_icon = require('../assets/images/items/medium_icon.png');
 export const google_authenticator_icon = require('../assets/images/items/google_authenticator_icon.png');
+export const withdraw_icon = require('../assets/images/items/withdraw_icon.png');
 export const expand = require('../assets/images/items/expand.png');
 export const see_favs = require('../assets/images/items/see_favs.png');
 export const fav = require('../assets/images/items/fav.png');

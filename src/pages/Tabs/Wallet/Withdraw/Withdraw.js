@@ -44,8 +44,9 @@ import {
 } from '../../../../utils/apiHeaders.utils';
 import {imageRenderer} from '../../../../utils/component.utils';
 import {generateOtp} from '../../../../api/users.api';
+import {getMatchingMarketList} from '../../../../api/markets.api';
 
-const Tab1 = ({setView, activecoin, setPaymentId, payment_id}) => {
+const Tab1 = ({setView, activecoin, setPaymentId, prec}) => {
   console.log(activecoin);
   const google_auth = useSelector(
     state => state.authReducer.auth_attributes.attributes.google_auth,
@@ -138,7 +139,7 @@ const Tab1 = ({setView, activecoin, setPaymentId, payment_id}) => {
       <View style={{flex: 1}}>
         <View style={{marginHorizontal: 16}}>
           <WithdrawHeader
-            available={`${balance.available.balance.toFixed(2)} ${
+            available={`${balance.available.balance.toFixed(prec.fee_prec)} ${
               activecoin.asset_code
             }`}
             order={`${balance.freeze.balance.toFixed(2)} ${
@@ -169,7 +170,11 @@ const Tab1 = ({setView, activecoin, setPaymentId, payment_id}) => {
                 Fee: {activecoin.withdrawal_fee} {activecoin.asset_code}
               </BPText>
               <BPText style={{fontSize: 12}}>
-                You will Get: 0 {activecoin.asset_code}
+                You will Get:{' '}
+                {withdrawAmount > 0
+                  ? parseFloat(withdrawAmount) - activecoin.withdrawal_fee
+                  : 0}{' '}
+                {activecoin.asset_code}
               </BPText>
             </View>
 
@@ -429,10 +434,49 @@ const Withdraw = () => {
   const [withdrawAmount, setWithdrawAmount] = useState(null);
   const [address, setAddress] = useState(null);
   const [showItems, setshowItems] = useState(false);
-
+  const [ttdetail, settdetail] = useState({money_prec: 2, stock_prec: 2});
+  const [marketlist, setmarketlist] = useState([]);
   const assetList = useSelector(state => state.walletReducer.assets);
 
   // const address = '14gC4zbkDdfdn6DscjuYqBufndzzfddLQzGViAg5cdfHJ'
+  const getMatchingMarket = async () => {
+    setload(true);
+    // alert('indisde getmatch');
+    let res = await getMatchingMarketList();
+    // alert(JSON.stringify(res));
+    // alert(JSON.stringify(activecoin));
+    //console.log("getMatchingMarketList", JSON.stringify(res));
+    if (res.status) {
+      console.log(res);
+
+      setmarketlist(res.data[0]);
+      setload(false);
+      // res.data[0].map((i, value) => {
+      //   console.log('getMatchingMarketList', i, value);
+      //   console.log('getMatchingMarketList objec', Object.keys(i));
+      //   let tt = Object.keys(i)[0];
+      //   console.log(
+      //     'getMatchingMarketList',
+      //     i[tt].filter(key => key.money == activecoin.asset_code)[0],
+      //   );
+      //   if (
+      //     i[tt].filter(key => key.money == activecoin.asset_code).length > 0
+      //   ) {
+      //     // alert('y');
+      //     console.log(
+      //       'getMatchingMarketList1',
+      //       i[tt].filter(key => key.money == activecoin.asset_code),
+      //     );
+      //     let tdetail = i[tt].filter(
+      //       key => key.money == activecoin.asset_code,
+      //     )[0];
+
+      //     // alert(JSON.stringify(tdetail));
+      //     settdetail(tdetail);
+      //   }
+      // });
+    }
+  };
 
   const changeCoin = coin => {
     let item = assetList.find(i => i.asset_code === coin);
@@ -460,6 +504,7 @@ const Withdraw = () => {
       let coin = assetList[0];
       setactivecoin(coin);
       setload(false);
+      getMatchingMarket();
     }
   }, []);
 
@@ -476,6 +521,7 @@ const Withdraw = () => {
           setWithdrawAmount={t => setWithdrawAmount(t)}
           setAddress={t => setAddress(t)}
           setPaymentId={r => setPaymentId(r)}
+          prec={ttdetail}
         />
       ) : (
         <Tab2 activecoin={activecoin} setView={v => setView(v)} />

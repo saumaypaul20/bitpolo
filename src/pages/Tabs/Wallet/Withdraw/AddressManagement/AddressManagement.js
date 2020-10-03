@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Container, Content, Root, CheckBox, Body} from 'native-base';
+import {Container, Content, Root, CheckBox, Body, Icon} from 'native-base';
 import Toolbar from '../../../../../components/Toolbar/Toolbar';
 import {Colors, Images} from '../../../../../theme';
 import BPText from '../../../../../common/BPText/BPText';
@@ -49,13 +49,10 @@ const AddressManagement = () => {
     {label: 'Select Coin...', value: null},
   ]);
   const [pickerOrderVal, setPickerOrderVal] = useState({
-    label: 'Select Coin',
+    label: 'Select Coin...',
     value: null,
   });
-  const [filterval, setfilterval] = useState({
-    label: 'Select Coin',
-    value: null,
-  });
+  const [filterval, setfilterval] = useState(filter[0]);
   const user = useSelector(
     state => state.authReducer.auth_attributes,
     shallowEqual,
@@ -73,8 +70,8 @@ const AddressManagement = () => {
   const [items, setitems] = useState([]);
   const assetList = useSelector(state => state.walletReducer.assets);
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () =>
-    useCallback(setIsEnabled(previousState => !previousState), []);
+  const [showmodalitems, setshowmodalitems] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const callgetaddress = async () => {
     let res = await getWithdrawAddresses();
@@ -104,13 +101,13 @@ const AddressManagement = () => {
   };
 
   const onAddWithdrawAddress = async () => {
-    let coin = options.find(i => pickerOrderVal === i.value);
+    let coin = options.find(i => pickerOrderVal.value === i.value);
     console.log('coin', coin);
     if (!coin) {
       return;
     }
 
-    if (pickerOrderVal === null) {
+    if (pickerOrderVal.value === null) {
       return;
     }
 
@@ -118,7 +115,7 @@ const AddressManagement = () => {
       data: {
         id: user.id,
         attributes: {
-          asset: pickerOrderVal,
+          asset: pickerOrderVal.value,
           address: address,
           label: label,
           coin: coin.label,
@@ -278,6 +275,8 @@ const AddressManagement = () => {
                 backgroundColor: Colors.darkGray,
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                position: 'relative',
+                zIndex: 1,
               }}>
               <BPText style={{fontSize: 12}}>
                 Only display whitelisted addresses
@@ -288,6 +287,8 @@ const AddressManagement = () => {
                   borderRadius: 4,
                   borderColor: Colors.white,
                   paddingVertical: 8,
+                  width: 120,
+                  paddingLeft: 5,
                 }}>
                 <PickerComp
                   items={filter}
@@ -296,9 +297,10 @@ const AddressManagement = () => {
                   color={Colors.white}
                   chevronPositionTop={10}
                   chevronColor={Colors.white}
-                  marginLeft={0}
-                  width={80}
+                  marginLeft={10}
+                  // width={80}
                   scale={0.9}
+                  horizontalOffet={-8}
                 />
               </View>
             </View>
@@ -312,6 +314,7 @@ const AddressManagement = () => {
                 alignItems: 'center',
               }}>
               <BPInput
+                // editable = {!}
                 borderRadius={45}
                 style={{fontSize: 12}}
                 placeholder={'Coin Name'}
@@ -363,8 +366,20 @@ const AddressManagement = () => {
                   padding: 16,
                   borderRadius: 14,
                 }}>
-                <View style={{borderColor: Colors.gray, borderWidth: 1}}>
-                  <PickerComp
+                <TouchableOpacity
+                  onPress={() => setshowmodalitems(!showmodalitems)}
+                  style={{
+                    borderColor: Colors.gray,
+                    borderWidth: 1,
+                    height: 50,
+                    position: 'relative',
+                    zIndex: 3,
+                    paddingLeft: 20,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                  }}>
+                  {/* <PickerComp
                     items={options}
                     pickerVal={pickerOrderVal}
                     setPickerVal={setPickerOrderVal}
@@ -375,14 +390,51 @@ const AddressManagement = () => {
                     marginLeft={-5}
                     width={Dimensions.get('window').width - 10}
                     scale={0.9}
+                    // inversetouchable
+                  /> */}
+                  <BPText style={{color: Colors.gray}}>
+                    {pickerOrderVal.label}
+                  </BPText>
+
+                  <Icon
+                    type="FontAwesome"
+                    name="chevron-down"
+                    style={{
+                      fontSize: 14,
+                      color: Colors.gray,
+                      paddingRight: 20,
+                    }}
                   />
-                </View>
+                </TouchableOpacity>
+                {showmodalitems && (
+                  <View>
+                    {options.map((i, index) => (
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: Colors.gray,
+                          padding: 5,
+                          paddingVertical: 10,
+                          borderBottomColor: Colors.white,
+                          borderBottomWidth: 1,
+                        }}
+                        onPress={() => {
+                          setPickerOrderVal(i);
+                          setshowmodalitems(!showmodalitems);
+                        }}>
+                        <BPText>{i.label}</BPText>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
                 <View
+                  // pointerEvents="none"
                   style={{
                     borderColor: Colors.gray,
                     borderWidth: 1,
                     marginTop: 8,
                     paddingHorizontal: 16,
+                    position: 'relative',
+                    zIndex: 0,
                   }}>
                   <TextInput
                     placeholder="Label"
@@ -394,11 +446,14 @@ const AddressManagement = () => {
                   />
                 </View>
                 <View
+                  // pointerEvents="none"
                   style={{
                     borderColor: Colors.gray,
                     borderWidth: 1,
                     marginTop: 8,
                     paddingHorizontal: 16,
+                    position: 'relative',
+                    zIndex: 0,
                   }}>
                   <TextInput
                     placeholder="Address"
@@ -417,14 +472,17 @@ const AddressManagement = () => {
                     justifyContent: 'flex-start',
                     alignItems: 'center',
                     marginLeft: -10,
+                    position: 'relative',
+                    zIndex: 0,
                   }}>
                   <CheckBox checked={check} color={Colors.darkGray} />
 
                   <Text style={{marginLeft: 15}}>Add to Whitelist</Text>
                 </TouchableOpacity>
-                <View style={{marginTop: 8}}>
+                <View style={{marginTop: 8, position: 'relative', zIndex: 0}}>
                   <BPButton
                     borderRadius={0}
+                    disabled={label.length === 0 || address.length === 0}
                     backgroundColor={Colors.darkGray}
                     label={'Submit'}
                     textColor={Colors.white}
