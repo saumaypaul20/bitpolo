@@ -34,6 +34,7 @@ import {
   getInfoAuthToken,
   getAuthToken,
 } from '../../../../../utils/apiHeaders.utils';
+import {Platform} from 'react-native';
 
 const AddressManagement = () => {
   const navigation = useNavigation();
@@ -435,6 +436,7 @@ const AddressManagement = () => {
                     paddingHorizontal: 16,
                     position: 'relative',
                     zIndex: 0,
+                    paddingVertical: Platform.OS === 'android' ? 0 : 12,
                   }}>
                   <TextInput
                     placeholder="Label"
@@ -454,6 +456,7 @@ const AddressManagement = () => {
                     paddingHorizontal: 16,
                     position: 'relative',
                     zIndex: 0,
+                    paddingVertical: Platform.OS === 'android' ? 0 : 12,
                   }}>
                   <TextInput
                     placeholder="Address"

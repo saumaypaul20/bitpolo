@@ -76,7 +76,7 @@ let ListItem = ({item, type, index}) => {
         </View>
 
         <View
-          style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}}>
+          style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
           <BPText
             style={{
               color: type === 1 ? Colors.lightGreen : Colors.red,

@@ -33,6 +33,8 @@ import {
   setordermoneyprec,
   setorderstockprec,
 } from '../../redux/actions/ordertab.actions';
+import {screenNames} from '../../routes/screenNames/screenNames';
+import {useNavigation} from '@react-navigation/native';
 const divideIt = i => {
   let divider = {};
   if (i.match('INR')) {
@@ -67,7 +69,7 @@ const orderItems = [
 
 let TradesOrderTabs = () => {
   //alert("ordertabs")
-
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const user = useSelector(
     state => state.authReducer.auth_attributes,
@@ -177,7 +179,7 @@ let TradesOrderTabs = () => {
       // setPrice(
       //   parseFloat(market_data.params[1].l).toFixed(tradeDetail?.money_prec),
       // );
-      let t = parseFloat(market_data.params[1].l).toFixed(
+      let t = parseFloat(market_data?.params[1].l).toFixed(
         tradeDetail?.money_prec,
       );
       dispatch(setordertabprice(t));
@@ -190,7 +192,9 @@ let TradesOrderTabs = () => {
   // };
 
   const isDisabled = () => {
-    if (
+    if (!user) {
+      return false;
+    } else if (
       parseFloat(currenttotal) === 0 ||
       parseFloat(currentamount) === 0 ||
       parseFloat(currenttotal) === 0 ||
@@ -472,13 +476,14 @@ let TradesOrderTabs = () => {
                 alignItems: 'center',
                 backgroundColor: Colors.darkGray3,
                 flexDirection: 'row',
+                padding: 5,
               }}>
               <View style={{flex: 1}}>
                 <BPText style={{opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM}}>
                   Total
                 </BPText>
               </View>
-              <View style={{flex: 3}}>
+              <View style={{flex: 2}}>
                 <InputCounter
                   onInputChange={t => dispatch(setordertabtotal(t))}
                   // validate={() => changeAmount(currenttotal, 'total')}
@@ -486,8 +491,15 @@ let TradesOrderTabs = () => {
                 />
               </View>
 
-              <View style={{flex: 1}}>
-                <BPText style={{opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM}}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <BPText
+                  // numberOfLines={1}
+                  style={{opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM}}>
                   {divideIt(activeTradePair).b}
                 </BPText>
               </View>
@@ -517,7 +529,7 @@ let TradesOrderTabs = () => {
             Avbl
           </BPText>
           <BPText style={{opacity: 0.5, fontFamily: Fonts.FONT_MEDIUM}}>
-            {`${balance?.available.balance.toFixed(2)}`}{' '}
+            {`${balance?.available.balance.toFixed(2) || '0.00'}`}{' '}
             {divideIt(activeTradePair).b}
           </BPText>
         </View>
@@ -530,9 +542,11 @@ let TradesOrderTabs = () => {
               currentordertab === 2 ? Colors.lightGreen : Colors.red
             }
             textColor={Colors.white}
-            label={currentordertab === 2 ? 'Buy' : 'Sell'}
+            label={!user ? 'Sign In' : currentordertab === 2 ? 'Buy' : 'Sell'}
             width="auto"
-            onPress={() => onsubmit()}
+            onPress={() =>
+              user ? onsubmit() : navigation.navigate(screenNames.SIGNIN)
+            }
             disabled={isDisabled()}
             loading={posting}
           />

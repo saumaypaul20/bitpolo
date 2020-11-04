@@ -21,14 +21,8 @@ export const getMatchingMarketList = () => {
       info: getInfoAuthToken(),
     };
 
-    let res = await fetchApi(
-      REST.MARKETS.MARKET_LIST,
-      'GET',
-      null,
-      200,
-      headers,
-    );
-    //console.log("match market list res", res)
+    let res = await fetchApi(REST.MARKETS.MARKET_LIST, 'GET', null, 200);
+    console.log('match market list res', res);
     if (!res?.responseBody?.errors) {
       resolve({status: true, data: res.responseBody.data.attributes});
     } else {

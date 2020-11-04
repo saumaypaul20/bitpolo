@@ -245,7 +245,6 @@ const WalletHistory = props => {
             flex: 1,
             justifyContent: 'flex-start',
             alignSelf: 'stretch',
-            marginHorizontal: 16,
           }}>
           <SettingsListItem
             onPress={() => setshowItems(!showItems)}
@@ -335,6 +334,7 @@ const WalletHistory = props => {
 
           {view === 1 && (
             <FlatList
+              style={{paddingHorizontal: 16}}
               data={renderArr(deposits)}
               renderItem={({item, index}) => (
                 <ListItem item={item} index={index} />

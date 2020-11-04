@@ -3,7 +3,7 @@ import {Text, View, FlatList, TouchableOpacity} from 'react-native';
 import {Images, Colors} from '../../theme';
 import BPText from '../BPText/BPText';
 import _ from 'lodash';
-import {useDispatch} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {
   setordertabamount,
   setordertabprice,
@@ -11,13 +11,21 @@ import {
 } from '../../redux/actions/ordertab.actions';
 import {useNavigation} from '@react-navigation/native';
 const Card = props => {
+  const money_prec = useSelector(
+    state => state.ordertab.money_prec,
+    shallowEqual,
+  );
+  const stock_prec = useSelector(
+    state => state.ordertab.stock_prec,
+    shallowEqual,
+  );
   const dispatch = useDispatch();
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => {
-        dispatch(setordertabamount(props.item.a.toFixed(2)));
-        dispatch(setordertabprice(props.item.p.toFixed(2)));
+        dispatch(setordertabamount(props.item.a.toFixed(stock_prec)));
+        dispatch(setordertabprice(props.item.p.toFixed(money_prec)));
         if (props.type === 1) {
           dispatch(setordertab(2));
         } else {
@@ -41,14 +49,14 @@ const Card = props => {
           fontSize: 12,
           color: props.type == 1 ? Colors.red : Colors.lightGreen,
         }}>
-        {props.item.a.toFixed(2)}
+        {props.item.a.toFixed(stock_prec)}
       </BPText>
       <BPText
         style={{
           fontSize: 12,
           color: props.type == 1 ? Colors.red : Colors.lightGreen,
         }}>
-        {props.item.p.toFixed(2)}
+        {props.item.p.toFixed(money_prec)}
       </BPText>
     </TouchableOpacity>
   );
@@ -90,6 +98,7 @@ class App extends Component {
         }}>
         {this.state.data.length > 0 ? (
           <FlatList
+            contentContainerStyle={{flexGrow: 1}}
             data={this.state.data}
             renderItem={({item}) => (
               <Card

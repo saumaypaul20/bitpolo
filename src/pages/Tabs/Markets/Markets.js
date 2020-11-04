@@ -63,10 +63,10 @@ const callDeleteFavCoin = async item => {
   }
 };
 
-const onStarClicked = (item, favourites) => {
-  let state = store.getState();
+const onStarClicked = (item, favourites, market_list) => {
+  // let state = store.getState();
 
-  let market_list = state.marketReducer.market_list;
+  // let market_list = state.marketReducer.market_list;
   if (favourites.find(i => i.name == item.params[0])) {
     onDeleteClick(item);
   } else {
@@ -95,7 +95,7 @@ let INRView = () => {
     state => state.marketReducer.data.filter(i => i.params[0].endsWith('INR')),
     equalityFnMarket,
   );
-  console.log('reloads');
+  // console.log('reloads');
   //   const [renderData, setrenderData]= useState(market_data);
   const [orderDirection, setorderDirection] = useState(true);
   const [orderBY, setorderBY] = useState(false);
@@ -103,7 +103,10 @@ let INRView = () => {
     state => state.marketReducer.favourites,
     equalityFnFavs,
   );
-
+  let market_list = useSelector(
+    state => state.marketReducer.market_list,
+    shallowEqual,
+  );
   const onSort = by_action => {
     setorderDirection(!orderDirection);
     setorderBY(by_action);
@@ -160,7 +163,7 @@ let INRView = () => {
       }}>
       <TouchableOpacity
         onPress={() => {
-          onStarClicked(rowData.item, favourites);
+          onStarClicked(rowData.item, favourites, market_list);
           setTimeout(() => {
             rowMap[rowData.item.id]?.closeRow();
           }, 1000);
@@ -194,6 +197,7 @@ let INRView = () => {
         />
       ) : (
         <SwipeListView
+          bounces={false}
           useFlatList={true}
           initialNumToRender={5}
           data={renderData}
@@ -229,6 +233,10 @@ let USDTView = () => {
   let favourites = useSelector(
     state => state.marketReducer.favourites,
     equalityFnFavs,
+  );
+  let market_list = useSelector(
+    state => state.marketReducer.market_list,
+    shallowEqual,
   );
   // market_data = market_data.filter(i=> i.params[0].endsWith("USDT"))
   // console.log(" USDTViewmarket_data",market_data)
@@ -285,7 +293,7 @@ let USDTView = () => {
       }}>
       <TouchableOpacity
         onPress={() => {
-          onStarClicked(rowData.item, favourites);
+          onStarClicked(rowData.item, favourites, market_list);
           setTimeout(() => {
             rowMap[rowData.item.id]?.closeRow();
           }, 1000);
@@ -320,6 +328,7 @@ let USDTView = () => {
         />
       ) : (
         <SwipeListView
+          bounces={false}
           useFlatList={true}
           initialNumToRender={2}
           data={renderData}
@@ -415,6 +424,7 @@ let FavouritesTab = () => {
   return (
     <View style={{backgroundColor: Colors.primeBG, flex: 1}}>
       <SwipeListView
+        bounces={false}
         useFlatList={true}
         data={renderData}
         initialNumToRender={7}
@@ -538,7 +548,7 @@ let ListItem = ({item, index}) => {
           style={{
             flex: 1,
             justifyContent: 'center',
-            alignItems: 'flex-start',
+            alignItems: 'flex-end',
             paddingHorizontal: 35,
           }}>
           <BPText style={{fontSize: 12}}>

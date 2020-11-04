@@ -57,7 +57,8 @@ const Routes = ({login}) => {
         colors: {...DefaultTheme.colors, background: Colors.primeBG},
       }}>
       <Stack.Navigator
-        initialRouteName={login ? screenNames.PINSCREEN : screenNames.SIGNIN}
+        initialRouteName={login ? screenNames.PINSCREEN : screenNames.DASHBOARD}
+        // initialRouteName={screenNames.DASHBOARD}
         screenOptions={{
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

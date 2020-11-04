@@ -124,7 +124,7 @@ const OTPscreen = props => {
           // navigation.reset({index:0, routes: [{name:screenNames.DASHBOARD}]})
         } else {
           // alert('Something went wrong. Please Re-enter the code');
-          alert(res.data.data.attributes.message);
+          alert(JSON.stringify(res.data.data.attributes.message));
           setCode('');
         }
       } catch (error) {
@@ -168,7 +168,7 @@ const OTPscreen = props => {
       }
     } else {
       // alert('Something went wrong. Please Re-enter the code');
-      alert(res.data.data.attributes.message);
+      alert(JSON.stringify(res.data.data.attributes.message));
       setCode('');
     }
   };
@@ -199,14 +199,14 @@ const OTPscreen = props => {
         console.log('withdraw res----#####2', res);
         //dispatch(addBanks([...banks,props.route.params.body.data.attributes]));
         navigation.dispatch(StackActions.pop(2));
-        alert(res.data.data.attributes.message);
+        alert(JSON.stringify(res.data.data.attributes.message));
       } else {
-        alert(res.data.data.attributes.message);
+        alert(JSON.stringify(res.data.data.attributes.message));
         navigation.dispatch(StackActions.pop(2));
       }
     } else {
       // alert('Something went wrong. Please Re-enter the code');
-      alert(res.data.data.attributes.message);
+      alert(JSON.stringify(res.data.data.attributes.message));
       setCode('');
     }
   };
@@ -242,7 +242,7 @@ const OTPscreen = props => {
       }
     } else {
       // alert('Something went wrong. Please Re-enter the code');
-      alert(res.data.data.attributes.message);
+      alert(JSON.stringify(res.data.data.attributes.message));
       setCode('');
     }
   };
@@ -285,7 +285,7 @@ const OTPscreen = props => {
     };
     let res = await resendOtp(attributes);
     if (res.status) {
-      alert(res.data.data.attributes.message);
+      alert(JSON.stringify(res.data.data.attributes.message));
     } else {
       alert('Something went worng, Try again!');
     }
@@ -312,7 +312,7 @@ const OTPscreen = props => {
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>
         {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-        <Toolbar enableBackButton />
+        <Toolbar enableBackButton backgroundColor="transparent" />
         <Content contentContainerStyle={{flexGrow: 1}}>
           <View
             style={{

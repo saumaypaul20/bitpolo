@@ -125,24 +125,27 @@ const IMPS = () => {
                 </BPText>
                 <View
                   style={{
-                    borderColor: Colors.lightWhite,
-                    borderRadius: 4,
+                    alignSelf: 'stretch',
                     borderWidth: 1,
-                    marginTop: 8,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    borderColor: Colors.lightWhite,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    height: 50,
+                    paddingLeft: 10,
+                    position: 'relative',
+                    zIndex: 1,
                   }}>
                   <PickerComp
                     items={acctypes}
                     pickerVal={accType}
                     setPickerVal={setAccType}
                     chevronPositionTop={16}
-                    height={48}
+                    height={20}
                   />
                 </View>
               </View>
 
-              <View style={{marginTop: 24}}>
+              <View style={{marginTop: 24, position: 'relative', zIndex: -1}}>
                 <BPInput
                   label="Account Label"
                   labelStyle={{fontSize: 18}}

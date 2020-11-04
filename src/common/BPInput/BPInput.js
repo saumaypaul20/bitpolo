@@ -3,6 +3,7 @@ import {View, TextInput} from 'react-native';
 import BPText from '../BPText/BPText';
 import {Colors, Fonts} from '../../theme';
 import {Input} from 'native-base';
+import {Platform} from 'react-native';
 
 const BPInput = ({
   label,
@@ -40,7 +41,11 @@ const BPInput = ({
           value={text}
           onChangeText={t => setText(t)}
           placeholder={placeholder}
-          style={{color: Colors.white, width: '100%'}}
+          style={{
+            color: Colors.white,
+            width: '100%',
+            paddingVertical: Platform.OS == 'ios' ? 14 : 10,
+          }}
           secureTextEntry={secureTextEntry}
           maxLength={maxLength}
           editable={editable}

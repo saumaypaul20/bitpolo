@@ -101,7 +101,7 @@ const PINScreen = props => {
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.primeBG}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>
         {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-        <Toolbar enableBackButton />
+        <Toolbar enableBackButton backgroundColor={Colors.primeBG} />
         <Content contentContainerStyle={{flexGrow: 1}}>
           <View
             style={{

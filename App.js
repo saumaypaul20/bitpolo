@@ -105,7 +105,7 @@ const App = () => {
     // requestLocationPermission()
     SplashScreen.hide();
     //uncomment the below to hide all console.log
-    console.log = function() {};
+    // console.log = function() {};
     getUser();
     storeIP();
     deviceAccess();

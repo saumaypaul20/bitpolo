@@ -75,12 +75,18 @@ const Toolbar = ({
           backgroundColor: backgroundColor || Colors.darkGray2,
           paddingTop: 10,
           paddingBottom: 10,
+          elevation: 0,
+          shadowOffset: {height: 0, width: 0},
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
         }}
+        iosBarStyle={Colors.barStyle}
+        androidStatusBarColor={Colors.barStyle}
         hasTabs={hasTabs}>
         <StatusBar
           translucent
           barStyle={Colors.barStyle}
-          backgroundColor={backgroundColor || Colors.darkGray2}
+          backgroundColor={backgroundColor}
         />
         <Left
           style={{

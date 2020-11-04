@@ -1,0 +1,2 @@
+cp src/utils/node_fixes/react-native-otp-input_index.js node_modules/@twotalltotems/react-native-otp-input/dist/index.js
+cp src/utils/node_fixes/RCTUIImageViewAnimated.m node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m

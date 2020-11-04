@@ -100,6 +100,7 @@ const HeaderComp = () => {
       state.marketReducer.data.filter(i => i.params[0] === activeTradePair),
     equalityFnMarket,
   );
+
   const found = market_data[0];
   const activecurrency = useSelector(
     state =>
@@ -213,7 +214,7 @@ const callAddFavCoin = async item => {
   };
   let res = await addFavCoin(payload, headers);
   if (res.status) {
-    console.log(res.data);
+    // console.log(res.data);
   }
 };
 
@@ -221,14 +222,13 @@ const callDeleteFavCoin = async item => {
   let payload = {lang: 'en', data: {attributes: {market: item}}};
   let res = await updateFavCoin(payload);
   if (res.status) {
-    console.log(res.data);
+    // console.log(res.data);
   }
 };
 
-const setFav = (item, favourites) => {
-  let state = store.getState();
+const setFav = (item, favourites, market_list) => {
+  // let state = store.getState();
 
-  let market_list = state.marketReducer.market_list;
   //   if (market_list.length === 0) {
   //     return;
   //   }
@@ -236,6 +236,8 @@ const setFav = (item, favourites) => {
   if (favourites.find(i => i.name == item)) {
     onDeleteClick(item, favourites);
   } else {
+    console.log(item);
+    // console.log(market_list);
     let itemRes = market_list.find(i => i.name === item);
     let newData = favourites.concat([itemRes]);
     console.log('onstart click data', newData);
@@ -254,6 +256,7 @@ const onDeleteClick = (item, favourites) => {
 };
 
 const isFavourite = (item, favs) => {
+  // console.log(favs);
   if (favs.length > 0 && favs.find(i => i.name === item)) {
     return (
       <Image
@@ -279,7 +282,10 @@ const MarketPage = () => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
+  let market_list = useSelector(
+    state => state.marketReducer.market_list,
+    shallowEqual,
+  );
   const currencies = useSelector(
     state => state.marketReducer.currencies,
     (l, r) => l.payload === r.payload,
@@ -290,7 +296,7 @@ const MarketPage = () => {
   );
 
   let favourites = useSelector(
-    state => state.marketReducer.favourites,
+    state => state.marketReducer.favourites.filter(i => i !== undefined),
     equalityFnFavs,
   );
 
@@ -528,7 +534,9 @@ const MarketPage = () => {
                   />
                 </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => setFav(activeTradePair, favourites)}>
+                  onPress={() =>
+                    setFav(activeTradePair, favourites, market_list)
+                  }>
                   {isFavourite(activeTradePair, favourites)}
                 </TouchableOpacity>
               </View>

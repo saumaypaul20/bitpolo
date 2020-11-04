@@ -103,8 +103,23 @@ const PickerComp = ({
           style={{
             position: 'relative',
             zIndex: 1,
+            top: 0,
+            right: 0,
+            left: 0,
+            right: 0,
           }}>
-          <BPText style={{color: color}}>{pickerVal?.label}</BPText>
+          {Platform.OS == 'android' ? (
+            <BPText
+              style={{
+                color: color,
+                margin: 0,
+                paddingVertical: 10,
+              }}>
+              {pickerVal?.label}
+            </BPText>
+          ) : (
+            <BPText style={{paddingVertical: 10}}>{pickerVal?.label}</BPText>
+          )}
         </TouchableOpacity22>
 
         {vis && (
@@ -113,7 +128,7 @@ const PickerComp = ({
               {
                 position: 'absolute',
                 zIndex: 1,
-                flex: 1,
+                // flex: 1,
                 paddingVertical: 5,
                 minWidth: '100%',
                 zIndex: 1,

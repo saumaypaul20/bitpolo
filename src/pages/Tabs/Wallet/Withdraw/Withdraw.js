@@ -213,6 +213,7 @@ const Tab1 = ({setView, activecoin, setPaymentId, prec}) => {
     </Root>
   );
 };
+
 const Tab2 = ({setView, activecoin}) => {
   const navigation = useNavigation();
   const google_auth = useSelector(
@@ -225,7 +226,7 @@ const Tab2 = ({setView, activecoin}) => {
   );
   const banks = useSelector(state => state.payments.banks, equalityFnBankslist);
   const [pickerOrderVal, setPickerOrderVal] = useState({
-    label: 'Traditional Payment',
+    label: 'Select',
     value: 0,
   });
   const [withdrawAmount, setWithdrawAmount] = useState(null);
@@ -249,8 +250,8 @@ const Tab2 = ({setView, activecoin}) => {
       let arr = [];
       banks.forEach(item => {
         let option = {
-          label: `${item.account_name}-${
-            item.type_of_account.bank_account.account_number
+          label: `${item?.account_name}-${
+            item?.type_of_account.bank_account?.account_number
           }`,
           value: item._id,
         };
@@ -330,10 +331,10 @@ const Tab2 = ({setView, activecoin}) => {
 
       <View style={{marginHorizontal: 16}}>
         <WithdrawHeader
-          available={`${balance.available.balance.toFixed(2)} INR`}
-          order={`${balance.freeze.balance.toFixed(2)} INR`}
+          available={`${balance?.available?.balance?.toFixed(2)} INR`}
+          order={`${balance?.freeze?.balance?.toFixed(2)} INR`}
           total={`${(
-            balance.available.balance + balance.freeze.balance
+            balance?.available?.balance + balance?.freeze?.balance
           ).toFixed(2)} INR`}
         />
 
@@ -545,7 +546,7 @@ const Withdraw = () => {
             </TouchableOpacity>
           }
         />
-        <Content contentContainerStyle={{flexGrow: 1}}>
+        <Content contentContainerStyle={{flexGrow: 1}} bounces={false}>
           <View
             style={{
               flex: 1,

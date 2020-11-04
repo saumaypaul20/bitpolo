@@ -15,8 +15,14 @@ import {
   getDeviceId,
 } from '../../../utils/apiHeaders.utils';
 import Storage from '../../../utils/storage.utils';
+import SignInView from '../../../components/SignInView/SignInView';
 
 const Account = () => {
+  const user = useSelector(
+    state => state.authReducer.auth_attributes,
+    (l, r) => l.id == r.id,
+  );
+
   let email = useSelector(state => state.authReducer.email);
   const navigation = useNavigation();
 
@@ -36,77 +42,85 @@ const Account = () => {
     <SafeAreaView style={{flex: 1}}>
       <Container style={{flex: 1, backgroundColor: Colors.primeBG}}>
         {/* <StatusBar translucent barStyle={Colors.barStyle}  backgroundColor="transparent" /> */}
-        <Toolbar enableBackButton title={'Account'} />
+        <Toolbar
+          enableBackButton
+          title={'Account'}
+          backgroundColor="transparent"
+        />
         <Content contentContainerStyle={{flexGrow: 1}}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginTop: 42,
-            }}>
-            <Image
-              source={Images.user_icon}
-              style={{width: 106, height: 106, marginBottom: 20}}
-              resizeMode="contain"
-            />
-
-            <Text
+          {user ? (
+            <View
               style={{
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Inter-Medium',
+                flex: 1,
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginTop: 42,
               }}>
-              {email}
-            </Text>
+              <Image
+                source={Images.user_icon}
+                style={{width: 106, height: 106, marginBottom: 20}}
+                resizeMode="contain"
+              />
 
-            {/* <Button bordered style={styles.btnContainer}>
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Inter-Medium',
+                }}>
+                {email}
+              </Text>
+
+              {/* <Button bordered style={styles.btnContainer}>
               <Text style={styles.btnText}>Edit Profile</Text>
             </Button> */}
 
-            <View style={{alignSelf: 'stretch', marginTop: 25}}>
-              <SettingsListItem
-                label="Bank Account Details"
-                image={Images.bank_account_details_icon}
-                onPress={() =>
-                  navigation.navigate(screenNames.BANK_ACCOUNT_DETAILS)
-                }
-              />
-              <SettingsListItem
-                onPress={() =>
-                  Linking.openURL('https://testing.bitpolo.com/fee-schedule')
-                }
-                label="Fees"
-                image={Images.fees_icon}
-              />
-              <SettingsListItem
-                label="Security"
-                image={Images.security_icon}
-                onPress={() => navigation.navigate(screenNames.SECURITY)}
-              />
-              {/* <SettingsListItem
+              <View style={{alignSelf: 'stretch', marginTop: 25}}>
+                <SettingsListItem
+                  label="Bank Account Details"
+                  image={Images.bank_account_details_icon}
+                  onPress={() =>
+                    navigation.navigate(screenNames.BANK_ACCOUNT_DETAILS)
+                  }
+                />
+                <SettingsListItem
+                  onPress={() =>
+                    Linking.openURL('https://testing.bitpolo.com/fee-schedule')
+                  }
+                  label="Fees"
+                  image={Images.fees_icon}
+                />
+                <SettingsListItem
+                  label="Security"
+                  image={Images.security_icon}
+                  onPress={() => navigation.navigate(screenNames.SECURITY)}
+                />
+                {/* <SettingsListItem
                 label="Settings"
                 image={Images.settings_icon}
                 onPress={() => navigation.navigate(screenNames.SETTINGS)}
               /> */}
-              <SettingsListItem
-                label="Support"
-                image={Images.support_icon}
-                onPress={() => Linking.openURL('mailto:support@beldex.io')}
-              />
-              {/* <SettingsListItem label="Rate Us" image={Images.rate_us_icon} /> */}
-              <SettingsListItem
-                label="About Us"
-                image={Images.about_us_icon}
-                onPress={() => navigation.navigate(screenNames.ABOUT)}
-              />
-              <SettingsListItem
-                label="Logout"
-                image={Images.about_us_icon}
-                onPress={() => logout()}
-              />
+                <SettingsListItem
+                  label="Support"
+                  image={Images.support_icon}
+                  onPress={() => Linking.openURL('mailto:support@beldex.io')}
+                />
+                {/* <SettingsListItem label="Rate Us" image={Images.rate_us_icon} /> */}
+                <SettingsListItem
+                  label="About Us"
+                  image={Images.about_us_icon}
+                  onPress={() => navigation.navigate(screenNames.ABOUT)}
+                />
+                <SettingsListItem
+                  label="Logout"
+                  image={Images.about_us_icon}
+                  onPress={() => logout()}
+                />
+              </View>
             </View>
-          </View>
+          ) : (
+            <SignInView />
+          )}
         </Content>
       </Container>
     </SafeAreaView>
